@@ -11,10 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database_helper.dart';
 import '../db/historia_foto_helper.dart';
-import '../db/tag_helper.dart';
 import '../models/historia.dart';
 import '../models/insight.dart';
-import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../providers/insight_provider.dart';
 import '../providers/premium_provider.dart';
@@ -24,9 +22,8 @@ import '../services/thumbnail_service.dart';
 import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/compact_historia_card.dart';
-import '../widgets/historia_media_widgets.dart';
 import '../widgets/insight_card.dart';
-import '../widgets/rich_text_viewer_widget.dart';
+import '../widgets/story_card.dart';
 import 'chapters_entry_screen.dart';
 import 'edit_historia_screen.dart';
 import 'group_selection_screen.dart';
@@ -214,7 +211,6 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   // Constantes e estado do componente home
-  static const double cardMargin = 24.0;
   static const int _pageSize = 15; // Número de histórias por página
 
   bool _isCardView = true;
@@ -482,22 +478,26 @@ class _HomeContentState extends State<HomeContent> {
     if (!mounted) return;
 
     final heroTag = _storyHeroTag(historia);
-    final action = await Navigator.of(context).push<_StoryPreviewAction>(
+    final action = await Navigator.of(context).push<StoryPreviewAction>(
       MaterialPageRoute(
-        builder: (_) => _StoryPreviewScreen(
+        builder: (_) => StoryPreviewScreen(
           historia: historia,
           localeName: AppLocalizations.of(context)!.localeName,
           convertLegacyEmoticon: _convertLegacyEmoticon,
           heroTag: heroTag,
+          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+          showEditDelete: true,
+          showMoodNotes: true,
+          showBottomActions: true,
         ),
       ),
     );
 
-    if (!mounted || action == null || action == _StoryPreviewAction.close) {
+    if (!mounted || action == null || action == StoryPreviewAction.close) {
       return;
     }
 
-    if (action == _StoryPreviewAction.edit) {
+    if (action == StoryPreviewAction.edit) {
       final updated = await Navigator.of(context).push(
         RouteTransitionHelper.slideUpRotateTransition(
           EditHistoriaScreen(historia: historia),
@@ -510,7 +510,7 @@ class _HomeContentState extends State<HomeContent> {
       return;
     }
 
-    if (action == _StoryPreviewAction.delete) {
+    if (action == StoryPreviewAction.delete) {
       await _deleteHistoria(historia);
     }
   }
@@ -562,287 +562,52 @@ class _HomeContentState extends State<HomeContent> {
   }
 
   Widget _buildCardView(Historia historia) {
-    return FutureBuilder<List<FotoComBytes>>(
-      future: HistoriaFotoHelper().getFotosComBytesByHistoria(historia.id ?? 0),
-      builder: (context, snapshot) {
-        final hasImages = snapshot.hasData && snapshot.data!.isNotEmpty;
-
-        return Slidable(
-          startActionPane: ActionPane(
-            motion: const BehindMotion(),
-            children: [
-              SlidableAction(
-                onPressed: (context) async {
-                  await _archiveWithUndo(historia);
-                },
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                icon: Icons.archive,
-                label: AppLocalizations.of(context)!.archiveLabel,
-              ),
-            ],
-          ),
-          endActionPane: ActionPane(
-            motion: const BehindMotion(),
-            children: [
-              SlidableAction(
-                onPressed: (context) async {
-                  final navigator = Navigator.of(context);
-                  final selectedGroup = await navigator.push<String>(
-                    MaterialPageRoute(
-                      builder: (_) => const GroupSelectionScreen(),
-                    ),
-                  );
-                  if (selectedGroup != null) {
-                    await _updateHistoria(
-                      historia,
-                      updates: {'grupo': selectedGroup},
-                    );
-                  }
-                },
-                backgroundColor: AppColors.emoticonGreen,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                icon: Icons.group,
-                label: AppLocalizations.of(context)!.group,
-              ),
-            ],
-          ),
-          child: GestureDetector(
-            onDoubleTap: () {
-              _openStoryPreview(historia);
+    return Slidable(
+      startActionPane: ActionPane(
+        motion: const BehindMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) async {
+              await _archiveWithUndo(historia);
             },
-            child: Hero(
-              tag: _storyHeroTag(historia),
-              createRectTween: (begin, end) =>
-                  MaterialRectArcTween(begin: begin, end: end),
-              flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
-              placeholderBuilder: (context, size, child) =>
-                  SizedBox(width: size.width, height: size.height),
-              child: Card(
-                margin: const EdgeInsets.only(bottom: cardMargin),
-                elevation: 0,
-                clipBehavior: Clip.antiAlias,
-                color: const Color(0x00000000),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withValues(alpha: 0.10),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withValues(alpha: 0.03),
-                        blurRadius: 20,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: _buildExpandFab(historia),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 16, 52, 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (hasImages) ...[
-                              HistoriaFotosGrid(
-                                historiaId: historia.id ?? 0,
-                                height: 100,
-                              ),
-                              const SizedBox(height: 12),
-                            ],
-                            // Linha combinada: Emoticon + Áudios + Vídeos
-                            HistoriaMediaRow(
-                              historiaId: historia.id ?? 0,
-                              emoticon: historia.emoticon,
-                              convertLegacyEmoticon: _convertLegacyEmoticon,
-                            ),
-                            Text(
-                              historia.titulo,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.notoSerif(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                height: 1.4,
-                                color: Theme.of(
-                                  context,
-                                ).textTheme.titleLarge?.color,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            SizedBox(
-                              height: 80,
-                              child: RichTextViewerCompactWidget(
-                                jsonContent: historia.descricao,
-                                maxLength: 155,
-                                textStyle: GoogleFonts.plusJakartaSans(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.5,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant
-                                      .withValues(alpha: 0.82),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            // Data
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      if (historia.emoticon != null &&
-                                          historia.emoticon!.isNotEmpty)
-                                        Builder(
-                                          builder: (context) {
-                                            final convertedEmoji =
-                                                _convertLegacyEmoticon(
-                                                  historia.emoticon!,
-                                                );
-                                            final displayEmoji =
-                                                convertedEmoji ??
-                                                historia.emoticon!;
-                                            return Opacity(
-                                              opacity: 0.62,
-                                              child: Text(
-                                                displayEmoji,
-                                                style: const TextStyle(
-                                                  fontSize: 18,
-                                                  height: 1,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      if (historia.emoticon != null &&
-                                          historia.emoticon!.isNotEmpty)
-                                        const SizedBox(width: 6),
-                                      Expanded(
-                                        child: Text(
-                                          DateFormat(
-                                            'dd/MM/yyyy HH:mm',
-                                            'pt_BR',
-                                          ).format(historia.data),
-                                          style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w500,
-                                            letterSpacing: 0.3,
-                                            color: Theme.of(
-                                              context,
-                                            ).textTheme.bodySmall?.color,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // Tags da história (novo sistema + legado)
-                            FutureBuilder<List<Tag>>(
-                              future: TagHelper().getTagsByHistoria(
-                                historia.id ?? 0,
-                              ),
-                              builder: (context, tagSnapshot) {
-                                final newTags = tagSnapshot.data ?? [];
-                                final legacyTag = historia.tag;
-                                final tagNames = newTags.isNotEmpty
-                                    ? newTags.map((t) => t.nome).toList()
-                                    : (legacyTag != null && legacyTag.isNotEmpty
-                                          ? [legacyTag]
-                                          : <String>[]);
-                                if (tagNames.isEmpty) {
-                                  return const SizedBox.shrink();
-                                }
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 8),
-                                    Wrap(
-                                      spacing: 4,
-                                      runSpacing: 4,
-                                      children: tagNames
-                                          .map(
-                                            (name) => Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 4,
-                                                  ),
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    Theme.of(
-                                                          context,
-                                                        ).brightness ==
-                                                        Brightness.dark
-                                                    ? Theme.of(context)
-                                                          .colorScheme
-                                                          .primaryContainer
-                                                    : Theme.of(context)
-                                                          .colorScheme
-                                                          .primaryContainer
-                                                          .withValues(
-                                                            alpha: 0.12,
-                                                          ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              child: Text(
-                                                name,
-                                                style: GoogleFonts.plusJakartaSans(
-                                                  fontSize: 11,
-                                                  fontWeight: FontWeight.w500,
-                                                  letterSpacing: 0.3,
-                                                  color:
-                                                      Theme.of(
-                                                            context,
-                                                          ).brightness ==
-                                                          Brightness.dark
-                                                      ? Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimaryContainer
-                                                      : Theme.of(
-                                                          context,
-                                                        ).colorScheme.primary,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            icon: Icons.archive,
+            label: AppLocalizations.of(context)!.archiveLabel,
           ),
-        );
-      },
+        ],
+      ),
+      endActionPane: ActionPane(
+        motion: const BehindMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) async {
+              final navigator = Navigator.of(context);
+              final selectedGroup = await navigator.push<String>(
+                MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
+              );
+              if (selectedGroup != null) {
+                await _updateHistoria(
+                  historia,
+                  updates: {'grupo': selectedGroup},
+                );
+              }
+            },
+            backgroundColor: AppColors.emoticonGreen,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            icon: Icons.group,
+            label: AppLocalizations.of(context)!.group,
+          ),
+        ],
+      ),
+      child: StoryCard(
+        historia: historia,
+        heroTag: _storyHeroTag(historia),
+        flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+        convertLegacyEmoticon: _convertLegacyEmoticon,
+        onPreview: () => _openStoryPreview(historia),
+        onDoubleTap: () => _openStoryPreview(historia),
+      ),
     );
   }
 
@@ -939,287 +704,6 @@ class _HomeContentState extends State<HomeContent> {
   }
 }
 
-enum _StoryPreviewAction { close, edit, delete }
-
-class _StoryPreviewScreen extends StatelessWidget {
-  final Historia historia;
-  final String localeName;
-  final String? Function(String emoticon) convertLegacyEmoticon;
-  final String heroTag;
-
-  const _StoryPreviewScreen({
-    required this.historia,
-    required this.localeName,
-    required this.convertLegacyEmoticon,
-    required this.heroTag,
-  });
-
-  String _moodNarrative(AppLocalizations l10n) {
-    final mood = historia.humor;
-    if (mood <= 1) return l10n.storyPreviewMoodVeryDifficultNarrative;
-    if (mood == 2) return l10n.storyPreviewMoodDifficultNarrative;
-    if (mood == 3) return l10n.storyPreviewMoodNeutralNarrative;
-    if (mood == 4) return l10n.storyPreviewMoodGoodNarrative;
-    return l10n.storyPreviewMoodVeryGoodNarrative;
-  }
-
-  String _energyNarrative(AppLocalizations l10n) {
-    final energy = historia.energia;
-    if (energy <= 1) return l10n.storyPreviewEnergyLowNarrative;
-    if (energy == 2) return l10n.storyPreviewEnergyNormalNarrative;
-    return l10n.storyPreviewEnergyHighNarrative;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            tooltip: l10n.close,
-            icon: const Icon(Icons.close),
-            onPressed: () =>
-                Navigator.of(context).pop(_StoryPreviewAction.close),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
-          child: Hero(
-            tag: heroTag,
-            createRectTween: (begin, end) =>
-                MaterialRectArcTween(begin: begin, end: end),
-            flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
-            placeholderBuilder: (context, size, child) =>
-                SizedBox(width: size.width, height: size.height),
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: colorScheme.onSurface.withValues(alpha: 0.10),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: colorScheme.onSurface.withValues(alpha: 0.03),
-                      blurRadius: 20,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      HistoriaFotosGrid(
-                        historiaId: historia.id ?? 0,
-                        height: 180,
-                      ),
-                      const SizedBox(height: 12),
-                      HistoriaMediaRow(
-                        historiaId: historia.id ?? 0,
-                        emoticon: historia.emoticon,
-                        convertLegacyEmoticon: convertLegacyEmoticon,
-                      ),
-                      const SizedBox(height: 14),
-                      Text(
-                        historia.titulo,
-                        style: GoogleFonts.notoSerif(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          height: 1.35,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          if (historia.emoticon != null &&
-                              historia.emoticon!.isNotEmpty)
-                            Opacity(
-                              opacity: 0.62,
-                              child: Text(
-                                convertLegacyEmoticon(historia.emoticon!) ??
-                                    historia.emoticon!,
-                                style: const TextStyle(fontSize: 18, height: 1),
-                              ),
-                            ),
-                          if (historia.emoticon != null &&
-                              historia.emoticon!.isNotEmpty)
-                            const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              DateFormat(
-                                'dd/MM/yyyy HH:mm',
-                                localeName,
-                              ).format(historia.data),
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0.3,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      RichTextViewerWidget(jsonContent: historia.descricao),
-                      const SizedBox(height: 14),
-                      Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: colorScheme.onSurface.withValues(alpha: 0.08),
-                      ),
-                      const SizedBox(height: 12),
-                      Container(
-                        padding: const EdgeInsets.only(left: 8),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            left: BorderSide(
-                              color: colorScheme.onSurface.withValues(
-                                alpha: 0.10,
-                              ),
-                            ),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _moodNarrative(l10n),
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.italic,
-                                height: 1.5,
-                                color: colorScheme.onSurfaceVariant.withValues(
-                                  alpha: 0.78,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              _energyNarrative(l10n),
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.italic,
-                                height: 1.5,
-                                color: colorScheme.onSurfaceVariant.withValues(
-                                  alpha: 0.78,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      FutureBuilder<List<Tag>>(
-                        future: TagHelper().getTagsByHistoria(historia.id ?? 0),
-                        builder: (context, tagSnapshot) {
-                          final newTags = tagSnapshot.data ?? [];
-                          final legacyTag = historia.tag;
-                          final tagNames = newTags.isNotEmpty
-                              ? newTags.map((t) => t.nome).toList()
-                              : (legacyTag != null && legacyTag.isNotEmpty
-                                    ? [legacyTag]
-                                    : <String>[]);
-
-                          if (tagNames.isEmpty) return const SizedBox.shrink();
-
-                          return Wrap(
-                            spacing: 6,
-                            runSpacing: 6,
-                            children: tagNames
-                                .map(
-                                  (name) => Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? colorScheme.primaryContainer
-                                          : colorScheme.primaryContainer
-                                                .withValues(alpha: 0.10),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      name,
-                                      style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w500,
-                                        letterSpacing: 0.25,
-                                        color:
-                                            Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? colorScheme.onPrimaryContainer
-                                            : colorScheme.primary,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(16, 4, 16, 14),
-        child: Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () =>
-                    Navigator.of(context).pop(_StoryPreviewAction.close),
-                child: Text(l10n.close),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: FilledButton.tonal(
-                onPressed: () =>
-                    Navigator.of(context).pop(_StoryPreviewAction.edit),
-                child: Text(l10n.edit),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: colorScheme.error,
-                  foregroundColor: colorScheme.onError,
-                ),
-                onPressed: () =>
-                    Navigator.of(context).pop(_StoryPreviewAction.delete),
-                child: Text(l10n.deleteLabel),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Widget interno para conteúdo paginado
 class _PaginatedHomeContent extends StatefulWidget {
   final bool isCardView;
   final bool showChapterShortcutCard;

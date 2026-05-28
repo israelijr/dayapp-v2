@@ -2,33 +2,168 @@ import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/app_localizations.dart';
 import 'package:dayapp/widgets/compact_historia_card.dart';
 import 'package:dayapp/widgets/pulse_animation.dart';
+import 'package:dayapp/widgets/story_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../db/database_helper.dart';
 import '../db/historia_foto_helper.dart';
-import '../db/tag_helper.dart';
-import '../helpers/rich_text_helper.dart';
 import '../models/grupo.dart';
 import '../models/historia.dart';
-import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../providers/pin_provider.dart';
-import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
-import '../services/pdf_export_service.dart';
 import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
-import '../widgets/historia_media_widgets.dart';
-import '../widgets/rich_text_viewer_widget.dart';
 import 'create_historia_screen.dart';
 import 'edit_historia_screen.dart';
 import 'edit_profile_screen.dart';
-import 'pdf_preview_screen.dart';
+
+HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
+  return (
+    BuildContext flightContext,
+    Animation<double> animation,
+    HeroFlightDirection flightDirection,
+    BuildContext fromHeroContext,
+    BuildContext toHeroContext,
+  ) {
+    final colorScheme = Theme.of(toHeroContext).colorScheme;
+    final easedAnimation = CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+
+    return AnimatedBuilder(
+      animation: easedAnimation,
+      builder: (context, child) {
+        final rawProgress = easedAnimation.value;
+        final progress = flightDirection == HeroFlightDirection.push
+            ? rawProgress
+            : 1 - rawProgress;
+        final compactOpacity = (1 - ((progress - 0.12) / 0.42)).clamp(0.0, 1.0);
+        final expandedOpacity = ((progress - 0.32) / 0.48).clamp(0.0, 1.0);
+
+        return Material(
+          color: Colors.transparent,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: colorScheme.onSurface.withValues(alpha: 0.10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.onSurface.withValues(alpha: 0.03),
+                    blurRadius: 20,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Opacity(
+                        opacity: compactOpacity,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.open_in_full_rounded,
+                                  size: 16,
+                                  color: colorScheme.onSurfaceVariant
+                                      .withValues(alpha: 0.55),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    historia.titulo,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.notoSerif(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: colorScheme.onSurface.withValues(
+                                        alpha: 0.85,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Opacity(
+                        opacity: expandedOpacity,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 28,
+                                height: 28,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: colorScheme.surfaceContainerHigh,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.auto_stories_outlined,
+                                  size: 16,
+                                  color: colorScheme.onSurfaceVariant
+                                      .withValues(alpha: 0.72),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      historia.titulo,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.notoSerif(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: colorScheme.onSurface.withValues(
+                                          alpha: 0.88,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  };
+}
 
 class GroupStoriesScreen extends StatefulWidget {
   final Grupo grupo;
@@ -41,8 +176,6 @@ class GroupStoriesScreen extends StatefulWidget {
 
 class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
   // Constantes para melhor organização
-  static const double cardMargin = 24.0;
-
   // Key para ScaffoldMessenger local — snackbars ficam escopados a esta tela
   // e são descartados automaticamente quando o usuário navega para outra rota.
   final _messengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -127,71 +260,6 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
         return '😭';
       default:
         return null; // Já é um emoji Unicode
-    }
-  }
-
-  Future<void> _exportHistoria(Historia historia) async {
-    // Bloqueia exportação de PDF para usuários Free
-    if (!context.read<PremiumProvider>().canExportPdf) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.exportPdfPremiumRequired),
-        ),
-      );
-      return;
-    }
-    try {
-      // Captura o locale antes do primeiro await para evitar uso de context após async
-      final localeName = AppLocalizations.of(context)!.localeName;
-      final fotosData = await HistoriaFotoHelper().getFotosComBytesByHistoria(
-        historia.id ?? 0,
-      );
-      final images = fotosData.map((f) => f.bytes).toList();
-      final content = RichTextHelper.jsonToPlainText(historia.descricao);
-      final pdfBytes = await PdfExportService.generatePdfFromHistoria(
-        title: historia.titulo,
-        content: content,
-        date: historia.data,
-        images: images,
-        tags: historia.tag,
-        emoticon: historia.emoticon,
-        locale: localeName,
-      );
-      final filename =
-          'historia_${historia.id ?? DateTime.now().millisecondsSinceEpoch}.pdf';
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PdfPreviewScreen(
-            initialPdfBytes: pdfBytes,
-            onGenerate: (highQuality, bgColor) =>
-                PdfExportService.generatePdfFromHistoria(
-                  title: historia.titulo,
-                  content: content,
-                  date: historia.data,
-                  images: images,
-                  tags: historia.tag,
-                  emoticon: historia.emoticon,
-                  highQuality: highQuality,
-                  backgroundColorHex: bgColor,
-                  locale: localeName,
-                ),
-            filename: filename,
-            title: AppLocalizations.of(context)!.previewTitle(historia.titulo),
-            onSave: null,
-          ),
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      _messengerKey.currentState?.showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.exportPdfError(e.toString()),
-          ),
-        ),
-      );
     }
   }
 
@@ -358,280 +426,58 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
   }
 
   Widget _buildCardView(Historia historia) {
-    return FutureBuilder<List<FotoComBytes>>(
-      future: HistoriaFotoHelper().getFotosComBytesByHistoria(historia.id ?? 0),
-      builder: (context, snapshot) {
-        final hasImages = snapshot.hasData && snapshot.data!.isNotEmpty;
-
-        return Slidable(
-          startActionPane: ActionPane(
-            motion: const BehindMotion(),
-            children: [
-              SlidableAction(
-                onPressed: (context) async {
-                  await _archiveWithUndo(historia);
-                },
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                icon: Icons.archive,
-                label: AppLocalizations.of(context)?.archiveLabel ?? 'Arquivar',
-              ),
-            ],
+    return Slidable(
+      startActionPane: ActionPane(
+        motion: const BehindMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) async {
+              await _archiveWithUndo(historia);
+            },
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            icon: Icons.archive,
+            label: AppLocalizations.of(context)?.archiveLabel ?? 'Arquivar',
           ),
-          endActionPane: ActionPane(
-            motion: const BehindMotion(),
-            children: [
-              SlidableAction(
-                onPressed: (slidableContext) async {
-                  final refreshProvider = Provider.of<RefreshProvider>(
-                    slidableContext,
-                    listen: false,
-                  );
-                  final ungroupedMsg = AppLocalizations.of(
-                    slidableContext,
-                  )!.storyUngrouped;
-                  await _updateHistoria(
-                    historia,
-                    updates: {'tag': null, 'arquivado': null, 'grupo': null},
-                  );
-                  if (!mounted) return;
-                  refreshProvider.refresh();
-                  _messengerKey.currentState?.showSnackBar(
-                    SnackBar(content: Text(ungroupedMsg)),
-                  );
-                },
-                backgroundColor: AppColors.emoticonGreen,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                icon: Icons.group_off,
-                label: AppLocalizations.of(context)?.ungroup ?? 'Desagrupar',
-              ),
-            ],
-          ),
-          child: GestureDetector(
-            onDoubleTap: () {
+        ],
+      ),
+      endActionPane: ActionPane(
+        motion: const BehindMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (slidableContext) async {
               final refreshProvider = Provider.of<RefreshProvider>(
-                context,
+                slidableContext,
                 listen: false,
               );
-              Navigator.push(
-                context,
-                RouteTransitionHelper.slideUpRotateTransition(
-                  EditHistoriaScreen(historia: historia),
-                ),
-              ).then((updated) {
-                if (!mounted) return;
-                if (updated == true) {
-                  refreshProvider.refresh();
-                }
-              });
+              final ungroupedMsg = AppLocalizations.of(
+                slidableContext,
+              )!.storyUngrouped;
+              await _updateHistoria(
+                historia,
+                updates: {'tag': null, 'arquivado': null, 'grupo': null},
+              );
+              if (!mounted) return;
+              refreshProvider.refresh();
+              _messengerKey.currentState?.showSnackBar(
+                SnackBar(content: Text(ungroupedMsg)),
+              );
             },
-            child: Card(
-              margin: const EdgeInsets.only(bottom: cardMargin),
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (hasImages) ...[
-                      HistoriaFotosGrid(
-                        historiaId: historia.id ?? 0,
-                        height: 100,
-                      ),
-                      const SizedBox(height: 12),
-                    ],
-                    // Linha combinada: Emoticon + Áudios + Vídeos
-                    HistoriaMediaRow(
-                      historiaId: historia.id ?? 0,
-                      emoticon: historia.emoticon,
-                      convertLegacyEmoticon: _convertLegacyEmoticon,
-                    ),
-                    Text(
-                      historia.titulo,
-                      style: GoogleFonts.notoSerif(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        height: 1.4,
-                        color: Theme.of(context).textTheme.titleLarge?.color,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      height: 80,
-                      child: RichTextViewerWidget(
-                        jsonContent: historia.descricao,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    // Data
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            if (historia.emoticon != null &&
-                                historia.emoticon!.isNotEmpty)
-                              Builder(
-                                builder: (context) {
-                                  final convertedEmoji = _convertLegacyEmoticon(
-                                    historia.emoticon!,
-                                  );
-                                  final displayEmoji =
-                                      convertedEmoji ?? historia.emoticon!;
-                                  return Text(
-                                    displayEmoji,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      height: 1,
-                                    ),
-                                  );
-                                },
-                              ),
-                            if (historia.emoticon != null &&
-                                historia.emoticon!.isNotEmpty)
-                              const SizedBox(width: 6),
-                            SizedBox(
-                              width: 140,
-                              child: Text(
-                                DateFormat(
-                                  'dd/MM/yyyy HH:mm',
-                                  'pt_BR',
-                                ).format(historia.data),
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0.3,
-                                  color: Theme.of(
-                                    context,
-                                  ).textTheme.bodySmall?.color,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        PopupMenuButton<String>(
-                          icon: Icon(
-                            Icons.more_horiz,
-                            color: Theme.of(context).iconTheme.color,
-                          ),
-                          onSelected: (value) async {
-                            if (value == 'edit') {
-                              final navigator = Navigator.of(context);
-                              final refreshProvider =
-                                  Provider.of<RefreshProvider>(
-                                    context,
-                                    listen: false,
-                                  );
-                              navigator
-                                  .push(
-                                    MaterialPageRoute(
-                                      builder: (_) => EditHistoriaScreen(
-                                        historia: historia,
-                                      ),
-                                    ),
-                                  )
-                                  .then((updated) {
-                                    if (!mounted) return;
-                                    if (updated == true) {
-                                      refreshProvider.refresh();
-                                    }
-                                  });
-                            } else if (value == 'delete') {
-                              await _deleteHistoria(historia);
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              value: 'edit',
-                              child: Text(
-                                AppLocalizations.of(context)?.editTip ??
-                                    'Editar - 2 toques',
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: 'delete',
-                              child: Text(
-                                AppLocalizations.of(context)?.deleteLabel ??
-                                    'Excluir',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    // Tags da história (novo sistema + legado)
-                    FutureBuilder<List<Tag>>(
-                      future: TagHelper().getTagsByHistoria(historia.id ?? 0),
-                      builder: (context, tagSnapshot) {
-                        final newTags = tagSnapshot.data ?? [];
-                        final legacyTag = historia.tag;
-                        final tagNames = newTags.isNotEmpty
-                            ? newTags.map((t) => t.nome).toList()
-                            : (legacyTag != null && legacyTag.isNotEmpty
-                                  ? [legacyTag]
-                                  : <String>[]);
-                        if (tagNames.isEmpty) return const SizedBox.shrink();
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 8),
-                            Wrap(
-                              spacing: 4,
-                              runSpacing: 4,
-                              children: tagNames
-                                  .map(
-                                    (name) => Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Theme.of(
-                                                context,
-                                              ).colorScheme.primaryContainer
-                                            : Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryContainer
-                                                  .withValues(alpha: 0.12),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        name,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color:
-                                              Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? Theme.of(
-                                                  context,
-                                                ).colorScheme.onPrimaryContainer
-                                              : Theme.of(
-                                                  context,
-                                                ).colorScheme.primary,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            backgroundColor: AppColors.emoticonGreen,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            icon: Icons.group_off,
+            label: AppLocalizations.of(context)?.ungroup ?? 'Desagrupar',
           ),
-        );
-      },
+        ],
+      ),
+      child: StoryCard(
+        historia: historia,
+        heroTag: _storyHeroTag(historia),
+        flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+        convertLegacyEmoticon: _convertLegacyEmoticon,
+        onPreview: () => _openStoryPreview(historia),
+        onDoubleTap: () => _openStoryPreview(historia),
+      ),
     );
   }
 
@@ -691,102 +537,39 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       onDismissed: (direction) {
         // Já tratado no confirmDismiss
       },
-      child: CompactHistoriaCard(
-        historia: historia,
-        localeName:
-            AppLocalizations.of(context)?.localeName ??
-            Localizations.localeOf(context).toString(),
-        overlayTrailing: true,
-        trailing: PopupMenuButton<String>(
-          icon: Icon(
-            Icons.more_horiz,
-            color: Theme.of(context).iconTheme.color,
-          ),
-          onSelected: (value) async {
-            if (value == 'edit') {
-              Navigator.push(
-                context,
-                RouteTransitionHelper.slideUpRotateTransition(
-                  EditHistoriaScreen(historia: historia),
-                ),
-              ).then((updated) {
-                if (!mounted) return;
-                if (updated == true) {
-                  final refreshProvider = Provider.of<RefreshProvider>(
-                    context,
-                    listen: false,
-                  );
-                  refreshProvider.refresh();
-                }
-              });
-            } else if (value == 'delete') {
-              await _deleteHistoria(historia);
-            } else if (value == 'export') {
-              await _exportHistoria(historia);
-            } else if (value == 'desagrupar') {
-              final refreshProvider = Provider.of<RefreshProvider>(
-                context,
-                listen: false,
-              );
-              await _updateHistoria(
-                historia,
-                updates: {'tag': null, 'arquivado': null, 'grupo': null},
-              );
-              if (!mounted) return;
-              refreshProvider.refresh();
-              _messengerKey.currentState?.showSnackBar(
-                SnackBar(
-                  content: Text(AppLocalizations.of(context)!.storyUngrouped),
-                ),
-              );
-            }
-          },
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: 'edit',
-              child: Text(AppLocalizations.of(context)?.edit ?? 'Editar'),
-            ),
-            PopupMenuItem(
-              value: 'export',
-              child: Text(
-                AppLocalizations.of(context)?.exportPdf ?? 'Exportar PDF',
-              ),
-            ),
-            PopupMenuItem(
-              value: 'desagrupar',
-              child: Text(
-                AppLocalizations.of(context)?.ungroup ?? 'Desagrupar',
-              ),
-            ),
-            PopupMenuItem(
-              value: 'delete',
-              child: Text(
-                AppLocalizations.of(context)?.deleteLabel ?? 'Excluir',
-              ),
-            ),
-          ],
-        ),
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                content: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: SingleChildScrollView(child: _buildCardView(historia)),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      AppLocalizations.of(context)?.close ?? 'Fechar',
-                    ),
+      child: Hero(
+        tag: _storyHeroTag(historia),
+        createRectTween: (begin, end) =>
+            MaterialRectArcTween(begin: begin, end: end),
+        placeholderBuilder: (context, size, child) =>
+            SizedBox(width: size.width, height: size.height),
+        child: Material(
+          color: Colors.transparent,
+          child: CompactHistoriaCard(
+            historia: historia,
+            localeName:
+                AppLocalizations.of(context)?.localeName ??
+                Localizations.localeOf(context).toString(),
+            overlayTrailing: true,
+            trailing: Material(
+              shape: const CircleBorder(),
+              color: Theme.of(context).colorScheme.primary,
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                onTap: () => _openStoryPreview(historia),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Icon(
+                    Icons.open_in_full,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
-                ],
-              );
-            },
-          );
-        },
+                ),
+              ),
+            ),
+            onDoubleTap: () => _openStoryPreview(historia),
+          ),
+        ),
       ),
     );
   }
@@ -1048,5 +831,62 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       if (!mounted) return;
       navigator.pushReplacementNamed('/home');
     }
+  }
+
+  String _storyHeroTag(Historia historia) =>
+      'group_story_${historia.id ?? historia.titulo.hashCode}';
+
+  Future<void> _openStoryPreview(Historia historia) async {
+    try {
+      await _warmupStoryPreviewMedia(
+        historia,
+      ).timeout(const Duration(milliseconds: 180));
+    } catch (_) {
+      // Ignora timeout/falha de pré-carregamento.
+    }
+
+    if (!mounted) return;
+
+    final heroTag = _storyHeroTag(historia);
+    final action = await Navigator.of(context).push<StoryPreviewAction>(
+      MaterialPageRoute(
+        builder: (_) => StoryPreviewScreen(
+          historia: historia,
+          localeName: AppLocalizations.of(context)!.localeName,
+          convertLegacyEmoticon: _convertLegacyEmoticon,
+          heroTag: heroTag,
+          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+          showEditDelete: true,
+          showMoodNotes: true,
+        ),
+      ),
+    );
+
+    if (!mounted || action == null || action == StoryPreviewAction.close) {
+      return;
+    }
+
+    if (action == StoryPreviewAction.edit) {
+      final updated = await Navigator.of(context).push(
+        RouteTransitionHelper.slideUpRotateTransition(
+          EditHistoriaScreen(historia: historia),
+        ),
+      );
+      if (!mounted) return;
+      if (updated == true) {
+        Provider.of<RefreshProvider>(context, listen: false).refresh();
+      }
+      return;
+    }
+
+    if (action == StoryPreviewAction.delete) {
+      await _deleteHistoria(historia);
+    }
+  }
+
+  Future<void> _warmupStoryPreviewMedia(Historia historia) async {
+    final historiaId = historia.id;
+    if (historiaId == null || historiaId <= 0) return;
+    await HistoriaFotoHelper().getFotosComBytesByHistoria(historiaId);
   }
 }
