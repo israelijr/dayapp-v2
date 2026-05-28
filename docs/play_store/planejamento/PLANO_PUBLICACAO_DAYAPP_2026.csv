@@ -1,0 +1,32 @@
+ID,Fase,Tarefa,Detalhamento,Complexidade,EstimativaHoras,Dependencias,Responsavel,Status,Prioridade,Entregavel,InfoFaltante
+1,Fase 0 - Escopo,Definir recursos da v1.0.0,Listar claramente o que entra e o que fica para v1.1,Media,2,,Product Owner,Nao iniciado,Alta,Documento de escopo aprovado,Nao
+2,Fase 0 - Escopo,Definir categoria da loja,Escolher entre Lifestyle e Productivity,Baixa,1,1,Product Owner,Nao iniciado,Media,Categoria definida,Nao
+3,Fase 0 - Escopo,Definir mercados e idiomas,Confirmar paises de distribuicao e idiomas da ficha,Media,"1,5",1,Product Owner,Nao iniciado,Media,Plano de distribuicao,Sim
+4,Fase 1 - Documentacao,Atualizar politica de privacidade,"Corrigir Application ID e revisar secoes de anuncios, coleta e compartilhamento",Alta,4,1,Dev,Nao iniciado,Alta,privacy_policy.md revisado,Nao
+5,Fase 1 - Documentacao,Publicar politica em URL estavel,Hospedar politica em URL publica sem login,Media,2,4,Dev,Nao iniciado,Alta,URL publica funcionando,Sim
+6,Fase 1 - Documentacao,Atualizar tela Sobre,"Remover hardcoded, migrar para i18n, revisar recursos e links",Alta,4,4,Dev,Nao iniciado,Alta,about_screen e ARBs atualizados,Nao
+7,Fase 1 - Documentacao,Atualizar tela Ajuda,Revisar topicos e textos conforme recursos atuais do app,Media,3,4,Dev,Nao iniciado,Alta,help_screen e ARBs atualizados,Nao
+8,Fase 1 - Documentacao,Consolidar checklist unico,Unificar PLAY_STORE_CHECKLIST e estrategia em uma versao operacional,Media,2,4,Product Owner,Nao iniciado,Media,Checklist unico atualizado,Nao
+9,Fase 2 - Monetizacao,Criar/validar conta AdMob,Acessar AdMob e concluir cadastro da conta,Media,1,,Product Owner,Nao iniciado,Alta,Conta AdMob ativa,Sim
+10,Fase 2 - Monetizacao,Cadastrar app no AdMob,Registrar pacote Android correto no AdMob,Media,1,9,Product Owner,Nao iniciado,Alta,App cadastrado,Nao
+11,Fase 2 - Monetizacao,Criar unidades de anuncio,Criar banner e intersticial; rewarded se aplicavel,Media,1,10,Product Owner,Nao iniciado,Alta,IDs de anuncio gerados,Sim
+12,Fase 2 - Monetizacao,Trocar IDs de teste por producao,Atualizar AndroidManifest e AdService para IDs reais,Alta,2,11,Dev,Nao iniciado,Alta,Build release com IDs de producao,Sim
+13,Fase 2 - Monetizacao,Validar frequencia e UX dos anuncios,Confirmar que anuncios nao prejudicam experiencia,Media,2,12,Dev,Nao iniciado,Media,Relatorio de validacao,Nao
+14,Fase 3 - Assinatura,Criar keystore de upload,Gerar keystore e armazenar backup seguro,Alta,1,,Dev,Nao iniciado,Alta,Keystore criada e salva,Sim
+15,Fase 3 - Assinatura,Configurar key.properties,Inserir credenciais reais e validar assinatura,Alta,1,14,Dev,Nao iniciado,Alta,Assinatura release valida,Sim
+16,Fase 4 - Build e QA,Atualizar versionamento,Definir versionName e versionCode para release,Baixa,"0,5",15,Dev,Nao iniciado,Media,Versao atualizada,Nao
+17,Fase 4 - Build e QA,Gerar AAB release,Executar flutter build appbundle --release,Media,1,16,Dev,Nao iniciado,Alta,AAB gerado,Nao
+18,Fase 4 - Build e QA,Teste funcional em dispositivo fisico,"Validar login, pin, biometria, editor, midia, backup, notificacao e anuncios",Alta,4,17,QA,Nao iniciado,Alta,Checklist de teste preenchido,Nao
+19,Fase 5 - Store assets,Criar feature graphic,Produzir arte 1024x500,Media,2,1,Designer,Nao iniciado,Media,Feature graphic pronta,Nao
+20,Fase 5 - Store assets,Criar screenshots da loja,Criar 8 screenshots com proposta de valor,Media,4,1,Designer,Nao iniciado,Alta,Pack de screenshots,Nao
+21,Fase 5 - Store assets,Fechar textos da loja,"Titulo, descricao curta e longa alinhados ao app",Media,2,4,Product Owner,Nao iniciado,Alta,Copy final da loja,Nao
+22,Fase 6 - Play Console,Criar app no Play Console,"Configurar app, idioma padrao e categoria",Media,1,2,Product Owner,Nao iniciado,Alta,App criado no console,Nao
+23,Fase 6 - Play Console,Preencher ficha da loja,"Enviar textos, screenshots, feature graphic e contatos",Media,2,20,Product Owner,Nao iniciado,Alta,Store listing completo,Nao
+24,Fase 6 - Play Console,Responder classificacao de conteudo IARC,Preencher questionario de classificacao etaria,Media,1,22,Product Owner,Nao iniciado,Alta,Classificacao aprovada,Nao
+25,Fase 6 - Play Console,Preencher Data Safety,Declarar dados coletados/compartilhados com base real no app,Alta,2,4,Product Owner,Nao iniciado,Alta,Formulario Data Safety concluido,Sim
+26,Fase 6 - Play Console,Declarar anuncios,Marcar presenca de anuncios e validar consistencia,Baixa,"0,5",12,Product Owner,Nao iniciado,Alta,Declaracao de anuncios ativa,Nao
+27,Fase 7 - Teste interno,Criar faixa de teste interno,Publicar AAB e gerar link para testadores,Media,1,23,Dev,Nao iniciado,Alta,Faixa interna ativa,Nao
+28,Fase 7 - Teste interno,Executar rodada de testes internos,Coletar feedback e evidencias de uso real,Media,6,27,QA,Nao iniciado,Alta,Relatorio de bugs e ajustes,Nao
+29,Fase 7 - Teste interno,Corrigir bloqueadores e reenviar,Tratar bugs criticos e subir novo AAB,Alta,6,28,Dev,Nao iniciado,Alta,Build candidata aprovada,Nao
+30,Fase 8 - Producao,Enviar para revisao de producao,Submeter versao final para aprovacao do Google,Media,1,29,Product Owner,Nao iniciado,Alta,Status em revisao,Nao
+31,Fase 8 - Producao,Monitorar pos-publicacao 7 dias,"Acompanhar crashes, reviews e receita inicial",Media,4,30,Product Owner,Nao iniciado,Media,Relatorio de lancamento,Nao

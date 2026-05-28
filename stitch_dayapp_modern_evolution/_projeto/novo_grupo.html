@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DayApp - Novo Grupo</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Noto+Serif:wght@600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "sage-deep": "#5D7A61",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#c7ecca",
+                        "surface-container": "#eeeeea",
+                        "primary-container": "#7da082",
+                        "on-secondary-fixed-variant": "#5a4400",
+                        "on-error": "#ffffff",
+                        "surface": "#faf9f5",
+                        "inverse-primary": "#abd0af",
+                        "secondary-container": "#ffd87c",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f1f1ed",
+                        "surface-container-low": "#f4f4f0",
+                        "tertiary": "#80515a",
+                        "on-tertiary-fixed": "#321018",
+                        "on-surface-variant": "#424842",
+                        "soft-ink": "#3C403D",
+                        "sage-mist": "#CDE0C9",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#bf8992",
+                        "on-secondary-fixed": "#251a00",
+                        "warm-clay": "#D9AE94",
+                        "outline": "#727971",
+                        "surface-container-high": "#e8e8e4",
+                        "outline-variant": "#c2c8bf",
+                        "on-primary-fixed": "#01210c",
+                        "surface-container-highest": "#e3e3df",
+                        "cream-base": "#FDFBF7",
+                        "surface-dim": "#dadad6",
+                        "secondary-fixed-dim": "#e7c268",
+                        "on-primary-container": "#16361f",
+                        "surface-variant": "#e3e3df",
+                        "secondary": "#765a05",
+                        "on-secondary-container": "#795d08",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdf96",
+                        "on-tertiary-container": "#4a242c",
+                        "on-primary-fixed-variant": "#2e4e35",
+                        "inverse-surface": "#2f312e",
+                        "tertiary-fixed": "#ffd9de",
+                        "on-surface": "#1a1c1a",
+                        "amber-glow": "#F4D35E",
+                        "tertiary-fixed-dim": "#f2b7c1",
+                        "surface-tint": "#45664b",
+                        "on-error-container": "#93000a",
+                        "primary": "#45664b",
+                        "on-background": "#1a1c1a",
+                        "on-tertiary-fixed-variant": "#653a43",
+                        "on-secondary": "#ffffff",
+                        "background": "#faf9f5",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#faf9f5",
+                        "primary-fixed-dim": "#abd0af"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "24px",
+                        "unit": "8px",
+                        "stack-gap": "20px",
+                        "entry-padding": "32px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Noto Serif"],
+                        "headline-sm": ["Noto Serif"],
+                        "headline-md": ["Noto Serif"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-active {
+            font-variation-settings: 'FILL' 1;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(253, 251, 247, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col items-center">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl">
+<div class="flex items-center w-full px-container-margin py-unit max-w-7xl mx-auto h-16">
+<button class="text-primary hover:bg-sage-mist/20 transition-colors rounded-full p-2 active:scale-95 duration-150">
+<a href="colecoes.html" class="material-symbols-outlined text-[24px]">close</a>
+</button>
+<h1 class="flex-grow ml-4 font-headline-md text-headline-md text-on-surface">Novo Grupo</h1>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="w-full max-w-2xl mt-16 px-container-margin py-stack-gap flex-grow flex flex-col gap-stack-gap">
+<!-- Form Section -->
+<section class="bg-surface-container-low rounded-xl p-entry-padding shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-soft-ink/5">
+<div class="space-y-8">
+<!-- Group Name -->
+<div class="group">
+<label class="block font-label-lg text-label-lg text-primary mb-2 transition-colors group-focus-within:text-sage-deep" for="group-name">
+                        Nome do Grupo
+                    </label>
+<input class="w-full bg-cream-base/50 border-b-2 border-sage-mist focus:border-primary outline-none py-3 px-1 transition-all text-body-lg font-body-lg placeholder:text-outline-variant focus:bg-cream-base" id="group-name" placeholder="Ex: Viagens, Saúde, Família" type="text"/>
+</div>
+<!-- Description -->
+<div class="group">
+<label class="block font-label-lg text-label-lg text-primary mb-2 transition-colors group-focus-within:text-sage-deep" for="description">
+                        Descrição
+                    </label>
+<textarea class="w-full bg-cream-base/50 border-b-2 border-sage-mist focus:border-primary outline-none py-3 px-1 transition-all text-body-md font-body-md placeholder:text-outline-variant resize-none focus:bg-cream-base" id="description" placeholder="Do que se trata esse grupo?" rows="3"></textarea>
+</div>
+<!-- Icon Selection -->
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-6">Selecione um ícone</h2>
+<div class="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
+<!-- Add Photo Button -->
+<button class="flex-shrink-0 flex flex-col items-center gap-2">
+<div class="w-14 h-14 rounded-full border-2 border-dashed border-sage-mist flex items-center justify-center text-primary hover:bg-sage-mist/20 transition-all">
+<span class="material-symbols-outlined">add_a_photo</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Foto</span>
+</button>
+<!-- Minimalist Icon Grid (Simulated horizontal) -->
+<div class="flex gap-4">
+<!-- Icon 1 (Selected) -->
+<button class="flex-shrink-0 flex flex-col items-center gap-2 group">
+<div class="w-14 h-14 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center transition-all scale-110">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">Amor</span>
+</button>
+<!-- Icon 2 -->
+<button class="flex-shrink-0 flex flex-col items-center gap-2 group">
+<div class="w-14 h-14 rounded-full bg-sage-mist/30 text-primary flex items-center justify-center hover:bg-sage-mist/50 transition-all group-hover:scale-105">
+<span class="material-symbols-outlined">work</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Trampo</span>
+</button>
+<!-- Icon 3 -->
+<button class="flex-shrink-0 flex flex-col items-center gap-2 group">
+<div class="w-14 h-14 rounded-full bg-sage-mist/30 text-primary flex items-center justify-center hover:bg-sage-mist/50 transition-all group-hover:scale-105">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Saúde</span>
+</button>
+<!-- Icon 4 -->
+<button class="flex-shrink-0 flex flex-col items-center gap-2 group">
+<div class="w-14 h-14 rounded-full bg-sage-mist/30 text-primary flex items-center justify-center hover:bg-sage-mist/50 transition-all group-hover:scale-105">
+<span class="material-symbols-outlined">flight</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Viagens</span>
+</button>
+<!-- Icon 5 -->
+<button class="flex-shrink-0 flex flex-col items-center gap-2 group">
+<div class="w-14 h-14 rounded-full bg-sage-mist/30 text-primary flex items-center justify-center hover:bg-sage-mist/50 transition-all group-hover:scale-105">
+<span class="material-symbols-outlined">home</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Casa</span>
+</button>
+<!-- Icon 6 -->
+<button class="flex-shrink-0 flex flex-col items-center gap-2 group">
+<div class="w-14 h-14 rounded-full bg-sage-mist/30 text-primary flex items-center justify-center hover:bg-sage-mist/50 transition-all group-hover:scale-105">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Gym</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Decorative Card / Insight -->
+<section class="mt-4 p-gutter bg-warm-clay/10 rounded-xl flex items-center gap-4">
+<div class="bg-warm-clay/20 p-3 rounded-full">
+<span class="material-symbols-outlined text-warm-clay">lightbulb</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-soft-ink italic">"Grupos ajudam você a organizar suas memórias por temas que importam para você."</p>
+</div>
+</section>
+<div class="flex-grow"></div>
+<!-- Create Button -->
+<div class="sticky bottom-4 left-0 w-full pt-4 bg-background/50 backdrop-blur-md">
+<button class="w-full bg-primary text-on-primary py-4 rounded-full font-label-lg text-label-lg shadow-lg shadow-primary/20 hover:bg-sage-deep transition-all active:scale-95">
+                Criar Grupo
+            </button>
+</div>
+</main>
+<!-- Visual Aesthetic Element: Subtle floating leaf illustration (Placeholder) -->
+<div class="fixed top-24 -right-12 opacity-10 pointer-events-none select-none -z-10 w-64 h-64">
+<img class="w-full h-full object-contain rotate-12" data-alt="A soft, watercolor illustration of a single botanical leaf with delicate green veins and a translucent texture. The lighting is ethereal and soft, mimicking a bright morning in a tranquil garden sanctuary. The style is warm minimalism with pastel sage and cream tones to match the application's digital sanctuary aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCx7QG0ZZCk3YI4dpIGCBWMgB7YAiRPnHfks-pmzW-VgqAtYdoq6CuM8AGgsnvOADk4kN9cvyLMXCbOUP63tIif8URWorI2FBXfR0OXoCVXJFuSE9u36e_lgJo5ksOHgWpY6HpiwjE65bQRPeknECMRABID65alMYfV8sboseIWtq0brAqv1x34JtyZL2QRRBEQxf2HQtUOw03pGtgMkGBrrnjkOzHkTMn70Tq5fEasElEhcJk5dsSjlcg8DqaHZCnvPOuMp_A8MaKR"/>
+</div>
+<!-- Scripts for micro-interactions -->
+<script>
+        // Simple ripple effect or active state handling
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Potential for haptic or visual feedback
+            });
+        });
+
+        // Icon Selection Logic
+        const iconButtons = document.querySelectorAll('.flex.gap-4 button:not(:first-child)');
+        iconButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Clear active states
+                iconButtons.forEach(b => {
+                    const circle = b.querySelector('div');
+                    const label = b.querySelector('span:last-child');
+                    const icon = b.querySelector('.material-symbols-outlined');
+                    
+                    circle.classList.remove('bg-primary-container', 'text-on-primary-container', 'scale-110');
+                    circle.classList.add('bg-sage-mist/30', 'text-primary');
+                    label.classList.remove('text-primary', 'font-bold');
+                    label.classList.add('text-on-surface-variant');
+                    icon.style.fontVariationSettings = "'FILL' 0";
+                });
+
+                // Set active state
+                const circle = btn.querySelector('div');
+                const label = btn.querySelector('span:last-child');
+                const icon = btn.querySelector('.material-symbols-outlined');
+
+                circle.classList.add('bg-primary-container', 'text-on-primary-container', 'scale-110');
+                circle.classList.remove('bg-sage-mist/30', 'text-primary');
+                label.classList.add('text-primary', 'font-bold');
+                label.classList.remove('text-on-surface-variant');
+                icon.style.fontVariationSettings = "'FILL' 1";
+            });
+        });
+    </script>
+</body></html>

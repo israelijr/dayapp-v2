@@ -1,0 +1,97 @@
+name: dayapp
+description: "Um aplicativo para registrar suas memórias."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# Define a versão da aplicação.
+version: 1.0.0+4
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  cupertino_icons: ^1.0.8
+
+  sqflite: ^2.3.2
+  path_provider: ^2.1.2
+  provider: ^6.1.2
+  intl: ^0.20.2
+  shared_preferences: ^2.2.3
+  path: ^1.8.3
+  uuid: ^4.3.3
+  image_picker: ^1.1.1
+  flutter_image_compress: ^2.3.0
+  url_launcher: ^6.1.10
+  share_plus: ^12.0.2
+  sqflite_common_ffi: ^2.3.6
+  flutter_local_notifications: ^21.0.0
+  timezone: ^0.11.0
+  flutter_slidable: ^4.0.3
+  file_selector: ^1.1.0
+  audioplayers: ^6.1.0
+  record: ^6.2.0
+  video_player: ^2.9.2
+  file_picker: ^11.0.2
+  table_calendar: ^3.1.2
+  local_auth: ^3.0.1
+  archive: ^4.0.9
+  crypto: ^3.0.3
+  flutter_quill: ^11.5.0
+  vsc_quill_delta_to_html: ^1.0.2
+  flutter_secure_storage: ^10.2.0
+  sqflite_common_ffi_web: ^1.1.1
+  package_info_plus: ^9.0.1
+  mailer: ^7.1.0
+  flutter_timezone: ^5.0.1
+  # PDF export
+  pdf: ^3.10.2
+  printing: ^5.11.0
+  animations: ^2.0.11
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.4
+  # pacote para geração automática de localizações (opcional)
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  windows:
+    generate: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icon/icon.png"
+  adaptive_icon_round: "assets/icon/icon.png"
+
+# Configuração do Native Splash Screen
+# Apenas cor sólida - a splash bonita é feita pelo Flutter
+# Isso evita duas splashes diferentes e garante transição suave
+flutter_native_splash:
+  color: "#F5E8FA"
+  color_dark: "#1A1A2E"
+  
+  # Android 12+ - apenas cor, sem ícone
+  android_12:
+    color: "#F5E8FA"
+    color_dark: "#1A1A2E"
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/image/
+    - assets/icon/
+    - assets/emojis.json
+    - assets/adi-registration.properties
+    - assets/fonts/

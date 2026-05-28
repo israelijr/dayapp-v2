@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>DayApp - Família</title>
+        <script
+            src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet" />
+        <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .glass-header {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .glass-card {
+            background: rgba(253, 251, 247, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(60, 64, 61, 0.08);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c2c8bf;
+            border-radius: 10px;
+        }
+        body {
+            background-color: #faf9f5;
+            color: #1a1c1a;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+        <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#ffd87c",
+                        "on-surface-variant": "#424842",
+                        "primary-fixed": "#c7ecca",
+                        "surface-container-highest": "#e3e3df",
+                        "surface-dim": "#dadad6",
+                        "on-secondary-container": "#795d08",
+                        "secondary-fixed": "#ffdf96",
+                        "tertiary": "#80515a",
+                        "primary-fixed-dim": "#abd0af",
+                        "background": "#faf9f5",
+                        "primary-container": "#7da082",
+                        "on-primary-container": "#16361f",
+                        "on-secondary-fixed-variant": "#5a4400",
+                        "sage-deep": "#5D7A61",
+                        "on-secondary-fixed": "#251a00",
+                        "secondary": "#765a05",
+                        "on-tertiary-container": "#4a242c",
+                        "warm-clay": "#D9AE94",
+                        "on-error": "#ffffff",
+                        "on-background": "#1a1c1a",
+                        "soft-ink": "#3C403D",
+                        "on-tertiary-fixed-variant": "#653a43",
+                        "inverse-primary": "#abd0af",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#faf9f5",
+                        "on-primary-fixed": "#01210c",
+                        "inverse-on-surface": "#f1f1ed",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#eeeeea",
+                        "outline-variant": "#c2c8bf",
+                        "on-surface": "#1a1c1a",
+                        "amber-glow": "#F4D35E",
+                        "tertiary-fixed-dim": "#f2b7c1",
+                        "tertiary-container": "#bf8992",
+                        "surface-tint": "#45664b",
+                        "on-error-container": "#93000a",
+                        "primary": "#45664b",
+                        "cream-base": "#FDFBF7",
+                        "sage-mist": "#CDE0C9",
+                        "surface-container-high": "#e8e8e4",
+                        "on-tertiary-fixed": "#321018",
+                        "surface-variant": "#e3e3df",
+                        "on-primary-fixed-variant": "#2e4e35",
+                        "tertiary-fixed": "#ffd9de",
+                        "on-primary": "#ffffff",
+                        "outline": "#727971",
+                        "surface-container-low": "#f4f4f0",
+                        "surface": "#faf9f5",
+                        "inverse-surface": "#2f312e",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#e7c268",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "entry-padding": "32px",
+                        "unit": "8px",
+                        "stack-gap": "20px",
+                        "container-margin": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Noto Serif"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+        <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+    </head>
+    <body class="font-body-md text-on-background min-h-screen flex flex-col">
+        <!-- TopAppBar -->
+        <header
+            class="fixed top-0 left-0 w-full z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-margin py-unit h-16 transition-all duration-300 ease-in-out">
+            <div class="flex items-center gap-3">
+                <a href="colecoes.html"
+                    class="hover:opacity-80 transition-opacity p-2 -ml-2">
+                    <span
+                        class="material-symbols-outlined text-primary">arrow_back</span>
+                </a>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-tertiary"
+                            style="font-variation-settings: 'FILL' 1;">favorite</span>
+                        <h1
+                            class="font-headline-md text-headline-md-mobile text-primary">Família</h1>
+                    </div>
+                    <span
+                        class="font-label-sm text-label-sm text-on-surface-variant">28
+                        momentos</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="colecoes.html"
+                    class="hover:opacity-80 transition-opacity p-2">
+                    <span
+                        class="material-symbols-outlined text-on-surface-variant">grid_view</span>
+                </a>
+                <a href="pesquisar.html"
+                    class="hover:opacity-80 transition-opacity p-2">
+                    <span
+                        class="material-symbols-outlined text-on-surface-variant">search</span>
+                </a>
+            </div>
+        </header>
+        <!-- Main Content Canvas -->
+        <main
+            class="flex-1 mt-16 pb-24 px-container-margin pt-stack-gap overflow-y-auto custom-scrollbar">
+            <!-- Moments List -->
+            <div class="flex flex-col gap-stack-gap">
+                <!-- Moment Card 1 -->
+                <div
+                    class="glass-card rounded-xl p-4 flex gap-4 transition-transform active:scale-[0.98]">
+                    <div
+                        class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-surface-container">
+                        <img alt="Almoço" class="w-full h-full object-cover"
+                            data-alt="A warm and inviting overhead shot of a large family dining table filled with rustic Italian dishes. Soft sunlight filters through a nearby window, illuminating plates of pasta and fresh bread. The atmosphere is joyful and communal, characterized by soft sage greens and warm cream tones that create a peaceful sanctuary vibe."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQX3Q6vyaEVP2Txb4n-b8w6LZjMrRWNm8ySXrpLWYw71B2lNe3PgHqV47gWucoK8al9Lue4oagEcxCN3yhzZALYTI28wT8KcWrpgTDDBw36NxWfOJ2NbB2gBhtP17voElK4zQMyI-mE302ZrVgWPfawUfOyh30shXZyHC6kF-thIjjujrThcS-HUvuTLu4VsCHLJtvOZzEvJI9QrCjFNp4Y5OiNSEegULhR0uEBenTwjFjsSYmZukkQuBzX95-B6K8A-E_BMx3xJyQ" />
+                    </div>
+                    <div class="flex flex-col justify-between flex-1">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h3
+                                    class="font-headline-sm text-headline-sm text-soft-ink leading-tight">Almoço
+                                    de Domingo</h3>
+                                <span
+                                    class="font-label-sm text-label-sm text-on-surface-variant">12
+                                    Out</span>
+                            </div>
+                            <p
+                                class="font-body-sm text-body-sm text-on-surface-variant mt-1 line-clamp-2">Reunimos
+                                todos na casa da Vovó. O riso das crianças
+                                encheu a sala enquanto saboreávamos a famosa
+                                lasanha.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Moment Card 2 -->
+                <div
+                    class="glass-card rounded-xl p-4 flex gap-4 transition-transform active:scale-[0.98]">
+                    <div
+                        class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-surface-container">
+                        <img alt="Caminhada" class="w-full h-full object-cover"
+                            data-alt="A serene landscape of a misty forest path at dawn, where tall pine trees are shrouded in soft morning fog. The ground is covered in a carpet of moss and fallen leaves, reflecting a palette of sage mist and deep greens. The lighting is diffused and ethereal, capturing a quiet, meditative moment of reflection in a digital sanctuary."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuChEo_HsKO-KNpN4Wv24ovfBqnqqUjpMDG5G49-Iqd6ykORLkQkeMG0nRD_HeNqL0_QaOCBoAzkYdkNSg0ORWl-tX6u56sz4FAeLHekjlmdGU3RrLDp_Gli1lC4UY9yMfXDf4d2sYHBCS-ZO3cIUK_Ml6H_Hq4fYci-DRqBP_1m8B-Yg-DGX5GSZKJGlpvY2U6Kz5fbMqIq-nagehwKugI129gZIdd5p2-Dqv_5H0gO_zryxFry8_rH9GskYLMFmAXTvQNdttpTO9ed" />
+                    </div>
+                    <div class="flex flex-col justify-between flex-1">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h3
+                                    class="font-headline-sm text-headline-sm text-soft-ink leading-tight">Caminhada
+                                    Matinal</h3>
+                                <span
+                                    class="font-label-sm text-label-sm text-on-surface-variant">08
+                                    Out</span>
+                            </div>
+                            <p
+                                class="font-body-sm text-body-sm text-on-surface-variant mt-1 line-clamp-2">Explorando
+                                a trilha nova perto de casa. O ar fresco da
+                                manhã e o silêncio da mata foram
+                                revigorantes.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Moment Card 3 - Special Feature -->
+                <div
+                    class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/30 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-3">
+                        <span
+                            class="material-symbols-outlined text-tertiary/20 text-4xl"
+                            style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-tertiary">history_edu</span>
+                            <h3
+                                class="font-headline-sm text-headline-sm text-soft-ink">História
+                                da Semana</h3>
+                        </div>
+                        <p
+                            class="font-body-md text-body-md text-on-surface-variant">"A paciência é a raiz de todas as memórias doces que cultivamos juntos hoje..."</p>
+                        <div class="flex gap-2 mt-2">
+                            <span
+                                class="px-3 py-1 bg-sage-mist/30 text-primary font-label-sm text-label-sm rounded-full">Reflexão</span>
+                            <span
+                                class="px-3 py-1 bg-tertiary/10 text-tertiary font-label-sm text-label-sm rounded-full">Amor</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Moment Card 4 -->
+                <div
+                    class="glass-card rounded-xl p-4 flex gap-4 transition-transform active:scale-[0.98]">
+                    <div
+                        class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-surface-container">
+                        <img alt="Praia" class="w-full h-full object-cover"
+                            data-alt="A minimalist photograph of a calm beach at sunset, with gentle waves lapping against soft golden sand. The sky is painted in hues of soft amber and pale pink, creating a peaceful and warm minimalist aesthetic. The overall mood is one of quiet contemplation and tactile softness, resembling a page from a premium journal."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZCB4K9gfF4e30xCldcCbdr976Lix1WOLgxxoHdEwTNXQiy0HytrTaJ2wIq0mcu07y5Iq8W1LDkqf66EYBXLqlWN_Gg5IPQ8mnLC7uah8dwCgiyfam7IKRFLlg_7ySZjUbDfoHr0oQYIr-rkXPQQBrteMEUXA9Gyw-5UA6nN7ax603g7S4iZDKdI1X-bEapdx1IJOpeA495sg2fxTPichxcZO8-9w0eEvznGXbqsCyqkCVF6zKuRuAP4Wcbq-Icm6UGsALpuExmqRX" />
+                    </div>
+                    <div class="flex flex-col justify-between flex-1">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h3
+                                    class="font-headline-sm text-headline-sm text-soft-ink leading-tight">Pôr
+                                    do Sol</h3>
+                                <span
+                                    class="font-label-sm text-label-sm text-on-surface-variant">05
+                                    Out</span>
+                            </div>
+                            <p
+                                class="font-body-sm text-body-sm text-on-surface-variant mt-1 line-clamp-2">Ficamos
+                                até tarde na areia, apenas observando as cores
+                                mudarem. Um momento de paz pura.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Moment Card 5 -->
+                <div
+                    class="glass-card rounded-xl p-4 flex gap-4 transition-transform active:scale-[0.98]">
+                    <div
+                        class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-surface-container">
+                        <img alt="Jardim" class="w-full h-full object-cover"
+                            data-alt="A close-up shot of delicate wildflowers swaying in a gentle breeze, captured in a dreamy, soft-focus style. The lighting is bright and airy, with a high-key light mode aesthetic. The color palette features soft creams, muted sage greens, and hints of pale yellow, evoking the feeling of a private, digital sanctuary garden."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6rg17Xb00VmeQ0FNCld0Hyab5IKDAGrizloJuBXfrOBP26FjrKFz13gz0EPuSl758py4xoOFvvaPeaz3Q8LZ8HPid4AulSMzkcXl7I4AR3WIOEUFixBE67tT2uSexHJOvvxwe5hXZh-3WNfjLgZV53TAiO37bpjc7C259fpGCo1e8SfPq1UlO86rd0dlTm5wfEaFk5mji0x5i8Lb3JI3qesZZuDR9rliGx-oZyDxnYKhpDBjhD6pwHex9iy7rNPMl5XYC2N9gYvYR" />
+                    </div>
+                    <div class="flex flex-col justify-between flex-1">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h3
+                                    class="font-headline-sm text-headline-sm text-soft-ink leading-tight">Jardinagem
+                                    em Família</h3>
+                                <span
+                                    class="font-label-sm text-label-sm text-on-surface-variant">01
+                                    Out</span>
+                            </div>
+                            <p
+                                class="font-body-sm text-body-sm text-on-surface-variant mt-1 line-clamp-2">Plantamos
+                                as novas mudas de ervas. As mãos sujas de terra
+                                e o cheiro de manjericão fresco no ar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Floating Action Button -->
+        <a href="nova.html"
+            class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:opacity-90 active:scale-90 transition-all z-40 group">
+            <span
+                class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform duration-300">add</span>
+    </a>
+        
+        <script>
+        // Micro-interactions and subtle scroll effects
+        const header = document.querySelector('header');
+        const main = document.querySelector('main');
+        
+        main.addEventListener('scroll', () => {
+            if (main.scrollTop > 10) {
+                header.classList.add('shadow-sm');
+            } else {
+                header.classList.remove('shadow-sm');
+            }
+        });
+
+        // Simple haptic-like feedback on card clicks
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // In a real app, this would trigger navigation
+                console.log('Navigating to moment details...');
+            });
+        });
+    </script>
+    </body></html>

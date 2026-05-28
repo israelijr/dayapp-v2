@@ -1,0 +1,110 @@
+# Configuração do Analyzer para DayApp
+# Este arquivo configura análise estática para prevenir problemas comuns.
+#
+# Para executar: flutter analyze
+# Documentação: https://dart.dev/guides/language/analysis-options
+
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  # Trata avisos importantes como erros para prevenir problemas
+  errors:
+    # Segurança e boas práticas - tratados como erros
+    use_build_context_synchronously: error
+    empty_catches: warning
+    
+    # APIs deprecadas - tratadas como avisos (não erros para compatibilidade)
+    deprecated_member_use: warning
+    deprecated_member_use_from_same_package: warning
+    
+    # Código não utilizado
+    unused_import: warning
+    unused_local_variable: warning
+    unused_field: warning
+    dead_code: warning
+    
+    # TODOs não devem aparecer como avisos (são lembretes intencionais)
+    todo: ignore
+    
+  # Exclui arquivos gerados automaticamente
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "build/**"
+    - ".dart_tool/**"
+
+linter:
+  rules:
+    # === SEGURANÇA E CONTEXTO ===
+    # Previne uso de BuildContext após operações assíncronas
+    use_build_context_synchronously: true
+    
+    # Exige documentação em catch blocks vazios
+    empty_catches: true
+    
+    # === APIS DEPRECADAS ===
+    # Alerta sobre uso de APIs deprecadas
+    deprecated_consistency: true
+    
+    # === BOAS PRÁTICAS DE CÓDIGO ===
+    # Prefere const para widgets e valores imutáveis
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_const_literals_to_create_immutables: true
+    
+    # Prefere final para variáveis que não mudam
+    prefer_final_locals: true
+    prefer_final_fields: true
+    
+    # Evita getters/setters desnecessários
+    unnecessary_getters_setters: true
+    
+    # Null safety
+    avoid_null_checks_in_equality_operators: true
+    null_check_on_nullable_type_parameter: true
+    
+    # === ESTILO E LEGIBILIDADE ===
+    # Formatação consistente
+    curly_braces_in_flow_control_structures: true
+    always_declare_return_types: true
+    always_put_required_named_parameters_first: true
+    
+    # Imports organizados
+    directives_ordering: true
+    
+    # Evita código problemático
+    avoid_print: true
+    avoid_empty_else: true
+    avoid_relative_lib_imports: true
+    avoid_returning_null_for_void: true
+    avoid_types_as_parameter_names: true
+    avoid_unnecessary_containers: true
+    
+    # Strings
+    prefer_single_quotes: true
+    prefer_interpolation_to_compose_strings: true
+    
+    # Coleções
+    prefer_collection_literals: true
+    prefer_is_empty: true
+    prefer_is_not_empty: true
+    
+    # Tipos
+    prefer_typing_uninitialized_variables: true
+    type_init_formals: true
+    
+    # === PERFORMANCE ===
+    # Evita reconstruções desnecessárias
+    sized_box_for_whitespace: true
+    use_colored_box: true
+    
+    # === FLUTTER ESPECÍFICO ===
+    # Boas práticas Flutter
+    use_key_in_widget_constructors: true
+    use_full_hex_values_for_flutter_colors: true
+    sort_child_properties_last: true
+
+# Informações adicionais:
+# - Regras completas: https://dart.dev/lints
+# - Para ignorar regra em linha: // ignore: nome_da_regra
+# - Para ignorar regra em arquivo: // ignore_for_file: nome_da_regra

@@ -1,0 +1,23 @@
+{
+  "es": [
+    "helpAutomaticBackupTitle",
+    "helpAutomaticBackupDesc",
+    "emptyTrashTitle",
+    "emptyTrashLabel",
+    "backupOnLogoutDescription",
+    "automaticBackupInfo",
+    "automaticBackupInfoLocal",
+    "autoBackupPremiumRequired",
+    "autoBackupStorageInfo"
+  ],
+
+  "pt": [
+    "helpAutomaticBackupTitle",
+    "helpAutomaticBackupDesc",
+    "backupOnLogoutDescription",
+    "automaticBackupInfo",
+    "automaticBackupInfoLocal",
+    "autoBackupPremiumRequired",
+    "autoBackupStorageInfo"
+  ]
+}

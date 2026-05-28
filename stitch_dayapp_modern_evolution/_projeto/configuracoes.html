@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Settings | DayApp</title>
+        <script
+            src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap"
+            rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet" />
+        <style>
+        body {
+            background-color: #faf9f5;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .custom-toggle:checked + .toggle-dot {
+            transform: translateX(100%);
+            background-color: #ffffff;
+        }
+        .custom-toggle:checked + .toggle-bg {
+            background-color: #45664b;
+        }
+    </style>
+        <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#727971",
+                    "tertiary-fixed-dim": "#f2b7c1",
+                    "on-secondary-fixed-variant": "#5a4400",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#eeeeea",
+                    "on-secondary-container": "#795d08",
+                    "on-primary-fixed-variant": "#2e4e35",
+                    "on-primary-container": "#16361f",
+                    "surface-tint": "#45664b",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#bf8992",
+                    "surface-variant": "#e3e3df",
+                    "surface-container-low": "#f4f4f0",
+                    "primary-container": "#7da082",
+                    "error": "#ba1a1a",
+                    "tertiary": "#80515a",
+                    "primary": "#45664b",
+                    "inverse-primary": "#abd0af",
+                    "on-primary-fixed": "#01210c",
+                    "inverse-on-surface": "#f1f1ed",
+                    "on-tertiary-fixed": "#321018",
+                    "cream-base": "#FDFBF7",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#653a43",
+                    "sage-deep": "#5D7A61",
+                    "surface-dim": "#dadad6",
+                    "warm-clay": "#D9AE94",
+                    "background": "#faf9f5",
+                    "surface-container-highest": "#e3e3df",
+                    "tertiary-fixed": "#ffd9de",
+                    "on-tertiary-container": "#4a242c",
+                    "on-surface": "#1a1c1a",
+                    "secondary-container": "#ffd87c",
+                    "secondary-fixed-dim": "#e7c268",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#e8e8e4",
+                    "secondary": "#765a05",
+                    "on-background": "#1a1c1a",
+                    "secondary-fixed": "#ffdf96",
+                    "outline-variant": "#c2c8bf",
+                    "surface-bright": "#faf9f5",
+                    "primary-fixed-dim": "#abd0af",
+                    "on-surface-variant": "#424842",
+                    "inverse-surface": "#2f312e",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#c7ecca",
+                    "amber-glow": "#F4D35E",
+                    "sage-mist": "#CDE0C9",
+                    "on-secondary-fixed": "#251a00",
+                    "soft-ink": "#3C403D",
+                    "surface": "#faf9f5",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-margin": "24px",
+                    "stack-gap": "20px",
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "entry-padding": "32px"
+            },
+            "fontFamily": {
+                    "label-lg": ["Plus Jakarta Sans"],
+                    "headline-md": ["Noto Serif"],
+                    "headline-lg": ["Noto Serif"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Noto Serif"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "body-sm": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Noto Serif"]
+            },
+            "fontSize": {
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+        <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+    </head>
+    <body class="bg-background text-on-surface font-body-md min-h-screen pb-32">
+        <!-- Top App Bar -->
+        <header
+            class="w-full sticky top-0 z-50 backdrop-blur-xl bg-surface/80 dark:bg-surface-dim/80">
+            <div
+                class="flex items-center px-container-margin h-16 w-full max-w-screen-xl mx-auto justify-between">
+                <div class="flex items-center gap-4">
+                    <a href="index.html"
+                        class="active:scale-95 transition-transform p-2 -ml-2 hover:bg-sage-mist/20 rounded-full">
+                        <span
+                            class="material-symbols-outlined text-primary">arrow_back</span>
+                    </a>
+                    <h1
+                        class="font-headline-sm text-headline-sm text-primary">Settings</h1>
+                </div>
+            </div>
+        </header>
+        <main class="max-w-2xl mx-auto px-container-margin mt-8 space-y-12">
+            <!-- Account Management Section -->
+            <section class="space-y-6">
+                <h2
+                    class="font-headline-sm text-headline-sm text-on-surface-variant px-2">Account
+                    Management</h2>
+                <div
+                    class="bg-cream-base rounded-[2rem] p-6 border border-soft-ink/5 shadow-sm space-y-4">
+                    <!-- Profile Item -->
+                    <button
+                        class="w-full flex items-center gap-4 p-2 hover:bg-sage-mist/10 rounded-2xl transition-all group">
+                        <div
+                            class="w-14 h-14 rounded-full overflow-hidden border-2 border-primary-container">
+                            <img alt="User Profile"
+                                class="w-full h-full object-cover"
+                                data-alt="A close-up portrait of a serene woman with a soft smile, captured in a warm, ethereal light. The background is a soft-focus garden with hints of sage green and cream. The overall visual style is reminiscent of a film photograph, gentle and meditative, matching the peaceful minimalist aesthetic of a wellness app."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrXMZh3wHz29LFe7u7ey796HgqgCmOVri29v1_3BwCX5isn-vDjnHKplls16x8qe5LO7jhBBsmP86SXkMh4Sr6yX9Jaibp_qv7cJKRJrucHzZS5hyscEqvdUaaXl8SUIqqs0ONqN31p_zUly2rFLAMPFgvZG3E1YrIvac8369B6h1vqAQDPsijAfxZJRK-oER6frvNVfwk3mNFj3NnC-P7h7E1jf45S7qpmAM7Fi5XgFwyncwBctihuetZx0t3DXLsq7r1JK91sobQ" />
+                        </div>
+                        <div class="flex-1 text-left">
+                            <p
+                                class="font-label-lg text-label-lg text-on-surface">Elena
+                                Rose</p>
+                            <p
+                                class="font-body-sm text-body-sm text-on-surface-variant">elena.rose@dayapp.com</p>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">chevron_right</span>
+                    </a>
+                    <hr class="border-t border-soft-ink/5 mx-2" />
+                    <!-- Security -->
+                    <a href="security.html"
+                        class="w-full flex items-center gap-4 p-3 hover:bg-sage-mist/10 rounded-2xl transition-all group">
+                        <div
+                            class="w-10 h-10 rounded-full bg-sage-mist/30 flex items-center justify-center">
+                            <span
+                                class="material-symbols-outlined text-primary">fingerprint</span>
+                        </div>
+                        <div class="flex-1 text-left">
+                            <p
+                                class="font-label-lg text-label-lg text-on-surface">Security</p>
+                            <p
+                                class="font-body-sm text-body-sm text-on-surface-variant">PIN
+                                &amp; Biometrics</p>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">chevron_right</span>
+                    </a>
+                    <hr class="border-t border-soft-ink/5 mx-2" />
+                    <!-- Data Backup -->
+                    <a href="data_backup.html"
+                        class="w-full flex items-center gap-4 p-3 hover:bg-sage-mist/10 rounded-2xl transition-all group">
+                        <div
+                            class="w-10 h-10 rounded-full bg-sage-mist/30 flex items-center justify-center">
+                            <span
+                                class="material-symbols-outlined text-primary">cloud_upload</span>
+                        </div>
+                        <div class="flex-1 text-left">
+                            <p
+                                class="font-label-lg text-label-lg text-on-surface">Data
+                                Backup</p>
+                            <p
+                                class="font-body-sm text-body-sm text-on-surface-variant">Last
+                                synced 2 hours ago</p>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">chevron_right</span>
+                    </a>
+                </div>
+            </section>
+            <!-- Notifications Section -->
+            <section class="space-y-6">
+                <h2
+                    class="font-headline-sm text-headline-sm text-on-surface-variant px-2">Notifications</h2>
+                <div
+                    class="bg-cream-base rounded-[2rem] p-6 border border-soft-ink/5 shadow-sm space-y-2">
+                    <div class="flex items-center justify-between p-3">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-sage-mist/30 flex items-center justify-center">
+                                <span
+                                    class="material-symbols-outlined text-primary">notifications_active</span>
+                            </div>
+                            <p
+                                class="font-label-lg text-label-lg text-on-surface">Daily
+                                Reminders</p>
+                        </div>
+                        <label
+                            class="relative inline-flex items-center cursor-pointer">
+                            <input checked class="sr-only custom-toggle"
+                                type="checkbox" />
+                            <div
+                                class="w-12 h-6 bg-surface-variant rounded-full transition-colors toggle-bg"></div>
+                            <div
+                                class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform toggle-dot"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between p-3">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-sage-mist/30 flex items-center justify-center">
+                                <span
+                                    class="material-symbols-outlined text-primary">insights</span>
+                            </div>
+                            <p
+                                class="font-label-lg text-label-lg text-on-surface">Weekly
+                                Insights</p>
+                        </div>
+                        <label
+                            class="relative inline-flex items-center cursor-pointer">
+                            <input class="sr-only custom-toggle"
+                                type="checkbox" />
+                            <div
+                                class="w-12 h-6 bg-surface-variant rounded-full transition-colors toggle-bg"></div>
+                            <div
+                                class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform toggle-dot"></div>
+                        </label>
+                    </div>
+                    <button
+                        class="w-full flex items-center justify-between p-3 hover:bg-sage-mist/10 rounded-2xl transition-all group">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-sage-mist/30 flex items-center justify-center">
+                                <span
+                                    class="material-symbols-outlined text-primary">volume_up</span>
+                            </div>
+                            <p
+                                class="font-label-lg text-label-lg text-on-surface">Sound
+                                Effects</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="text-body-sm text-on-surface-variant">Breeze</span>
+                            <span
+                                class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">chevron_right</span>
+                        </div>
+                    </button>
+                </div>
+            </section>
+            <!-- Appearance Section -->
+            <section class="space-y-6">
+                <h2
+                    class="font-headline-sm text-headline-sm text-on-surface-variant px-2">Appearance</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Theme Card -->
+                    <div
+                        class="bg-cream-base rounded-[2rem] p-6 border border-soft-ink/5 shadow-sm flex flex-col items-center gap-4 text-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center">
+                            <span
+                                class="material-symbols-outlined text-primary">palette</span>
+                        </div>
+                        <div>
+                            <p
+                                class="font-label-lg text-label-lg text-on-surface">Theme</p>
+                            <p
+                                class="font-body-sm text-body-sm text-on-surface-variant mb-4">Follows
+                                your system settings</p>
+                        </div>
+                        <div class="flex gap-2 w-full">
+                            <button
+                                class="flex-1 py-2 bg-primary-container text-on-primary-container rounded-full font-label-sm">System</button>
+                            <button
+                                class="flex-1 py-2 bg-surface-variant text-on-surface-variant rounded-full font-label-sm">Light</button>
+                        </div>
+                    </div>
+                    <!-- Font/Color Quick Controls -->
+                    <div
+                        class="bg-cream-base rounded-[2rem] p-6 border border-soft-ink/5 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between p-1">
+                            <span
+                                class="font-label-lg text-label-lg text-on-surface">Font
+                                Size</span>
+                            <div
+                                class="flex items-center gap-4 bg-surface-container-low rounded-full px-4 py-1">
+                                <span
+                                    class="text-xs font-bold text-on-surface-variant">A</span>
+                                <input class="w-20 accent-primary" max="3"
+                                    min="1" type="range" value="2" />
+                                <span
+                                    class="text-lg font-bold text-on-surface-variant">A</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-1">
+                            <span
+                                class="font-label-lg text-label-lg text-on-surface">Accent</span>
+                            <div class="flex gap-2">
+                                <div
+                                    class="w-6 h-6 rounded-full bg-primary cursor-pointer ring-2 ring-offset-2 ring-primary"></div>
+                                <div
+                                    class="w-6 h-6 rounded-full bg-warm-clay cursor-pointer"></div>
+                                <div
+                                    class="w-6 h-6 rounded-full bg-amber-glow cursor-pointer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Support Section -->
+            <section class="space-y-6 pb-12">
+                <h2
+                    class="font-headline-sm text-headline-sm text-on-surface-variant px-2">Support</h2>
+                <div
+                    class="bg-cream-base rounded-[2rem] p-6 border border-soft-ink/5 shadow-sm space-y-1">
+                    <button
+                        class="w-full flex items-center justify-between p-3 hover:bg-sage-mist/10 rounded-2xl transition-all">
+                        <div class="flex items-center gap-4">
+                            <span
+                                class="material-symbols-outlined text-primary">info</span>
+                            <span
+                                class="font-label-lg text-label-lg text-on-surface">About
+                                DayApp</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-outline">chevron_right</span>
+                    </button>
+                    <button
+                        class="w-full flex items-center justify-between p-3 hover:bg-sage-mist/10 rounded-2xl transition-all">
+                        <div class="flex items-center gap-4">
+                            <span
+                                class="material-symbols-outlined text-primary">verified_user</span>
+                            <span
+                                class="font-label-lg text-label-lg text-on-surface">Privacy
+                                Policy</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-outline">chevron_right</span>
+                    </button>
+                    <button
+                        class="w-full flex items-center justify-between p-3 hover:bg-sage-mist/10 rounded-2xl transition-all">
+                        <div class="flex items-center gap-4">
+                            <span
+                                class="material-symbols-outlined text-primary">help_center</span>
+                            <span
+                                class="font-label-lg text-label-lg text-on-surface">Help
+                                Center</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-outline">chevron_right</span>
+                    </button>
+                </div>
+                <div class="text-center mt-8 px-4">
+                    <p class="font-body-sm text-body-sm text-outline">DayApp
+                        Version 2.4.0 (2024)</p>
+                    <button
+                        class="mt-4 text-error font-label-lg hover:underline decoration-error/30">Sign
+                        Out</button>
+                </div>
+            </section>
+        </main>
+        <!-- Bottom Navigation Bar -->
+        <nav
+            class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe glass-nav bg-surface/80">
+            <button
+                class="flex flex-col items-center justify-center text-on-surface-variant p-2 active:scale-90 transition-all duration-200">
+                <span class="material-symbols-outlined">edit_note</span>
+                <span class="font-label-sm text-label-sm">Journal</span>
+            </button>
+            <button
+                class="flex flex-col items-center justify-center text-on-surface-variant p-2 active:scale-90 transition-all duration-200">
+                <span class="material-symbols-outlined">self_improvement</span>
+                <span class="font-label-sm text-label-sm">Reflect</span>
+            </button>
+            <button
+                class="flex flex-col items-center justify-center text-on-surface-variant p-2 active:scale-90 transition-all duration-200">
+                <span class="material-symbols-outlined">search</span>
+                <span class="font-label-sm text-label-sm">Search</span>
+            </button>
+            <button
+                class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-1.5 active:scale-90 transition-all duration-200">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="font-label-sm text-label-sm">Settings</span>
+            </button>
+        </nav>
+        <script>
+        // Simple micro-interaction for toggles
+        document.querySelectorAll('.custom-toggle').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const parent = this.closest('div');
+                if (this.checked) {
+                    console.log('Preference Enabled');
+                } else {
+                    console.log('Preference Disabled');
+                }
+            });
+        });
+
+        // Theme switching simulation (visual only)
+        const accentDots = document.querySelectorAll('.accent-dot');
+        accentDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                accentDots.forEach(d => d.classList.remove('ring-2', 'ring-offset-2', 'ring-primary'));
+                dot.classList.add('ring-2', 'ring-offset-2', 'ring-primary');
+            });
+        });
+    </script>
+    </body></html>

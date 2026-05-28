@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Calendário de Memórias - DayApp</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "tertiary-fixed-dim": "#f2b7c1",
+                "surface-container": "#eeeeea",
+                "primary-container": "#7da082",
+                "soft-ink": "#3C403D",
+                "secondary-fixed-dim": "#e7c268",
+                "on-secondary-fixed-variant": "#5a4400",
+                "primary-fixed": "#c7ecca",
+                "surface-tint": "#45664b",
+                "surface-container-highest": "#e3e3df",
+                "on-tertiary-container": "#4a242c",
+                "on-tertiary-fixed-variant": "#653a43",
+                "sage-deep": "#5D7A61",
+                "on-secondary": "#ffffff",
+                "on-primary-container": "#16361f",
+                "on-error": "#ffffff",
+                "on-primary-fixed": "#01210c",
+                "primary": "#45664b",
+                "tertiary-container": "#bf8992",
+                "outline-variant": "#c2c8bf",
+                "on-error-container": "#93000a",
+                "inverse-primary": "#abd0af",
+                "on-secondary-container": "#795d08",
+                "tertiary": "#80515a",
+                "on-tertiary": "#ffffff",
+                "background": "#faf9f5",
+                "on-surface": "#1a1c1a",
+                "on-primary": "#ffffff",
+                "on-background": "#1a1c1a",
+                "on-tertiary-fixed": "#321018",
+                "warm-clay": "#D9AE94",
+                "on-primary-fixed-variant": "#2e4e35",
+                "surface-dim": "#dadad6",
+                "error-container": "#ffdad6",
+                "primary-fixed-dim": "#abd0af",
+                "surface-container-low": "#f4f4f0",
+                "sage-mist": "#CDE0C9",
+                "error": "#ba1a1a",
+                "cream-base": "#FDFBF7",
+                "outline": "#727971",
+                "secondary": "#765a05",
+                "inverse-surface": "#2f312e",
+                "tertiary-fixed": "#ffd9de",
+                "secondary-fixed": "#ffdf96",
+                "surface-variant": "#e3e3df",
+                "amber-glow": "#F4D35E",
+                "surface-container-lowest": "#ffffff",
+                "surface": "#faf9f5",
+                "on-surface-variant": "#424842",
+                "on-secondary-fixed": "#251a00",
+                "secondary-container": "#ffd87c",
+                "surface-container-high": "#e8e8e4",
+                "surface-bright": "#faf9f5",
+                "inverse-on-surface": "#f1f1ed"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "stack-gap": "20px",
+                "unit": "8px",
+                "entry-padding": "32px",
+                "gutter": "16px",
+                "container-margin": "24px"
+            },
+            "fontFamily": {
+                "body-sm": ["Plus Jakarta Sans"],
+                "label-sm": ["Plus Jakarta Sans"],
+                "body-md": ["Plus Jakarta Sans"],
+                "body-lg": ["Plus Jakarta Sans"],
+                "headline-sm": ["Noto Serif"],
+                "headline-md": ["Noto Serif"],
+                "headline-lg": ["Noto Serif"],
+                "label-lg": ["Plus Jakarta Sans"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        /* Custom scrollbar for subtle aesthetic */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CDE0C9;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen selection:bg-sage-mist/30">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-soft-ink/10 flex items-center justify-between px-container-margin h-16">
+<button class="flex items-center justify-center w-10 h-10 text-primary hover:bg-sage-mist/20 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-sage-deep">Calendário</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<main class="pb-32 max-w-2xl mx-auto px-container-margin">
+<!-- Month Navigation -->
+<section class="mt-8 mb-6 flex items-center justify-between">
+<div class="flex items-center gap-2 group cursor-pointer">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Outubro 2023</h2>
+<span class="material-symbols-outlined text-primary group-hover:translate-y-0.5 transition-transform" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-sage-mist/20 rounded-full text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-2 hover:bg-sage-mist/20 rounded-full text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Calendar Grid -->
+<section class="bg-cream-base border border-soft-ink/5 rounded-[2rem] p-6 shadow-sm mb-stack-gap">
+<!-- Weekdays -->
+<div class="calendar-grid text-center mb-4">
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">D</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">S</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">T</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">Q</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">Q</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">S</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">S</div>
+</div>
+<!-- Dates -->
+<div class="calendar-grid gap-y-2">
+<!-- Row 1 -->
+<button class="h-12 flex flex-col items-center justify-center text-on-surface-variant/30 font-body-sm">24</button>
+<button class="h-12 flex flex-col items-center justify-center text-on-surface-variant/30 font-body-sm">25</button>
+<button class="h-12 flex flex-col items-center justify-center text-on-surface-variant/30 font-body-sm">26</button>
+<button class="h-12 flex flex-col items-center justify-center text-on-surface-variant/30 font-body-sm">27</button>
+<button class="h-12 flex flex-col items-center justify-center text-on-surface-variant/30 font-body-sm">28</button>
+<button class="h-12 flex flex-col items-center justify-center text-on-surface-variant/30 font-body-sm">29</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors relative group">
+<span class="font-body-md">1</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-sage-deep rounded-full opacity-60"></span>
+</button>
+<!-- Row 2 -->
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">2</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors relative">
+<span class="font-body-md">3</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-sage-deep rounded-full opacity-60"></span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">4</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors relative">
+<span class="font-body-md">5</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-sage-deep rounded-full opacity-60"></span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">6</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">7</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">8</span>
+</button>
+<!-- Row 3 -->
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">9</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors relative">
+<span class="font-body-md">10</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-sage-deep rounded-full opacity-60"></span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">11</span>
+</button>
+<!-- Active Day (12) -->
+<button class="h-12 flex flex-col items-center justify-center bg-primary text-on-primary rounded-full shadow-lg relative scale-110">
+<span class="font-body-md font-bold">12</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-white rounded-full"></span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">13</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">14</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors relative">
+<span class="font-body-md">15</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-sage-deep rounded-full opacity-60"></span>
+</button>
+<!-- Row 4 -->
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">16</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors relative">
+<span class="font-body-md">17</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-sage-deep rounded-full opacity-60"></span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">18</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">19</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">20</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors relative">
+<span class="font-body-md">21</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-sage-deep rounded-full opacity-60"></span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">22</span>
+</button>
+<!-- Row 5 -->
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">23</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors relative">
+<span class="font-body-md">24</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-sage-deep rounded-full opacity-60"></span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">25</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">26</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors relative">
+<span class="font-body-md">27</span>
+<span class="absolute bottom-1.5 w-1 h-1 bg-sage-deep rounded-full opacity-60"></span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">28</span>
+</button>
+<button class="h-12 flex flex-col items-center justify-center hover:bg-sage-mist/20 rounded-full transition-colors">
+<span class="font-body-md">29</span>
+</button>
+</div>
+</section>
+<!-- Daily Preview -->
+<section class="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+<header class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Memórias de 12 de Outubro</h3>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest bg-sage-mist/20 px-3 py-1 rounded-full">3 Entradas</span>
+</header>
+<div class="space-y-4">
+<!-- Memory Item 1 -->
+<article class="flex items-center gap-4 bg-cream-base p-4 rounded-2xl border border-soft-ink/5 hover:border-sage-mist transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-sm">
+<img alt="Lago sereno" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A serene landscape of a calm lake surrounded by lush green mountains at sunrise. The lighting is soft and golden, reflecting a quiet and meditative atmosphere. The overall style is minimalist and organic, with a color palette of soft greens, misty blues, and warm creams, perfectly fitting a digital sanctuary aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcFhMiKvmygnwRVBh39l3zZDt1S_vFE6gOOCo1aJm-J0Q6aKs6iZwznB2QQ01OAhrLIn0cfxpHIxa9c3Ibt-DFTxQuUtJP7RWwESqU4JxzZAN5vrP34B84suw32vbNq7BaDSLHpH22xu9IsNf4ih2mYzokwK4yS3NcLOnh_zMCGzENJJikJnrwwZDkrmo8aXwnYzF2XAdTI3x_AKaTqeOxK8yetjse8H7Wzvplew6hNBNbVBl-OfLlS4BGUi2bhtnSjPrjYVpDT8yt"/>
+</div>
+<div class="flex-1">
+<h4 class="font-label-lg text-label-lg text-on-surface mb-0.5">Caminhada matinal no lago</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">O silêncio era interrompido apenas pelo som das águas e dos pássaros...</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[14px] text-sage-deep" data-icon="schedule">schedule</span>
+<span class="text-[11px] font-label-sm text-on-surface-variant/70">07:45</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40 group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</article>
+<!-- Memory Item 2 -->
+<article class="flex items-center gap-4 bg-cream-base p-4 rounded-2xl border border-soft-ink/5 hover:border-sage-mist transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-sm bg-sage-mist/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-sage-deep text-3xl" data-icon="format_quote">format_quote</span>
+</div>
+<div class="flex-1">
+<h4 class="font-label-lg text-label-lg text-on-surface mb-0.5">Pensamento sobre gratidão</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Hoje me senti grato pelas pequenas coisas, como o cheiro do café fresco...</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[14px] text-sage-deep" data-icon="schedule">schedule</span>
+<span class="text-[11px] font-label-sm text-on-surface-variant/70">13:10</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40 group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</article>
+<!-- Memory Item 3 -->
+<article class="flex items-center gap-4 bg-cream-base p-4 rounded-2xl border border-soft-ink/5 hover:border-sage-mist transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-sm">
+<img alt="Café e livro" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A cozy indoor scene featuring a steaming cup of coffee next to an open linen-bound journal on a wooden table. Soft afternoon sunlight streams through a nearby window, casting gentle shadows. The mood is intimate and reflective, with a warm color palette of ambers, soft creams, and earthy clays, emphasizing a sense of home and peace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrtcYLcMWI6jkPb_EvRvY-swWPKKD_HMNRf-KGQUErW0X4t9nymSC4WMW_SQydj7yxQjyVgzP37zTi3kkxg2U96LewC3pT3QFr0CQab6KB1f6fVJ8GIg4V7H5oTA_VeQJl1S8ipVONKdh0wgD5i1tDnoQMPxA6Yzu0IzDTyn6rGBIMPKW-u9XsOb3BTqilYB6ni2gOstpDyqUx_IoZzuUFjNOFKx76BnLjvmSWAxCJDMzJa_Pj1CY1Sro4DpSDio2no-V9PkzeNx95"/>
+</div>
+<div class="flex-1">
+<h4 class="font-label-lg text-label-lg text-on-surface mb-0.5">Leitura de fim de tarde</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Finalmente terminei aquele capítulo que estava me fazendo pensar...</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[14px] text-sage-deep" data-icon="schedule">schedule</span>
+<span class="text-[11px] font-label-sm text-on-surface-variant/70">18:30</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40 group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</article>
+</div>
+</section>
+</main>
+<!-- Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md rounded-t-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<!-- Início (Active) -->
+<a class="flex flex-col items-center justify-center bg-sage-mist/30 dark:bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-90 transition-transform duration-200" href="index.html">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Início</span>
+</a>
+<!-- Coleções -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:opacity-80 transition-opacity" href="colecoes.html">
+<span class="material-symbols-outlined" data-icon="library_books">library_books</span>
+<span class="font-label-sm text-label-sm">Coleções</span>
+</a>
+<!-- Pesquisa -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:opacity-80 transition-opacity" href="pesquisar.html">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm">Pesquisa</span>
+</a>
+<!-- Nova (FAB replacement in Nav) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:opacity-80 transition-opacity group" href="nova.html">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-lg shadow-primary/20 -mt-8 mb-1 group-active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add" style="font-variation-settings: 'wght' 600;">add</span>
+</div>
+<span class="font-label-sm text-label-sm">Nova</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction: Calendar day click effect
+        document.querySelectorAll('.calendar-grid button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Ignore empty/prev-month days
+                if (this.innerText.length === 0 || this.classList.contains('text-on-surface-variant/30')) return;
+                
+                // Reset others
+                document.querySelectorAll('.calendar-grid button').forEach(b => {
+                    if (b.classList.contains('bg-primary')) {
+                        b.classList.remove('bg-primary', 'text-on-primary', 'shadow-lg', 'scale-110', 'font-bold');
+                        b.classList.add('hover:bg-sage-mist/20');
+                        // Reset the dot color
+                        const dot = b.querySelector('.bg-white');
+                        if (dot) {
+                            dot.classList.remove('bg-white');
+                            dot.classList.add('bg-sage-deep', 'opacity-60');
+                        }
+                    }
+                });
+
+                // Set active
+                this.classList.add('bg-primary', 'text-on-primary', 'shadow-lg', 'scale-110', 'font-bold');
+                this.classList.remove('hover:bg-sage-mist/20');
+                const dot = this.querySelector('.bg-sage-deep');
+                if (dot) {
+                    dot.classList.remove('bg-sage-deep', 'opacity-60');
+                    dot.classList.add('bg-white');
+                }
+
+                // Update title (mock)
+                const day = this.querySelector('span')?.innerText || this.innerText;
+                document.querySelector('h3').innerText = `Memórias de ${day} de Outubro`;
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,96 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+**/build/
+**/.gradle/
+**/.kotlin/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Database files (SQLite)
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+.sync.ffs_db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.md
+
+# Firebase configuration files
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+# Local SDK and secrets
+android/local.properties
+**/local.properties
+key.properties
+# Keystore files
+*.jks
+*.keystore
+# Env files
+.env
+.env.*
+# Credentials
+credentials.json
+serviceAccountKey.json
+*.p12
+*.pem
+*.crt
+
+# Configuração SMTP (credenciais de e-mail)
+lib/services/smtp_config.dart
+lib/services/smtp_config.example.dart
+
+# Arquivos de apoio
+GoogleSite.txt
+.a Lembretes.txt
+Themas.xlsx
+DayApp_PlayStore_Estrategia_Completa.md
+privacy_policy.md
+privacy_policy.html
+PUBLICIDADE_README.md
+Versão Prêmium.md
+
+# Pastas do mkdocs
+dayapp_docs/
+**/dayapp_docs/

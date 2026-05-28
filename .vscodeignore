@@ -1,0 +1,42 @@
+# Build outputs
+build/**
+.dart_tool/**
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android
+android/.gradle/**
+android/build/**
+android/app/build/**
+android/gradle/**
+android/gradlew
+android/gradlew.bat
+android/.idea/**
+android/local.properties
+
+# iOS
+ios/Pods/**
+ios/.symlinks/**
+ios/Runner.xcworkspace/**
+ios/Runner.xcodeproj/**
+ios/build/**
+
+# Coverage
+coverage/**
+test/coverage/**
+
+# Temporary
+*.tmp
+*.temp
+*.log
+
+# Dependencies
+.pub-cache/**
+node_modules/**
+
+# Git
+.git/**
+
+# Index
+index/**

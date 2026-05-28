@@ -1,0 +1,4964 @@
+[
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😄",
+    "Código": ":smile:",
+    "Tradução": "Sorrir"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😆",
+    "Código": ":laughing:",
+    "Tradução": "Rindo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😊",
+    "Código": ":blush:",
+    "Tradução": "Corar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😃",
+    "Código": ":smiley:",
+    "Tradução": "Smiley"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "☺️",
+    "Código": ":relaxed:",
+    "Tradução": "Relaxado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😏",
+    "Código": ":smirk:",
+    "Tradução": "Sorriso"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😍",
+    "Código": ":heart_eyes:",
+    "Tradução": "Olhos De Coração"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😘",
+    "Código": ":kissing_heart:",
+    "Tradução": "Beijando Coração"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😚",
+    "Código": ":kissing_closed_eyes:",
+    "Tradução": "Beijando Os Olhos Fechados"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😳",
+    "Código": ":flushed:",
+    "Tradução": "Liberado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😌",
+    "Código": ":relieved:",
+    "Tradução": "Aliviado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😆",
+    "Código": ":satisfied:",
+    "Tradução": "Satisfeito"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😁",
+    "Código": ":grin:",
+    "Tradução": "Sorriso"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😉",
+    "Código": ":wink:",
+    "Tradução": "Piscar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😜",
+    "Código": ":stuck_out_tongue_winking_eye:",
+    "Tradução": "Língua Para Fora Piscando O Olho"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😝",
+    "Código": ":stuck_out_tongue_closed_eyes:",
+    "Tradução": "Língua Para Fora Olhos Fechados"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😀",
+    "Código": ":grinning:",
+    "Tradução": "Sorrindo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😗",
+    "Código": ":kissing:",
+    "Tradução": "Beijar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😙",
+    "Código": ":kissing_smiling_eyes:",
+    "Tradução": "Beijando Olhos Sorridentes"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😛",
+    "Código": ":stuck_out_tongue:",
+    "Tradução": "Língua De Fora"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😴",
+    "Código": ":sleeping:",
+    "Tradução": "Dormir"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😟",
+    "Código": ":worried:",
+    "Tradução": "Preocupado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😦",
+    "Código": ":frowning:",
+    "Tradução": "Carrancudo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😧",
+    "Código": ":anguished:",
+    "Tradução": "Angustiado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😮",
+    "Código": ":open_mouth:",
+    "Tradução": "Boca Aberta"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😬",
+    "Código": ":grimacing:",
+    "Tradução": "Caretas"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😕",
+    "Código": ":confused:",
+    "Tradução": "Confuso"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😯",
+    "Código": ":hushed:",
+    "Tradução": "Silenciosa"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😑",
+    "Código": ":expressionless:",
+    "Tradução": "Inexpressivo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😒",
+    "Código": ":unamused:",
+    "Tradução": "Sem Graça"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😅",
+    "Código": ":sweat_smile:",
+    "Tradução": "Sorriso De Suor"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😓",
+    "Código": ":sweat:",
+    "Tradução": "Suar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😥",
+    "Código": ":disappointed_relieved:",
+    "Tradução": "Desapontado Aliviado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😩",
+    "Código": ":weary:",
+    "Tradução": "Cansado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😔",
+    "Código": ":pensive:",
+    "Tradução": "Pensativo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😞",
+    "Código": ":disappointed:",
+    "Tradução": "Desiludido"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😖",
+    "Código": ":confounded:",
+    "Tradução": "Perplexo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😨",
+    "Código": ":fearful:",
+    "Tradução": "Medroso"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😰",
+    "Código": ":cold_sweat:",
+    "Tradução": "Suor Frio"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😣",
+    "Código": ":persevere:",
+    "Tradução": "Perseverar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😢",
+    "Código": ":cry:",
+    "Tradução": "Chorar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😭",
+    "Código": ":sob:",
+    "Tradução": "Soluçar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😂",
+    "Código": ":joy:",
+    "Tradução": "Alegria"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😲",
+    "Código": ":astonished:",
+    "Tradução": "Espantado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😱",
+    "Código": ":scream:",
+    "Tradução": "Gritar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😫",
+    "Código": ":tired_face:",
+    "Tradução": "Rosto Cansado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😠",
+    "Código": ":angry:",
+    "Tradução": "Irritado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😡",
+    "Código": ":rage:",
+    "Tradução": "Fúria"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😤",
+    "Código": ":triumph:",
+    "Tradução": "Triunfo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😪",
+    "Código": ":sleepy:",
+    "Tradução": "Sonolento"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😋",
+    "Código": ":yum:",
+    "Tradução": "Yum"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😷",
+    "Código": ":mask:",
+    "Tradução": "Máscara"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😎",
+    "Código": ":sunglasses:",
+    "Tradução": "Óculos Escuros"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😵",
+    "Código": ":dizzy_face:",
+    "Tradução": "Rosto Tonto"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👿",
+    "Código": ":imp:",
+    "Tradução": "Diabrete"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😈",
+    "Código": ":smiling_imp:",
+    "Tradução": "Diabinho Sorridente"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😐",
+    "Código": ":neutral_face:",
+    "Tradução": "Rosto Neutro"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😶",
+    "Código": ":no_mouth:",
+    "Tradução": "Sem Boca"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😇",
+    "Código": ":innocent:",
+    "Tradução": "Inocente"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👽",
+    "Código": ":alien:",
+    "Tradução": "Alienígena"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💛",
+    "Código": ":yellow_heart:",
+    "Tradução": "Coração Amarelo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💙",
+    "Código": ":blue_heart:",
+    "Tradução": "Coração Azul"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💜",
+    "Código": ":purple_heart:",
+    "Tradução": "Coração Roxo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "❤️",
+    "Código": ":heart:",
+    "Tradução": "Coração"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💚",
+    "Código": ":green_heart:",
+    "Tradução": "Coração Verde"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💔",
+    "Código": ":broken_heart:",
+    "Tradução": "Coração Partido"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💓",
+    "Código": ":heartbeat:",
+    "Tradução": "Batimento Cardíaco"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💗",
+    "Código": ":heartpulse:",
+    "Tradução": "Pulso Cardíaco"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💕",
+    "Código": ":two_hearts:",
+    "Tradução": "Dois Corações"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💞",
+    "Código": ":revolving_hearts:",
+    "Tradução": "Corações Giratórios"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💘",
+    "Código": ":cupid:",
+    "Tradução": "Cupido"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💖",
+    "Código": ":sparkling_heart:",
+    "Tradução": "Coração Cintilante"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "✨",
+    "Código": ":sparkles:",
+    "Tradução": "Brilhos"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "⭐",
+    "Código": ":star:",
+    "Tradução": "Estrela"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🌟",
+    "Código": ":star2:",
+    "Tradução": "Estrela2"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💫",
+    "Código": ":dizzy:",
+    "Tradução": "Tonto"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💥",
+    "Código": ":boom:",
+    "Tradução": "Bum"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💥",
+    "Código": ":collision:",
+    "Tradução": "Colisão"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💢",
+    "Código": ":anger:",
+    "Tradução": "Raiva"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "❗",
+    "Código": ":exclamation:",
+    "Tradução": "Exclamação"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "❓",
+    "Código": ":question:",
+    "Tradução": "Pergunta"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "❕",
+    "Código": ":grey_exclamation:",
+    "Tradução": "Exclamação Cinza"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "❔",
+    "Código": ":grey_question:",
+    "Tradução": "Pergunta Cinzenta"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💤",
+    "Código": ":zzz:",
+    "Tradução": "Zzz"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💨",
+    "Código": ":dash:",
+    "Tradução": "Traço"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💦",
+    "Código": ":sweat_drops:",
+    "Tradução": "Gotas De Suor"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🎶",
+    "Código": ":notes:",
+    "Tradução": "Anotações"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🎵",
+    "Código": ":musical_note:",
+    "Tradução": "Nota Musical"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🔥",
+    "Código": ":fire:",
+    "Tradução": "Fogo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💩",
+    "Código": ":shit:",
+    "Tradução": "Merda"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👍",
+    "Código": ":+1:",
+    "Tradução": "Ok"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👍",
+    "Código": ":thumbsup:",
+    "Tradução": "Polegar Para Cima"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👎",
+    "Código": ":-1:",
+    "Tradução": "Negativo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👎",
+    "Código": ":thumbsdown:",
+    "Tradução": "Polegar Para Baixo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👌",
+    "Código": ":ok_hand:",
+    "Tradução": "Ok Mão"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👊",
+    "Código": ":punch:",
+    "Tradução": "Soco"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👊",
+    "Código": ":facepunch:",
+    "Tradução": "Soco Na Cara"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "✊",
+    "Código": ":fist:",
+    "Tradução": "Punho"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "✌️",
+    "Código": ":v:",
+    "Tradução": "Vitória"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👋",
+    "Código": ":wave:",
+    "Tradução": "Onda"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "✋",
+    "Código": ":hand:",
+    "Tradução": "Mão"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "✋",
+    "Código": ":raised_hand:",
+    "Tradução": "Mão Levantada"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👐",
+    "Código": ":open_hands:",
+    "Tradução": "Mãos Abertas"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "☝️",
+    "Código": ":point_up:",
+    "Tradução": "Apontar Para Cima"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👇",
+    "Código": ":point_down:",
+    "Tradução": "Apontar Para Baixo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👈",
+    "Código": ":point_left:",
+    "Tradução": "Ponto À Esquerda"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👉",
+    "Código": ":point_right:",
+    "Tradução": "Aponte Para A Direita"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙌",
+    "Código": ":raised_hands:",
+    "Tradução": "Mãos Levantadas"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙏",
+    "Código": ":pray:",
+    "Tradução": "Rezar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👆",
+    "Código": ":point_up_2:",
+    "Tradução": "Apontar Para Cima 2"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👏",
+    "Código": ":clap:",
+    "Tradução": "Aplaudir"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💪",
+    "Código": ":muscle:",
+    "Tradução": "Músculo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🤘",
+    "Código": ":metal:",
+    "Tradução": "Metal"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🖕",
+    "Código": ":fu:",
+    "Tradução": "Fu"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🚶",
+    "Código": ":walking:",
+    "Tradução": "Ambulante"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🏃",
+    "Código": ":runner:",
+    "Tradução": "Corredor"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🏃",
+    "Código": ":running:",
+    "Tradução": "Executando"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👫",
+    "Código": ":couple:",
+    "Tradução": "Par"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👪",
+    "Código": ":family:",
+    "Tradução": "Família"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👬",
+    "Código": ":two_men_holding_hands:",
+    "Tradução": "Dois Homens De Mãos Dadas"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👭",
+    "Código": ":two_women_holding_hands:",
+    "Tradução": "Duas Mulheres De Mãos Dadas"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💃",
+    "Código": ":dancer:",
+    "Tradução": "Dançarino"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👯",
+    "Código": ":dancers:",
+    "Tradução": "Dançarinos"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙆‍♀️",
+    "Código": ":ok_woman:",
+    "Tradução": "Ok Mulher"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙅",
+    "Código": ":no_good:",
+    "Tradução": "Não É Bom"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💁",
+    "Código": ":information_desk_person:",
+    "Tradução": "Pessoa Do Balcão De Informações"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙋",
+    "Código": ":raising_hand:",
+    "Tradução": "Levantando A Mão"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👰‍♀️",
+    "Código": ":bride_with_veil:",
+    "Tradução": "Noiva Com Véu"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙇",
+    "Código": ":bow:",
+    "Tradução": "Arco"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💏",
+    "Código": ":couplekiss:",
+    "Tradução": "Beijo De Casal"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💑",
+    "Código": ":couple_with_heart:",
+    "Tradução": "Casal Com Coração"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💆",
+    "Código": ":massage:",
+    "Tradução": "Massagem"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💇",
+    "Código": ":haircut:",
+    "Tradução": "Cabelo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💅",
+    "Código": ":nail_care:",
+    "Tradução": "Cuidados Com As Unhas"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👦",
+    "Código": ":boy:",
+    "Tradução": "Menino"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👧",
+    "Código": ":girl:",
+    "Tradução": "Garota"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👩",
+    "Código": ":woman:",
+    "Tradução": "Mulher"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👨",
+    "Código": ":man:",
+    "Tradução": "Homem"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👶",
+    "Código": ":baby:",
+    "Tradução": "Bebê"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👵",
+    "Código": ":older_woman:",
+    "Tradução": "Mulher Mais Velha"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👴",
+    "Código": ":older_man:",
+    "Tradução": "Homem Mais Velho"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👲",
+    "Código": ":man_with_gua_pi_mao:",
+    "Tradução": "Homem Com Gua Pi Mao"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👳‍♂️",
+    "Código": ":man_with_turban:",
+    "Tradução": "Homem Com Turbante"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👷",
+    "Código": ":construction_worker:",
+    "Tradução": "Trabalhador Da Construção Civil"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👮",
+    "Código": ":cop:",
+    "Tradução": "Policial"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👼",
+    "Código": ":angel:",
+    "Tradução": "Anjo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👸",
+    "Código": ":princess:",
+    "Tradução": "Princesa"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😺",
+    "Código": ":smiley_cat:",
+    "Tradução": "Gato Sorridente"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😸",
+    "Código": ":smile_cat:",
+    "Tradução": "Gato Sorridente"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😻",
+    "Código": ":heart_eyes_cat:",
+    "Tradução": "Coração Olhos Gato"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😽",
+    "Código": ":kissing_cat:",
+    "Tradução": "Beijando Gato"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😼",
+    "Código": ":smirk_cat:",
+    "Tradução": "Gato Sorridente"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙀",
+    "Código": ":scream_cat:",
+    "Tradução": "Gato Grito"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😿",
+    "Código": ":crying_cat_face:",
+    "Tradução": "Cara De Gato Chorando"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😹",
+    "Código": ":joy_cat:",
+    "Tradução": "Gato Alegria"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "😾",
+    "Código": ":pouting_cat:",
+    "Tradução": "Gato Fazendo Beicinho"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👹",
+    "Código": ":japanese_ogre:",
+    "Tradução": "Ogre Japonês"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👺",
+    "Código": ":japanese_goblin:",
+    "Tradução": "Duende Japonês"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙈",
+    "Código": ":see_no_evil:",
+    "Tradução": "Não Veja O Mal"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙉",
+    "Código": ":hear_no_evil:",
+    "Tradução": "Não Ouça O Mal"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🙊",
+    "Código": ":speak_no_evil:",
+    "Tradução": "Não Fale Mal"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💂‍♂️",
+    "Código": ":guardsman:",
+    "Tradução": "Guarda"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💀",
+    "Código": ":skull:",
+    "Tradução": "Crânio"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🐾",
+    "Código": ":feet:",
+    "Tradução": "Pé"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👄",
+    "Código": ":lips:",
+    "Tradução": "Lábios"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💋",
+    "Código": ":kiss:",
+    "Tradução": "Beijar"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💧",
+    "Código": ":droplet:",
+    "Tradução": "Gotícula"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👂",
+    "Código": ":ear:",
+    "Tradução": "Orelha"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👀",
+    "Código": ":eyes:",
+    "Tradução": "Olho"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👃",
+    "Código": ":nose:",
+    "Tradução": "Nariz"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👅",
+    "Código": ":tongue:",
+    "Tradução": "Língua"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💌",
+    "Código": ":love_letter:",
+    "Tradução": "Carta De Amor"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👤",
+    "Código": ":bust_in_silhouette:",
+    "Tradução": "Busto Em Silhueta"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "👥",
+    "Código": ":busts_in_silhouette:",
+    "Tradução": "Bustos Em Silhueta"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💬",
+    "Código": ":speech_balloon:",
+    "Tradução": "Balão De Fala"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "💭",
+    "Código": ":thought_balloon:",
+    "Tradução": "Balão De Pensamento"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "☀️",
+    "Código": ":sunny:",
+    "Tradução": "Ensolarado"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "☔",
+    "Código": ":umbrella:",
+    "Tradução": "Guarda-Chuva"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "☁️",
+    "Código": ":cloud:",
+    "Tradução": "Nuvem"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "❄️",
+    "Código": ":snowflake:",
+    "Tradução": "Floco De Neve"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "⛄",
+    "Código": ":snowman:",
+    "Tradução": "Boneco De Neve"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "⚡",
+    "Código": ":zap:",
+    "Tradução": "Zap"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🌀",
+    "Código": ":cyclone:",
+    "Tradução": "Ciclone"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🌁",
+    "Código": ":foggy:",
+    "Tradução": "Nevoento"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🌊",
+    "Código": ":ocean:",
+    "Tradução": "Oceano"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐱",
+    "Código": ":cat:",
+    "Tradução": "Gato"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐶",
+    "Código": ":dog:",
+    "Tradução": "Cão"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐭",
+    "Código": ":mouse:",
+    "Tradução": "Rato"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐹",
+    "Código": ":hamster:",
+    "Tradução": "Hamster"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐰",
+    "Código": ":rabbit:",
+    "Tradução": "Coelho"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐺",
+    "Código": ":wolf:",
+    "Tradução": "Lobo"
+  },
+  {
+    "Grupo": "SENTIMENTOS",
+    "Emoji": "🐸",
+    "Código": ":frog:",
+    "Tradução": "Rã"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐯",
+    "Código": ":tiger:",
+    "Tradução": "Tigre"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐨",
+    "Código": ":koala:",
+    "Tradução": "Coala"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐻",
+    "Código": ":bear:",
+    "Tradução": "Urso"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐷",
+    "Código": ":pig:",
+    "Tradução": "Porco"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐽",
+    "Código": ":pig_nose:",
+    "Tradução": "Nariz De Porco"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐮",
+    "Código": ":cow:",
+    "Tradução": "Vaca"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐗",
+    "Código": ":boar:",
+    "Tradução": "Javali"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐵",
+    "Código": ":monkey_face:",
+    "Tradução": "Cara De Macaco"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐒",
+    "Código": ":monkey:",
+    "Tradução": "Macaco"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐴",
+    "Código": ":horse:",
+    "Tradução": "Cavalo"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐎",
+    "Código": ":racehorse:",
+    "Tradução": "Cavalo De Corrida"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐫",
+    "Código": ":camel:",
+    "Tradução": "Camelo"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐑",
+    "Código": ":sheep:",
+    "Tradução": "Ovelha"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐘",
+    "Código": ":elephant:",
+    "Tradução": "Elefante"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐼",
+    "Código": ":panda_face:",
+    "Tradução": "Cara De Panda"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐍",
+    "Código": ":snake:",
+    "Tradução": "Cobra"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐦",
+    "Código": ":bird:",
+    "Tradução": "Pássaro"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐤",
+    "Código": ":baby_chick:",
+    "Tradução": "Pintinho Bebê"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐥",
+    "Código": ":hatched_chick:",
+    "Tradução": "Pintinho Chocado"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐣",
+    "Código": ":hatching_chick:",
+    "Tradução": "Pintinho Para Incubação"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐔",
+    "Código": ":chicken:",
+    "Tradução": "Frango"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐧",
+    "Código": ":penguin:",
+    "Tradução": "Pinguim"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐢",
+    "Código": ":turtle:",
+    "Tradução": "Tartaruga"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐛",
+    "Código": ":bug:",
+    "Tradução": "Bug"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐝",
+    "Código": ":honeybee:",
+    "Tradução": "Abelha"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐜",
+    "Código": ":ant:",
+    "Tradução": "Formiga"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐌",
+    "Código": ":snail:",
+    "Tradução": "Caracol"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐙",
+    "Código": ":octopus:",
+    "Tradução": "Polvo"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐠",
+    "Código": ":tropical_fish:",
+    "Tradução": "Peixes Tropicais"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐟",
+    "Código": ":fish:",
+    "Tradução": "Peixe"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐳",
+    "Código": ":whale:",
+    "Tradução": "Baleia"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐋",
+    "Código": ":whale2:",
+    "Tradução": "Baleia2"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐬",
+    "Código": ":dolphin:",
+    "Tradução": "Golfinho"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐄",
+    "Código": ":cow2:",
+    "Tradução": "Vaca2"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐏",
+    "Código": ":ram:",
+    "Tradução": "Carneiro"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐀",
+    "Código": ":rat:",
+    "Tradução": "Rato"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐃",
+    "Código": ":water_buffalo:",
+    "Tradução": "Búfalo-Asiático"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐅",
+    "Código": ":tiger2:",
+    "Tradução": "Tigre2"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐇",
+    "Código": ":rabbit2:",
+    "Tradução": "Coelho2"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐉",
+    "Código": ":dragon:",
+    "Tradução": "Dragão"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐐",
+    "Código": ":goat:",
+    "Tradução": "Cabra"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐓",
+    "Código": ":rooster:",
+    "Tradução": "Galo"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐕",
+    "Código": ":dog2:",
+    "Tradução": "Cachorro 2"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐖",
+    "Código": ":pig2:",
+    "Tradução": "Porco2"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐁",
+    "Código": ":mouse2:",
+    "Tradução": "Mouse2"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐂",
+    "Código": ":ox:",
+    "Tradução": "Boi"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐲",
+    "Código": ":dragon_face:",
+    "Tradução": "Cara De Dragão"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐡",
+    "Código": ":blowfish:",
+    "Tradução": "Baiacu"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐊",
+    "Código": ":crocodile:",
+    "Tradução": "Crocodilo"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐪",
+    "Código": ":dromedary_camel:",
+    "Tradução": "Camelo Dromedário"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐆",
+    "Código": ":leopard:",
+    "Tradução": "Leopardo"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐈",
+    "Código": ":cat2:",
+    "Tradução": "Gato 2"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐩",
+    "Código": ":poodle:",
+    "Tradução": "Poodle"
+  },
+  {
+    "Grupo": "ANIMAIS",
+    "Emoji": "🐾",
+    "Código": ":paw_prints:",
+    "Tradução": "Pegadas"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "💐",
+    "Código": ":bouquet:",
+    "Tradução": "Buquê"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌸",
+    "Código": ":cherry_blossom:",
+    "Tradução": "Flor De Cerejeira"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌷",
+    "Código": ":tulip:",
+    "Tradução": "Tulipa"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🍀",
+    "Código": ":four_leaf_clover:",
+    "Tradução": "Trevo De Quatro Folhas"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌹",
+    "Código": ":rose:",
+    "Tradução": "Rosa"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌻",
+    "Código": ":sunflower:",
+    "Tradução": "Girassol"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌺",
+    "Código": ":hibiscus:",
+    "Tradução": "Hibisco"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🍁",
+    "Código": ":maple_leaf:",
+    "Tradução": "Folha De Bordo"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🍃",
+    "Código": ":leaves:",
+    "Tradução": "Folhas"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🍂",
+    "Código": ":fallen_leaf:",
+    "Tradução": "Folha Caída"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌿",
+    "Código": ":herb:",
+    "Tradução": "Erva"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🍄",
+    "Código": ":mushroom:",
+    "Tradução": "Cogumelo"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌵",
+    "Código": ":cactus:",
+    "Tradução": "Cacto"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌴",
+    "Código": ":palm_tree:",
+    "Tradução": "Palmeira"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌲",
+    "Código": ":evergreen_tree:",
+    "Tradução": "Árvore Perene"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌳",
+    "Código": ":deciduous_tree:",
+    "Tradução": "Árvore Caducifólia"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌰",
+    "Código": ":chestnut:",
+    "Tradução": "Castanha"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌱",
+    "Código": ":seedling:",
+    "Tradução": "Muda"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌼",
+    "Código": ":blossom:",
+    "Tradução": "Florescer"
+  },
+  {
+    "Grupo": "VEGETAIS",
+    "Emoji": "🌾",
+    "Código": ":ear_of_rice:",
+    "Tradução": "Espiga De Arroz"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌐",
+    "Código": ":globe_with_meridians:",
+    "Tradução": "Globo Com Meridianos"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌞",
+    "Código": ":sun_with_face:",
+    "Tradução": "Sol Com Rosto"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌝",
+    "Código": ":full_moon_with_face:",
+    "Tradução": "Lua Cheia Com Rosto"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌚",
+    "Código": ":new_moon_with_face:",
+    "Tradução": "Lua Nova Com Rosto"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌑",
+    "Código": ":new_moon:",
+    "Tradução": "Lua Nova"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌒",
+    "Código": ":waxing_crescent_moon:",
+    "Tradução": "Lua Crescente Crescente"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌓",
+    "Código": ":first_quarter_moon:",
+    "Tradução": "Lua Minguante"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌔",
+    "Código": ":waxing_gibbous_moon:",
+    "Tradução": "Lua Crescente"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌕",
+    "Código": ":full_moon:",
+    "Tradução": "Lua Cheia"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌖",
+    "Código": ":waning_gibbous_moon:",
+    "Tradução": "Lua Minguante Convexa"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌗",
+    "Código": ":last_quarter_moon:",
+    "Tradução": "Lua Minguante"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌘",
+    "Código": ":waning_crescent_moon:",
+    "Tradução": "Lua Crescente Minguante"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌜",
+    "Código": ":last_quarter_moon_with_face:",
+    "Tradução": "Lua Minguante Com Rosto"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌛",
+    "Código": ":first_quarter_moon_with_face:",
+    "Tradução": "Lua Minguante Com Rosto"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌔",
+    "Código": ":moon:",
+    "Tradução": "Lua"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "🌌",
+    "Código": ":milky_way:",
+    "Tradução": "Via Láctea"
+  },
+  {
+    "Grupo": "CÉU",
+    "Emoji": "⛅",
+    "Código": ":partly_sunny:",
+    "Tradução": "Parcialmente Ensolarado"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎍",
+    "Código": ":bamboo:",
+    "Tradução": "Bambu"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💝",
+    "Código": ":gift_heart:",
+    "Tradução": "Coração De Presente"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎎",
+    "Código": ":dolls:",
+    "Tradução": "Bonecas"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎒",
+    "Código": ":school_satchel:",
+    "Tradução": "Mochila Escolar"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎓",
+    "Código": ":mortar_board:",
+    "Tradução": "Placa De Argamassa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎏",
+    "Código": ":flags:",
+    "Tradução": "Sinalizadores"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎆",
+    "Código": ":fireworks:",
+    "Tradução": "Fogos De Artifício"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎇",
+    "Código": ":sparkler:",
+    "Tradução": "Sparkler"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎐",
+    "Código": ":wind_chime:",
+    "Tradução": "Carrilhão De Vento"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎑",
+    "Código": ":rice_scene:",
+    "Tradução": "Cena Do Arroz"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎃",
+    "Código": ":jack_o_lantern:",
+    "Tradução": "Lanterna Jack O"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👻",
+    "Código": ":ghost:",
+    "Tradução": "Fantasma"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎅",
+    "Código": ":santa:",
+    "Tradução": "Santa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎄",
+    "Código": ":christmas_tree:",
+    "Tradução": "Árvore De Natal"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎁",
+    "Código": ":gift:",
+    "Tradução": "Presente"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔔",
+    "Código": ":bell:",
+    "Tradução": "Sino"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔕",
+    "Código": ":no_bell:",
+    "Tradução": "Sem Campainha"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎋",
+    "Código": ":tanabata_tree:",
+    "Tradução": "Árvore Tanabata"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎉",
+    "Código": ":tada:",
+    "Tradução": "Tada"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎊",
+    "Código": ":confetti_ball:",
+    "Tradução": "Bola De Confete"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎈",
+    "Código": ":balloon:",
+    "Tradução": "Balão"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔮",
+    "Código": ":crystal_ball:",
+    "Tradução": "Bola De Cristal"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💿",
+    "Código": ":cd:",
+    "Tradução": "Cd"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📀",
+    "Código": ":dvd:",
+    "Tradução": "Dvd"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💾",
+    "Código": ":floppy_disk:",
+    "Tradução": "Disquete"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📷",
+    "Código": ":camera:",
+    "Tradução": "Câmera"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📹",
+    "Código": ":video_camera:",
+    "Tradução": "Câmera De Vídeo"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎥",
+    "Código": ":movie_camera:",
+    "Tradução": "Câmera De Filme"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💻",
+    "Código": ":computer:",
+    "Tradução": "Computador"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📺",
+    "Código": ":tv:",
+    "Tradução": "Tevê"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📱",
+    "Código": ":iphone:",
+    "Tradução": "Iphone"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "☎️",
+    "Código": ":phone:",
+    "Tradução": "Telefone"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📞",
+    "Código": ":telephone_receiver:",
+    "Tradução": "Receptor De Telefone"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📟",
+    "Código": ":pager:",
+    "Tradução": "Pager"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📠",
+    "Código": ":fax:",
+    "Tradução": "Fax"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💽",
+    "Código": ":minidisc:",
+    "Tradução": "Minidisco"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📼",
+    "Código": ":vhs:",
+    "Tradução": "Vhs"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔉",
+    "Código": ":sound:",
+    "Tradução": "Som"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔈",
+    "Código": ":speaker:",
+    "Tradução": "Orador"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔇",
+    "Código": ":mute:",
+    "Tradução": "Mudo"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📢",
+    "Código": ":loudspeaker:",
+    "Tradução": "Altifalante"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📣",
+    "Código": ":mega:",
+    "Tradução": "Mega"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "⌛",
+    "Código": ":hourglass:",
+    "Tradução": "Ampulheta"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "⏳",
+    "Código": ":hourglass_flowing_sand:",
+    "Tradução": "Ampulheta Fluindo Areia"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "⏰",
+    "Código": ":alarm_clock:",
+    "Tradução": "Despertador"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "⌚",
+    "Código": ":watch:",
+    "Tradução": "Relógio"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📻",
+    "Código": ":radio:",
+    "Tradução": "Rádio"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📡",
+    "Código": ":satellite:",
+    "Tradução": "Satélite"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "➿",
+    "Código": ":loop:",
+    "Tradução": "Laço"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔍",
+    "Código": ":mag:",
+    "Tradução": "Mag"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔎",
+    "Código": ":mag_right:",
+    "Tradução": "Mag Certo"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔓",
+    "Código": ":unlock:",
+    "Tradução": "Destravar"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔒",
+    "Código": ":lock:",
+    "Tradução": "Fechadura"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔏",
+    "Código": ":lock_with_ink_pen:",
+    "Tradução": "Fechadura Com Caneta De Tinta"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔐",
+    "Código": ":closed_lock_with_key:",
+    "Tradução": "Fechadura Fechada Com Chave"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔑",
+    "Código": ":key:",
+    "Tradução": "Chave"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💡",
+    "Código": ":bulb:",
+    "Tradução": "Lâmpada"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔦",
+    "Código": ":flashlight:",
+    "Tradução": "Lanterna"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔆",
+    "Código": ":high_brightness:",
+    "Tradução": "Alto Brilho"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔅",
+    "Código": ":low_brightness:",
+    "Tradução": "Baixo Brilho"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔌",
+    "Código": ":electric_plug:",
+    "Tradução": "Plugue Elétrico"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔋",
+    "Código": ":battery:",
+    "Tradução": "Bateria"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📲",
+    "Código": ":calling:",
+    "Tradução": "Vocação"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📧",
+    "Código": ":email:",
+    "Tradução": "Email"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📫",
+    "Código": ":mailbox:",
+    "Tradução": "Caixa De Correio"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📮",
+    "Código": ":postbox:",
+    "Tradução": "Caixa Postal"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🛀",
+    "Código": ":bath:",
+    "Tradução": "Banho"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🛁",
+    "Código": ":bathtub:",
+    "Tradução": "Banheira"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🚿",
+    "Código": ":shower:",
+    "Tradução": "Chuveiro"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🚽",
+    "Código": ":toilet:",
+    "Tradução": "Retrete"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔧",
+    "Código": ":wrench:",
+    "Tradução": "Chave"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔩",
+    "Código": ":nut_and_bolt:",
+    "Tradução": "Porca E Parafuso"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔨",
+    "Código": ":hammer:",
+    "Tradução": "Martelo"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💺",
+    "Código": ":seat:",
+    "Tradução": "Assento"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💰",
+    "Código": ":moneybag:",
+    "Tradução": "Saco De Dinheiro"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💴",
+    "Código": ":yen:",
+    "Tradução": "Iene"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💵",
+    "Código": ":dollar:",
+    "Tradução": "Dólar"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💷",
+    "Código": ":pound:",
+    "Tradução": "Libra"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💶",
+    "Código": ":euro:",
+    "Tradução": "Euro"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💳",
+    "Código": ":credit_card:",
+    "Tradução": "Cartão De Crédito"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💸",
+    "Código": ":money_with_wings:",
+    "Tradução": "Dinheiro Com Asas"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📧",
+    "Código": ":e-mail:",
+    "Tradução": "E-Mail"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📥",
+    "Código": ":inbox_tray:",
+    "Tradução": "Bandeja Da Caixa De Entrada"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📤",
+    "Código": ":outbox_tray:",
+    "Tradução": "Bandeja Da Caixa De Saída"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "✉️",
+    "Código": ":envelope:",
+    "Tradução": "Envelope"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📨",
+    "Código": ":incoming_envelope:",
+    "Tradução": "Envelope De Entrada"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📯",
+    "Código": ":postal_horn:",
+    "Tradução": "Buzina Postal"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📪",
+    "Código": ":mailbox_closed:",
+    "Tradução": "Caixa De Correio Fechada"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📬",
+    "Código": ":mailbox_with_mail:",
+    "Tradução": "Caixa De Correio Com Correio"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📭",
+    "Código": ":mailbox_with_no_mail:",
+    "Tradução": "Caixa De Correio Sem Correio"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🚪",
+    "Código": ":door:",
+    "Tradução": "Porta"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🚬",
+    "Código": ":smoking:",
+    "Tradução": "Tabagismo"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💣",
+    "Código": ":bomb:",
+    "Tradução": "Bomba"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔫",
+    "Código": ":gun:",
+    "Tradução": "Arma"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔪",
+    "Código": ":hocho:",
+    "Tradução": "Hocho"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💊",
+    "Código": ":pill:",
+    "Tradução": "Pílula"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💉",
+    "Código": ":syringe:",
+    "Tradução": "Seringa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📄",
+    "Código": ":page_facing_up:",
+    "Tradução": "Página Virada Para Cima"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📃",
+    "Código": ":page_with_curl:",
+    "Tradução": "Página Com Ondulação"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📑",
+    "Código": ":bookmark_tabs:",
+    "Tradução": "Guias De Favoritos"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📊",
+    "Código": ":bar_chart:",
+    "Tradução": "Gráfico De Barras"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📈",
+    "Código": ":chart_with_upwards_trend:",
+    "Tradução": "Gráfico Com Tendência De Alta"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📉",
+    "Código": ":chart_with_downwards_trend:",
+    "Tradução": "Gráfico Com Tendência De Queda"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📜",
+    "Código": ":scroll:",
+    "Tradução": "Rolar"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📋",
+    "Código": ":clipboard:",
+    "Tradução": "Área De Transferência"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📆",
+    "Código": ":calendar:",
+    "Tradução": "Calendário"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📅",
+    "Código": ":date:",
+    "Tradução": "Data"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📇",
+    "Código": ":card_index:",
+    "Tradução": "Índice De Cartões"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📁",
+    "Código": ":file_folder:",
+    "Tradução": "Pasta De Arquivo"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📂",
+    "Código": ":open_file_folder:",
+    "Tradução": "Abrir Pasta De Arquivos"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "✂️",
+    "Código": ":scissors:",
+    "Tradução": "Tesoura"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📌",
+    "Código": ":pushpin:",
+    "Tradução": "Tacha"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📎",
+    "Código": ":paperclip:",
+    "Tradução": "Clipe"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "✒️",
+    "Código": ":black_nib:",
+    "Tradução": "Ponta Preta"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "✏️",
+    "Código": ":pencil2:",
+    "Tradução": "Lápis2"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📏",
+    "Código": ":straight_ruler:",
+    "Tradução": "Régua Reta"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📐",
+    "Código": ":triangular_ruler:",
+    "Tradução": "Régua Triangular"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📕",
+    "Código": ":closed_book:",
+    "Tradução": "Livro Fechado"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📗",
+    "Código": ":green_book:",
+    "Tradução": "Livro Verde"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📘",
+    "Código": ":blue_book:",
+    "Tradução": "Livro Azul"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📙",
+    "Código": ":orange_book:",
+    "Tradução": "Livro Laranja"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📓",
+    "Código": ":notebook:",
+    "Tradução": "Caderno"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📔",
+    "Código": ":notebook_with_decorative_cover:",
+    "Tradução": "Caderno Com Capa Decorativa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📒",
+    "Código": ":ledger:",
+    "Tradução": "Livro-Razão"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📚",
+    "Código": ":books:",
+    "Tradução": "Livros"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔖",
+    "Código": ":bookmark:",
+    "Tradução": "Indicador"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📛",
+    "Código": ":name_badge:",
+    "Tradução": "Crachá"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔬",
+    "Código": ":microscope:",
+    "Tradução": "Microscópio"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🔭",
+    "Código": ":telescope:",
+    "Tradução": "Telescópio"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📰",
+    "Código": ":newspaper:",
+    "Tradução": "Jornal"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🏈",
+    "Código": ":football:",
+    "Tradução": "Futebol"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🏀",
+    "Código": ":basketball:",
+    "Tradução": "Basquete"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "⚽",
+    "Código": ":soccer:",
+    "Tradução": "Futebol"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "⚾",
+    "Código": ":baseball:",
+    "Tradução": "Beisebol"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎾",
+    "Código": ":tennis:",
+    "Tradução": "Tênis"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎱",
+    "Código": ":8ball:",
+    "Tradução": "8 Bolas"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🏉",
+    "Código": ":rugby_football:",
+    "Tradução": "Futebol De Rugby"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎳",
+    "Código": ":bowling:",
+    "Tradução": "Boliche"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "⛳",
+    "Código": ":golf:",
+    "Tradução": "Golfe"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🚵",
+    "Código": ":mountain_bicyclist:",
+    "Tradução": "Ciclista De Montanha"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🚴",
+    "Código": ":bicyclist:",
+    "Tradução": "Ciclista"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🏇",
+    "Código": ":horse_racing:",
+    "Tradução": "Hipismo"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🏂",
+    "Código": ":snowboarder:",
+    "Tradução": "Snowboarder"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🏊",
+    "Código": ":swimmer:",
+    "Tradução": "Nadador"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🏄",
+    "Código": ":surfer:",
+    "Tradução": "Surfista"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎿",
+    "Código": ":ski:",
+    "Tradução": "Esqui"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "♠️",
+    "Código": ":spades:",
+    "Tradução": "Espadas"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "♥️",
+    "Código": ":hearts:",
+    "Tradução": "Copas"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "♣️",
+    "Código": ":clubs:",
+    "Tradução": "Paus"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "♦️",
+    "Código": ":diamonds:",
+    "Tradução": "Ouros"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💎",
+    "Código": ":gem:",
+    "Tradução": "Gema"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💍",
+    "Código": ":ring:",
+    "Tradução": "Anel"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🏆",
+    "Código": ":trophy:",
+    "Tradução": "Troféu"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎼",
+    "Código": ":musical_score:",
+    "Tradução": "Partitura Musical"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎹",
+    "Código": ":musical_keyboard:",
+    "Tradução": "Teclado Musical"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎻",
+    "Código": ":violin:",
+    "Tradução": "Violino"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👾",
+    "Código": ":space_invader:",
+    "Tradução": "Invasor Do Espaço"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎮",
+    "Código": ":video_game:",
+    "Tradução": "Vídeo Game"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🃏",
+    "Código": ":black_joker:",
+    "Tradução": "Coringa Negro"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎴",
+    "Código": ":flower_playing_cards:",
+    "Tradução": "Cartas De Baralho De Flores"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎲",
+    "Código": ":game_die:",
+    "Tradução": "Jogo Morre"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎯",
+    "Código": ":dart:",
+    "Tradução": "Dardo"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🀄",
+    "Código": ":mahjong:",
+    "Tradução": "Mahjong"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎬",
+    "Código": ":clapper:",
+    "Tradução": "Badalo"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📝",
+    "Código": ":memo:",
+    "Tradução": "Memorando"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📝",
+    "Código": ":pencil:",
+    "Tradução": "Lápis"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "📖",
+    "Código": ":book:",
+    "Tradução": "Livro"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎨",
+    "Código": ":art:",
+    "Tradução": "Arte"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎤",
+    "Código": ":microphone:",
+    "Tradução": "Microfone"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎧",
+    "Código": ":headphones:",
+    "Tradução": "Auscultadores"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎺",
+    "Código": ":trumpet:",
+    "Tradução": "Trombeta"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎷",
+    "Código": ":saxophone:",
+    "Tradução": "Saxofone"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎸",
+    "Código": ":guitar:",
+    "Tradução": "Violão"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👞",
+    "Código": ":shoe:",
+    "Tradução": "Sapato"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👡",
+    "Código": ":sandal:",
+    "Tradução": "Sandália"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👠",
+    "Código": ":high_heel:",
+    "Tradução": "Salto Alto"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💄",
+    "Código": ":lipstick:",
+    "Tradução": "Batom"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👢",
+    "Código": ":boot:",
+    "Tradução": "Bota"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👕",
+    "Código": ":shirt:",
+    "Tradução": "Camisa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👕",
+    "Código": ":tshirt:",
+    "Tradução": "Camiseta"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👔",
+    "Código": ":necktie:",
+    "Tradução": "Gravata"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👚",
+    "Código": ":womans_clothes:",
+    "Tradução": "Roupas Femininas"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👗",
+    "Código": ":dress:",
+    "Tradução": "Vestir"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎽",
+    "Código": ":running_shirt_with_sash:",
+    "Tradução": "Camisa De Corrida Com Faixa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👖",
+    "Código": ":jeans:",
+    "Tradução": "Jeans"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👘",
+    "Código": ":kimono:",
+    "Tradução": "Quimono"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👙",
+    "Código": ":bikini:",
+    "Tradução": "Biquíni"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎀",
+    "Código": ":ribbon:",
+    "Tradução": "Fita"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎩",
+    "Código": ":tophat:",
+    "Tradução": "Cartola"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👑",
+    "Código": ":crown:",
+    "Tradução": "Coroa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👒",
+    "Código": ":womans_hat:",
+    "Tradução": "Chapéu Das Mulheres"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👞",
+    "Código": ":mans_shoe:",
+    "Tradução": "Homem Sapato"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🌂",
+    "Código": ":closed_umbrella:",
+    "Tradução": "Guarda-Chuva Fechado"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "💼",
+    "Código": ":briefcase:",
+    "Tradução": "Pasta"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👜",
+    "Código": ":handbag:",
+    "Tradução": "Bolsa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👝",
+    "Código": ":pouch:",
+    "Tradução": "Bolsa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👛",
+    "Código": ":purse:",
+    "Tradução": "Bolsa"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "👓",
+    "Código": ":eyeglasses:",
+    "Tradução": "Óculos"
+  },
+  {
+    "Grupo": "OBJETOS",
+    "Emoji": "🎣",
+    "Código": ":fishing_pole_and_fish:",
+    "Tradução": "Vara De Pesca E Peixe"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "☕",
+    "Código": ":coffee:",
+    "Tradução": "Café"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍵",
+    "Código": ":tea:",
+    "Tradução": "Chá"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍶",
+    "Código": ":sake:",
+    "Tradução": "Saquê"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍼",
+    "Código": ":baby_bottle:",
+    "Tradução": "Mamadeira"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍺",
+    "Código": ":beer:",
+    "Tradução": "Cerveja"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍻",
+    "Código": ":beers:",
+    "Tradução": "Cervejas"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍸",
+    "Código": ":cocktail:",
+    "Tradução": "Coquetel"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍹",
+    "Código": ":tropical_drink:",
+    "Tradução": "Bebida Tropical"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍷",
+    "Código": ":wine_glass:",
+    "Tradução": "Taça"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍴",
+    "Código": ":fork_and_knife:",
+    "Tradução": "Garfo E Faca"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍕",
+    "Código": ":pizza:",
+    "Tradução": "Pizza"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍔",
+    "Código": ":hamburger:",
+    "Tradução": "Hambúrguer"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍟",
+    "Código": ":fries:",
+    "Tradução": "Batatas Fritas"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍗",
+    "Código": ":poultry_leg:",
+    "Tradução": "Perna De Aves"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍖",
+    "Código": ":meat_on_bone:",
+    "Tradução": "Carne Com Osso"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍝",
+    "Código": ":spaghetti:",
+    "Tradução": "Espaguete"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍛",
+    "Código": ":curry:",
+    "Tradução": "Caril"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍤",
+    "Código": ":fried_shrimp:",
+    "Tradução": "Camarão Frito"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍱",
+    "Código": ":bento:",
+    "Tradução": "Bento"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍣",
+    "Código": ":sushi:",
+    "Tradução": "Sushi"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍥",
+    "Código": ":fish_cake:",
+    "Tradução": "Bolo De Peixe"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍙",
+    "Código": ":rice_ball:",
+    "Tradução": "Bolinho De Arroz"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍘",
+    "Código": ":rice_cracker:",
+    "Tradução": "Biscoito De Arroz"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍚",
+    "Código": ":rice:",
+    "Tradução": "Arroz"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍜",
+    "Código": ":ramen:",
+    "Tradução": "Ramen"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍲",
+    "Código": ":stew:",
+    "Tradução": "Guisado"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍢",
+    "Código": ":oden:",
+    "Tradução": "Oden"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍡",
+    "Código": ":dango:",
+    "Tradução": "Dango"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🥚",
+    "Código": ":egg:",
+    "Tradução": "Ovo"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍞",
+    "Código": ":bread:",
+    "Tradução": "Pão"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍩",
+    "Código": ":doughnut:",
+    "Tradução": "Rosquinha"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍮",
+    "Código": ":custard:",
+    "Tradução": "Creme"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍦",
+    "Código": ":icecream:",
+    "Tradução": "Sorvete"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍨",
+    "Código": ":ice_cream:",
+    "Tradução": "Gelado"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍧",
+    "Código": ":shaved_ice:",
+    "Tradução": "Gelo Raspado"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🎂",
+    "Código": ":birthday:",
+    "Tradução": "Aniversário"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍰",
+    "Código": ":cake:",
+    "Tradução": "Bolo"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍪",
+    "Código": ":cookie:",
+    "Tradução": "Biscoito"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍫",
+    "Código": ":chocolate_bar:",
+    "Tradução": "Barra De Chocolate"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍬",
+    "Código": ":candy:",
+    "Tradução": "Bombom"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍭",
+    "Código": ":lollipop:",
+    "Tradução": "Pirulito"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍯",
+    "Código": ":honey_pot:",
+    "Tradução": "Pote De Mel"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍎",
+    "Código": ":apple:",
+    "Tradução": "Maçã"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍏",
+    "Código": ":green_apple:",
+    "Tradução": "Maçã Verde"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍊",
+    "Código": ":tangerine:",
+    "Tradução": "Tangerina"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍋",
+    "Código": ":lemon:",
+    "Tradução": "Limão"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍒",
+    "Código": ":cherries:",
+    "Tradução": "Cerejas"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍇",
+    "Código": ":grapes:",
+    "Tradução": "Uvas"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍉",
+    "Código": ":watermelon:",
+    "Tradução": "Melancia"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍓",
+    "Código": ":strawberry:",
+    "Tradução": "Morango"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍑",
+    "Código": ":peach:",
+    "Tradução": "Pêssego"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍈",
+    "Código": ":melon:",
+    "Tradução": "Melão"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍌",
+    "Código": ":banana:",
+    "Tradução": "Banana"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍐",
+    "Código": ":pear:",
+    "Tradução": "Pêra"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍍",
+    "Código": ":pineapple:",
+    "Tradução": "Abacaxi"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍠",
+    "Código": ":sweet_potato:",
+    "Tradução": "Batata-Doce"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍆",
+    "Código": ":eggplant:",
+    "Tradução": "Beringela"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🍅",
+    "Código": ":tomato:",
+    "Tradução": "Tomate"
+  },
+  {
+    "Grupo": "ALIMENTOS",
+    "Emoji": "🌽",
+    "Código": ":corn:",
+    "Tradução": "Milho"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏠",
+    "Código": ":house:",
+    "Tradução": "Casa"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏡",
+    "Código": ":house_with_garden:",
+    "Tradução": "Casa Com Jardim"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏫",
+    "Código": ":school:",
+    "Tradução": "Escola"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏢",
+    "Código": ":office:",
+    "Tradução": "Escritório"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏣",
+    "Código": ":post_office:",
+    "Tradução": "Correio"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏥",
+    "Código": ":hospital:",
+    "Tradução": "Hospital"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏦",
+    "Código": ":bank:",
+    "Tradução": "Banco"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏪",
+    "Código": ":convenience_store:",
+    "Tradução": "Loja De Conveniência"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏩",
+    "Código": ":love_hotel:",
+    "Tradução": "Hotel Do Amor"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏨",
+    "Código": ":hotel:",
+    "Tradução": "Hotel"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "💒",
+    "Código": ":wedding:",
+    "Tradução": "Casamento"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "⛪",
+    "Código": ":church:",
+    "Tradução": "Igreja"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏬",
+    "Código": ":department_store:",
+    "Tradução": "Loja De Departamentos"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏤",
+    "Código": ":european_post_office:",
+    "Tradução": "Estação De Correios Europeia"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🌇",
+    "Código": ":city_sunrise:",
+    "Tradução": "Nascer Do Sol Da Cidade"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🌆",
+    "Código": ":city_sunset:",
+    "Tradução": "Pôr Do Sol Da Cidade"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏯",
+    "Código": ":japanese_castle:",
+    "Tradução": "Castelo Japonês"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏰",
+    "Código": ":european_castle:",
+    "Tradução": "Castelo Europeu"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "⛺",
+    "Código": ":tent:",
+    "Tradução": "Tenda"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏭",
+    "Código": ":factory:",
+    "Tradução": "Fábrica"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🗼",
+    "Código": ":tokyo_tower:",
+    "Tradução": "Torre De Tóquio"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🗾",
+    "Código": ":japan:",
+    "Tradução": "Japão"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🗻",
+    "Código": ":mount_fuji:",
+    "Tradução": "Monte Fuji"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🌄",
+    "Código": ":sunrise_over_mountains:",
+    "Tradução": "Nascer Do Sol Sobre Montanhas"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🌅",
+    "Código": ":sunrise:",
+    "Tradução": "Nascer Do Sol"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🌠",
+    "Código": ":stars:",
+    "Tradução": "Estrelas"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🗽",
+    "Código": ":statue_of_liberty:",
+    "Tradução": "Estátua Da Liberdade"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🌉",
+    "Código": ":bridge_at_night:",
+    "Tradução": "Ponte À Noite"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🎠",
+    "Código": ":carousel_horse:",
+    "Tradução": "Cavalo Carrossel"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🌈",
+    "Código": ":rainbow:",
+    "Tradução": "Arco-Íris"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🎡",
+    "Código": ":ferris_wheel:",
+    "Tradução": "Roda-Gigante"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "⛲",
+    "Código": ":fountain:",
+    "Tradução": "Fonte"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🎢",
+    "Código": ":roller_coaster:",
+    "Tradução": "Montanha-Russa"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚢",
+    "Código": ":ship:",
+    "Tradução": "Navio"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚤",
+    "Código": ":speedboat:",
+    "Tradução": "Lancha"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "⛵",
+    "Código": ":boat:",
+    "Tradução": "Barco"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "⛵",
+    "Código": ":sailboat:",
+    "Tradução": "Veleiro"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚣",
+    "Código": ":rowboat:",
+    "Tradução": "Barco"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "⚓",
+    "Código": ":anchor:",
+    "Tradução": "Âncora"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚀",
+    "Código": ":rocket:",
+    "Tradução": "Foguete"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "✈️",
+    "Código": ":airplane:",
+    "Tradução": "Avião"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚁",
+    "Código": ":helicopter:",
+    "Tradução": "Helicóptero"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚂",
+    "Código": ":steam_locomotive:",
+    "Tradução": "Locomotiva A Vapor"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚊",
+    "Código": ":tram:",
+    "Tradução": "Bonde"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚞",
+    "Código": ":mountain_railway:",
+    "Tradução": "Ferrovia De Montanha"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚲",
+    "Código": ":bike:",
+    "Tradução": "Bicicleta"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚡",
+    "Código": ":aerial_tramway:",
+    "Tradução": "Bonde Aéreo"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚟",
+    "Código": ":suspension_railway:",
+    "Tradução": "Ferrovia Suspensa"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚠",
+    "Código": ":mountain_cableway:",
+    "Tradução": "Teleférico De Montanha"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚜",
+    "Código": ":tractor:",
+    "Tradução": "Trator"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚙",
+    "Código": ":blue_car:",
+    "Tradução": "Carro Azul"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚘",
+    "Código": ":oncoming_automobile:",
+    "Tradução": "Automóvel Que Se Aproxima"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚗",
+    "Código": ":car:",
+    "Tradução": "Carro"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚗",
+    "Código": ":red_car:",
+    "Tradução": "Carro Vermelho"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚕",
+    "Código": ":taxi:",
+    "Tradução": "Táxi"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚖",
+    "Código": ":oncoming_taxi:",
+    "Tradução": "Táxi Em Sentido Contrário"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚛",
+    "Código": ":articulated_lorry:",
+    "Tradução": "Caminhão Articulado"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚌",
+    "Código": ":bus:",
+    "Tradução": "Autocarro"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚍",
+    "Código": ":oncoming_bus:",
+    "Tradução": "Ônibus Em Sentido Contrário"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚨",
+    "Código": ":rotating_light:",
+    "Tradução": "Luz Rotativa"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚓",
+    "Código": ":police_car:",
+    "Tradução": "Viatura Policial"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚔",
+    "Código": ":oncoming_police_car:",
+    "Tradução": "Carro De Polícia Que Se Aproxima"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚒",
+    "Código": ":fire_engine:",
+    "Tradução": "Carro De Bombeiros"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚑",
+    "Código": ":ambulance:",
+    "Tradução": "Ambulância"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚐",
+    "Código": ":minibus:",
+    "Tradução": "Microônibus"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚚",
+    "Código": ":truck:",
+    "Tradução": "Camião"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚋",
+    "Código": ":train:",
+    "Tradução": "Trem"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚉",
+    "Código": ":station:",
+    "Tradução": "Estação"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚆",
+    "Código": ":train2:",
+    "Tradução": "Trem2"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚅",
+    "Código": ":bullettrain_front:",
+    "Tradução": "Frente De Trem-Bala"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚄",
+    "Código": ":bullettrain_side:",
+    "Tradução": "Lado Do Trem-Bala"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚈",
+    "Código": ":light_rail:",
+    "Tradução": "Vlt"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚝",
+    "Código": ":monorail:",
+    "Tradução": "Monotrilho"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚃",
+    "Código": ":railway_car:",
+    "Tradução": "Vagão Ferroviário"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚎",
+    "Código": ":trolleybus:",
+    "Tradução": "Trólebus"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🎫",
+    "Código": ":ticket:",
+    "Tradução": "Bilhete"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "⛽",
+    "Código": ":fuelpump:",
+    "Tradução": "Bomba De Combustível"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚦",
+    "Código": ":vertical_traffic_light:",
+    "Tradução": "Semáforo Vertical"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚥",
+    "Código": ":traffic_light:",
+    "Tradução": "Sinal De Tráfego"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "⚠️",
+    "Código": ":warning:",
+    "Tradução": "Aviso"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚧",
+    "Código": ":construction:",
+    "Tradução": "Construção"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🔰",
+    "Código": ":beginner:",
+    "Tradução": "Iniciante"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏧",
+    "Código": ":atm:",
+    "Tradução": "Caixa Automático"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🎰",
+    "Código": ":slot_machine:",
+    "Tradução": "Máquina Caça-Níqueis"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚏",
+    "Código": ":busstop:",
+    "Tradução": "Parada De Ônibus"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "💈",
+    "Código": ":barber:",
+    "Tradução": "Barbeiro"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "♨️",
+    "Código": ":hotsprings:",
+    "Tradução": "Hotsprings"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏁",
+    "Código": ":checkered_flag:",
+    "Tradução": "Bandeira Quadriculada"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🎌",
+    "Código": ":crossed_flags:",
+    "Tradução": "Bandeiras Cruzadas"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🏮",
+    "Código": ":izakaya_lantern:",
+    "Tradução": "Lanterna Izakaya"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🗿",
+    "Código": ":moyai:",
+    "Tradução": "Moyai"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🎪",
+    "Código": ":circus_tent:",
+    "Tradução": "Tenda De Circo"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🎭",
+    "Código": ":performing_arts:",
+    "Tradução": "Artes Cênicas"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "📍",
+    "Código": ":round_pushpin:",
+    "Tradução": "Alfinete Redondo"
+  },
+  {
+    "Grupo": "LUGARES",
+    "Emoji": "🚩",
+    "Código": ":triangular_flag_on_post:",
+    "Tradução": "Bandeira Triangular No Post"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "1️⃣",
+    "Código": ":one:",
+    "Tradução": "Um"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "2️⃣",
+    "Código": ":two:",
+    "Tradução": "Dois"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "3️⃣",
+    "Código": ":three:",
+    "Tradução": "Três"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "4️⃣",
+    "Código": ":four:",
+    "Tradução": "Quatro"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "5️⃣",
+    "Código": ":five:",
+    "Tradução": "Cinco"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "6️⃣",
+    "Código": ":six:",
+    "Tradução": "Seis"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "7️⃣",
+    "Código": ":seven:",
+    "Tradução": "Sete"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "8️⃣",
+    "Código": ":eight:",
+    "Tradução": "Oito"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "9️⃣",
+    "Código": ":nine:",
+    "Tradução": "Nove"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔟",
+    "Código": ":keycap_ten:",
+    "Tradução": "Tecla Dez"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔢",
+    "Código": ":1234:",
+    "Tradução": "1234"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "0️⃣",
+    "Código": ":zero:",
+    "Tradução": "Zero"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "#️⃣",
+    "Código": ":hash:",
+    "Tradução": "Hash"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔣",
+    "Código": ":symbols:",
+    "Tradução": "Símbolos"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "◀️",
+    "Código": ":arrow_backward:",
+    "Tradução": "Seta Para Trás"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⬇️",
+    "Código": ":arrow_down:",
+    "Tradução": "Seta Para Baixo"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "▶️",
+    "Código": ":arrow_forward:",
+    "Tradução": "Seta Para A Frente"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⬅️",
+    "Código": ":arrow_left:",
+    "Tradução": "Seta Para A Esquerda"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔠",
+    "Código": ":capital_abcd:",
+    "Tradução": "Capital Abcd"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔡",
+    "Código": ":abcd:",
+    "Tradução": "Abcd"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔤",
+    "Código": ":abc:",
+    "Tradução": "Abc"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "↙️",
+    "Código": ":arrow_lower_left:",
+    "Tradução": "Seta Inferior Esquerda"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "↘️",
+    "Código": ":arrow_lower_right:",
+    "Tradução": "Seta Inferior Direita"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "➡️",
+    "Código": ":arrow_right:",
+    "Tradução": "Seta Para A Direita"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⬆️",
+    "Código": ":arrow_up:",
+    "Tradução": "Seta Para Cima"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "↖️",
+    "Código": ":arrow_upper_left:",
+    "Tradução": "Seta Superior Esquerda"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "↗️",
+    "Código": ":arrow_upper_right:",
+    "Tradução": "Seta Superior Direita"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⏬",
+    "Código": ":arrow_double_down:",
+    "Tradução": "Seta Dobra Para Baixo"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⏫",
+    "Código": ":arrow_double_up:",
+    "Tradução": "Seta Dobra Para Cima"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔽",
+    "Código": ":arrow_down_small:",
+    "Tradução": "Seta Para Baixo Pequena"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⤵️",
+    "Código": ":arrow_heading_down:",
+    "Tradução": "Seta Para Baixo"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⤴️",
+    "Código": ":arrow_heading_up:",
+    "Tradução": "Seta Subindo"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "↩️",
+    "Código": ":leftwards_arrow_with_hook:",
+    "Tradução": "Seta Para A Esquerda Com Gancho"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "↪️",
+    "Código": ":arrow_right_hook:",
+    "Tradução": "Seta Gancho Direito"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "↔️",
+    "Código": ":left_right_arrow:",
+    "Tradução": "Seta Para A Esquerda E Para A Direita"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "↕️",
+    "Código": ":arrow_up_down:",
+    "Tradução": "Seta Para Cima E Para Baixo"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔼",
+    "Código": ":arrow_up_small:",
+    "Tradução": "Seta Para Cima Pequena"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔃",
+    "Código": ":arrows_clockwise:",
+    "Tradução": "Setas No Sentido Horário"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔄",
+    "Código": ":arrows_counterclockwise:",
+    "Tradução": "Setas No Sentido Anti-Horário"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⏪",
+    "Código": ":rewind:",
+    "Tradução": "Rebobinar"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⏩",
+    "Código": ":fast_forward:",
+    "Tradução": "Avançar"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "ℹ️",
+    "Código": ":information_source:",
+    "Tradução": "Fonte De Informação"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆗",
+    "Código": ":ok:",
+    "Tradução": "Okey"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔀",
+    "Código": ":twisted_rightwards_arrows:",
+    "Tradução": "Setas Torcidas Para A Direita"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔁",
+    "Código": ":repeat:",
+    "Tradução": "Repetir"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔂",
+    "Código": ":repeat_one:",
+    "Tradução": "Repita Um"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆕",
+    "Código": ":new:",
+    "Tradução": "Novo"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔝",
+    "Código": ":top:",
+    "Tradução": "Início"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆙",
+    "Código": ":up:",
+    "Tradução": "Em Cima"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆒",
+    "Código": ":cool:",
+    "Tradução": "Fresco"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆓",
+    "Código": ":free:",
+    "Tradução": "Livre"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆖",
+    "Código": ":ng:",
+    "Tradução": "Ng"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🎦",
+    "Código": ":cinema:",
+    "Tradução": "Cinema"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈁",
+    "Código": ":koko:",
+    "Tradução": "Koko"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "📶",
+    "Código": ":signal_strength:",
+    "Tradução": "Intensidade Do Sinal"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈹",
+    "Código": ":u5272:",
+    "Tradução": "U5272"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈴",
+    "Código": ":u5408:",
+    "Tradução": "U5408"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈺",
+    "Código": ":u55b6:",
+    "Tradução": "U55B6"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈯",
+    "Código": ":u6307:",
+    "Tradução": "U6307"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈷️",
+    "Código": ":u6708:",
+    "Tradução": "U6708"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈶",
+    "Código": ":u6709:",
+    "Tradução": "U6709"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈵",
+    "Código": ":u6e80:",
+    "Tradução": "U6E80"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈚",
+    "Código": ":u7121:",
+    "Tradução": "U7121"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈸",
+    "Código": ":u7533:",
+    "Tradução": "U7533"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈳",
+    "Código": ":u7a7a:",
+    "Tradução": "U7A7A"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈲",
+    "Código": ":u7981:",
+    "Tradução": "U7981"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🈂️",
+    "Código": ":sa:",
+    "Tradução": "Sa"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚻",
+    "Código": ":restroom:",
+    "Tradução": "Banheiro"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚹",
+    "Código": ":mens:",
+    "Tradução": "Mens"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚺",
+    "Código": ":womens:",
+    "Tradução": "Mulheres"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚼",
+    "Código": ":baby_symbol:",
+    "Tradução": "Símbolo Do Bebê"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚭",
+    "Código": ":no_smoking:",
+    "Tradução": "Não Fumar"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🅿️",
+    "Código": ":parking:",
+    "Tradução": "Estacionamento"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♿",
+    "Código": ":wheelchair:",
+    "Tradução": "Cadeira De Rodas"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚇",
+    "Código": ":metro:",
+    "Tradução": "Metro"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🛄",
+    "Código": ":baggage_claim:",
+    "Tradução": "Bagagens"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🉑",
+    "Código": ":accept:",
+    "Tradução": "Aceitar"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚾",
+    "Código": ":wc:",
+    "Tradução": "Banheiro"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚰",
+    "Código": ":potable_water:",
+    "Tradução": "Água Potável"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚮",
+    "Código": ":put_litter_in_its_place:",
+    "Tradução": "Colocar Lixo Em Seu Lugar"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "㊙️",
+    "Código": ":secret:",
+    "Tradução": "Segredo"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "㊗️",
+    "Código": ":congratulations:",
+    "Tradução": "Parabéns"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "Ⓜ️",
+    "Código": ":m:",
+    "Tradução": "M"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🛂",
+    "Código": ":passport_control:",
+    "Tradução": "Controle De Passaporte"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🛅",
+    "Código": ":left_luggage:",
+    "Tradução": "Depósito De Bagagem"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🛃",
+    "Código": ":customs:",
+    "Tradução": "Alfândega"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🉐",
+    "Código": ":ideograph_advantage:",
+    "Tradução": "Vantagem Ideográfica"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆑",
+    "Código": ":cl:",
+    "Tradução": "Cl"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆘",
+    "Código": ":sos:",
+    "Tradução": "Sos"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆔",
+    "Código": ":id:",
+    "Tradução": "Id"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚫",
+    "Código": ":no_entry_sign:",
+    "Tradução": "Sem Sinal De Entrada"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔞",
+    "Código": ":underage:",
+    "Tradução": "Menores"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "📵",
+    "Código": ":no_mobile_phones:",
+    "Tradução": "Sem Telefones Celulares"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚯",
+    "Código": ":do_not_litter:",
+    "Tradução": "Não Jogue Lixo"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚱",
+    "Código": ":non-potable_water:",
+    "Tradução": "Água Não Potável"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚳",
+    "Código": ":no_bicycles:",
+    "Tradução": "Sem Bicicletas"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚷",
+    "Código": ":no_pedestrians:",
+    "Tradução": "Sem Pedestres"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🚸",
+    "Código": ":children_crossing:",
+    "Tradução": "Crianças Cruzando"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⛔",
+    "Código": ":no_entry:",
+    "Tradução": "Sem Entrada"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "✳️",
+    "Código": ":eight_spoked_asterisk:",
+    "Tradução": "Asterisco De Oito Raios"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "✴️",
+    "Código": ":eight_pointed_black_star:",
+    "Tradução": "Estrela Negra De Oito Pontas"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "💟",
+    "Código": ":heart_decoration:",
+    "Tradução": "Decoração Do Coração"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆚",
+    "Código": ":vs:",
+    "Tradução": "Vs"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "📳",
+    "Código": ":vibration_mode:",
+    "Tradução": "Modo De Vibração"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "📴",
+    "Código": ":mobile_phone_off:",
+    "Tradução": "Celular Desligado"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "💹",
+    "Código": ":chart:",
+    "Tradução": "Gráfico"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "💱",
+    "Código": ":currency_exchange:",
+    "Tradução": "Câmbios"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♈",
+    "Código": ":aries:",
+    "Tradução": "Áries"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♉",
+    "Código": ":taurus:",
+    "Tradução": "Taurus"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♊",
+    "Código": ":gemini:",
+    "Tradução": "Gemini"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♋",
+    "Código": ":cancer:",
+    "Tradução": "Câncer"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♌",
+    "Código": ":leo:",
+    "Tradução": "Leão"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♍",
+    "Código": ":virgo:",
+    "Tradução": "Virgem"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♎",
+    "Código": ":libra:",
+    "Tradução": "Libra"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♏",
+    "Código": ":scorpius:",
+    "Tradução": "Scorpius"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♐",
+    "Código": ":sagittarius:",
+    "Tradução": "Sagitário"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♑",
+    "Código": ":capricorn:",
+    "Tradução": "Capricórnio"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♒",
+    "Código": ":aquarius:",
+    "Tradução": "Aquário"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♓",
+    "Código": ":pisces:",
+    "Tradução": "Peixes"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⛎",
+    "Código": ":ophiuchus:",
+    "Tradução": "Ophiuchus"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔯",
+    "Código": ":six_pointed_star:",
+    "Tradução": "Estrela De Seis Pontas"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "❎",
+    "Código": ":negative_squared_cross_mark:",
+    "Tradução": "Marca Da Cruz Quadrada Negativa"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🅰️",
+    "Código": ":a:",
+    "Tradução": "Um"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🅱️",
+    "Código": ":b:",
+    "Tradução": "B"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🆎",
+    "Código": ":ab:",
+    "Tradução": "Ab"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🅾️",
+    "Código": ":o2:",
+    "Tradução": "O2"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "💠",
+    "Código": ":diamond_shape_with_a_dot_inside:",
+    "Tradução": "Forma De Diamante Com Um Ponto Dentro"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "♻️",
+    "Código": ":recycle:",
+    "Tradução": "Reciclar"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔚",
+    "Código": ":end:",
+    "Tradução": "Fim"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔛",
+    "Código": ":on:",
+    "Tradução": "Em"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔜",
+    "Código": ":soon:",
+    "Tradução": "Em Breve"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕐",
+    "Código": ":clock1:",
+    "Tradução": "Clock1"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕜",
+    "Código": ":clock130:",
+    "Tradução": "Clock130"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕙",
+    "Código": ":clock10:",
+    "Tradução": "Clock10"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕥",
+    "Código": ":clock1030:",
+    "Tradução": "Clock1030"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕚",
+    "Código": ":clock11:",
+    "Tradução": "Clock11"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕦",
+    "Código": ":clock1130:",
+    "Tradução": "Relógio 1130"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕛",
+    "Código": ":clock12:",
+    "Tradução": "Clock12"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕧",
+    "Código": ":clock1230:",
+    "Tradução": "Relógio 1230"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕑",
+    "Código": ":clock2:",
+    "Tradução": "Clock2"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕝",
+    "Código": ":clock230:",
+    "Tradução": "Relógio 230"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕒",
+    "Código": ":clock3:",
+    "Tradução": "Clock3"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕞",
+    "Código": ":clock330:",
+    "Tradução": "Clock330"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕓",
+    "Código": ":clock4:",
+    "Tradução": "Relógio 4"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕟",
+    "Código": ":clock430:",
+    "Tradução": "Clock430"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕔",
+    "Código": ":clock5:",
+    "Tradução": "Clock5"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕠",
+    "Código": ":clock530:",
+    "Tradução": "Relógio 530"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕕",
+    "Código": ":clock6:",
+    "Tradução": "Clock6"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕡",
+    "Código": ":clock630:",
+    "Tradução": "Relógio 630"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕖",
+    "Código": ":clock7:",
+    "Tradução": "Relógio 7"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕢",
+    "Código": ":clock730:",
+    "Tradução": "Relógio 730"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕗",
+    "Código": ":clock8:",
+    "Tradução": "Clock8"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕣",
+    "Código": ":clock830:",
+    "Tradução": "Relógio 830"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕘",
+    "Código": ":clock9:",
+    "Tradução": "Clock9"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🕤",
+    "Código": ":clock930:",
+    "Tradução": "Clock930"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "💲",
+    "Código": ":heavy_dollar_sign:",
+    "Tradução": "Cifrão Pesado"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "©️",
+    "Código": ":copyright:",
+    "Tradução": "Direitos Autorais"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "®️",
+    "Código": ":registered:",
+    "Tradução": "Registado"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "™️",
+    "Código": ":tm:",
+    "Tradução": "Tm"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "❌",
+    "Código": ":x:",
+    "Tradução": "X"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "❗",
+    "Código": ":heavy_exclamation_mark:",
+    "Tradução": "Ponto De Exclamação Pesado"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "‼️",
+    "Código": ":bangbang:",
+    "Tradução": "Bangbang"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⁉️",
+    "Código": ":interrobang:",
+    "Tradução": "Interrobang"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⭕",
+    "Código": ":o:",
+    "Tradução": "O"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "✖️",
+    "Código": ":heavy_multiplication_x:",
+    "Tradução": "Multiplicação Pesada X"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "➕",
+    "Código": ":heavy_plus_sign:",
+    "Tradução": "Sinal De Mais Pesado"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "➖",
+    "Código": ":heavy_minus_sign:",
+    "Tradução": "Sinal De Menos Pesado"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "➗",
+    "Código": ":heavy_division_sign:",
+    "Tradução": "Sinal De Divisão Pesada"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "💮",
+    "Código": ":white_flower:",
+    "Tradução": "Flor Branca"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "💯",
+    "Código": ":100:",
+    "Tradução": "100"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "✔️",
+    "Código": ":heavy_check_mark:",
+    "Tradução": "Marca De Seleção Pesada"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "☑️",
+    "Código": ":ballot_box_with_check:",
+    "Tradução": "Urna Com Cheque"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔘",
+    "Código": ":radio_button:",
+    "Tradução": "Botão De Opção"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔗",
+    "Código": ":link:",
+    "Tradução": "Link"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "➰",
+    "Código": ":curly_loop:",
+    "Tradução": "Laço Encaracolado"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "〰️",
+    "Código": ":wavy_dash:",
+    "Tradução": "Traço Ondulado"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "〽️",
+    "Código": ":part_alternation_mark:",
+    "Tradução": "Marca De Alternância De Peças"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔱",
+    "Código": ":trident:",
+    "Tradução": "Tridente"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "✅",
+    "Código": ":white_check_mark:",
+    "Tradução": "Marca De Seleção Branca"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔲",
+    "Código": ":black_square_button:",
+    "Tradução": "Botão Quadrado Preto"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔳",
+    "Código": ":white_square_button:",
+    "Tradução": "Botão Quadrado Branco"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⚫",
+    "Código": ":black_circle:",
+    "Tradução": "Círculo Preto"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "⚪",
+    "Código": ":white_circle:",
+    "Tradução": "Círculo Branco"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔴",
+    "Código": ":red_circle:",
+    "Tradução": "Círculo Vermelho"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔵",
+    "Código": ":large_blue_circle:",
+    "Tradução": "Grande Círculo Azul"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔷",
+    "Código": ":large_blue_diamond:",
+    "Tradução": "Grande Diamante Azul"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔶",
+    "Código": ":large_orange_diamond:",
+    "Tradução": "Grande Diamante Laranja"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔹",
+    "Código": ":small_blue_diamond:",
+    "Tradução": "Pequeno Diamante Azul"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔸",
+    "Código": ":small_orange_diamond:",
+    "Tradução": "Pequeno Diamante Laranja"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔺",
+    "Código": ":small_red_triangle:",
+    "Tradução": "Pequeno Triângulo Vermelho"
+  },
+  {
+    "Grupo": "SÍMBOLOS",
+    "Emoji": "🔻",
+    "Código": ":small_red_triangle_down:",
+    "Tradução": "Pequeno Triângulo Vermelho Para Baixo"
+  }
+]

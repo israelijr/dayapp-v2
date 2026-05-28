@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Política de Privacidade do DayApp - Seu diário pessoal privado e seguro">
+    <title>Política de Privacidade - DayApp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .last-update {
+            color: #666;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+        
+        h2 {
+            color: #764ba2;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        h3 {
+            color: #667eea;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight-box {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .danger-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        tr:hover {
+            background: #f8f9ff;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+        
+        .contact-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .contact-info h3 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        .contact-info a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .btn-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+        
+        .btn-top:hover {
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+            
+            table {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="app-icon">📔</div>
+            <h1>Política de Privacidade</h1>
+            <h2 style="color: #764ba2; margin-top: 10px; border: none;">DayApp</h2>
+            <p class="last-update">Última atualização: 26 de março de 2026</p>
+        </header>
+
+        <div class="highlight-box">
+            <p><strong>📔 Seu diário, suas regras, sua privacidade!</strong></p>
+            <p>O DayApp é um aplicativo de diário pessoal que mantém TODOS os seus dados armazenados LOCALMENTE no seu dispositivo. Não enviamos nada para servidores externos.</p>
+        </div>
+
+        <section id="introducao">
+            <h2>1. Introdução</h2>
+            <p>Esta Política de Privacidade descreve como o <strong>DayApp</strong> ("nós", "nosso" ou "aplicativo") coleta, usa, armazena e protege suas informações quando você usa nosso aplicativo móvel.</p>
+            <p>O DayApp é um aplicativo de diário pessoal que permite aos usuários registrar suas histórias, sentimentos e momentos do dia a dia de forma privada e segura.</p>
+            <ul>
+                <li><strong>Desenvolvedor:</strong> iijrapp.com.br </li>
+                <li><strong>Contato:</strong> contato@iijrapp.com.br</li>
+                <li><strong>Application ID:</strong> br.com.israelijr.dayapp</li>
+            </ul>
+            <p>Ao usar o DayApp, você concorda com os termos desta política de privacidade.</p>
+        </section>
+
+        <section id="informacoes">
+            <h2>2. Informações que Coletamos</h2>
+            
+            <h3>2.1 Informações Fornecidas por Você</h3>
+            <p>O DayApp coleta e armazena localmente no seu dispositivo:</p>
+            <ul>
+                <li><span class="emoji">👤</span><strong>Informações de conta:</strong> Nome, e-mail, data de nascimento e avatar (foto de perfil)</li>
+                <li><span class="emoji">📝</span><strong>Conteúdo do diário:</strong> Textos, títulos, sentimentos e descrições das suas histórias</li>
+                <li><span class="emoji">📸</span><strong>Mídias:</strong> Fotos, vídeos e áudios que você adiciona às suas histórias</li>
+                <li><span class="emoji">📅</span><strong>Metadados:</strong> Datas, horários e informações de organização (grupos, categorias)</li>
+                <li><span class="emoji">⚙️</span><strong>Preferências:</strong> Configurações do aplicativo, tema (claro/escuro), notificações</li>
+            </ul>
+
+            <h3>2.2 Informações Coletadas Automaticamente</h3>
+            <ul>
+                <li><strong>Dados de uso:</strong> Interações com o aplicativo (apenas para funcionamento, não enviados externamente)</li>
+                <li><strong>Informações do dispositivo:</strong> Versão do sistema operacional, modelo do dispositivo (apenas para compatibilidade)</li>
+            </ul>
+        </section>
+
+        <section id="uso">
+            <h2>3. Como Usamos Suas Informações</h2>
+            <p>O DayApp usa suas informações exclusivamente para:</p>
+            
+            <div class="info-box">
+                <h4><span class="emoji">✅</span>Fornecer funcionalidades do aplicativo:</h4>
+                <ul>
+                    <li>Armazenar e exibir suas histórias pessoais</li>
+                    <li>Organizar conteúdo por data, grupos e categorias</li>
+                    <li>Reproduzir mídias (fotos, vídeos, áudios)</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4><span class="emoji">✅</span>Personalizar sua experiência:</h4>
+                <ul>
+                    <li>Aplicar preferências de tema e visualização</li>
+                    <li>Exibir seu nome e avatar no perfil</li>
+                    <li>Filtrar e pesquisar histórias</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4><span class="emoji">✅</span>Enviar notificações locais:</h4>
+                <ul>
+                    <li>Lembretes configurados por você</li>
+                    <li>Alertas de histórias agendadas</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4><span class="emoji">✅</span>Proteger seus dados:</h4>
+                <ul>
+                    <li>Autenticação biométrica (impressão digital/Face ID)</li>
+                    <li>Backup e restauração de dados</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="armazenamento">
+            <h2>4. Como Armazenamos Suas Informações</h2>
+            
+            <h3>4.1 Armazenamento Local</h3>
+            <div class="highlight-box">
+                <p><strong>TODOS os seus dados são armazenados LOCALMENTE no seu dispositivo.</strong></p>
+                <ul>
+                    <li><strong>Banco de dados local (SQLite):</strong> Armazena textos, metadados e referências</li>
+                    <li><strong>Armazenamento interno do dispositivo:</strong> Armazena fotos, vídeos e áudios</li>
+                    <li><strong>Preferências compartilhadas:</strong> Armazena configurações do app</li>
+                </ul>
+            </div>
+
+            <h3>4.2 Nenhum Servidor Externo</h3>
+            <div class="danger-box">
+                <ul>
+                    <li><span class="emoji">❌</span><strong>O DayApp NÃO envia seus dados para servidores externos</strong></li>
+                    <li><span class="emoji">❌</span><strong>O DayApp NÃO usa Firebase ou serviços de nuvem</strong></li>
+                    <li><span class="emoji">❌</span><strong>O DayApp NÃO compartilha suas informações com terceiros</strong></li>
+                </ul>
+            </div>
+
+            <h3>4.3 Backup</h3>
+            <p>O aplicativo oferece a funcionalidade de criar backups manuais:</p>
+            <ul>
+                <li>Backups são gerados em formato <strong>ZIP criptografado</strong></li>
+                <li>Os arquivos ZIP são salvos <strong>localmente no seu dispositivo</strong></li>
+                <li>Você pode compartilhar o backup com serviços de sua escolha (OneDrive, Google Drive, etc)</li>
+                <li>O compartilhamento é <strong>opcional</strong> e controlado por você</li>
+            </ul>
+        </section>
+
+        <section id="permissoes">
+            <h2>5. Permissões Solicitadas</h2>
+            <p>O DayApp solicita as seguintes permissões do Android:</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Permissão</th>
+                        <th>Propósito</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>📷 Câmera e Galeria</strong></td>
+                        <td>Adicionar fotos e vídeos às suas histórias</td>
+                    </tr>
+                    <tr>
+                        <td><strong>💾 Armazenamento</strong></td>
+                        <td>Salvar e ler mídias e backups</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔔 Notificações</strong></td>
+                        <td>Enviar lembretes locais configurados por você</td>
+                    </tr>
+                    <tr>
+                        <td><strong>👆 Biometria</strong></td>
+                        <td>Proteger o acesso ao app com impressão digital/Face ID</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📳 Vibração</strong></td>
+                        <td>Feedback tátil em interações</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔄 Executar ao iniciar</strong></td>
+                        <td>Permitir notificações agendadas funcionarem após reiniciar</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p><strong>Todas as permissões são usadas exclusivamente para as funcionalidades descritas.</strong></p>
+        </section>
+
+        <section id="compartilhamento">
+            <h2>6. Compartilhamento de Dados</h2>
+            
+            <h3>6.1 Não Compartilhamos seus Dados</h3>
+            <div class="danger-box">
+                <p><strong>O DayApp NÃO vende, aluga ou compartilha suas informações pessoais com terceiros.</strong></p>
+            </div>
+
+            <h3>6.2 Compartilhamento Voluntário</h3>
+            <p>Você pode opcionalmente:</p>
+            <ul>
+                <li><strong>Exportar/Compartilhar histórias individuais</strong> usando a função de compartilhamento</li>
+                <li><strong>Criar e compartilhar backups</strong> com serviços de nuvem de sua escolha</li>
+                <li><strong>Compartilhar mídias</strong> através do sistema de compartilhamento do Android</li>
+            </ul>
+            <p>Esses compartilhamentos são <strong>voluntários</strong> e controlados inteiramente por você.</p>
+        </section>
+
+        <section id="seguranca">
+            <h2>7. Segurança dos Dados</h2>
+            
+            <h3>7.1 Medidas de Segurança</h3>
+            <p>Implementamos medidas de segurança para proteger seus dados:</p>
+            <div class="info-box">
+                <ul>
+                    <li><span class="emoji">✅</span><strong>Armazenamento local criptografado</strong> pelo sistema Android</li>
+                    <li><span class="emoji">✅</span><strong>Autenticação biométrica</strong> opcional para acesso ao app</li>
+                    <li><span class="emoji">✅</span><strong>Backups criptografados</strong> em formato ZIP protegido</li>
+                    <li><span class="emoji">✅</span><strong>Nenhuma transmissão de dados</strong> para servidores externos</li>
+                    <li><span class="emoji">✅</span><strong>Isolamento de dados</strong> do aplicativo (sandbox do Android)</li>
+                </ul>
+            </div>
+
+            <h3>7.2 Responsabilidade do Usuário</h3>
+            <div class="warning-box">
+                <p><strong>Para máxima segurança:</strong></p>
+                <ul>
+                    <li>Configure autenticação biométrica no app</li>
+                    <li>Mantenha seu dispositivo protegido com senha/PIN</li>
+                    <li>Armazene backups em locais seguros</li>
+                    <li>Não compartilhe backups publicamente</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="retencao">
+            <h2>8. Retenção e Exclusão de Dados</h2>
+            
+            <h3>8.1 Retenção</h3>
+            <p>Seus dados permanecem no seu dispositivo até que você:</p>
+            <ul>
+                <li>Delete histórias manualmente</li>
+                <li>Desinstale o aplicativo</li>
+                <li>Limpe dados do aplicativo nas configurações do Android</li>
+            </ul>
+
+            <h3>8.2 Exclusão Completa</h3>
+            <p>Para excluir todos os seus dados:</p>
+            <ol>
+                <li><strong>Lixeira:</strong> Exclua histórias que estão na lixeira</li>
+                <li><strong>Configurações do Android:</strong>
+                    <ul>
+                        <li>Vá em Configurações > Apps > DayApp</li>
+                        <li>Toque em "Limpar dados" ou "Desinstalar"</li>
+                    </ul>
+                </li>
+                <li><strong>Backups:</strong> Delete manualmente arquivos ZIP de backup que criou</li>
+            </ol>
+            <p><strong>Não mantemos cópias dos seus dados após exclusão.</strong></p>
+        </section>
+
+        <section id="criancas">
+            <h2>9. Privacidade de Crianças</h2>
+            <p>O DayApp não é direcionado a crianças menores de 13 anos.</p>
+            <p>Não coletamos intencionalmente informações de crianças menores de 13 anos. Se você é pai/mãe e descobrir que seu filho forneceu informações ao aplicativo, entre em contato conosco.</p>
+        </section>
+
+        <section id="terceiros">
+            <h2>10. Serviços de Terceiros</h2>
+            
+            <h3>10.1 Bibliotecas e SDKs</h3>
+            <p>O DayApp usa as seguintes bibliotecas de código aberto:</p>
+            <ul>
+                <li><strong>Flutter SDK</strong> (framework de desenvolvimento)</li>
+                <li><strong>SQLite</strong> (banco de dados local)</li>
+                <li><strong>Bibliotecas de código aberto</strong> listadas em <a href="https://pub.dev" target="_blank">pub.dev</a></li>
+            </ul>
+            <p>Essas bibliotecas <strong>NÃO coletam nem transmitem</strong> dados pessoais.</p>
+
+            <h3>10.2 Sem Anúncios ou Analytics</h3>
+            <div class="danger-box">
+                <ul>
+                    <li><span class="emoji">❌</span><strong>Não usamos Google Analytics</strong></li>
+                    <li><span class="emoji">❌</span><strong>Não usamos sistemas de rastreamento</strong></li>
+                    <li><span class="emoji">❌</span><strong>Não exibimos anúncios</strong></li>
+                    <li><span class="emoji">❌</span><strong>Não usamos cookies</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="direitos">
+            <h2>12. Seus Direitos</h2>
+            <p>Você tem direito a:</p>
+            <div class="info-box">
+                <ul>
+                    <li><span class="emoji">✅</span><strong>Acessar</strong> todos os seus dados (estão no app)</li>
+                    <li><span class="emoji">✅</span><strong>Exportar</strong> suas informações (função de backup)</li>
+                    <li><span class="emoji">✅</span><strong>Corrigir</strong> informações incorretas (edição no app)</li>
+                    <li><span class="emoji">✅</span><strong>Excluir</strong> dados (função de exclusão no app)</li>
+                    <li><span class="emoji">✅</span><strong>Portabilidade</strong> (backup em formato aberto ZIP)</li>
+                    <li><span class="emoji">✅</span><strong>Revogar permissões</strong> (configurações do Android)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="conformidade">
+            <h2>13. Conformidade Legal</h2>
+            <p>Esta política está em conformidade com:</p>
+            <ul>
+                <li><strong>LGPD</strong> (Lei Geral de Proteção de Dados - Brasil)</li>
+                <li><strong>GDPR</strong> (Regulamento Geral de Proteção de Dados - União Europeia)</li>
+                <li><strong>Políticas do Google Play Store</strong></li>
+            </ul>
+        </section>
+
+        <section id="alteracoes">
+            <h2>14. Alterações nesta Política</h2>
+            <p>Podemos atualizar esta Política de Privacidade ocasionalmente. Quando fizermos isso:</p>
+            <ul>
+                <li>Atualizaremos a data de "Última atualização" no topo</li>
+                <li>Notificaremos sobre mudanças significativas no aplicativo</li>
+                <li>A versão mais recente estará sempre disponível no app</li>
+            </ul>
+            <p>Recomendamos revisar esta política periodicamente.</p>
+        </section>
+
+        <section id="contato">
+            <h2>15. Contato</h2>
+            <div class="contact-info">
+                <h3>Entre em Contato</h3>
+                <p>Se você tiver dúvidas sobre esta Política de Privacidade ou sobre como tratamos seus dados:</p>
+                <p><strong>Desenvolvedor: </strong> iijrapp.com.br</p>
+                <p><strong>E-mail: </strong> <a href="mailto:contato@iijrapp.com.br">contato@iijrapp.com.br</a></p>
+                <p><strong>Localização: </strong> Belo Horizonte - MG, Brasil</p>
+            </div>
+        </section>
+
+        <section id="resumo">
+            <h2>16. Resumo - Principais Pontos</h2>
+            
+            <div class="info-box">
+                <h3><span class="emoji">✅</span>O que o DayApp faz:</h3>
+                <ul>
+                    <li>Armazena seus dados LOCALMENTE no seu dispositivo</li>
+                    <li>Permite criar backups manuais opcionais</li>
+                    <li>Protege seus dados com biometria</li>
+                    <li>Não compartilha dados com terceiros</li>
+                </ul>
+            </div>
+
+            <div class="danger-box">
+                <h3><span class="emoji">❌</span>O que o DayApp NÃO faz:</h3>
+                <ul>
+                    <li>NÃO envia dados para servidores</li>
+                    <li>NÃO usa serviços de nuvem automáticos</li>
+                    <li>NÃO vende ou compartilha seus dados</li>
+                    <li>NÃO exibe anúncios</li>
+                    <li>NÃO rastreia seu comportamento</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="consentimento">
+            <h2>17. Consentimento</h2>
+            <div class="warning-box">
+                <p><strong>Ao usar o DayApp, você confirma que:</strong></p>
+                <ul>
+                    <li>Leu e compreendeu esta Política de Privacidade</li>
+                    <li>Concorda com a coleta e uso de informações conforme descrito</li>
+                    <li>Tem mais de 13 anos de idade (ou tem permissão dos pais)</li>
+                </ul>
+                <p><strong>Se você não concordar com esta política, por favor, não use o aplicativo.</strong></p>
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>📔 DayApp - Seu diário pessoal, privado e seguro 🔒</strong></p>
+            <p>Esta política de privacidade foi criada em 05 de outubro de 2025</p>
+            <p>&copy; 2025 Israel Inacio Junior. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <a href="#" class="btn-top" title="Voltar ao topo">↑</a>
+
+    <script>
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mostrar/ocultar botão de voltar ao topo
+        window.addEventListener('scroll', function() {
+            const btnTop = document.querySelector('.btn-top');
+            if (window.scrollY > 300) {
+                btnTop.style.display = 'flex';
+            } else {
+                btnTop.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
