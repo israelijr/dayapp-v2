@@ -1,8 +1,10 @@
 import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/app_localizations.dart';
+import 'package:dayapp/widgets/compact_historia_card.dart';
 import 'package:dayapp/widgets/pulse_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -449,9 +451,10 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
                     ),
                     Text(
                       historia.titulo,
-                      style: TextStyle(
+                      style: GoogleFonts.notoSerif(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
                         color: Theme.of(context).textTheme.titleLarge?.color,
                       ),
                     ),
@@ -497,8 +500,10 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
                                   'dd/MM/yyyy HH:mm',
                                   'pt_BR',
                                 ).format(historia.data),
-                                style: TextStyle(
+                                style: GoogleFonts.plusJakartaSans(
                                   fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0.3,
                                   color: Theme.of(
                                     context,
                                   ).textTheme.bodySmall?.color,
@@ -686,149 +691,102 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       onDismissed: (direction) {
         // Já tratado no confirmDismiss
       },
-      child: Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: ListTile(
-          leading: Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Builder(
-                builder: (context) {
-                  if (historia.emoticon != null &&
-                      historia.emoticon!.isNotEmpty) {
-                    final converted = _convertLegacyEmoticon(
-                      historia.emoticon!,
-                    );
-                    final display = converted ?? historia.emoticon!;
-                    return Text(
-                      display,
-                      style: const TextStyle(fontSize: 20, height: 1),
-                    );
-                  }
-                  return Icon(
-                    Icons.image,
-                    color: Theme.of(context).iconTheme.color,
-                    size: 26,
-                  );
-                },
-              ),
-            ),
+      child: CompactHistoriaCard(
+        historia: historia,
+        localeName:
+            AppLocalizations.of(context)?.localeName ??
+            Localizations.localeOf(context).toString(),
+        overlayTrailing: true,
+        trailing: PopupMenuButton<String>(
+          icon: Icon(
+            Icons.more_horiz,
+            color: Theme.of(context).iconTheme.color,
           ),
-          title: Text(
-            historia.titulo,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).textTheme.titleMedium?.color,
-            ),
-          ),
-          subtitle: Text(
-            DateFormat('dd/MM/yyyy', 'pt_BR').format(historia.data),
-            style: TextStyle(
-              fontSize: 12,
-              color: Theme.of(context).textTheme.bodySmall?.color,
-            ),
-          ),
-          trailing: PopupMenuButton<String>(
-            icon: Icon(
-              Icons.more_horiz,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            onSelected: (value) async {
-              if (value == 'edit') {
-                Navigator.push(
-                  context,
-                  RouteTransitionHelper.slideUpRotateTransition(
-                    EditHistoriaScreen(historia: historia),
-                  ),
-                ).then((updated) {
-                  if (!mounted) return;
-                  if (updated == true) {
-                    final refreshProvider = Provider.of<RefreshProvider>(
-                      context,
-                      listen: false,
-                    );
-                    refreshProvider.refresh();
-                  }
-                });
-              } else if (value == 'delete') {
-                await _deleteHistoria(historia);
-              } else if (value == 'export') {
-                await _exportHistoria(historia);
-              } else if (value == 'desagrupar') {
-                final refreshProvider = Provider.of<RefreshProvider>(
-                  context,
-                  listen: false,
-                );
-                await _updateHistoria(
-                  historia,
-                  updates: {'tag': null, 'arquivado': null, 'grupo': null},
-                );
+          onSelected: (value) async {
+            if (value == 'edit') {
+              Navigator.push(
+                context,
+                RouteTransitionHelper.slideUpRotateTransition(
+                  EditHistoriaScreen(historia: historia),
+                ),
+              ).then((updated) {
                 if (!mounted) return;
-                refreshProvider.refresh();
-                _messengerKey.currentState?.showSnackBar(
-                  SnackBar(
-                    content: Text(AppLocalizations.of(context)!.storyUngrouped),
-                  ),
-                );
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'edit',
-                child: Text(AppLocalizations.of(context)?.edit ?? 'Editar'),
-              ),
-              PopupMenuItem(
-                value: 'export',
-                child: Text(
-                  AppLocalizations.of(context)?.exportPdf ?? 'Exportar PDF',
+                if (updated == true) {
+                  final refreshProvider = Provider.of<RefreshProvider>(
+                    context,
+                    listen: false,
+                  );
+                  refreshProvider.refresh();
+                }
+              });
+            } else if (value == 'delete') {
+              await _deleteHistoria(historia);
+            } else if (value == 'export') {
+              await _exportHistoria(historia);
+            } else if (value == 'desagrupar') {
+              final refreshProvider = Provider.of<RefreshProvider>(
+                context,
+                listen: false,
+              );
+              await _updateHistoria(
+                historia,
+                updates: {'tag': null, 'arquivado': null, 'grupo': null},
+              );
+              if (!mounted) return;
+              refreshProvider.refresh();
+              _messengerKey.currentState?.showSnackBar(
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.storyUngrouped),
                 ),
-              ),
-              PopupMenuItem(
-                value: 'desagrupar',
-                child: Text(
-                  AppLocalizations.of(context)?.ungroup ?? 'Desagrupar',
-                ),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Text(
-                  AppLocalizations.of(context)?.deleteLabel ?? 'Excluir',
-                ),
-              ),
-            ],
-          ),
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  content: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: SingleChildScrollView(
-                      child: _buildCardView(historia),
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(
-                        AppLocalizations.of(context)?.close ?? 'Fechar',
-                      ),
-                    ),
-                  ],
-                );
-              },
-            );
+              );
+            }
           },
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: 'edit',
+              child: Text(AppLocalizations.of(context)?.edit ?? 'Editar'),
+            ),
+            PopupMenuItem(
+              value: 'export',
+              child: Text(
+                AppLocalizations.of(context)?.exportPdf ?? 'Exportar PDF',
+              ),
+            ),
+            PopupMenuItem(
+              value: 'desagrupar',
+              child: Text(
+                AppLocalizations.of(context)?.ungroup ?? 'Desagrupar',
+              ),
+            ),
+            PopupMenuItem(
+              value: 'delete',
+              child: Text(
+                AppLocalizations.of(context)?.deleteLabel ?? 'Excluir',
+              ),
+            ),
+          ],
         ),
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: SingleChildScrollView(child: _buildCardView(historia)),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      AppLocalizations.of(context)?.close ?? 'Fechar',
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }

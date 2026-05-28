@@ -769,8 +769,9 @@ class _HomeContentState extends State<HomeContent> {
                                     : (legacyTag != null && legacyTag.isNotEmpty
                                           ? [legacyTag]
                                           : <String>[]);
-                                if (tagNames.isEmpty)
+                                if (tagNames.isEmpty) {
                                   return const SizedBox.shrink();
+                                }
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [

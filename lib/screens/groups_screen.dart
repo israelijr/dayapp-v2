@@ -163,26 +163,10 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border(
-                      left: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 4,
-                      ),
-                      top: BorderSide(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.outlineVariant.withValues(alpha: 0.17),
-                      ),
-                      right: BorderSide(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.outlineVariant.withValues(alpha: 0.17),
-                      ),
-                      bottom: BorderSide(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.outlineVariant.withValues(alpha: 0.17),
-                      ),
+                    border: Border.all(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.outlineVariant.withValues(alpha: 0.17),
                     ),
                     boxShadow: [
                       BoxShadow(
@@ -194,44 +178,64 @@ class _GroupsScreenState extends State<GroupsScreen> {
                       ),
                     ],
                   ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 16,
-                    ),
-                    leading: Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.surfaceContainerHighest,
-                        shape: BoxShape.circle,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 4,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            bottomLeft: Radius.circular(16),
+                          ),
+                        ),
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        grupo.emoticon ?? '📁',
-                        style: const TextStyle(fontSize: 20),
+                      Expanded(
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 16,
+                          ),
+                          leading: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.surfaceContainerHighest,
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              grupo.emoticon ?? '📁',
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          title: Text(
+                            grupo.nome,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '$count ${count == 1 ? AppLocalizations.of(context)!.record : AppLocalizations.of(context)!.records}',
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 18,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                          onTap: () {
+                            _navigateAndRefresh(
+                              GroupStoriesScreen(grupo: grupo),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    title: Text(
-                      grupo.nome,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                    subtitle: Text(
-                      '$count ${count == 1 ? AppLocalizations.of(context)!.record : AppLocalizations.of(context)!.records}',
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 18,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                    onTap: () {
-                      _navigateAndRefresh(GroupStoriesScreen(grupo: grupo));
-                    },
+                    ],
                   ),
                 );
               },
