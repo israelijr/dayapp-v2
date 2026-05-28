@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ import '../providers/insight_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
+import '../services/thumbnail_service.dart';
 import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/compact_historia_card.dart';
@@ -468,6 +471,16 @@ class _HomeContentState extends State<HomeContent> {
   }
 
   Future<void> _openStoryPreview(Historia historia) async {
+    try {
+      await _warmupStoryPreviewMedia(
+        historia,
+      ).timeout(const Duration(milliseconds: 180));
+    } catch (_) {
+      // Ignora timeout/falha de prewarm para não bloquear a navegação.
+    }
+
+    if (!mounted) return;
+
     final heroTag = _storyHeroTag(historia);
     final action = await Navigator.of(context).push<_StoryPreviewAction>(
       MaterialPageRoute(
@@ -499,6 +512,27 @@ class _HomeContentState extends State<HomeContent> {
 
     if (action == _StoryPreviewAction.delete) {
       await _deleteHistoria(historia);
+    }
+  }
+
+  Future<void> _warmupStoryPreviewMedia(Historia historia) async {
+    final historiaId = historia.id;
+    if (historiaId == null || historiaId <= 0) return;
+
+    try {
+      final fotos = await HistoriaFotoHelper().getFotosComBytesByHistoria(
+        historiaId,
+      );
+      if (fotos.isEmpty) return;
+
+      final thumbnailsInput = fotos
+          .map((foto) => MapEntry('foto_${foto.id}', foto.bytes))
+          .toList(growable: false);
+
+      await ThumbnailService().preloadThumbnails(thumbnailsInput);
+    } catch (e) {
+      // Evita interromper a abertura da preview se o prewarm falhar.
+      debugPrint('HomeContent: falha no prewarm de mídia da preview: $e');
     }
   }
 
@@ -943,7 +977,6 @@ class _StoryPreviewScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(l10n.previewTitle(historia.titulo)),
         actions: [
           IconButton(
             tooltip: l10n.close,
