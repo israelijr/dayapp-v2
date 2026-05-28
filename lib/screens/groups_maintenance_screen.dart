@@ -209,70 +209,174 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               itemCount: _grupos.length + 1,
               itemBuilder: (context, index) {
                 if (index == _grupos.length) {
-                  return Column(
-                    children: [
-                      const Divider(height: 1, thickness: 1),
-                      ListTile(
-                        title: Text(
-                          AppLocalizations.of(context)!.archivedTitle,
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerLowest,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border(
+                        left: BorderSide(
+                          color: Theme.of(context).colorScheme.tertiary,
+                          width: 4,
                         ),
-                        leading: Icon(
-                          Icons.archive,
-                          color: Theme.of(context).iconTheme.color,
-                        ),
-                        // Arquivados não é editável, apenas visualização/navegação
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                        onTap: () {
-                          Navigator.push(
+                        top: BorderSide(
+                          color: Theme.of(
                             context,
-                            MaterialPageRoute(
-                              builder: (_) => const ArchivedStoriesScreen(),
-                            ),
-                          );
-                        },
+                          ).colorScheme.outlineVariant.withValues(alpha: 0.17),
+                        ),
+                        right: BorderSide(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.outlineVariant.withValues(alpha: 0.17),
+                        ),
+                        bottom: BorderSide(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.outlineVariant.withValues(alpha: 0.17),
+                        ),
                       ),
-                    ],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.06),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 16,
+                      ),
+                      leading: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.surfaceContainerHigh,
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.archive,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      title: Text(
+                        AppLocalizations.of(context)!.archivedTitle,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 18,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ArchivedStoriesScreen(),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 }
 
                 final grupo = _grupos[index];
-                return ListTile(
-                  leading: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      grupo.emoticon ?? '📁',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  title: Text(grupo.nome),
-                  subtitle: Text(
-                    'Criado em ${grupo.dataCriacao?.toLocal().toString().split(' ')[0] ?? ''}',
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _showGroupDialog(grupo: grupo),
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border(
+                      left: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 4,
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _deleteGrupo(grupo),
+                      top: BorderSide(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.outlineVariant.withValues(alpha: 0.17),
+                      ),
+                      right: BorderSide(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.outlineVariant.withValues(alpha: 0.17),
+                      ),
+                      bottom: BorderSide(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.outlineVariant.withValues(alpha: 0.17),
+                      ),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.06),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
                       ),
                     ],
                   ),
-                  onTap: () => _showGroupDialog(grupo: grupo),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 16,
+                    ),
+                    leading: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
+                        shape: BoxShape.circle,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        grupo.emoticon ?? '📁',
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    title: Text(
+                      grupo.nome,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Criado em ${grupo.dataCriacao?.toLocal().toString().split(' ')[0] ?? ''}',
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () => _showGroupDialog(grupo: grupo),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => _deleteGrupo(grupo),
+                        ),
+                      ],
+                    ),
+                    onTap: () => _showGroupDialog(grupo: grupo),
+                  ),
                 );
               },
             ),
