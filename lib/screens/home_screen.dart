@@ -171,6 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _messengerKey,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: _selectedIndex != 1,
           title: Text(
             _selectedIndex == 0
                 ? l10n.appTitle

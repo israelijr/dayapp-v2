@@ -11,6 +11,7 @@ import '../l10n/app_localizations.dart';
 import '../models/capitulo.dart';
 import '../models/grupo.dart';
 import '../providers/auth_provider.dart';
+import 'archived_stories_screen.dart';
 import 'chapters_screen.dart';
 import 'group_stories_screen.dart';
 
@@ -82,6 +83,9 @@ class _GroupsScreenState extends State<GroupsScreen>
         }
 
         if (!mounted) return;
+        gruposComHistorias.sort(
+          (a, b) => a.nome.toLowerCase().compareTo(b.nome.toLowerCase()),
+        );
         setState(() {
           _grupos = gruposComHistorias;
           _grupoCounts = counts;
@@ -278,20 +282,6 @@ class _GroupsScreenState extends State<GroupsScreen>
   Widget _buildGroupsTab(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    if (_grupos.isEmpty) {
-      return ListView(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        children: [
-          Center(
-            child: Text(
-              l10n.noGroupsFound,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-        ],
-      );
-    }
-
     return GridView.builder(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -300,8 +290,78 @@ class _GroupsScreenState extends State<GroupsScreen>
         mainAxisSpacing: 16,
         childAspectRatio: 0.75,
       ),
-      itemCount: _grupos.length,
+      itemCount: _grupos.length + 1,
       itemBuilder: (context, index) {
+        if (index == _grupos.length) {
+          return Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(28),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ArchivedStoriesScreen(),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.secondaryContainer.withValues(alpha: 0.24),
+                      border: Border.all(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.secondary.withValues(alpha: 0.18),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.06),
+                          blurRadius: 18,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.archive,
+                      size: 42,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.archivedTitle,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.archivedTitle,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
         final grupo = _grupos[index];
         final count = _grupoCounts[grupo.nome] ?? 0;
 
@@ -401,6 +461,7 @@ class _GroupsScreenState extends State<GroupsScreen>
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TabBar(
                       controller: _tabController,
+                      // dividerColor: Colors.transparent,
                       labelColor: Theme.of(context).colorScheme.primary,
                       unselectedLabelColor: Theme.of(
                         context,

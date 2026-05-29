@@ -1,29 +1,25 @@
 import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
+import 'package:dayapp/widgets/story_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../db/database_helper.dart';
 import '../db/historia_foto_helper.dart';
-import '../db/tag_helper.dart';
 import '../helpers/rich_text_helper.dart';
 import '../models/historia.dart';
-import '../models/tag.dart';
 import '../providers/auth_provider.dart';
-import '../providers/pin_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
 import '../services/pdf_export_service.dart';
 import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
-import '../widgets/historia_media_widgets.dart';
-import '../widgets/rich_text_viewer_widget.dart';
 import 'create_historia_screen.dart';
 import 'edit_historia_screen.dart';
-import 'edit_profile_screen.dart';
 import 'group_selection_screen.dart';
 import 'pdf_preview_screen.dart';
 
@@ -35,9 +31,6 @@ class ArchivedStoriesScreen extends StatefulWidget {
 }
 
 class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
-  // Constantes para melhor organização
-  static const double cardMargin = 24.0;
-
   bool _isCardView = true; // true = modo blocos, false = modo ícones
 
   // Controle de scroll para manter posição da lista
@@ -292,274 +285,151 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
   }
 
   Widget _buildCardView(Historia historia) {
-    return FutureBuilder<List<FotoComBytes>>(
-      future: HistoriaFotoHelper().getFotosComBytesByHistoria(historia.id ?? 0),
-      builder: (context, snapshot) {
-        final hasImages = snapshot.hasData && snapshot.data!.isNotEmpty;
-
-        return Slidable(
-          startActionPane: ActionPane(
-            motion: const BehindMotion(),
-            children: [
-              SlidableAction(
-                onPressed: (context) async {
-                  // Desarquivar (remover flag de arquivado)
-                  await _updateHistoria(historia, updates: {'arquivado': null});
-                },
-                backgroundColor: AppColors.emoticonGreen,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                icon: Icons.restore,
-                label: AppLocalizations.of(context)?.unarchive ?? 'Desarquivar',
-              ),
-            ],
-          ),
-          endActionPane: ActionPane(
-            motion: const BehindMotion(),
-            children: [
-              SlidableAction(
-                onPressed: (context) async {
-                  final selectedGroup = await Navigator.push<String>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const GroupSelectionScreen(),
-                    ),
-                  );
-                  if (selectedGroup != null) {
-                    await _updateHistoria(
-                      historia,
-                      updates: {'grupo': selectedGroup, 'arquivado': null},
-                    );
-                  }
-                },
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                icon: Icons.group,
-                label: AppLocalizations.of(context)?.group ?? 'Grupo',
-              ),
-            ],
-          ),
-          child: GestureDetector(
-            onDoubleTap: () {
-              final refreshProvider = Provider.of<RefreshProvider>(
-                context,
-                listen: false,
-              );
-              Navigator.push(
-                context,
-                RouteTransitionHelper.slideUpRotateTransition(
-                  EditHistoriaScreen(historia: historia),
-                ),
-              ).then((updated) {
-                if (!mounted) return;
-                if (updated == true) {
-                  refreshProvider.refresh();
-                }
-              });
+    return Slidable(
+      startActionPane: ActionPane(
+        motion: const BehindMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) async {
+              await _updateHistoria(historia, updates: {'arquivado': null});
             },
-            child: Card(
-              margin: const EdgeInsets.only(bottom: cardMargin),
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (hasImages) ...[
-                      HistoriaFotosGrid(
-                        historiaId: historia.id ?? 0,
-                        height: 100,
-                      ),
-                      const SizedBox(height: 12),
-                    ],
-                    // Linha combinada: Emoticon + Áudios + Vídeos
-                    HistoriaMediaRow(
-                      historiaId: historia.id ?? 0,
-                      emoticon: historia.emoticon,
-                      convertLegacyEmoticon: _convertLegacyEmoticon,
-                    ),
-                    Text(
-                      historia.titulo,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.titleLarge?.color,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      height: 80,
-                      child: RichTextViewerWidget(
-                        jsonContent: historia.descricao,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            if (historia.emoticon != null &&
-                                historia.emoticon!.isNotEmpty)
-                              Builder(
-                                builder: (context) {
-                                  final convertedEmoji = _convertLegacyEmoticon(
-                                    historia.emoticon!,
-                                  );
-                                  final displayEmoji =
-                                      convertedEmoji ?? historia.emoticon!;
-                                  return Container(
-                                    width: 36,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      displayEmoji,
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        height: 1,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            if (historia.emoticon != null &&
-                                historia.emoticon!.isNotEmpty)
-                              const SizedBox(width: 6),
-                            SizedBox(
-                              width: 140,
-                              child: Text(
-                                DateFormat(
-                                  'dd/MM/yyyy HH:mm',
-                                  'pt_BR',
-                                ).format(historia.data),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Theme.of(
-                                    context,
-                                  ).textTheme.bodySmall?.color,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        PopupMenuButton<String>(
-                          icon: Icon(
-                            Icons.more_horiz,
-                            color: Theme.of(context).iconTheme.color,
-                          ),
-                          onSelected: (value) async {
-                            if (value == 'edit') {
-                              final refreshProvider =
-                                  Provider.of<RefreshProvider>(
-                                    context,
-                                    listen: false,
-                                  );
-                              Navigator.push(
-                                context,
-                                RouteTransitionHelper.slideUpRotateTransition(
-                                  EditHistoriaScreen(historia: historia),
-                                ),
-                              ).then((updated) {
-                                if (!mounted) return;
-                                if (updated == true) {
-                                  refreshProvider.refresh();
-                                }
-                              });
-                            } else if (value == 'delete') {
-                              await _deleteHistoria(historia);
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              value: 'edit',
-                              child: Text(
-                                AppLocalizations.of(context)?.editTip ??
-                                    'Editar - 2 toques',
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: 'delete',
-                              child: Text(
-                                AppLocalizations.of(context)?.deleteLabel ??
-                                    'Excluir',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    // Tags: movidas para abaixo da linha da data
-                    FutureBuilder<List<Tag>>(
-                      future: TagHelper().getTagsByHistoria(historia.id ?? 0),
-                      builder: (context, tagSnapshot) {
-                        final newTags = tagSnapshot.data ?? [];
-                        final legacyTag = historia.tag;
-                        final tagNames = newTags.isNotEmpty
-                            ? newTags.map((t) => t.nome).toList()
-                            : (legacyTag != null && legacyTag.isNotEmpty
-                                  ? [legacyTag]
-                                  : <String>[]);
-                        if (tagNames.isEmpty) return const SizedBox.shrink();
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 8),
-                            Wrap(
-                              spacing: 4,
-                              runSpacing: 4,
-                              children: tagNames
-                                  .map(
-                                    (name) => Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Theme.of(
-                                                context,
-                                              ).colorScheme.primaryContainer
-                                            : Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryContainer
-                                                  .withValues(alpha: 0.12),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        name,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color:
-                                              Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? Theme.of(
-                                                  context,
-                                                ).colorScheme.onPrimaryContainer
-                                              : Theme.of(
-                                                  context,
-                                                ).colorScheme.primary,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            backgroundColor: AppColors.emoticonGreen,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            icon: Icons.restore,
+            label: AppLocalizations.of(context)?.unarchive ?? 'Desarquivar',
           ),
-        );
-      },
+        ],
+      ),
+      endActionPane: ActionPane(
+        motion: const BehindMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) async {
+              final selectedGroup = await Navigator.push<String>(
+                context,
+                MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
+              );
+              if (selectedGroup != null) {
+                await _updateHistoria(
+                  historia,
+                  updates: {'grupo': selectedGroup, 'arquivado': null},
+                );
+              }
+            },
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            icon: Icons.group,
+            label: AppLocalizations.of(context)?.group ?? 'Grupo',
+          ),
+        ],
+      ),
+      child: StoryCard(
+        historia: historia,
+        convertLegacyEmoticon: _convertLegacyEmoticon,
+        onPreview: () => _openStoryPreview(historia),
+        onDoubleTap: () => _openStoryPreview(historia),
+        footer: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            PopupMenuButton<String>(
+              icon: Icon(
+                Icons.more_horiz,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              onSelected: (value) async {
+                if (value == 'edit') {
+                  final refreshProvider = Provider.of<RefreshProvider>(
+                    context,
+                    listen: false,
+                  );
+                  Navigator.push(
+                    context,
+                    RouteTransitionHelper.slideUpRotateTransition(
+                      EditHistoriaScreen(historia: historia),
+                    ),
+                  ).then((updated) {
+                    if (!mounted) return;
+                    if (updated == true) {
+                      refreshProvider.refresh();
+                    }
+                  });
+                } else if (value == 'delete') {
+                  await _deleteHistoria(historia);
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Text(
+                    AppLocalizations.of(context)?.editTip ??
+                        'Editar - 2 toques',
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Text(
+                    AppLocalizations.of(context)?.deleteLabel ?? 'Excluir',
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        stateLabel: AppLocalizations.of(context)?.archivedTitle,
+      ),
     );
+  }
+
+  Future<void> _openStoryPreview(Historia historia) async {
+    try {
+      await _warmupStoryPreviewMedia(
+        historia,
+      ).timeout(const Duration(milliseconds: 180));
+    } catch (_) {
+      // Ignora timeout/falha de pré-carregamento.
+    }
+
+    if (!mounted) return;
+
+    final action = await Navigator.of(context).push<StoryPreviewAction>(
+      MaterialPageRoute(
+        builder: (_) => StoryPreviewScreen(
+          historia: historia,
+          localeName: AppLocalizations.of(context)!.localeName,
+          convertLegacyEmoticon: _convertLegacyEmoticon,
+          heroTag: 'archived_story_${historia.id ?? historia.titulo.hashCode}',
+          showEditDelete: true,
+          showMoodNotes: true,
+        ),
+      ),
+    );
+
+    if (!mounted || action == null || action == StoryPreviewAction.close) {
+      return;
+    }
+
+    if (action == StoryPreviewAction.edit) {
+      final updated = await Navigator.of(context).push(
+        RouteTransitionHelper.slideUpRotateTransition(
+          EditHistoriaScreen(historia: historia),
+        ),
+      );
+      if (!mounted) return;
+      if (updated == true) {
+        Provider.of<RefreshProvider>(context, listen: false).refresh();
+      }
+      return;
+    }
+
+    if (action == StoryPreviewAction.delete) {
+      await _deleteHistoria(historia);
+    }
+  }
+
+  Future<void> _warmupStoryPreviewMedia(Historia historia) async {
+    final historiaId = historia.id;
+    if (historiaId == null || historiaId <= 0) return;
+    await HistoriaFotoHelper().getFotosComBytesByHistoria(historiaId);
   }
 
   Widget _buildIconView(Historia historia) {
@@ -654,15 +524,16 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
           ),
           title: Text(
             historia.titulo,
-            style: TextStyle(
+            style: GoogleFonts.notoSerif(
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               color: Theme.of(context).textTheme.titleMedium?.color,
+              height: 1.25,
             ),
           ),
           subtitle: Text(
             DateFormat('dd/MM/yyyy', 'pt_BR').format(historia.data),
-            style: TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 12,
               color: Theme.of(context).textTheme.bodySmall?.color,
             ),
@@ -747,15 +618,15 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Row(
-          children: [
-            Image.asset('assets/icon/icon.png', width: 32, height: 32),
-            const SizedBox(width: 12),
-            Text(
-              AppLocalizations.of(context)?.archivedTitle ?? 'Arquivados',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
+        title: Text(
+          AppLocalizations.of(context)?.archivedTitle ?? 'Arquivados',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.notoSerif(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            height: 1.3,
+          ),
         ),
         actions: [
           IconButton(
@@ -773,64 +644,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
                 : (AppLocalizations.of(context)?.toggleToCards ??
                       'Alternar para modo blocos'),
           ),
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-            ),
-          ),
         ],
-      ),
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              child: Text(
-                AppLocalizations.of(context)!.menu,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: Text(AppLocalizations.of(context)!.editProfile),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const EditProfileScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: Text(AppLocalizations.of(context)!.settings),
-              onTap: () {
-                Navigator.pushNamed(context, '/settings');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: Text(AppLocalizations.of(context)!.logout),
-              onTap: () async {
-                final auth = Provider.of<AuthProvider>(context, listen: false);
-                final pinProvider = Provider.of<PinProvider>(
-                  context,
-                  listen: false,
-                );
-                final navigator = Navigator.of(context);
-                await auth.logout();
-                // Atualiza o status de login no PinProvider
-                pinProvider.updateUserLoginStatus(false);
-                if (!mounted) return;
-                navigator.pushReplacementNamed('/login');
-              },
-            ),
-          ],
-        ),
       ),
       body: Consumer<RefreshProvider>(
         builder: (context, refreshProvider, child) {

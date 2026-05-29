@@ -13,14 +13,12 @@ import '../db/historia_foto_helper.dart';
 import '../models/grupo.dart';
 import '../models/historia.dart';
 import '../providers/auth_provider.dart';
-import '../providers/pin_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
 import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
 import 'create_historia_screen.dart';
 import 'edit_historia_screen.dart';
-import 'edit_profile_screen.dart';
 
 HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
   return (
@@ -625,71 +623,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
               onPressed: () => _deleteGroup(),
               tooltip: AppLocalizations.of(context)!.deleteGroupTitle,
             ),
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openEndDrawer(),
-              ),
-            ),
           ],
-        ),
-        endDrawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.menu,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: Text(AppLocalizations.of(context)!.editProfile),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const EditProfileScreen(),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: Text(AppLocalizations.of(context)!.settings),
-                onTap: () {
-                  Navigator.pushNamed(context, '/settings');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: Text(AppLocalizations.of(context)!.logout),
-                onTap: () async {
-                  final auth = Provider.of<AuthProvider>(
-                    context,
-                    listen: false,
-                  );
-                  final pinProvider = Provider.of<PinProvider>(
-                    context,
-                    listen: false,
-                  );
-                  final navigator = Navigator.of(context);
-                  await auth.logout();
-                  // Atualiza o status de login no PinProvider
-                  pinProvider.updateUserLoginStatus(false);
-                  if (!mounted) return;
-                  navigator.pushReplacementNamed('/login');
-                },
-              ),
-            ],
-          ),
         ),
         body: Consumer<RefreshProvider>(
           builder: (context, refreshProvider, child) {
