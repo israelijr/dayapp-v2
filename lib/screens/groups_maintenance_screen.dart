@@ -1,5 +1,6 @@
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../db/grupo_helper.dart';
@@ -252,10 +253,11 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                       ),
                       title: Text(
                         AppLocalizations.of(context)!.archivedTitle,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
                       ),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
@@ -315,14 +317,16 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                     ),
                     title: Text(
                       grupo.nome,
-                      style: TextStyle(
+                      style: GoogleFonts.notoSerif(
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.onSurface,
+                        height: 1.4,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
                       ),
                     ),
                     subtitle: Text(
                       'Criado em ${grupo.dataCriacao?.toLocal().toString().split(' ')[0] ?? ''}',
-                      style: TextStyle(
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),

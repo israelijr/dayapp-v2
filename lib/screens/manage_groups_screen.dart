@@ -1,5 +1,6 @@
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../db/database_helper.dart';
@@ -104,17 +105,46 @@ class _ManageGroupsScreenState extends State<ManageGroupsScreen> {
             );
           }
           return ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
             itemCount: grupos.length,
             itemBuilder: (context, index) {
               final grupo = grupos[index];
-              return ListTile(
-                title: Text(grupo.nome),
-                trailing: IconButton(
-                  icon: Icon(
-                    Icons.delete,
-                    color: Theme.of(context).colorScheme.error,
+              return Card(
+                margin: const EdgeInsets.only(bottom: 12),
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                elevation: 3,
+                shadowColor: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.08),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.outlineVariant.withValues(alpha: 0.18),
                   ),
-                  onPressed: () => _deleteGrupo(grupo),
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 16,
+                  ),
+                  title: Text(
+                    grupo.nome,
+                    style: GoogleFonts.notoSerif(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      height: 1.4,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
+                    ),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                    onPressed: () => _deleteGrupo(grupo),
+                  ),
                 ),
               );
             },

@@ -30,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   bool _isCardView = true;
+  int _collectionsTabIndex = 0;
 
   // ScaffoldMessenger local — snackbars ficam escopados à HomeScreen e
   // são descartados automaticamente ao navegar para outra rota (ex: logout).
@@ -51,6 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
         _backupSuggestionShown = true;
       }
     });
+  }
+
+  void _handleCollectionsTabChanged(int index) {
+    setState(() => _collectionsTabIndex = index);
   }
 
   Future<void> _checkUnsavedStories() async {
@@ -536,10 +541,12 @@ class _HomeScreenState extends State<HomeScreen> {
         body: _selectedIndex == 0
             ? HomeContent(isCardView: _isCardView)
             : _selectedIndex == 1
-            ? const GroupsScreen()
+            ? GroupsScreen(onTabChanged: _handleCollectionsTabChanged)
             : const SearchScreen(),
-        // Mostra o FAB apenas nas abas Home e Grupos
-        floatingActionButton: _selectedIndex != 2
+        // Mostra o FAB apenas nas abas Home e, se necessário, na aba Capítulos
+        floatingActionButton:
+            _selectedIndex != 2 &&
+                (_selectedIndex == 0 || _collectionsTabIndex == 0)
             ? PulseAnimation(
                 scaleTarget: 1.06,
                 child: FloatingActionButton.extended(
@@ -559,7 +566,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: Text(
                     _selectedIndex == 0
                         ? AppLocalizations.of(context)!.newStory
-                        : AppLocalizations.of(context)!.chapterLinkModeNew,
+                        : AppLocalizations.of(context)!.chapterCreateTitle,
                   ),
                 ),
               )

@@ -15,14 +15,18 @@ import 'chapters_screen.dart';
 import 'group_stories_screen.dart';
 
 class GroupsScreen extends StatefulWidget {
-  const GroupsScreen({super.key});
+  const GroupsScreen({super.key, this.onTabChanged});
+
+  final ValueChanged<int>? onTabChanged;
 
   @override
   State<GroupsScreen> createState() => _GroupsScreenState();
 }
 
-class _GroupsScreenState extends State<GroupsScreen> {
+class _GroupsScreenState extends State<GroupsScreen>
+    with TickerProviderStateMixin {
   final CapituloHelper _capituloHelper = CapituloHelper();
+  late final TabController _tabController;
 
   List<Grupo> _grupos = [];
   Map<String, int> _grupoCounts = {};
@@ -32,7 +36,22 @@ class _GroupsScreenState extends State<GroupsScreen> {
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this)
+      ..addListener(_onTabChanged);
     _loadCollections();
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_onTabChanged);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _onTabChanged() {
+    if (!_tabController.indexIsChanging) {
+      widget.onTabChanged?.call(_tabController.index);
+    }
   }
 
   Future<void> _loadCollections() async {
@@ -381,6 +400,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TabBar(
+                      controller: _tabController,
                       labelColor: Theme.of(context).colorScheme.primary,
                       unselectedLabelColor: Theme.of(
                         context,
@@ -408,6 +428,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   ),
                   Expanded(
                     child: TabBarView(
+                      controller: _tabController,
                       children: [
                         RefreshIndicator(
                           onRefresh: _loadCollections,
