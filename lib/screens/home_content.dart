@@ -7,7 +7,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database_helper.dart';
 import '../db/historia_foto_helper.dart';
@@ -15,7 +14,6 @@ import '../models/historia.dart';
 import '../models/insight.dart';
 import '../providers/auth_provider.dart';
 import '../providers/insight_provider.dart';
-import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
 import '../services/thumbnail_service.dart';
@@ -24,7 +22,6 @@ import '../theme/m3_expressive_theme.dart';
 import '../widgets/compact_historia_card.dart';
 import '../widgets/insight_card.dart';
 import '../widgets/story_card.dart';
-import 'chapters_entry_screen.dart';
 import 'edit_historia_screen.dart';
 import 'group_selection_screen.dart';
 import 'search_screen.dart';
@@ -198,12 +195,7 @@ HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
 
 class HomeContent extends StatefulWidget {
   final bool isCardView;
-  final bool showChapterShortcutCard;
-  const HomeContent({
-    required this.isCardView,
-    required this.showChapterShortcutCard,
-    super.key,
-  });
+  const HomeContent({required this.isCardView, super.key});
 
   @override
   State<HomeContent> createState() => _HomeContentState();
@@ -689,7 +681,6 @@ class _HomeContentState extends State<HomeContent> {
         return _PaginatedHomeContent(
           key: ValueKey(refreshProvider.refreshCounter),
           isCardView: _isCardView,
-          showChapterShortcutCard: widget.showChapterShortcutCard,
           historias: _historias,
           isInitialLoading: _isInitialLoading,
           isLoadingMore: _isLoadingMore,
@@ -706,7 +697,6 @@ class _HomeContentState extends State<HomeContent> {
 
 class _PaginatedHomeContent extends StatefulWidget {
   final bool isCardView;
-  final bool showChapterShortcutCard;
   final List<Historia> historias;
   final bool isInitialLoading;
   final bool isLoadingMore;
@@ -718,7 +708,6 @@ class _PaginatedHomeContent extends StatefulWidget {
 
   const _PaginatedHomeContent({
     required this.isCardView,
-    required this.showChapterShortcutCard,
     required this.historias,
     required this.isInitialLoading,
     required this.isLoadingMore,
@@ -738,14 +727,10 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
   bool _hasRefreshed = false;
   // Chave para identificar a posição do scroll desta tela
   static const String _scrollPositionKey = 'home_list_scroll';
-  static const String _prefShowIntroOnOpen = 'chapters_show_intro_on_open';
-
-  bool _showChapterIntroOnOpen = true;
 
   @override
   void initState() {
     super.initState();
-    _loadChapterIntroPreference();
     // Recarrega dados quando a key muda (RefreshProvider foi atualizado)
     // Usa addPostFrameCallback para evitar setState durante build
     // Só executa uma vez por instância do widget
@@ -767,33 +752,6 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
         _restoreScrollPositionAfterLoad();
       }
     });
-  }
-
-  Future<void> _loadChapterIntroPreference() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final value = prefs.getBool(_prefShowIntroOnOpen) ?? true;
-      if (!mounted) return;
-      setState(() {
-        _showChapterIntroOnOpen = value;
-      });
-    } catch (e) {
-      // Mantém o comportamento padrão caso a leitura de preferência falhe.
-    }
-  }
-
-  Future<void> _openChapters({bool forceIntro = false}) async {
-    if (forceIntro) {
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => const ChaptersEntryScreen(forceShowIntro: true),
-        ),
-      );
-    } else {
-      await Navigator.pushNamed(context, '/chapters');
-    }
-    if (!mounted) return;
-    await _loadChapterIntroPreference();
   }
 
   /// Restaura a posição do scroll após os dados serem carregados
@@ -864,69 +822,86 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
           builder: (context, insightProvider, _) {
             final insights = insightProvider.insights;
             final storiesCount = widget.historias.length;
-            final extraChapterCard = widget.showChapterShortcutCard ? 1 : 0;
 
-            Widget chapterShortcutCard() {
-              final l10n = AppLocalizations.of(context)!;
-              final premium = context.watch<PremiumProvider>();
-              return Card(
+            Widget greetingBanner() {
+              final user = Provider.of<AuthProvider>(
+                context,
+                listen: false,
+              ).user;
+              final userName = user?.nome ?? '';
+              final now = DateTime.now();
+              final greeting = now.hour < 12
+                  ? 'Bom dia'
+                  : now.hour < 18
+                  ? 'Boa tarde'
+                  : 'Boa noite';
+              return Container(
                 margin: const EdgeInsets.only(bottom: 16),
-                elevation: 0,
-                clipBehavior: Clip.antiAlias,
-                color: const Color(0x00000000),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.18),
+                      Theme.of(context).colorScheme.primaryContainer,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
                       color: Theme.of(
                         context,
-                      ).colorScheme.onSurface.withValues(alpha: 0.10),
+                      ).colorScheme.primary.withValues(alpha: 0.12),
+                      blurRadius: 22,
+                      offset: const Offset(0, 10),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withValues(alpha: 0.025),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: ListTile(
-                    leading: Icon(
-                      premium.canUseChapters
-                          ? Icons.auto_stories_rounded
-                          : Icons.workspace_premium,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    title: Text(
-                      l10n.chaptersHomeCardTitle,
-                      style: GoogleFonts.notoSerif(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        height: 1.4,
-                      ),
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (!_showChapterIntroOnOpen)
-                          IconButton(
-                            tooltip: l10n.help,
-                            onPressed: () => _openChapters(forceIntro: true),
-                            icon: const Icon(Icons.help_outline_rounded),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '$greeting${userName.isNotEmpty ? ', $userName' : ''}.',
+                            style: GoogleFonts.notoSerif(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              height: 1.2,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimaryContainer,
+                            ),
                           ),
-                        FilledButton.tonal(
-                          onPressed: _openChapters,
-                          child: Text(l10n.chapterOpenLabel),
-                        ),
-                      ],
+                          const SizedBox(height: 8),
+                          Text(
+                            'Aqui estão suas histórias recentes.',
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimaryContainer,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 12),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: Image.asset(
+                        'assets/image/LogoDayApp.png',
+                        width: 96,
+                        height: 96,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
                 ),
               );
             }
@@ -938,8 +913,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             final devMode = insightProvider.devMode;
             final hasDevBanner = devMode && insights.isNotEmpty;
             final extraDevBanner = hasDevBanner ? 1 : 0;
-            final headerCount =
-                extraChapterCard + extraDevBanner + insights.length;
+            final headerCount = 1 + extraDevBanner + insights.length;
 
             Widget devModeBanner() {
               final colorScheme = Theme.of(context).colorScheme;
@@ -1060,58 +1034,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
               );
             }
 
-            // Estado verdadeiramente vazio: sem histórias e sem insights.
-            if (storiesCount == 0 && insights.isEmpty) {
-              return ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: [
-                  if (widget.showChapterShortcutCard) chapterShortcutCard(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/image/home_vazia.png',
-                            width: 250,
-                            height: 250,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            AppLocalizations.of(context)!.noStoriesHere,
-                            style: GoogleFonts.notoSerif(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              height: 1.4,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            AppLocalizations.of(
-                              context,
-                            )!.storiesGroupedOrArchived,
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              height: 1.4,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }
-
-            // Lista unificada: capítulo + insights (topo) + histórias (corpo).
+            // Lista unificada: saudação + insights (topo) + histórias (corpo).
             final totalBodyItems = storiesCount == 0
                 ? 1 // placeholder de lista vazia
                 : storiesCount + (widget.hasMoreData ? 1 : 0);
@@ -1124,20 +1047,27 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               itemCount: totalItems,
               itemBuilder: (context, index) {
-                // Card de capítulos
-                if (widget.showChapterShortcutCard && index == 0) {
-                  return chapterShortcutCard();
+                if (index == 0) {
+                  return greetingBanner();
                 }
 
-                // Banner de modo desenvolvimento
-                if (hasDevBanner && index == extraChapterCard) {
+                if (hasDevBanner && index == 1) {
                   return devModeBanner();
                 }
 
-                // Cards de insights no topo (abaixo do card de capítulos)
                 if (index < headerCount) {
-                  final insightIndex =
-                      index - extraChapterCard - extraDevBanner;
+                  final insightIndex = index - 1 - extraDevBanner;
+                  return buildInsightCard(insights[insightIndex]);
+                }
+
+                // Banner de modo desenvolvimento
+                if (hasDevBanner && index == 1) {
+                  return devModeBanner();
+                }
+
+                // Cards de insights no topo (abaixo da saudação)
+                if (index < headerCount) {
+                  final insightIndex = index - 1 - extraDevBanner;
                   return buildInsightCard(insights[insightIndex]);
                 }
 

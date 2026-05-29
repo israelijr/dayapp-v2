@@ -19,8 +19,6 @@ import 'groups_screen.dart';
 import 'home_content.dart';
 import 'search_screen.dart';
 
-enum _HomeHeaderMenuAction { viewLarge, viewCompact, toggleChapterCard }
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -31,7 +29,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   bool _isCardView = true;
-  bool _showChapterShortcutCard = true;
 
   // ScaffoldMessenger local — snackbars ficam escopados à HomeScreen e
   // são descartados automaticamente ao navegar para outra rota (ex: logout).
@@ -40,13 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
   // apenas uma vez por inicialização do app.
   static bool _backupSuggestionShown = false;
   static const String _prefKeyIsCardView = 'home_isCardView';
-  static const String _prefKeyShowChapterCard = 'home_show_chapter_card';
 
   @override
   void initState() {
     super.initState();
     _loadLayoutPreference();
-    _loadChapterCardPreference();
     // Executar a checagem de histórias não salvas apenas na primeira
     // construção após o carregamento do app.
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -154,35 +149,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _loadChapterCardPreference() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final val = prefs.getBool(_prefKeyShowChapterCard);
-      if (val != null) {
-        setState(() {
-          _showChapterShortcutCard = val;
-        });
-      }
-    } catch (e) {
-      // Mantém padrão de card em caso de falha de leitura.
-      debugPrint(
-        'HomeScreen: erro ao carregar preferência de card de capítulos: $e',
-      );
-    }
-  }
-
-  Future<void> _saveChapterCardPreference(bool value) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_prefKeyShowChapterCard, value);
-    } catch (e) {
-      // Falha de persistência não deve quebrar o fluxo.
-      debugPrint(
-        'HomeScreen: erro ao salvar preferência de card de capítulos: $e',
-      );
-    }
-  }
-
   // screens list is built dynamically in the body to reflect current view mode
 
   void _onItemTapped(int index) {
@@ -194,174 +160,63 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isCompactHeader = MediaQuery.sizeOf(context).width < 390;
 
     return ScaffoldMessenger(
       key: _messengerKey,
       child: Scaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              Image.asset('assets/icon/icon.png', width: 32, height: 32),
-              const SizedBox(width: 12),
-              Flexible(
-                child: Text(
-                  _selectedIndex == 0
-                      ? l10n.appTitle
-                      : _selectedIndex == 1
-                      ? l10n.manageGroups
-                      : l10n.search,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.notoSerif(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                    height: 1.3,
-                  ),
-                ),
+          title: Flexible(
+            child: Text(
+              _selectedIndex == 0
+                  ? l10n.appTitle
+                  : _selectedIndex == 1
+                  ? l10n.manageGroups
+                  : l10n.search,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.notoSerif(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                height: 1.3,
               ),
-            ],
+            ),
           ),
           actions: [
-            // Só mostra os botões de visualização na aba Home
-            if (_selectedIndex == 0 && isCompactHeader) ...[
-              IconButton(
-                tooltip: l10n.homeHeaderOpenCalendarTooltip,
-                onPressed: () => Navigator.pushNamed(context, '/calendar'),
-                icon: const Icon(Icons.calendar_month_rounded),
-              ),
-              IconButton(
-                tooltip: l10n.chaptersTitle,
-                onPressed: () => Navigator.pushNamed(context, '/chapters'),
-                icon: const Icon(Icons.auto_stories_outlined),
-              ),
-              PopupMenuButton<_HomeHeaderMenuAction>(
-                tooltip: l10n.moreOptions,
-                onSelected: (action) {
-                  switch (action) {
-                    case _HomeHeaderMenuAction.viewLarge:
-                      setState(() {
-                        _isCardView = true;
-                      });
-                      _saveLayoutPreference(true);
-                      break;
-                    case _HomeHeaderMenuAction.viewCompact:
-                      setState(() {
-                        _isCardView = false;
-                      });
-                      _saveLayoutPreference(false);
-                      break;
-                    case _HomeHeaderMenuAction.toggleChapterCard:
-                      setState(() {
-                        _showChapterShortcutCard = !_showChapterShortcutCard;
-                      });
-                      _saveChapterCardPreference(_showChapterShortcutCard);
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  CheckedPopupMenuItem<_HomeHeaderMenuAction>(
-                    value: _HomeHeaderMenuAction.viewLarge,
-                    checked: _isCardView,
-                    child: Text(l10n.homeHeaderLargeCards),
-                  ),
-                  CheckedPopupMenuItem<_HomeHeaderMenuAction>(
-                    value: _HomeHeaderMenuAction.viewCompact,
-                    checked: !_isCardView,
-                    child: Text(l10n.homeHeaderCompactCards),
-                  ),
-                  const PopupMenuDivider(),
-                  CheckedPopupMenuItem<_HomeHeaderMenuAction>(
-                    value: _HomeHeaderMenuAction.toggleChapterCard,
-                    checked: _showChapterShortcutCard,
-                    child: Text(l10n.chapterShortcutToggle),
-                  ),
-                ],
-              ),
-            ] else if (_selectedIndex == 0)
+            if (_selectedIndex == 0)
               Builder(
                 builder: (context) {
                   const duration = AppDurations.listSwitch;
-                  Widget buildToggle(
-                    IconData icon,
-                    bool active,
-                    String tooltip,
-                    VoidCallback onTap,
-                  ) {
-                    final colorScheme = Theme.of(context).colorScheme;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                      child: Tooltip(
-                        message: tooltip,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: () {
-                            onTap();
+                  return Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isCardView = !_isCardView;
+                            });
+                            _saveLayoutPreference(_isCardView);
                           },
-                          child: AnimatedContainer(
-                            duration: duration,
-                            curve: Curves.easeInOut,
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: active
-                                  ? colorScheme.secondary.withValues(
-                                      alpha: 0.14,
-                                    )
-                                  : const Color(0x00000000),
-                              borderRadius: BorderRadius.circular(8),
-                              border: active
-                                  ? Border.all(
-                                      color: colorScheme.secondary,
-                                      width: 1.2,
-                                    )
-                                  : null,
-                            ),
-                            child: AnimatedScale(
-                              duration: duration,
-                              curve: Curves.easeOutBack,
-                              scale: active ? 1.05 : 1.0,
-                              child: Icon(
-                                icon,
-                                size: 28,
-                                color: active
-                                    ? colorScheme.secondary
-                                    : colorScheme.onSurfaceVariant,
-                              ),
-                            ),
+                          icon: Icon(
+                            _isCardView
+                                ? Icons.grid_view_rounded
+                                : Icons.view_agenda_rounded,
+                            size: 22,
+                          ),
+                          tooltip: _isCardView
+                              ? l10n.homeHeaderCompactCards
+                              : l10n.homeHeaderLargeCards,
+                          splashRadius: 24,
+                          constraints: const BoxConstraints(
+                            minWidth: 38,
+                            minHeight: 38,
                           ),
                         ),
                       ),
-                    );
-                  }
-
-                  return Row(
-                    children: [
-                      buildToggle(
-                        Icons.view_agenda_rounded,
-                        _isCardView,
-                        l10n.homeHeaderLargeCards,
-                        () {
-                          setState(() {
-                            _isCardView = true;
-                          });
-                          _saveLayoutPreference(true);
-                        },
-                      ),
-                      buildToggle(
-                        Icons.grid_view_rounded,
-                        !_isCardView,
-                        l10n.homeHeaderCompactCards,
-                        () {
-                          setState(() {
-                            _isCardView = false;
-                          });
-                          _saveLayoutPreference(false);
-                        },
-                      ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: InkWell(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                           onTap: () {
                             Navigator.pushNamed(context, '/calendar');
                           },
@@ -370,92 +225,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: AnimatedContainer(
                               duration: duration,
                               curve: Curves.easeInOut,
-                              padding: const EdgeInsets.all(6),
+                              width: 38,
+                              height: 38,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              child: Icon(
-                                Icons.calendar_month_rounded,
-                                size: 28,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: () {
-                            Navigator.pushNamed(context, '/chapters');
-                          },
-                          child: Tooltip(
-                            message: l10n.chaptersTitle,
-                            child: AnimatedContainer(
-                              duration: duration,
-                              curve: Curves.easeInOut,
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                Icons.auto_stories_outlined,
-                                size: 28,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: () {
-                            setState(() {
-                              _showChapterShortcutCard =
-                                  !_showChapterShortcutCard;
-                            });
-                            _saveChapterCardPreference(
-                              _showChapterShortcutCard,
-                            );
-                          },
-                          child: Tooltip(
-                            message: l10n.chapterShortcutToggle,
-                            child: AnimatedContainer(
-                              duration: duration,
-                              curve: Curves.easeInOut,
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: _showChapterShortcutCard
-                                    ? Theme.of(context).colorScheme.secondary
-                                          .withValues(alpha: 0.14)
-                                    : const Color(0x00000000),
-                                borderRadius: BorderRadius.circular(8),
-                                border: _showChapterShortcutCard
-                                    ? Border.all(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.secondary,
-                                        width: 1.2,
-                                      )
-                                    : null,
-                              ),
-                              child: Icon(
-                                _showChapterShortcutCard
-                                    ? Icons.toggle_on_outlined
-                                    : Icons.toggle_off_outlined,
-                                size: 28,
-                                color: _showChapterShortcutCard
-                                    ? Theme.of(context).colorScheme.secondary
-                                    : Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
+                              child: Center(
+                                child: Icon(
+                                  Icons.calendar_month_rounded,
+                                  size: 22,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                               ),
                             ),
                           ),
@@ -753,10 +535,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         body: _selectedIndex == 0
-            ? HomeContent(
-                isCardView: _isCardView,
-                showChapterShortcutCard: _showChapterShortcutCard,
-              )
+            ? HomeContent(isCardView: _isCardView)
             : _selectedIndex == 1
             ? const GroupsScreen()
             : const SearchScreen(),

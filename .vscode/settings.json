@@ -1,6 +1,6 @@
 {
     "chat.tools.terminal.autoApprove": {
-        "/^cat /home/israel/Dev/DayApp/lib/l10n/intl_pt_BR\\.arb \\| python3 -c \"import json,sys; d=json\\.load\\(sys\\.stdin\\); \\[print\\(f'\\{k\\}: \\{v\\}'\\) for k,v in d\\.items\\(\\) if not k\\.startswith\\('@'\\) and k not in \\['@@locale'\\]\\]\" \\| tail -200$/": {
+        "/^cat /home/israel/Dev/DayApp_Stitch/lib/l10n/intl_pt_BR\\.arb \\| python3 -c \"import json,sys; d=json\\.load\\(sys\\.stdin\\); \\[print\\(f'\\{k\\}: \\{v\\}') for k,v in d\\.items\\(\\) if not k\\.startswith\\(\\'@\\'\\) and k not in \\[\\'@@locale\\'\\]\\]\\" \\| tail -200$/": {
             "approve": true,
             "matchCommandLine": true
         },
@@ -23,5 +23,6 @@
         "pgrep": true,
         "wait": true,
         "strings": true
-    }
+    },
+    "cmake.sourceDirectory": "/home/israel/Dev/DayApp_Stitch/linux"
 }
