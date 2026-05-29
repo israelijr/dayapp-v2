@@ -7,7 +7,6 @@ import 'package:dayapp/providers/pin_provider.dart';
 import 'package:dayapp/sharing/renderer/story_share_renderer.dart';
 import 'package:dayapp/sharing/story_data.dart';
 import 'package:dayapp/sharing/story_share_preview_screen.dart';
-import 'package:dayapp/sharing/templates/story_share_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
