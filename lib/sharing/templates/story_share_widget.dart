@@ -249,13 +249,34 @@ class StoryShareWidget extends StatelessWidget {
     );
   }
 
+  Widget _buildEmptyPhotoBackground(ColorScheme colorScheme) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            colorScheme.surfaceContainerHighest.withValues(alpha: 0.95),
+            colorScheme.surface.withValues(alpha: 0.82),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.photo,
+          size: 80,
+          color: colorScheme.onSurface.withValues(alpha: 0.22),
+        ),
+      ),
+    );
+  }
+
   Widget _buildScrapbook(BuildContext context) {
     final photos = story.images;
-    final colorScheme = Theme.of(context).colorScheme;
+    final hasPhotos = photos.isNotEmpty;
     final displayImages = photos.take(3).toList();
-    final extraCount = photos.length > displayImages.length
-        ? photos.length - displayImages.length
-        : 0;
+    final extraCount = photos.length > 3 ? photos.length - 3 : 0;
+    final colorScheme = Theme.of(context).colorScheme;
     final dateLabel = DateFormat(
       'dd MMM yyyy',
       story.localeName,
@@ -264,19 +285,92 @@ class StoryShareWidget extends StatelessWidget {
     Widget buildPhotoTile(Uint8List? image) {
       return Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           color: colorScheme.surface,
           border: Border.all(
             color: colorScheme.onSurface.withValues(alpha: 0.08),
             width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: colorScheme.onSurface.withValues(alpha: 0.08),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           child: image != null
               ? Image.memory(image, fit: BoxFit.cover)
               : Container(color: colorScheme.surfaceContainerHighest),
         ),
+      );
+    }
+
+    Widget buildTextContent({required bool expanded}) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            story.title,
+            softWrap: true,
+            overflow: TextOverflow.visible,
+            style: GoogleFonts.playfairDisplay(
+              fontSize: 30,
+              fontWeight: FontWeight.w500,
+              color: colorScheme.onSurface,
+              height: 1.05,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            flex: expanded ? 3 : 1,
+            child: Text(
+              _normalizedDescription(story.description),
+              maxLines: expanded ? 6 : 3,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 15,
+                height: 1.6,
+                color: colorScheme.onSurface.withValues(alpha: 0.88),
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  if (story.emoticon != null && story.emoticon!.isNotEmpty)
+                    Text(
+                      story.emoticon!,
+                      style: GoogleFonts.plusJakartaSans(fontSize: 18),
+                    ),
+                  if (story.emoticon != null && story.emoticon!.isNotEmpty)
+                    const SizedBox(width: 8),
+                  Text(
+                    _moodLabel(story.mood),
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12,
+                      color: colorScheme.onSurface.withValues(alpha: 0.76),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                dateLabel,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 12,
+                  color: colorScheme.onSurface.withValues(alpha: 0.76),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
       );
     }
 
@@ -285,22 +379,22 @@ class StoryShareWidget extends StatelessWidget {
       children: [
         Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 700),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(36),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: colorScheme.surface.withValues(alpha: 0.52),
+                    color: colorScheme.surface.withValues(alpha: 0.58),
                     borderRadius: BorderRadius.circular(36),
                     border: Border.all(
-                      color: colorScheme.onSurface.withValues(alpha: 0.06),
+                      color: colorScheme.onSurface.withValues(alpha: 0.08),
                     ),
                     boxShadow: [
                       BoxShadow(
                         color: colorScheme.onSurface.withValues(alpha: 0.12),
-                        blurRadius: 28,
+                        blurRadius: 32,
                         offset: const Offset(0, 16),
                       ),
                     ],
@@ -310,213 +404,106 @@ class StoryShareWidget extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Flexible(
-                          flex: 5,
-                          child: AspectRatio(
-                            aspectRatio: 1.05,
-                            child: LayoutBuilder(
-                              builder: (context, photoConstraints) {
-                                final photoWidth = photoConstraints.maxWidth;
-                                final photoHeight = photoConstraints.maxHeight;
-                                final largeWidth = photoWidth * 0.56;
-                                final largeHeight = photoHeight * 0.66;
-                                final smallWidth = photoWidth * 0.34;
-                                final smallHeight = photoWidth * 0.40;
+                        if (hasPhotos) ...[
+                          Expanded(
+                            flex: 5,
+                            child: AspectRatio(
+                              aspectRatio: 1.05,
+                              child: LayoutBuilder(
+                                builder: (context, photoConstraints) {
+                                  final photoWidth = photoConstraints.maxWidth;
+                                  final photoHeight =
+                                      photoConstraints.maxHeight;
+                                  final largeWidth = photoWidth * 0.55;
+                                  final largeHeight = photoHeight * 0.62;
+                                  final smallWidth = photoWidth * 0.38;
+                                  final smallHeight = photoHeight * 0.44;
 
-                                return Stack(
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    Positioned(
-                                      left: 0,
-                                      top: photoHeight * 0.06,
-                                      child: Transform.rotate(
-                                        angle: -0.03,
-                                        child: SizedBox(
-                                          width: largeWidth,
-                                          height: largeHeight,
-                                          child: buildPhotoTile(
-                                            displayImages.isNotEmpty
-                                                ? displayImages[0]
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: photoWidth * 0.02,
-                                      top: photoHeight * 0.02,
-                                      child: Transform.rotate(
-                                        angle: 0.03,
-                                        child: SizedBox(
-                                          width: smallWidth,
-                                          height: smallHeight,
-                                          child: buildPhotoTile(
-                                            displayImages.length > 1
-                                                ? displayImages[1]
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: photoWidth * 0.04,
-                                      top: photoHeight * 0.34,
-                                      child: Transform.rotate(
-                                        angle: -0.02,
-                                        child: SizedBox(
-                                          width: smallWidth,
-                                          height: smallHeight,
-                                          child: buildPhotoTile(
-                                            displayImages.length > 2
-                                                ? displayImages[2]
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    if (extraCount > 0 &&
-                                        displayImages.length > 2)
+                                  return Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
                                       Positioned(
-                                        right:
-                                            photoWidth * 0.08 +
-                                            smallWidth * 0.08,
-                                        bottom: photoHeight * 0.08,
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 14,
-                                            vertical: 10,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: colorScheme.onSurface
-                                                .withValues(alpha: 0.64),
-                                            borderRadius: BorderRadius.circular(
-                                              999,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            '+$extraCount',
-                                            style: GoogleFonts.plusJakartaSans(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w700,
-                                              color: colorScheme.surface,
+                                        left: 0,
+                                        top: photoHeight * 0.06,
+                                        child: Transform.rotate(
+                                          angle: -0.04,
+                                          child: SizedBox(
+                                            width: largeWidth,
+                                            height: largeHeight,
+                                            child: buildPhotoTile(
+                                              displayImages[0],
                                             ),
                                           ),
                                         ),
                                       ),
-                                  ],
-                                );
-                              },
+                                      if (displayImages.length > 1)
+                                        Positioned(
+                                          left: largeWidth - smallWidth * 0.08,
+                                          top: photoHeight * 0.12,
+                                          child: Transform.rotate(
+                                            angle: 0.02,
+                                            child: SizedBox(
+                                              width: smallWidth,
+                                              height: smallHeight,
+                                              child: buildPhotoTile(
+                                                displayImages[1],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      if (displayImages.length > 2)
+                                        Positioned(
+                                          left: largeWidth - smallWidth * 0.01,
+                                          top: photoHeight * 0.44,
+                                          child: Transform.rotate(
+                                            angle: -0.05,
+                                            child: SizedBox(
+                                              width: smallWidth,
+                                              height: smallHeight,
+                                              child: buildPhotoTile(
+                                                displayImages[2],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      if (extraCount > 0 &&
+                                          displayImages.length > 2)
+                                        Positioned(
+                                          left: largeWidth + smallWidth * 0.53,
+                                          top: photoHeight * 0.75,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 14,
+                                              vertical: 10,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: colorScheme.onSurface
+                                                  .withValues(alpha: 0.64),
+                                              borderRadius:
+                                                  BorderRadius.circular(999),
+                                            ),
+                                            child: Text(
+                                              '+$extraCount',
+                                              style:
+                                                  GoogleFonts.plusJakartaSans(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: colorScheme.surface,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 22),
-                        Flexible(
-                          flex: 4,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  story.title,
-                                  softWrap: true,
-                                  overflow: TextOverflow.visible,
-                                  style: GoogleFonts.playfairDisplay(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w500,
-                                    color: colorScheme.onSurface,
-                                    height: 1.05,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              Flexible(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    _normalizedDescription(story.description),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 16,
-                                      height: 1.6,
-                                      color: colorScheme.onSurface.withValues(
-                                        alpha: 0.88,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 22),
-                              Flexible(
-                                child: LayoutBuilder(
-                                  builder: (context, boxConstraints) {
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              if (story.emoticon != null &&
-                                                  story.emoticon!.isNotEmpty)
-                                                Text(
-                                                  story.emoticon!,
-                                                  style:
-                                                      GoogleFonts.plusJakartaSans(
-                                                        fontSize: 18,
-                                                      ),
-                                                ),
-                                              if (story.emoticon != null &&
-                                                  story.emoticon!.isNotEmpty)
-                                                const SizedBox(width: 8),
-                                              Flexible(
-                                                child: Text(
-                                                  _moodLabel(story.mood),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style:
-                                                      GoogleFonts.plusJakartaSans(
-                                                        fontSize: 12,
-                                                        color: colorScheme
-                                                            .onSurface
-                                                            .withValues(
-                                                              alpha: 0.76,
-                                                            ),
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Flexible(
-                                          child: Text(
-                                            dateLabel,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.right,
-                                            style: GoogleFonts.plusJakartaSans(
-                                              fontSize: 12,
-                                              color: colorScheme.onSurface
-                                                  .withValues(alpha: 0.76),
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
+                          const SizedBox(height: 20),
+                        ],
+                        Expanded(
+                          flex: hasPhotos ? 4 : 9,
+                          child: buildTextContent(expanded: !hasPhotos),
                         ),
                       ],
                     ),
@@ -527,42 +514,6 @@ class StoryShareWidget extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildEmptyPhotoBackground(ColorScheme colorScheme) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            colorScheme.surfaceContainerHighest.withValues(alpha: 0.18),
-            colorScheme.surface.withValues(alpha: 0.12),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.photo_outlined,
-              size: 72,
-              color: colorScheme.onSurface.withValues(alpha: 0.30),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Sem imagens',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface.withValues(alpha: 0.50),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 

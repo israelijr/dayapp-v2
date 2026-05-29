@@ -14,7 +14,7 @@ class StoryShareTemplateSelector {
       return StoryShareTemplateType.heroMemory;
     }
 
-    if (count <= 5) {
+    if (count <= 8) {
       return StoryShareTemplateType.scrapbook;
     }
 
