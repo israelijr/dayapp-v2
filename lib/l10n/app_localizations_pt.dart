@@ -2193,6 +2193,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get chaptersTitle => 'Capítulos';
 
   @override
+  String get collectionsTitle => 'Coleções';
+
+  @override
+  String get collectionsSubtitle =>
+      'Seus momentos organizados em capítulos e grupos, como uma biblioteca de vida.';
+
+  @override
+  String get groupsTabLabel => 'Grupos';
+
+  @override
   String get chapterShortcutToggle =>
       'Mostrar/ocultar card de capítulos na Home';
 
@@ -4770,6 +4780,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get chaptersTitle => 'Capítulos';
+
+  @override
+  String get collectionsTitle => 'Coleções';
+
+  @override
+  String get collectionsSubtitle =>
+      'Seus momentos organizados em capítulos e grupos, como uma biblioteca de vida.';
+
+  @override
+  String get groupsTabLabel => 'Grupos';
 
   @override
   String get chapterShortcutToggle =>

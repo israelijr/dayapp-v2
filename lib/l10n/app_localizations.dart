@@ -3968,6 +3968,24 @@ abstract class AppLocalizations {
   /// **'Chapters'**
   String get chaptersTitle;
 
+  /// Header title for the Collections screen
+  ///
+  /// In en, this message translates to:
+  /// **'Collections'**
+  String get collectionsTitle;
+
+  /// Header subtitle for the Collections screen
+  ///
+  /// In en, this message translates to:
+  /// **'Your moments organized into chapters and groups, like a life library.'**
+  String get collectionsSubtitle;
+
+  /// Label for the groups tab inside the Collections screen
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get groupsTabLabel;
+
   /// Tooltip for toggling chapter shortcut card visibility
   ///
   /// In en, this message translates to:

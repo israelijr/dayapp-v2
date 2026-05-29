@@ -2204,6 +2204,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get chaptersTitle => 'Capitoli';
 
   @override
+  String get collectionsTitle => 'Collezioni';
+
+  @override
+  String get collectionsSubtitle =>
+      'I tuoi momenti organizzati in capitoli e gruppi, come una biblioteca di vita.';
+
+  @override
+  String get groupsTabLabel => 'Gruppi';
+
+  @override
   String get chapterShortcutToggle =>
       'Mostra/nascondi la scheda capitoli nella Home';
 

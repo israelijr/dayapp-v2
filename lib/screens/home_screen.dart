@@ -165,20 +165,18 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _messengerKey,
       child: Scaffold(
         appBar: AppBar(
-          title: Flexible(
-            child: Text(
-              _selectedIndex == 0
-                  ? l10n.appTitle
-                  : _selectedIndex == 1
-                  ? l10n.manageGroups
-                  : l10n.search,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.notoSerif(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-                height: 1.3,
-              ),
+          title: Text(
+            _selectedIndex == 0
+                ? l10n.appTitle
+                : _selectedIndex == 1
+                ? l10n.collectionsTitle
+                : l10n.search,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.notoSerif(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              height: 1.3,
             ),
           ),
           actions: [
@@ -569,7 +567,7 @@ class _HomeScreenState extends State<HomeScreen> {
             NavigationDestination(
               icon: const Icon(Icons.group_outlined),
               selectedIcon: const Icon(Icons.group),
-              label: AppLocalizations.of(context)!.groups,
+              label: AppLocalizations.of(context)!.collectionsTitle,
             ),
             NavigationDestination(
               icon: const Icon(Icons.search_outlined),

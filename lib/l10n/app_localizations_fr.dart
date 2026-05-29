@@ -2217,6 +2217,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get chaptersTitle => 'Chapitres';
 
   @override
+  String get collectionsTitle => 'Collections';
+
+  @override
+  String get collectionsSubtitle =>
+      'Vos moments organisés en chapitres et groupes, comme une bibliothèque de vie.';
+
+  @override
+  String get groupsTabLabel => 'Groupes';
+
+  @override
   String get chapterShortcutToggle =>
       'Afficher/masquer la carte des chapitres sur l\'accueil';
 

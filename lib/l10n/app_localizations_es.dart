@@ -2208,6 +2208,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get chaptersTitle => 'Capítulos';
 
   @override
+  String get collectionsTitle => 'Colecciones';
+
+  @override
+  String get collectionsSubtitle =>
+      'Tus momentos organizados en capítulos y grupos, como una biblioteca de vida.';
+
+  @override
+  String get groupsTabLabel => 'Grupos';
+
+  @override
   String get chapterShortcutToggle =>
       'Mostrar/ocultar tarjeta de capítulos en Inicio';
 
