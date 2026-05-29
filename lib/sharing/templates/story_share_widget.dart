@@ -292,7 +292,7 @@ class StoryShareWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(36),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: colorScheme.surface.withValues(alpha: 0.42),
+                    color: colorScheme.surface.withValues(alpha: 0.52),
                     borderRadius: BorderRadius.circular(36),
                     border: Border.all(
                       color: colorScheme.onSurface.withValues(alpha: 0.06),
