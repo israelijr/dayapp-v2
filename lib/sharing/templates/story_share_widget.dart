@@ -89,7 +89,7 @@ class StoryShareWidget extends StatelessWidget {
             if (primaryPhoto != null)
               Image.memory(primaryPhoto, fit: BoxFit.cover)
             else
-              Container(color: colorScheme.primaryContainer),
+              _buildEmptyPhotoBackground(colorScheme),
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -527,6 +527,42 @@ class StoryShareWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildEmptyPhotoBackground(ColorScheme colorScheme) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            colorScheme.surfaceContainerHighest.withValues(alpha: 0.18),
+            colorScheme.surface.withValues(alpha: 0.12),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.photo_outlined,
+              size: 72,
+              color: colorScheme.onSurface.withValues(alpha: 0.30),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Sem imagens',
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onSurface.withValues(alpha: 0.50),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

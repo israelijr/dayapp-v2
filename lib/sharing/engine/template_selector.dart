@@ -4,6 +4,10 @@ enum StoryShareTemplateType { heroMemory, scrapbook, minimalTimeline }
 
 class StoryShareTemplateSelector {
   static StoryShareTemplateType selectTemplate(StoryData story) {
+    if (story.images.isEmpty) {
+      return StoryShareTemplateType.heroMemory;
+    }
+
     final count = story.images.length;
 
     if (count <= 1) {

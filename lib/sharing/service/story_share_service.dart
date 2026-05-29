@@ -7,6 +7,7 @@ import 'package:dayapp/providers/pin_provider.dart';
 import 'package:dayapp/sharing/renderer/story_share_renderer.dart';
 import 'package:dayapp/sharing/story_data.dart';
 import 'package:dayapp/sharing/story_share_preview_screen.dart';
+import 'package:dayapp/sharing/templates/story_share_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -17,7 +18,27 @@ class StoryShareService {
     Historia historia,
     String localeName,
   ) async {
-    final args = _StoryShareArguments.fromContext(context);
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    final localizations = AppLocalizations.of(context);
+    final overlayState = Overlay.maybeOf(context);
+    final pinProvider = Provider.of<PinProvider>(context, listen: false);
+
+    if (messenger == null || localizations == null || overlayState == null) {
+      debugPrint('StoryShareService: missing UI context for sharing.');
+      messenger?.showSnackBar(
+        SnackBar(
+          content: Text(localizations?.shareError ?? 'Erro ao compartilhar.'),
+        ),
+      );
+      return;
+    }
+
+    final args = _StoryShareArguments(
+      messenger: messenger,
+      localizations: localizations,
+      overlayState: overlayState,
+      pinProvider: pinProvider,
+    );
     final navigator = Navigator.of(context);
     args.pinProvider.isPickingExternalMedia = true;
 
@@ -187,13 +208,4 @@ class _StoryShareArguments {
     required this.overlayState,
     required this.pinProvider,
   });
-
-  factory _StoryShareArguments.fromContext(BuildContext context) {
-    return _StoryShareArguments(
-      messenger: ScaffoldMessenger.of(context),
-      localizations: AppLocalizations.of(context)!,
-      overlayState: Overlay.of(context),
-      pinProvider: Provider.of<PinProvider>(context, listen: false),
-    );
-  }
 }
