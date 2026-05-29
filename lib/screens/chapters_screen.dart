@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:animations/animations.dart';
 import 'package:dayapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +26,73 @@ import '../services/capitulo_sugestao_service.dart';
 import '../widgets/compact_historia_card.dart';
 import '../widgets/historia_media_widgets.dart';
 import '../widgets/rich_text_viewer_widget.dart';
+
+Future<void> openCreateChapterScreen(BuildContext context) async {
+  final l10n = AppLocalizations.of(context)!;
+  final auth = Provider.of<AuthProvider>(context, listen: false);
+  final userId = auth.user?.id;
+  if (userId == null) return;
+
+  final capituloHelper = CapituloHelper();
+  final entradasComTags = await capituloHelper.listEntradasElegiveisComTags(
+    userId,
+  );
+  if (!context.mounted) return;
+
+  final entradas = entradasComTags.map((e) => e.historia).toList();
+  final tagNomesPorId = {
+    for (final e in entradasComTags)
+      if (e.historia.id != null) e.historia.id!: e.tagNomes,
+  };
+
+  final resultado = await Navigator.of(context).push<_CreateCapituloResult?>(
+    MaterialPageRoute(
+      fullscreenDialog: true,
+      builder: (_) =>
+          _CreateCapituloPage(entradas: entradas, tagNomesPorId: tagNomesPorId),
+    ),
+  );
+
+  if (resultado == null) return;
+
+  final selectedEntries =
+      entradas
+          .where(
+            (entry) =>
+                entry.id != null && resultado.entradaIds.contains(entry.id),
+          )
+          .toList()
+        ..sort((a, b) => a.data.compareTo(b.data));
+
+  if (selectedEntries.length < 3) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.chapterMinimumEntries)));
+    return;
+  }
+
+  final capitulo = Capitulo(
+    userId: userId,
+    titulo: resultado.titulo,
+    descricao: resultado.descricao,
+    dataInicio: selectedEntries.first.data,
+    dataFim: selectedEntries.last.data,
+    criadoAutomaticamente: false,
+    fotoPath: resultado.fotoPath,
+  );
+
+  await capituloHelper.insertCapituloWithEntradas(
+    capitulo,
+    selectedEntries.map((entry) => entry.id!).toList(growable: false),
+  );
+
+  if (!context.mounted) return;
+  Provider.of<RefreshProvider>(context, listen: false).refresh();
+  ScaffoldMessenger.of(
+    context,
+  ).showSnackBar(SnackBar(content: Text(l10n.chapterCreated)));
+}
 
 // ---------------------------------------------------------------------------
 // Helpers visuais compartilhados entre as telas de capítulos
@@ -339,12 +407,20 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                     children: [
                       Text(
                         sugestao.tituloSugerido,
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: GoogleFonts.notoSerif(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          height: 1.25,
+                          color: colorScheme.onSurface,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         periodo,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.2,
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),
@@ -489,7 +565,12 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                     Expanded(
                       child: Text(
                         capitulo.titulo,
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: GoogleFonts.notoSerif(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          height: 1.25,
+                          color: colorScheme.onSurface,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -499,7 +580,17 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                     ),
                   ],
                 ),
-                // Imagem do capítulo (entre título e datas)
+                const SizedBox(height: 8),
+                // Datas
+                Text(
+                  periodo,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.2,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
                 if (hasChapterPhoto) ...[
                   const SizedBox(height: 10),
                   ClipRRect(
@@ -512,22 +603,18 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                     ),
                   ),
                 ],
-                const SizedBox(height: 10),
-                // Datas
-                Text(
-                  periodo,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
                 if (descricao != null && descricao.isNotEmpty) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Text(
                     descricao,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 1.5,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
                 const SizedBox(height: 10),
@@ -1568,6 +1655,20 @@ class _EntradasChecklistState extends State<_EntradasChecklist> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ChapterDetailsScreen extends StatelessWidget {
+  final CapituloResumo resumo;
+
+  const ChapterDetailsScreen({required this.resumo, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _ChapterDetailsScreen(
+      resumoInicial: resumo,
+      capituloHelper: CapituloHelper(),
     );
   }
 }

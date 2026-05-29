@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
+import 'package:dayapp/screens/chapters_screen.dart';
 import 'package:dayapp/screens/create_historia_screen.dart';
 import 'package:dayapp/widgets/pulse_animation.dart';
 import 'package:flutter/material.dart';
@@ -543,15 +544,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 scaleTarget: 1.06,
                 child: FloatingActionButton.extended(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      RouteTransitionHelper.slideUpRotateTransition(
-                        const CreateHistoriaScreen(),
-                      ),
-                    );
+                    if (_selectedIndex == 0) {
+                      Navigator.push(
+                        context,
+                        RouteTransitionHelper.slideUpRotateTransition(
+                          const CreateHistoriaScreen(),
+                        ),
+                      );
+                    } else {
+                      openCreateChapterScreen(context);
+                    }
                   },
                   icon: const Icon(Icons.add),
-                  label: Text(AppLocalizations.of(context)!.newStory),
+                  label: Text(
+                    _selectedIndex == 0
+                        ? AppLocalizations.of(context)!.newStory
+                        : AppLocalizations.of(context)!.chapterLinkModeNew,
+                  ),
                 ),
               )
             : null,
@@ -560,18 +569,42 @@ class _HomeScreenState extends State<HomeScreen> {
           onDestinationSelected: _onItemTapped,
           destinations: [
             NavigationDestination(
-              icon: const Icon(Icons.home_outlined),
-              selectedIcon: const Icon(Icons.home),
+              icon: Image.asset(
+                'assets/image/home_1.png',
+                width: 24,
+                height: 24,
+              ),
+              selectedIcon: Image.asset(
+                'assets/image/home_2.png',
+                width: 24,
+                height: 24,
+              ),
               label: AppLocalizations.of(context)!.home,
             ),
             NavigationDestination(
-              icon: const Icon(Icons.group_outlined),
-              selectedIcon: const Icon(Icons.group),
+              icon: Image.asset(
+                'assets/image/colecao_1.png',
+                width: 24,
+                height: 24,
+              ),
+              selectedIcon: Image.asset(
+                'assets/image/colecao_2.png',
+                width: 24,
+                height: 24,
+              ),
               label: AppLocalizations.of(context)!.collectionsTitle,
             ),
             NavigationDestination(
-              icon: const Icon(Icons.search_outlined),
-              selectedIcon: const Icon(Icons.search),
+              icon: Image.asset(
+                'assets/image/pesquisar_1.png',
+                width: 24,
+                height: 24,
+              ),
+              selectedIcon: Image.asset(
+                'assets/image/pesquisar_2.png',
+                width: 24,
+                height: 24,
+              ),
               label: AppLocalizations.of(context)!.search,
             ),
           ],

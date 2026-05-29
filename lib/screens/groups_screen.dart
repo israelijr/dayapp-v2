@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -77,11 +80,18 @@ class _GroupsScreenState extends State<GroupsScreen> {
     _loadCollections();
   }
 
+  Future<void> _openChapter(CapituloResumo resumo) async {
+    await _navigateAndRefresh(ChapterDetailsScreen(resumo: resumo));
+  }
+
   Widget _buildChapterCard(BuildContext context, CapituloResumo resumo) {
     final l10n = AppLocalizations.of(context)!;
     final capitulo = resumo.capitulo;
     final period =
         '${DateFormat('dd/MM/yy', l10n.localeName).format(capitulo.dataInicio)} - ${DateFormat('dd/MM/yy', l10n.localeName).format(capitulo.dataFim)}';
+
+    final hasChapterPhoto =
+        capitulo.fotoPath != null && File(capitulo.fotoPath!).existsSync();
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -89,81 +99,92 @@ class _GroupsScreenState extends State<GroupsScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 0,
       child: InkWell(
-        onTap: () => _navigateAndRefresh(const ChaptersScreen()),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: Theme.of(
-                context,
-              ).colorScheme.onSurface.withValues(alpha: 0.08),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(
-                  context,
-                ).colorScheme.onSurface.withValues(alpha: 0.03),
-                blurRadius: 18,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                capitulo.titulo,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
+        onTap: () => _openChapter(resumo),
+        onDoubleTap: () => _openChapter(resumo),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.08),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.03),
+                    blurRadius: 18,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              Text(
-                period,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (capitulo.descricao != null &&
-                  capitulo.descricao!.isNotEmpty) ...[
-                const SizedBox(height: 12),
-                Text(
-                  capitulo.descricao!,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-              const SizedBox(height: 14),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      l10n.chapterEntriesCount(resumo.totalEntradas),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w700,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          capitulo.titulo,
+                          style: GoogleFonts.notoSerif(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            height: 1.25,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
                       ),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    period,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.2,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  if (resumo.topTags.isNotEmpty)
-                    ...resumo.topTags.map(
-                      (tag) => Container(
+                  if (hasChapterPhoto) ...[
+                    const SizedBox(height: 16),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.file(
+                        File(capitulo.fotoPath!),
+                        width: double.infinity,
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                  if (capitulo.descricao != null &&
+                      capitulo.descricao!.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      capitulo.descricao!,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 1.5,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 14),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: 6,
@@ -171,19 +192,64 @@ class _GroupsScreenState extends State<GroupsScreen> {
                         decoration: BoxDecoration(
                           color: Theme.of(
                             context,
-                          ).colorScheme.surfaceContainerHighest,
+                          ).colorScheme.primary.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          tag,
-                          style: Theme.of(context).textTheme.labelSmall,
+                          l10n.chapterEntriesCount(resumo.totalEntradas),
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
                         ),
                       ),
-                    ),
+                      if (resumo.topTags.isNotEmpty)
+                        ...resumo.topTags.map(
+                          (tag) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.surfaceContainerHighest,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              tag,
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
+            ),
+            Positioned(
+              top: 14,
+              right: 14,
+              child: SizedBox(
+                width: 34,
+                height: 34,
+                child: FloatingActionButton.small(
+                  heroTag: null,
+                  elevation: 1,
+                  tooltip: l10n.preview,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerLow,
+                  foregroundColor: Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant,
+                  onPressed: () => _openChapter(resumo),
+                  child: const Icon(Icons.open_in_full_rounded, size: 16),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -317,16 +383,22 @@ class _GroupsScreenState extends State<GroupsScreen> {
                       unselectedLabelStyle: Theme.of(
                         context,
                       ).textTheme.bodyMedium,
-                      indicatorColor: Theme.of(context).colorScheme.primary,
-                      indicatorWeight: 3,
+                      indicator: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                      indicatorPadding: EdgeInsets.zero,
+                      indicatorSize: TabBarIndicatorSize.label,
                       tabs: [
                         Tab(text: l10n.chaptersTitle),
                         Tab(text: l10n.groupsTabLabel),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Divider(height: 1),
                   Expanded(
                     child: TabBarView(
                       children: [
