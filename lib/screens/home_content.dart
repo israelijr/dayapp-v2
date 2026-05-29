@@ -276,27 +276,78 @@ class _HomeContentState extends State<HomeContent> {
     final userId = auth.user?.id ?? '';
     final db = await DatabaseHelper().database;
 
-    final result = await db.query(
+    final activeCountResult = await db.rawQuery(
+      'SELECT COUNT(*) AS cnt FROM historia WHERE user_id = ? AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL',
+      [userId],
+    );
+    final activeCount = (activeCountResult.first['cnt'] ?? 0) as int;
+
+    final activeResults = await db.query(
       'historia',
       where:
           'user_id = ? AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL',
       whereArgs: [userId],
       orderBy: 'data DESC',
-      limit: _pageSize,
+      limit: activeCount > 5 ? _pageSize : 5,
       offset: offset,
     );
 
-    final newHistorias = result.map((map) => Historia.fromMap(map)).toList();
+    final activeHistorias = activeResults
+        .map((map) => Historia.fromMap(map))
+        .toList(growable: false);
+
+    if (activeCount > 5) {
+      if (mounted) {
+        setState(() {
+          final existingIds = _historias.map((h) => h.id).toSet();
+          final filteredHistorias = activeHistorias
+              .where((h) => !existingIds.contains(h.id))
+              .toList();
+          _historias.addAll(filteredHistorias);
+          _hasMoreData = activeHistorias.length == _pageSize;
+        });
+      }
+      return;
+    }
+
+    if (offset > 0) {
+      // Não há paginação quando usamos o modo de completar até 5 histórias.
+      if (mounted) {
+        setState(() {
+          _hasMoreData = false;
+        });
+      }
+      return;
+    }
+
+    final remaining = 5 - activeHistorias.length;
+    final List<Historia> combinedHistorias;
+    if (remaining > 0) {
+      final otherResults = await db.query(
+        'historia',
+        where:
+            'user_id = ? AND excluido IS NULL AND (grupo IS NOT NULL OR arquivado IS NOT NULL)',
+        whereArgs: [userId],
+        orderBy: 'data DESC',
+        limit: remaining,
+      );
+      final otherHistorias = otherResults
+          .map((map) => Historia.fromMap(map))
+          .toList(growable: false);
+      combinedHistorias = [...activeHistorias, ...otherHistorias]
+        ..sort((a, b) => b.data.compareTo(a.data));
+    } else {
+      combinedHistorias = activeHistorias;
+    }
 
     if (mounted) {
       setState(() {
-        // Evita duplicatas verificando IDs existentes
         final existingIds = _historias.map((h) => h.id).toSet();
-        final filteredHistorias = newHistorias
+        final filteredHistorias = combinedHistorias
             .where((h) => !existingIds.contains(h.id))
             .toList();
         _historias.addAll(filteredHistorias);
-        _hasMoreData = newHistorias.length == _pageSize;
+        _hasMoreData = false;
       });
     }
   }
@@ -597,6 +648,11 @@ class _HomeContentState extends State<HomeContent> {
         heroTag: _storyHeroTag(historia),
         flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
         convertLegacyEmoticon: _convertLegacyEmoticon,
+        stateLabel: historia.grupo?.isNotEmpty == true
+            ? historia.grupo
+            : historia.arquivado != null
+            ? AppLocalizations.of(context)!.archivedStateLabel
+            : null,
         onPreview: () => _openStoryPreview(historia),
         onDoubleTap: () => _openStoryPreview(historia),
       ),
@@ -663,6 +719,11 @@ class _HomeContentState extends State<HomeContent> {
         child: CompactHistoriaCard(
           historia: historia,
           localeName: AppLocalizations.of(context)!.localeName,
+          stateLabel: historia.grupo?.isNotEmpty == true
+              ? historia.grupo
+              : historia.arquivado != null
+              ? AppLocalizations.of(context)!.archivedStateLabel
+              : null,
           trailing: _buildExpandFab(historia),
           overlayTrailing: true,
           onDoubleTap: () => _openStoryPreview(historia),

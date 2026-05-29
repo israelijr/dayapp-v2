@@ -15,6 +15,7 @@ class CompactHistoriaCard extends StatefulWidget {
   final VoidCallback? onDoubleTap;
   final EdgeInsetsGeometry margin;
   final bool showMood;
+  final String? stateLabel;
 
   const CompactHistoriaCard({
     required this.historia,
@@ -25,6 +26,7 @@ class CompactHistoriaCard extends StatefulWidget {
     this.onDoubleTap,
     this.margin = const EdgeInsets.only(bottom: 12),
     this.showMood = true,
+    this.stateLabel,
     super.key,
   });
 
@@ -235,6 +237,25 @@ class _CompactHistoriaCardState extends State<CompactHistoriaCard> {
                           const SizedBox(height: 6),
                           Row(
                             children: [
+                              if (widget.stateLabel != null &&
+                                  widget.stateLabel!.isNotEmpty) ...[
+                                Flexible(
+                                  child: Text(
+                                    widget.stateLabel!,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: 0.3,
+                                      color: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall?.color,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                              ],
                               Text(
                                 DateFormat(
                                   'dd/MM/yyyy',

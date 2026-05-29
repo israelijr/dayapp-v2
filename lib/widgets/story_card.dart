@@ -28,6 +28,7 @@ class StoryCard extends StatelessWidget {
   final Widget? footer;
   final int descriptionMaxLength;
   final TextStyle? descriptionTextStyle;
+  final String? stateLabel;
 
   const StoryCard({
     required this.historia,
@@ -39,6 +40,7 @@ class StoryCard extends StatelessWidget {
     this.footer,
     this.descriptionMaxLength = 155,
     this.descriptionTextStyle,
+    this.stateLabel,
     super.key,
   });
 
@@ -184,6 +186,26 @@ class StoryCard extends StatelessWidget {
                                   if (historia.emoticon != null &&
                                       historia.emoticon!.isNotEmpty)
                                     const SizedBox(width: 6),
+                                  if (stateLabel != null &&
+                                      stateLabel!.isNotEmpty) ...[
+                                    Flexible(
+                                      child: Text(
+                                        stateLabel!,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 0.3,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant
+                                              .withValues(alpha: 0.72),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                  ],
                                   Expanded(
                                     child: Text(
                                       DateFormat(
