@@ -213,43 +213,22 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
               itemCount: _grupos.length + 1,
               itemBuilder: (context, index) {
                 if (index == _grupos.length) {
-                  return Container(
+                  return Card(
                     margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerLowest,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHighest,
+                    elevation: 3,
+                    shadowColor: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.08),
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
-                      border: Border(
-                        left: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          width: 4,
-                        ),
-                        top: BorderSide(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.outlineVariant.withValues(alpha: 0.17),
-                        ),
-                        right: BorderSide(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.outlineVariant.withValues(alpha: 0.17),
-                        ),
-                        bottom: BorderSide(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.outlineVariant.withValues(alpha: 0.17),
-                        ),
+                      side: BorderSide(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.outlineVariant.withValues(alpha: 0.18),
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withValues(alpha: 0.06),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
                     ),
                     child: ListTile(
                       contentPadding: const EdgeInsets.symmetric(
@@ -296,41 +275,20 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                 }
 
                 final grupo = _grupos[index];
-                return Container(
+                return Card(
                   margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerLowest,
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  elevation: 3,
+                  shadowColor: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.08),
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    border: Border(
-                      left: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 4,
-                      ),
-                      top: BorderSide(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.outlineVariant.withValues(alpha: 0.17),
-                      ),
-                      right: BorderSide(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.outlineVariant.withValues(alpha: 0.17),
-                      ),
-                      bottom: BorderSide(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.outlineVariant.withValues(alpha: 0.17),
-                      ),
+                    side: BorderSide(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.outlineVariant.withValues(alpha: 0.18),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withValues(alpha: 0.06),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
                   ),
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(
@@ -343,13 +301,16 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                       decoration: BoxDecoration(
                         color: Theme.of(
                           context,
-                        ).colorScheme.surfaceContainerHighest,
+                        ).colorScheme.primaryContainer.withValues(alpha: 0.22),
                         shape: BoxShape.circle,
                       ),
                       alignment: Alignment.center,
                       child: Text(
                         grupo.emoticon ?? '📁',
-                        style: const TextStyle(fontSize: 20),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ),
                     title: Text(
@@ -361,16 +322,21 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                     ),
                     subtitle: Text(
                       'Criado em ${grupo.dataCriacao?.toLocal().toString().split(' ')[0] ?? ''}',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
                           icon: const Icon(Icons.edit),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                           onPressed: () => _showGroupDialog(grupo: grupo),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                           onPressed: () => _deleteGrupo(grupo),
                         ),
                       ],

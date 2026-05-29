@@ -70,8 +70,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
         });
       }
     } finally {
-      if (!mounted) return;
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -278,62 +279,68 @@ class _GroupsScreenState extends State<GroupsScreen> {
         crossAxisCount: MediaQuery.of(context).size.width >= 600 ? 3 : 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 0.78,
+        childAspectRatio: 0.75,
       ),
       itemCount: _grupos.length,
       itemBuilder: (context, index) {
         final grupo = _grupos[index];
         final count = _grupoCounts[grupo.nome] ?? 0;
 
-        return InkWell(
-          borderRadius: BorderRadius.circular(28),
-          onTap: () => _navigateAndRefresh(GroupStoriesScreen(grupo: grupo)),
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(
-                color: Theme.of(
-                  context,
-                ).colorScheme.outlineVariant.withValues(alpha: 0.12),
-              ),
-            ),
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(28),
+            onTap: () => _navigateAndRefresh(GroupStoriesScreen(grupo: grupo)),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 88,
-                  height: 88,
+                  width: 140,
+                  height: 140,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Theme.of(
                       context,
-                    ).colorScheme.primary.withValues(alpha: 0.12),
+                    ).colorScheme.primaryContainer.withValues(alpha: 0.24),
+                    border: Border.all(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.18),
+                      width: 1.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.06),
+                        blurRadius: 18,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
                   ),
                   alignment: Alignment.center,
                   child: Text(
                     grupo.emoticon ?? '📁',
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 42,
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
                 const SizedBox(height: 12),
-                Flexible(
-                  child: Text(
-                    grupo.nome,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+                Text(
+                  grupo.nome,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color:
+                        Theme.of(context).appBarTheme.foregroundColor ??
+                        Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Text(
                   '$count ${count == 1 ? l10n.record : l10n.records}',
                   textAlign: TextAlign.center,
