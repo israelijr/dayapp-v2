@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:dayapp/l10n/generated/app_localizations.dart';
@@ -32,19 +33,33 @@ class StorySharePreviewScreen extends StatelessWidget {
               ),
             ),
           ),
-          Center(
-            child: FractionallySizedBox(
-              widthFactor: 0.92,
-              heightFactor: 0.80,
-              child: Material(
-                color: Colors.transparent,
-                elevation: 12,
-                shadowColor: colorScheme.onSurface.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(34),
-                clipBehavior: Clip.antiAlias,
-                child: StoryShareWidget(story: story),
-              ),
-            ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isLandscape = constraints.maxWidth > constraints.maxHeight;
+              final targetAspectRatio = isLandscape ? 4 / 3 : 9 / 16;
+              final maxWidth =
+                  constraints.maxWidth * (isLandscape ? 0.96 : 0.92);
+              final maxHeight =
+                  constraints.maxHeight * (isLandscape ? 0.90 : 0.82);
+              final widthByHeight = maxHeight * targetAspectRatio;
+              final width = math.min(maxWidth, widthByHeight);
+              final height = width / targetAspectRatio;
+
+              return Center(
+                child: SizedBox(
+                  width: width,
+                  height: height,
+                  child: Material(
+                    color: Colors.transparent,
+                    elevation: 12,
+                    shadowColor: colorScheme.onSurface.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(34),
+                    clipBehavior: Clip.antiAlias,
+                    child: StoryShareWidget(story: story),
+                  ),
+                ),
+              );
+            },
           ),
           Positioned(
             left: 16,

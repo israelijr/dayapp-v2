@@ -308,176 +308,215 @@ class StoryShareWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(18),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        AspectRatio(
-                          aspectRatio: 1.05,
-                          child: LayoutBuilder(
-                            builder: (context, photoConstraints) {
-                              final photoWidth = photoConstraints.maxWidth;
-                              final photoHeight = photoConstraints.maxHeight;
-                              final largeWidth = photoWidth * 0.56;
-                              final largeHeight = photoHeight * 0.66;
-                              final smallWidth = photoWidth * 0.34;
-                              final smallHeight = photoHeight * 0.40;
-
-                              return Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  Positioned(
-                                    left: 0,
-                                    top: photoHeight * 0.06,
-                                    child: Transform.rotate(
-                                      angle: -0.03,
-                                      child: SizedBox(
-                                        width: largeWidth,
-                                        height: largeHeight,
-                                        child: buildPhotoTile(
-                                          displayImages.isNotEmpty
-                                              ? displayImages[0]
-                                              : null,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: photoWidth * 0.02,
-                                    top: photoHeight * 0.02,
-                                    child: Transform.rotate(
-                                      angle: 0.03,
-                                      child: SizedBox(
-                                        width: smallWidth,
-                                        height: smallHeight,
-                                        child: buildPhotoTile(
-                                          displayImages.length > 1
-                                              ? displayImages[1]
-                                              : null,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: photoWidth * 0.04,
-                                    top: photoHeight * 0.34,
-                                    child: Transform.rotate(
-                                      angle: -0.02,
-                                      child: SizedBox(
-                                        width: smallWidth,
-                                        height: smallHeight,
-                                        child: buildPhotoTile(
-                                          displayImages.length > 2
-                                              ? displayImages[2]
-                                              : null,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  if (extraCount > 0 &&
-                                      displayImages.length > 2)
-                                    Positioned(
-                                      right:
-                                          photoWidth * 0.08 + smallWidth * 0.08,
-                                      bottom: photoHeight * 0.08,
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 14,
-                                          vertical: 10,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: colorScheme.onSurface
-                                              .withValues(alpha: 0.64),
-                                          borderRadius: BorderRadius.circular(
-                                            999,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          '+$extraCount',
-                                          style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700,
-                                            color: colorScheme.surface,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 22),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            story.title,
-                            softWrap: true,
-                            overflow: TextOverflow.visible,
-                            style: GoogleFonts.playfairDisplay(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w500,
-                              color: colorScheme.onSurface,
-                              height: 1.05,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 14),
                         Flexible(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              _normalizedDescription(story.description),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 16,
-                                height: 1.6,
-                                color: colorScheme.onSurface.withValues(
-                                  alpha: 0.88,
-                                ),
-                              ),
+                          flex: 5,
+                          child: AspectRatio(
+                            aspectRatio: 1.05,
+                            child: LayoutBuilder(
+                              builder: (context, photoConstraints) {
+                                final photoWidth = photoConstraints.maxWidth;
+                                final photoHeight = photoConstraints.maxHeight;
+                                final largeWidth = photoWidth * 0.56;
+                                final largeHeight = photoHeight * 0.66;
+                                final smallWidth = photoWidth * 0.34;
+                                final smallHeight = photoWidth * 0.40;
+
+                                return Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Positioned(
+                                      left: 0,
+                                      top: photoHeight * 0.06,
+                                      child: Transform.rotate(
+                                        angle: -0.03,
+                                        child: SizedBox(
+                                          width: largeWidth,
+                                          height: largeHeight,
+                                          child: buildPhotoTile(
+                                            displayImages.isNotEmpty
+                                                ? displayImages[0]
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: photoWidth * 0.02,
+                                      top: photoHeight * 0.02,
+                                      child: Transform.rotate(
+                                        angle: 0.03,
+                                        child: SizedBox(
+                                          width: smallWidth,
+                                          height: smallHeight,
+                                          child: buildPhotoTile(
+                                            displayImages.length > 1
+                                                ? displayImages[1]
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: photoWidth * 0.04,
+                                      top: photoHeight * 0.34,
+                                      child: Transform.rotate(
+                                        angle: -0.02,
+                                        child: SizedBox(
+                                          width: smallWidth,
+                                          height: smallHeight,
+                                          child: buildPhotoTile(
+                                            displayImages.length > 2
+                                                ? displayImages[2]
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    if (extraCount > 0 &&
+                                        displayImages.length > 2)
+                                      Positioned(
+                                        right:
+                                            photoWidth * 0.08 +
+                                            smallWidth * 0.08,
+                                        bottom: photoHeight * 0.08,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 14,
+                                            vertical: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: colorScheme.onSurface
+                                                .withValues(alpha: 0.64),
+                                            borderRadius: BorderRadius.circular(
+                                              999,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            '+$extraCount',
+                                            style: GoogleFonts.plusJakartaSans(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700,
+                                              color: colorScheme.surface,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                );
+                              },
                             ),
                           ),
                         ),
                         const SizedBox(height: 22),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                if (story.emoticon != null &&
-                                    story.emoticon!.isNotEmpty)
-                                  Text(
-                                    story.emoticon!,
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                if (story.emoticon != null &&
-                                    story.emoticon!.isNotEmpty)
-                                  const SizedBox(width: 8),
-                                Text(
-                                  _moodLabel(story.mood),
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 12,
-                                    color: colorScheme.onSurface.withValues(
-                                      alpha: 0.76,
-                                    ),
-                                    fontWeight: FontWeight.w600,
+                        Flexible(
+                          flex: 4,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  story.title,
+                                  softWrap: true,
+                                  overflow: TextOverflow.visible,
+                                  style: GoogleFonts.playfairDisplay(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w500,
+                                    color: colorScheme.onSurface,
+                                    height: 1.05,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Text(
-                              dateLabel,
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 12,
-                                color: colorScheme.onSurface.withValues(
-                                  alpha: 0.76,
-                                ),
-                                fontWeight: FontWeight.w600,
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 14),
+                              Flexible(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    _normalizedDescription(story.description),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 16,
+                                      height: 1.6,
+                                      color: colorScheme.onSurface.withValues(
+                                        alpha: 0.88,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 22),
+                              Flexible(
+                                child: LayoutBuilder(
+                                  builder: (context, boxConstraints) {
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              if (story.emoticon != null &&
+                                                  story.emoticon!.isNotEmpty)
+                                                Text(
+                                                  story.emoticon!,
+                                                  style:
+                                                      GoogleFonts.plusJakartaSans(
+                                                        fontSize: 18,
+                                                      ),
+                                                ),
+                                              if (story.emoticon != null &&
+                                                  story.emoticon!.isNotEmpty)
+                                                const SizedBox(width: 8),
+                                              Flexible(
+                                                child: Text(
+                                                  _moodLabel(story.mood),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style:
+                                                      GoogleFonts.plusJakartaSans(
+                                                        fontSize: 12,
+                                                        color: colorScheme
+                                                            .onSurface
+                                                            .withValues(
+                                                              alpha: 0.76,
+                                                            ),
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Flexible(
+                                          child: Text(
+                                            dateLabel,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.right,
+                                            style: GoogleFonts.plusJakartaSans(
+                                              fontSize: 12,
+                                              color: colorScheme.onSurface
+                                                  .withValues(alpha: 0.76),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
