@@ -753,6 +753,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get share => 'Compartir';
 
   @override
+  String get scrapbookTemplateLabel => 'Scrapbook';
+
+  @override
   String get home => 'Inicio';
 
   @override

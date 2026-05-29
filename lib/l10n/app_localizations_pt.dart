@@ -747,6 +747,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get share => 'Compartilhar';
 
   @override
+  String get scrapbookTemplateLabel => 'Scrapbook';
+
+  @override
   String get home => 'Início';
 
   @override
@@ -3335,6 +3338,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get share => 'Compartilhar';
+
+  @override
+  String get scrapbookTemplateLabel => 'Scrapbook';
 
   @override
   String get home => 'Início';

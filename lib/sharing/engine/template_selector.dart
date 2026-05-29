@@ -1,6 +1,11 @@
 import '../story_data.dart';
 
-enum StoryShareTemplateType { heroMemory, scrapbook, minimalTimeline }
+enum StoryShareTemplateType {
+  heroMemory,
+  polaroidStack,
+  scrapbook,
+  minimalTimeline,
+}
 
 class StoryShareTemplateSelector {
   static StoryShareTemplateType selectTemplate(StoryData story) {
@@ -10,14 +15,14 @@ class StoryShareTemplateSelector {
 
     final count = story.images.length;
 
-    if (count <= 1) {
+    if (count == 5) {
+      return StoryShareTemplateType.polaroidStack;
+    }
+
+    if (count <= 3) {
       return StoryShareTemplateType.heroMemory;
     }
 
-    if (count <= 8) {
-      return StoryShareTemplateType.scrapbook;
-    }
-
-    return StoryShareTemplateType.minimalTimeline;
+    return StoryShareTemplateType.scrapbook;
   }
 }

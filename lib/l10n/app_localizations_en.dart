@@ -742,6 +742,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get share => 'Share';
 
   @override
+  String get scrapbookTemplateLabel => 'Scrapbook';
+
+  @override
   String get home => 'Home';
 
   @override

@@ -313,6 +313,8 @@
   "@deleteGroupTitle": { "description": "Dialog title for group deletion", "type": "text" },
   "share": "Share",
   "@share": { "description": "Label for share action", "type": "text" },
+  "scrapbookTemplateLabel": "Scrapbook",
+  "@scrapbookTemplateLabel": { "description": "Label for the Scrapbook story share template", "type": "text" },
   "home": "Home",
   "@home": { "description": "Label for home tab", "type": "text" },
   "groups": "Groups",

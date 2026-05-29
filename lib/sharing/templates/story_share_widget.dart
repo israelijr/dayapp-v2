@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/sharing/engine/template_selector.dart';
 import 'package:dayapp/sharing/story_data.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,8 @@ class StoryShareWidget extends StatelessWidget {
     switch (templateType) {
       case StoryShareTemplateType.heroMemory:
         return _buildHeroMemory(context);
+      case StoryShareTemplateType.polaroidStack:
+        return _buildPolaroidStack(context);
       case StoryShareTemplateType.scrapbook:
         return _buildScrapbook(context);
       case StoryShareTemplateType.minimalTimeline:
@@ -54,6 +57,8 @@ class StoryShareWidget extends StatelessWidget {
         final horizontalPadding = width * 0.045;
         final verticalPadding = height * 0.045;
         final innerGap = width * 0.035;
+        final smallWidth = width * 0.28;
+        final smallHeight = height * 0.23;
 
         Widget buildPhotoCard(Uint8List? bytes, double rotation) {
           return Transform.rotate(
@@ -122,28 +127,64 @@ class StoryShareWidget extends StatelessWidget {
                       children: [
                         Expanded(
                           flex: 6,
-                          child: buildPhotoCard(primaryPhoto, -0.025),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Transform.rotate(
+                              angle: -0.06,
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: double.infinity,
+                                child: buildPhotoCard(primaryPhoto, 0),
+                              ),
+                            ),
+                          ),
                         ),
                         SizedBox(width: innerGap),
-                        Expanded(
-                          flex: 4,
+                        SizedBox(
+                          width: width * 0.32,
                           child: Column(
                             children: [
                               Expanded(
-                                child: buildPhotoCard(
-                                  secondaryPhotos.isNotEmpty
-                                      ? secondaryPhotos[0]
-                                      : null,
-                                  0.04,
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Transform.translate(
+                                    offset: const Offset(-25, 0),
+                                    child: Transform.rotate(
+                                      angle: 0.06,
+                                      child: SizedBox(
+                                        width: smallWidth + 20,
+                                        height: smallHeight,
+                                        child: buildPhotoCard(
+                                          secondaryPhotos.isNotEmpty
+                                              ? secondaryPhotos[0]
+                                              : null,
+                                          0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                               SizedBox(height: innerGap),
                               Expanded(
-                                child: buildPhotoCard(
-                                  secondaryPhotos.length > 1
-                                      ? secondaryPhotos[1]
-                                      : null,
-                                  -0.03,
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Transform.translate(
+                                    offset: const Offset(-20, 0),
+                                    child: Transform.rotate(
+                                      angle: -0.065,
+                                      child: SizedBox(
+                                        width: smallWidth + 150,
+                                        height: smallHeight + 80,
+                                        child: buildPhotoCard(
+                                          secondaryPhotos.length > 1
+                                              ? secondaryPhotos[1]
+                                              : null,
+                                          0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -177,32 +218,6 @@ class StoryShareWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (story.emoticon != null &&
-                              story.emoticon!.isNotEmpty)
-                            Text(
-                              story.emoticon!,
-                              style: TextStyle(
-                                fontSize: 28,
-                                height: 1,
-                                color: colorScheme.onSurface.withValues(
-                                  alpha: 0.40,
-                                ),
-                              ),
-                            ),
-                          if (story.emoticon != null &&
-                              story.emoticon!.isNotEmpty)
-                            SizedBox(height: height * 0.01),
-                          Text(
-                            story.subtitle ?? 'Memória',
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: colorScheme.onSurface.withValues(
-                                alpha: 0.78,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: height * 0.01),
                           Text(
                             story.title,
                             softWrap: true,
@@ -214,27 +229,47 @@ class StoryShareWidget extends StatelessWidget {
                               height: 1.02,
                             ),
                           ),
-                          const Spacer(),
-                          Text(
-                            dateLabel,
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          SizedBox(height: height * 0.015),
-                          Text(
-                            _normalizedDescription(story.description),
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 13,
-                              height: 1.5,
-                              color: colorScheme.onSurface.withValues(
-                                alpha: 0.88,
+                          const SizedBox(height: 12),
+                          Expanded(
+                            child: Text(
+                              _normalizedDescription(story.description),
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 13,
+                                height: 1.5,
+                                color: colorScheme.onSurface.withValues(
+                                  alpha: 0.88,
+                                ),
                               ),
                             ),
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Text(
+                                dateLabel,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                              if (story.emoticon != null &&
+                                  story.emoticon!.isNotEmpty) ...[
+                                const SizedBox(width: 10),
+                                Text(
+                                  story.emoticon!,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    height: 1,
+                                    color: colorScheme.onSurface.withValues(
+                                      alpha: 0.54,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         ],
                       ),
@@ -271,7 +306,8 @@ class StoryShareWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildScrapbook(BuildContext context) {
+  // ignore: unused_element
+  Widget _buildScrapbookLegacy(BuildContext context) {
     final photos = story.images;
     final hasPhotos = photos.isNotEmpty;
     final displayImages = photos.take(3).toList();
@@ -511,6 +547,523 @@ class StoryShareWidget extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildScrapbook(BuildContext context) {
+    final photos = story.images;
+    final l10n = AppLocalizations.of(context)!;
+    final displayImages = photos.take(4).toList();
+    final extraCount = photos.length > 4 ? photos.length - 4 : 0;
+    final colorScheme = Theme.of(context).colorScheme;
+    final dateLabel = DateFormat(
+      'dd MMM yyyy',
+      story.localeName,
+    ).format(story.date);
+
+    Widget buildPhotoCard(Uint8List? image) {
+      return Container(
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: colorScheme.onSurface.withValues(alpha: 0.08),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: colorScheme.onSurface.withValues(alpha: 0.10),
+              blurRadius: 26,
+              offset: const Offset(0, 14),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: ColoredBox(
+              color: colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.14,
+              ),
+              child: image != null
+                  ? Image.memory(image, fit: BoxFit.cover)
+                  : Container(color: colorScheme.surfaceContainerHighest),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget buildTextContent() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.scrapbookTemplateLabel,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onSurface.withValues(alpha: 0.72),
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            story.title,
+            softWrap: true,
+            overflow: TextOverflow.visible,
+            style: GoogleFonts.playfairDisplay(
+              fontSize: 34,
+              fontWeight: FontWeight.w500,
+              color: colorScheme.onSurface,
+              height: 1.04,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Expanded(
+            child: Text(
+              _normalizedDescription(story.description),
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 15,
+                height: 1.65,
+                color: colorScheme.onSurface.withValues(alpha: 0.84),
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                _moodLabel(story.mood),
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 12,
+                  color: colorScheme.onSurface.withValues(alpha: 0.72),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                dateLabel,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 12,
+                  color: colorScheme.onSurface.withValues(alpha: 0.72),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(38),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface.withValues(alpha: 0.70),
+                    borderRadius: BorderRadius.circular(38),
+                    border: Border.all(
+                      color: colorScheme.onSurface.withValues(alpha: 0.08),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.onSurface.withValues(alpha: 0.10),
+                        blurRadius: 30,
+                        offset: const Offset(0, 18),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          flex: 6,
+                          child: AspectRatio(
+                            aspectRatio: 1.02,
+                            child: LayoutBuilder(
+                              builder: (context, photoConstraints) {
+                                final photoWidth = photoConstraints.maxWidth;
+                                final photoHeight = photoConstraints.maxHeight;
+                                final largeWidth = photoWidth * 0.56;
+                                final largeHeight = photoHeight * 0.62;
+                                final smallWidth = photoWidth * 0.34;
+                                final smallHeight = photoHeight * 0.28;
+
+                                return Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Positioned(
+                                      left: 0,
+                                      top: photoHeight * 0.06,
+                                      child: Transform.rotate(
+                                        angle: -0.045,
+                                        child: SizedBox(
+                                          width: largeWidth,
+                                          height: largeHeight,
+                                          child: buildPhotoCard(
+                                            displayImages.isNotEmpty
+                                                ? displayImages[0]
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    if (displayImages.length > 1)
+                                      Positioned(
+                                        left: photoWidth * 0.56,
+                                        top: photoHeight * 0.04,
+                                        child: Transform.rotate(
+                                          angle: 0.08,
+                                          child: SizedBox(
+                                            width: smallWidth,
+                                            height: smallHeight,
+                                            child: buildPhotoCard(
+                                              displayImages[1],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    if (displayImages.length > 2)
+                                      Positioned(
+                                        left: photoWidth * 0.16,
+                                        top: photoHeight * 0.52,
+                                        child: Transform.rotate(
+                                          angle: 0.05,
+                                          child: SizedBox(
+                                            width: smallWidth,
+                                            height: smallHeight,
+                                            child: buildPhotoCard(
+                                              displayImages[2],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    if (displayImages.length > 3)
+                                      Positioned(
+                                        left: photoWidth * 0.50,
+                                        top: photoHeight * 0.38,
+                                        child: Transform.rotate(
+                                          angle: -0.075,
+                                          child: SizedBox(
+                                            width: smallWidth,
+                                            height: smallHeight,
+                                            child: buildPhotoCard(
+                                              displayImages[3],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    if (extraCount > 0)
+                                      Positioned(
+                                        left: photoWidth * 0.70,
+                                        top: photoHeight * 0.66,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 14,
+                                            vertical: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: colorScheme.onSurface
+                                                .withValues(alpha: 0.72),
+                                            borderRadius: BorderRadius.circular(
+                                              999,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            '+$extraCount',
+                                            style: GoogleFonts.plusJakartaSans(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                              color: colorScheme.surface,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Expanded(flex: 4, child: buildTextContent()),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPolaroidStack(BuildContext context) {
+    final photos = story.images;
+    final displayImages = photos.take(5).toList();
+    final colorScheme = Theme.of(context).colorScheme;
+    final dateLabel = DateFormat(
+      'dd MMM yyyy',
+      story.localeName,
+    ).format(story.date);
+
+    Widget buildTopImageTile(Uint8List? image) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: colorScheme.onSurface.withValues(alpha: 0.08),
+            width: 1,
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: image != null
+              ? Image.memory(image, fit: BoxFit.cover)
+              : Container(color: colorScheme.surfaceContainerHighest),
+        ),
+      );
+    }
+
+    Widget buildBottomPhoto(Uint8List? image, double width, double height) {
+      return Transform.rotate(
+        angle: -0.60,
+        child: Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: colorScheme.onSurface.withValues(alpha: 0.10),
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: colorScheme.onSurface.withValues(alpha: 0.18),
+                blurRadius: 26,
+                offset: const Offset(0, 34),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+            child: image != null
+                ? Image.memory(image, fit: BoxFit.cover)
+                : Container(color: colorScheme.surfaceContainerHighest),
+          ),
+        ),
+      );
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final width = constraints.maxWidth;
+              final height = constraints.maxHeight;
+              final cardWidth = width * 1.10;
+              final cardHeight = height * 0.82;
+              final topImagesHeight = cardHeight * 0.34;
+              final bottomPhotoWidth = cardWidth * 0.58;
+              final bottomPhotoHeight = cardHeight * 0.27;
+              final cardTop = (height - cardHeight) / 2;
+
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    left: (width - bottomPhotoWidth) / 2,
+                    top: cardTop - bottomPhotoHeight * 0.30,
+                    child: buildBottomPhoto(
+                      displayImages.length > 4 ? displayImages[4] : null,
+                      bottomPhotoWidth,
+                      bottomPhotoHeight,
+                    ),
+                  ),
+                  Positioned(
+                    left: (width - cardWidth) / 2,
+                    top: cardTop,
+                    child: Container(
+                      width: cardWidth,
+                      height: cardHeight,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        borderRadius: BorderRadius.zero,
+                        border: Border.all(
+                          color: colorScheme.onSurface.withValues(alpha: 0.08),
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: colorScheme.onSurface.withValues(
+                              alpha: 0.16,
+                            ),
+                            blurRadius: 28,
+                            spreadRadius: 1,
+                            offset: const Offset(0, 18),
+                          ),
+                          BoxShadow(
+                            color: colorScheme.onSurface.withValues(
+                              alpha: 0.08,
+                            ),
+                            blurRadius: 16,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(18, 18, 18, 12),
+                            child: SizedBox(
+                              height: topImagesHeight,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              right: 10,
+                                            ),
+                                            child: buildTopImageTile(
+                                              displayImages.isNotEmpty
+                                                  ? displayImages[0]
+                                                  : null,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: buildTopImageTile(
+                                            displayImages.length > 1
+                                                ? displayImages[1]
+                                                : null,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              right: 10,
+                                            ),
+                                            child: buildTopImageTile(
+                                              displayImages.length > 2
+                                                  ? displayImages[2]
+                                                  : null,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: buildTopImageTile(
+                                            displayImages.length > 3
+                                                ? displayImages[3]
+                                                : null,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 18,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    story.title,
+                                    softWrap: true,
+                                    overflow: TextOverflow.visible,
+                                    style: GoogleFonts.playfairDisplay(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w500,
+                                      color: colorScheme.onSurface,
+                                      height: 1.05,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    _normalizedDescription(story.description),
+                                    maxLines: 5,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 15,
+                                      height: 1.58,
+                                      color: colorScheme.onSurface.withValues(
+                                        alpha: 0.78,
+                                      ),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        dateLabel,
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: colorScheme.onSurface
+                                              .withValues(alpha: 0.72),
+                                        ),
+                                      ),
+                                      Text(
+                                        story.emoticon ?? '',
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ],

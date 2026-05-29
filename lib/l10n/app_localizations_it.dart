@@ -755,6 +755,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get share => 'Condividi';
 
   @override
+  String get scrapbookTemplateLabel => 'Scrapbook';
+
+  @override
   String get home => 'Home';
 
   @override

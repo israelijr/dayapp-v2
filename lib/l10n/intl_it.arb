@@ -309,6 +309,8 @@
   "@deleteGroupTitle": {"description": "Titolo del dialogo di eliminazione gruppo", "type": "text"},
   "share": "Condividi",
   "@share": {"description": "Etichetta dell'azione condividi", "type": "text"},
+  "scrapbookTemplateLabel": "Scrapbook",
+  "@scrapbookTemplateLabel": { "description": "Etichetta per il template di condivisione storia Scrapbook", "type": "text" },
   "home": "Home",
   "@home": {"description": "Etichetta della scheda home", "type": "text"},
   "groups": "Gruppi",

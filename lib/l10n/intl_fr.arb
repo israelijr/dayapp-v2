@@ -309,6 +309,8 @@
   "@deleteGroupTitle": {"description": "Titre du dialogue de suppression de groupe", "type": "text"},
   "share": "Partager",
   "@share": {"description": "Étiquette de l'action partager", "type": "text"},
+  "scrapbookTemplateLabel": "Scrapbook",
+  "@scrapbookTemplateLabel": { "description": "Libellé pour le modèle de partage d'histoire Scrapbook", "type": "text" },
   "home": "Accueil",
   "@home": {"description": "Étiquette de l'onglet accueil", "type": "text"},
   "groups": "Groupes",

@@ -1,5 +1,3 @@
-import 'dart:ui' as ui;
-
 import 'package:dayapp/db/historia_foto_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/models/historia.dart';
@@ -99,88 +97,10 @@ class _ShareStoryShareableScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Stack(
       fit: StackFit.expand,
       children: [
-        if (story.images.isNotEmpty)
-          Image.memory(story.images.first, fit: BoxFit.cover)
-        else
-          ColoredBox(
-            color: colorScheme.surface,
-            child: Center(
-              child: Container(
-                width: 240,
-                height: 240,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      colorScheme.surfaceContainerHighest.withValues(
-                        alpha: 0.18,
-                      ),
-                      colorScheme.surfaceContainerHighest.withValues(
-                        alpha: 0.12,
-                      ),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: colorScheme.onSurface.withValues(alpha: 0.08),
-                    width: 1.0,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: colorScheme.onSurface.withValues(alpha: 0.05),
-                      blurRadius: 18,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 5,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: colorScheme.onSurface.withValues(alpha: 0.04),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Container(
-                        height: 5,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: colorScheme.onSurface.withValues(alpha: 0.03),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(height: 26),
-                      Icon(
-                        Icons.photo_outlined,
-                        size: 56,
-                        color: colorScheme.onSurface.withValues(alpha: 0.28),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        Positioned.fill(
-          child: BackdropFilter(
-            filter: ui.ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-            child: Container(
-              color: colorScheme.surface.withValues(alpha: 0.10),
-            ),
-          ),
-        ),
+        Image.asset('assets/image/fundo_madeira.jpg', fit: BoxFit.cover),
         Center(
           child: FractionallySizedBox(
             widthFactor: 0.70,

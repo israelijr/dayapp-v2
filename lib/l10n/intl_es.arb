@@ -297,6 +297,8 @@
   "deletePhotoConfirm": "¿Desea realmente eliminar esta foto?",
   "deleteGroupTitle": "Eliminar Grupo",
   "share": "Compartir",
+  "scrapbookTemplateLabel": "Scrapbook",
+  "@scrapbookTemplateLabel": { "description": "Etiqueta para la plantilla de compartir historias Scrapbook", "type": "text" },
   "imageCopiedBase64": "Imagen copiada al portapapeles (base64)",
   "home": "Inicio",
   "groups": "Grupos",

@@ -1473,6 +1473,12 @@ abstract class AppLocalizations {
   /// **'Share'**
   String get share;
 
+  /// Label for the Scrapbook story share template
+  ///
+  /// In en, this message translates to:
+  /// **'Scrapbook'**
+  String get scrapbookTemplateLabel;
+
   /// Label for home tab
   ///
   /// In en, this message translates to:

@@ -1,6 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui' as ui;
-
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/sharing/story_data.dart';
 import 'package:dayapp/sharing/templates/story_share_widget.dart';
@@ -19,18 +17,10 @@ class StorySharePreviewScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          if (story.images.isNotEmpty)
-            Positioned.fill(
-              child: Image.memory(story.images.first, fit: BoxFit.cover),
-            )
-          else
-            Positioned.fill(child: ColoredBox(color: colorScheme.surface)),
           Positioned.fill(
-            child: BackdropFilter(
-              filter: ui.ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-              child: Container(
-                color: colorScheme.surface.withValues(alpha: 0.12),
-              ),
+            child: Image.asset(
+              'assets/image/fundo_madeira.jpg',
+              fit: BoxFit.cover,
             ),
           ),
           LayoutBuilder(
@@ -78,6 +68,13 @@ class StorySharePreviewScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: colorScheme.surface,
+                        foregroundColor: colorScheme.onSurface,
+                        side: BorderSide(
+                          color: colorScheme.onSurface.withValues(alpha: 0.16),
+                        ),
+                      ),
                       onPressed: () => Navigator.of(context).pop(false),
                       child: Text(l10n.close),
                     ),
