@@ -3,6 +3,7 @@ import 'package:dayapp/db/tag_helper.dart';
 import 'package:dayapp/l10n/app_localizations.dart';
 import 'package:dayapp/models/historia.dart';
 import 'package:dayapp/models/tag.dart';
+import 'package:dayapp/sharing/service/story_share_service.dart';
 import 'package:dayapp/widgets/historia_media_widgets.dart';
 import 'package:dayapp/widgets/rich_text_viewer_widget.dart';
 import 'package:flutter/material.dart';
@@ -371,6 +372,10 @@ class StoryPreviewScreen extends StatelessWidget {
     return l10n.storyPreviewEnergyHighNarrative;
   }
 
+  Future<void> _shareStory(BuildContext context) async {
+    await StoryShareService.shareHistoria(context, historia, localeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -380,6 +385,11 @@ class StoryPreviewScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         actions: [
+          IconButton(
+            tooltip: l10n.share,
+            icon: const Icon(Icons.share),
+            onPressed: () => _shareStory(context),
+          ),
           IconButton(
             tooltip: l10n.close,
             icon: const Icon(Icons.close),

@@ -41,6 +41,7 @@ import 'screens/pin_recovery_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/splash_screen.dart';
+import 'screens/story_share_debug_screen.dart';
 import 'screens/trash_screen.dart';
 import 'services/engagement_service.dart';
 import 'services/inactivity_service.dart';
@@ -591,6 +592,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               '/trash': (context) => const TrashScreen(),
               '/search': (context) => const SearchScreen(),
               '/insight-history': (context) => const InsightHistoryScreen(),
+              '/story-share-debug': (context) => const StoryShareDebugScreen(),
             },
           );
         },
