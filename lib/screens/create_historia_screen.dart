@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dayapp/l10n/generated/app_localizations.dart';
-import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -37,9 +36,8 @@ import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
 import 'rich_text_editor_screen.dart';
 
-// Note: This file implements two UI features requested by the team:
-// 1) Importar arquivo .txt na descrição usando `file_selector` (_pickTxtFileForDescription).
-/// 2) Animação de expansão do editor de descrição bottom-to-top ao abrir a tela de edição (_expandDescriptionEditor).
+// Note: This file implements one UI feature requested by the team:
+// 1) Animação de expansão do editor de descrição bottom-to-top ao abrir a tela de edição (_expandDescriptionEditor).
 // The expanded editor screen is in `lib/screens/rich_text_editor_screen.dart` which
 // provides drag-to-save (swipe down) behavior.
 
@@ -430,6 +428,48 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
     }
   }
 
+  Future<void> _handleCancel() async {
+    if (!_hasUnsavedChanges) {
+      Navigator.of(context).pop();
+      return;
+    }
+
+    final loc = AppLocalizations.of(context)!;
+    final dialogResult = await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text(loc.discardStoryTitle),
+        content: Text(loc.unsavedStoryPrompt),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop('cancel'),
+            child: Text(loc.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop('discard'),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.error,
+            ),
+            child: Text(loc.discard),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop('save'),
+            child: Text(loc.save),
+          ),
+        ],
+      ),
+    );
+
+    if (!mounted) return;
+
+    if (dialogResult == 'save') {
+      await _saveHistoria();
+    } else if (dialogResult == 'discard') {
+      Navigator.of(context).pop();
+    }
+  }
+
   void _expandDescriptionEditor() async {
     final navigator = Navigator.of(context);
     final richTextJson = RichTextHelper.controllerToJson(richTextController);
@@ -474,64 +514,6 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
           null,
         );
       });
-    }
-  }
-
-  Future<void> _pickTxtFileForDescription() async {
-    // Seta flag para evitar bloqueio de tela quando o app vai para background
-    final pinProvider = context.read<PinProvider>();
-    pinProvider.isPickingExternalMedia = true;
-
-    try {
-      const typeGroup = XTypeGroup(extensions: ['txt']);
-      final files = await openFiles(acceptedTypeGroups: [typeGroup]);
-
-      // Reseta a flag após retornar do app externo (independente de sucesso ou cancelamento)
-      pinProvider.isPickingExternalMedia = false;
-
-      if (files.isEmpty) return; // canceled
-      final file = files.first;
-      // Lê como bytes e decodifica como UTF-8 com fallback para Latin-1,
-      // evitando caracteres corrompidos em diferentes plataformas.
-      final bytes = await file.readAsBytes();
-      String content;
-      try {
-        content = utf8.decode(bytes);
-      } catch (e) {
-        debugPrint(
-          'CreateHistoriaScreen: fallback para Latin-1 na leitura de arquivo TXT: $e',
-        );
-        content = latin1.decode(bytes);
-      }
-
-      if (!mounted) return;
-      // Normaliza quebras de linha (Windows \r\n → \n, macOS antigo \r → \n)
-      final normalizedContent = content
-          .replaceAll('\r\n', '\n')
-          .replaceAll('\r', '\n');
-
-      // Usa replaceText para garantir que o controller notifique os listeners
-      // e o botão de descarte seja ativado corretamente
-      richTextController.replaceText(
-        0,
-        richTextController.document.length - 1,
-        normalizedContent,
-        null,
-      );
-      // Força verificação de mudanças caso o listener não dispare de imediato
-      _checkForChanges();
-    } catch (e) {
-      // Garante reset da flag em caso de erro
-      pinProvider.isPickingExternalMedia = false;
-
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.errorLoadingFile(e.toString()),
-          ),
-        ),
-      );
     }
   }
 
@@ -646,17 +628,6 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                   height: 16,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
-              )
-            else
-              TextButton(
-                onPressed: _saveHistoria,
-                child: Text(
-                  loc.save,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: labelColor,
-                  ),
-                ),
               ),
           ],
         ),
@@ -722,14 +693,36 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Rich Text Description
-                    Text(
-                      loc.descriptionLabel,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: labelColor,
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            loc.descriptionLabel,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: labelColor,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 34,
+                          height: 34,
+                          child: FloatingActionButton.small(
+                            heroTag: null,
+                            elevation: 1,
+                            backgroundColor:
+                                theme.colorScheme.surfaceContainerLow,
+                            foregroundColor: theme.colorScheme.onSurfaceVariant,
+                            tooltip: loc.expandTooltip,
+                            onPressed: _expandDescriptionEditor,
+                            child: const Icon(
+                              Icons.open_in_full_rounded,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     RichTextEditorWidget(
@@ -912,43 +905,40 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                 ),
               ),
             ),
-            // Description Toolbar (above main toolbar)
-            Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
-                border: Border(
-                  top: BorderSide(
-                    color: theme.colorScheme.outlineVariant,
-                    width: 1,
-                  ),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: IconButton(
-                      icon: const Icon(Icons.upload_file),
-                      onPressed: _pickTxtFileForDescription,
-                      tooltip: loc.importTxtTooltip,
-                    ),
-                  ),
-                  Expanded(
-                    child: IconButton(
-                      icon: const Icon(Icons.open_in_full),
-                      onPressed: _expandDescriptionEditor,
-                      tooltip: loc.expandTooltip,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             // Main Toolbar (photos, videos, audio, emoji)
             EntryToolbar(
               onPickPhoto: _pickImage,
               onPickVideo: _pickVideo,
               onRecordAudio: _recordAudio,
               onSelectEmoji: _selectEmoji,
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceVariant,
+                border: Border.all(
+                  color: theme.colorScheme.outlineVariant,
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _handleCancel,
+                      child: Text(loc.cancel),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: _isLoading ? null : _saveHistoria,
+                      child: Text(loc.save),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

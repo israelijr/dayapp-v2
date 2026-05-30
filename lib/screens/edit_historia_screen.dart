@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dayapp/l10n/generated/app_localizations.dart';
-import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -623,6 +622,48 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
     return true;
   }
 
+  Future<void> _handleCancel() async {
+    if (!_hasUnsavedChanges) {
+      Navigator.of(context).pop();
+      return;
+    }
+
+    final loc = AppLocalizations.of(context)!;
+    final dialogResult = await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text(loc.discardChangesTitle),
+        content: Text(loc.discardChangesPrompt),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop('cancel'),
+            child: Text(loc.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop('discard'),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.error,
+            ),
+            child: Text(loc.discard),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop('save'),
+            child: Text(loc.save),
+          ),
+        ],
+      ),
+    );
+
+    if (!mounted) return;
+
+    if (dialogResult == 'save') {
+      await _save();
+    } else if (dialogResult == 'discard') {
+      Navigator.of(context).pop();
+    }
+  }
+
   void _expandDescriptionEditor() async {
     final navigator = Navigator.of(context);
     final richTextJson = RichTextHelper.controllerToJson(richTextController);
@@ -666,63 +707,6 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
           null,
         );
       });
-    }
-  }
-
-  Future<void> _pickTxtFileForDescription() async {
-    // Seta flag para evitar bloqueio de tela quando o app vai para background
-    final pinProvider = context.read<PinProvider>();
-    pinProvider.isPickingExternalMedia = true;
-
-    try {
-      const typeGroup = XTypeGroup(extensions: ['txt']);
-      final files = await openFiles(acceptedTypeGroups: [typeGroup]);
-
-      // Reseta a flag após retornar do app externo (independente de sucesso ou cancelamento)
-      pinProvider.isPickingExternalMedia = false;
-
-      if (files.isEmpty) return; // canceled
-      final file = files.first;
-      // Lê como bytes e decodifica como UTF-8 com fallback para Latin-1,
-      // evitando caracteres corrompidos em diferentes plataformas.
-      final bytes = await file.readAsBytes();
-      String content;
-      try {
-        content = utf8.decode(bytes);
-      } catch (e) {
-        debugPrint(
-          'EditHistoriaScreen: fallback para Latin-1 na leitura de arquivo TXT: $e',
-        );
-        content = latin1.decode(bytes);
-      }
-      if (!mounted) return;
-      // Normaliza quebras de linha (Windows \r\n → \n, macOS antigo \r → \n)
-      final normalizedContent = content
-          .replaceAll('\r\n', '\n')
-          .replaceAll('\r', '\n');
-
-      // Usa replaceText para garantir que o controller notifique os listeners
-      // e o botão de descarte seja ativado corretamente
-      richTextController.replaceText(
-        0,
-        richTextController.document.length - 1,
-        normalizedContent,
-        null,
-      );
-      // Força verificação de mudanças caso o listener não dispare de imediato
-      _checkForChanges();
-    } catch (e) {
-      // Garante reset da flag em caso de erro
-      pinProvider.isPickingExternalMedia = false;
-
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.errorLoadingFile(e.toString()),
-          ),
-        ),
-      );
     }
   }
 
@@ -810,15 +794,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
               color: Theme.of(context).textTheme.titleLarge?.color,
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () async => await _save(),
-              child: Text(
-                loc.save,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
+          actions: [],
         ),
         body: Column(
           children: [
@@ -869,7 +845,38 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Description
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            loc.descriptionLabel,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 34,
+                          height: 34,
+                          child: FloatingActionButton.small(
+                            heroTag: null,
+                            elevation: 1,
+                            backgroundColor:
+                                theme.colorScheme.surfaceContainerLow,
+                            foregroundColor: theme.colorScheme.onSurfaceVariant,
+                            tooltip: loc.expandTooltip,
+                            onPressed: _expandDescriptionEditor,
+                            child: const Icon(
+                              Icons.open_in_full_rounded,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
                     RichTextEditorWidget(
                       key: const Key('description_field'),
                       controller: richTextController,
@@ -1096,43 +1103,40 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
               ),
             ),
 
-            // Description Toolbar (above main toolbar)
-            Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
-                border: Border(
-                  top: BorderSide(
-                    color: theme.colorScheme.outlineVariant,
-                    width: 1,
-                  ),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: IconButton(
-                      icon: const Icon(Icons.upload_file),
-                      onPressed: _pickTxtFileForDescription,
-                      tooltip: loc.importTxtTooltip,
-                    ),
-                  ),
-                  Expanded(
-                    child: IconButton(
-                      icon: const Icon(Icons.open_in_full),
-                      onPressed: _expandDescriptionEditor,
-                      tooltip: loc.expandTooltip,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             // Main Toolbar (photos, videos, audio, emoji)
             EntryToolbar(
               onPickPhoto: _pickImage,
               onPickVideo: _pickVideo,
               onRecordAudio: _recordAudio,
               onSelectEmoji: _selectEmoji,
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceVariant,
+                border: Border.all(
+                  color: theme.colorScheme.outlineVariant,
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _handleCancel,
+                      child: Text(loc.cancel),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: _save,
+                      child: Text(loc.save),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

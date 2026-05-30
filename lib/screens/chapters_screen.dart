@@ -1163,18 +1163,16 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
             child: Row(
               children: [
                 Expanded(
-                  child: OutlinedButton.icon(
+                  child: OutlinedButton(
                     onPressed: () => _showPhotoOptions(context, l10n),
-                    icon: const Icon(Icons.photo_camera_back_outlined),
-                    label: Text(l10n.chapterPhotoActionLabel),
+                    child: Text(l10n.chapterPhotoActionLabel),
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: FilledButton.icon(
+                  child: FilledButton(
                     onPressed: selected.length >= 3 ? () => _save(l10n) : null,
-                    icon: const Icon(Icons.bookmark_add_outlined),
-                    label: Text(l10n.chapterCreateMyLabel),
+                    child: Text(l10n.save),
                   ),
                 ),
               ],
@@ -1501,20 +1499,18 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
             child: Row(
               children: [
                 Expanded(
-                  child: OutlinedButton.icon(
+                  child: OutlinedButton(
                     onPressed: () => _showPhotoOptions(context, l10n),
-                    icon: const Icon(Icons.photo_camera_back_outlined),
-                    label: Text(l10n.chapterPhotoActionLabel),
+                    child: Text(l10n.chapterPhotoActionLabel),
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: FilledButton.icon(
+                  child: FilledButton(
                     onPressed: selectedIds.length >= 3
                         ? () => _save(l10n)
                         : null,
-                    icon: const Icon(Icons.save_outlined),
-                    label: Text(l10n.save),
+                    child: Text(l10n.save),
                   ),
                 ),
               ],
