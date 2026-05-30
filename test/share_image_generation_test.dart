@@ -101,7 +101,7 @@ void main() {
         home: Scaffold(
           body: Builder(
             builder: (context) {
-              overlayState = Overlay.of(context)!;
+              overlayState = Overlay.of(context);
               return const SizedBox.shrink();
             },
           ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -858,9 +859,15 @@ class StoryShareWidget extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: colorScheme.onSurface.withValues(alpha: 0.18),
-                blurRadius: 26,
-                offset: const Offset(0, 34),
+                color: colorScheme.onSurface.withValues(alpha: 0.24),
+                blurRadius: 36,
+                spreadRadius: 1,
+                offset: const Offset(0, 30),
+              ),
+              BoxShadow(
+                color: colorScheme.onSurface.withValues(alpha: 0.12),
+                blurRadius: 20,
+                offset: const Offset(0, 14),
               ),
             ],
           ),
@@ -885,21 +892,48 @@ class StoryShareWidget extends StatelessWidget {
               final height = constraints.maxHeight;
               final cardWidth = width * 1.10;
               final cardHeight = height * 0.82;
-              final topImagesHeight = cardHeight * 0.34;
-              final bottomPhotoWidth = cardWidth * 0.58;
-              final bottomPhotoHeight = cardHeight * 0.27;
-              final cardTop = (height - cardHeight) / 2;
+              final topImagesHeight = cardHeight * 0.44;
+              const bottomPhotoScale = 0.60;
+              final bottomPhotoWidth = cardWidth * 0.68 * bottomPhotoScale;
+              final bottomPhotoHeight = cardHeight * 0.38 * bottomPhotoScale;
+              const bottomPhotoRotation = -0.60;
+              final rotationAngle = bottomPhotoRotation.abs();
+              final rotatedPhotoHeight =
+                  bottomPhotoWidth * math.sin(rotationAngle) +
+                  bottomPhotoHeight * math.cos(rotationAngle);
+              final photoTopMargin =
+                  (rotatedPhotoHeight - bottomPhotoHeight) / 2;
+              final cardTop = math.min(
+                (height - cardHeight) / 2 + cardHeight * 0.08,
+                height - cardHeight,
+              );
+              final bottomPhotoTop = math.max(photoTopMargin, 0.0);
 
               return Stack(
                 clipBehavior: Clip.none,
                 children: [
                   Positioned(
-                    left: (width - bottomPhotoWidth) / 2,
-                    top: cardTop - bottomPhotoHeight * 0.30,
+                    left: (width - bottomPhotoWidth) / 2.3,
+                    top: bottomPhotoTop,
                     child: buildBottomPhoto(
                       displayImages.length > 4 ? displayImages[4] : null,
                       bottomPhotoWidth,
                       bottomPhotoHeight,
+                    ),
+                  ),
+                  Positioned(
+                    left: (width - cardWidth) / 2,
+                    top: cardTop,
+                    child: Transform.rotate(
+                      angle: -0.08,
+                      child: Container(
+                        width: cardWidth,
+                        height: cardHeight,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.zero,
+                        ),
+                      ),
                     ),
                   ),
                   Positioned(
@@ -918,18 +952,18 @@ class StoryShareWidget extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: colorScheme.onSurface.withValues(
-                              alpha: 0.16,
+                              alpha: 0.22,
                             ),
-                            blurRadius: 28,
-                            spreadRadius: 1,
-                            offset: const Offset(0, 18),
+                            blurRadius: 32,
+                            spreadRadius: 2,
+                            offset: const Offset(0, 22),
                           ),
                           BoxShadow(
                             color: colorScheme.onSurface.withValues(
-                              alpha: 0.08,
+                              alpha: 0.10,
                             ),
-                            blurRadius: 16,
-                            offset: const Offset(0, 10),
+                            blurRadius: 18,
+                            offset: const Offset(0, 12),
                           ),
                         ],
                       ),
