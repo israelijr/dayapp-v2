@@ -5,6 +5,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -607,7 +608,12 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         appBar: AppBar(
           title: Text(
             loc.newStory,
-            style: TextStyle(color: labelColor, fontWeight: FontWeight.bold),
+            style: GoogleFonts.notoSerif(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: labelColor,
+              height: 1.3,
+            ),
           ),
           actions: [
             // Indicador de sync do backup incremental (Opção B: visível, não bloqueante)
@@ -701,7 +707,11 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                       controller: titleController,
                       label: loc.storyTitleLabel,
                       hintText: loc.storyTitleHint,
-                      style: theme.textTheme.headlineSmall,
+                      style: GoogleFonts.notoSerif(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
+                      ),
                       inputFormatters: [
                         SentenceCapitalizationTextInputFormatter(),
                       ],
@@ -715,7 +725,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     // Rich Text Description
                     Text(
                       loc.descriptionLabel,
-                      style: TextStyle(
+                      style: GoogleFonts.plusJakartaSans(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: labelColor,
@@ -726,6 +736,12 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                       key: const Key('description_field'),
                       controller: richTextController,
                       hintText: loc.descriptionHint,
+                      textStyle: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 1.5,
+                        color: theme.colorScheme.onSurface,
+                      ),
                       minLines: 8,
                       maxLines: 15,
                       showToolbar: true,
@@ -761,7 +777,9 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     // Humor (como você se sentiu)
                     Text(
                       loc.moodQuestion,
-                      style: theme.textTheme.titleSmall?.copyWith(
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
                         color: labelColor,
                       ),
                     ),
@@ -778,7 +796,9 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     const SizedBox(height: 16),
                     Text(
                       loc.energyQuestion,
-                      style: theme.textTheme.titleSmall?.copyWith(
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
                         color: labelColor,
                       ),
                     ),
@@ -796,7 +816,9 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     if (fotos.isNotEmpty) ...[
                       Text(
                         loc.photosSection,
-                        style: theme.textTheme.titleSmall?.copyWith(
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                           color: labelColor,
                         ),
                       ),
@@ -842,7 +864,9 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     if (audios.isNotEmpty) ...[
                       Text(
                         loc.audiosSection,
-                        style: theme.textTheme.titleSmall?.copyWith(
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                           color: labelColor,
                         ),
                       ),
@@ -864,7 +888,9 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     if (videos.isNotEmpty) ...[
                       Text(
                         loc.videosSection,
-                        style: theme.textTheme.titleSmall?.copyWith(
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                           color: labelColor,
                         ),
                       ),

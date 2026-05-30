@@ -5,6 +5,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -800,7 +801,15 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(loc.editStory),
+          title: Text(
+            loc.editStory,
+            style: GoogleFonts.notoSerif(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              height: 1.3,
+              color: Theme.of(context).textTheme.titleLarge?.color,
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () async => await _save(),
@@ -845,7 +854,11 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                       controller: titleController,
                       label: loc.storyTitleLabel,
                       hintText: loc.storyTitleHint,
-                      style: theme.textTheme.bodyLarge,
+                      style: GoogleFonts.notoSerif(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
+                      ),
                       inputFormatters: [
                         SentenceCapitalizationTextInputFormatter(),
                       ],
@@ -861,6 +874,12 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                       key: const Key('description_field'),
                       controller: richTextController,
                       hintText: loc.descriptionHint,
+                      textStyle: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 1.5,
+                        color: theme.colorScheme.onSurface,
+                      ),
                       minLines: 8,
                       maxLines: 15,
                       showToolbar: true,
@@ -895,7 +914,14 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
 
                     // Humor (como você se sentiu)
                     const SizedBox(height: 16),
-                    Text(loc.moodQuestion, style: theme.textTheme.titleSmall),
+                    Text(
+                      loc.moodQuestion,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     MoodSelector(
                       value: _selectedMood,
@@ -907,7 +933,14 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
 
                     // Energia
                     const SizedBox(height: 16),
-                    Text(loc.energyQuestion, style: theme.textTheme.titleSmall),
+                    Text(
+                      loc.energyQuestion,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     EnergySelector(
                       value: _selectedEnergy,
@@ -963,7 +996,14 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
 
                     // Media Previews
                     if (fotos.isNotEmpty) ...[
-                      Text('Fotos', style: theme.textTheme.titleSmall),
+                      Text(
+                        'Fotos',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       SizedBox(
                         height: 100,
@@ -1004,7 +1044,14 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                     ],
 
                     if (audios.isNotEmpty) ...[
-                      Text('Áudios', style: theme.textTheme.titleSmall),
+                      Text(
+                        'Áudios',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       Wrap(
                         spacing: 8,
@@ -1021,7 +1068,14 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                     ],
 
                     if (videos.isNotEmpty) ...[
-                      Text('Vídeos', style: theme.textTheme.titleSmall),
+                      Text(
+                        'Vídeos',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       Wrap(
                         spacing: 8,

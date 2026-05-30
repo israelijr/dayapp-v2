@@ -80,6 +80,31 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final effectiveTextStyle =
+        widget.textStyle ??
+        DefaultTextStyle.of(context).style.copyWith(fontSize: 16);
+    final effectivePlaceholderStyle = effectiveTextStyle.copyWith(
+      color:
+          effectiveTextStyle.color?.withValues(alpha: 0.62) ??
+          theme.colorScheme.onSurface.withValues(alpha: 0.62),
+    );
+
+    final customStyles = DefaultStyles(
+      paragraph: DefaultTextBlockStyle(
+        effectiveTextStyle,
+        const HorizontalSpacing(0, 0),
+        const VerticalSpacing(8, 0),
+        const VerticalSpacing(0, 0),
+        null,
+      ),
+      placeHolder: DefaultTextBlockStyle(
+        effectivePlaceholderStyle,
+        const HorizontalSpacing(0, 0),
+        const VerticalSpacing(8, 0),
+        const VerticalSpacing(0, 0),
+        null,
+      ),
+    );
 
     // Widget do editor com decoração
     Widget editorContainer = Container(
@@ -108,6 +133,7 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
         config: QuillEditorConfig(
           placeholder: widget.hintText ?? 'Digite aqui...',
           padding: const EdgeInsets.all(12),
+          customStyles: customStyles,
         ),
       ),
     );
