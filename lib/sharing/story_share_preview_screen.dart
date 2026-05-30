@@ -18,7 +18,7 @@ class StorySharePreviewScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset('assets/image/fundo.jpg', fit: BoxFit.cover),
+            child: Image.asset('assets/image/fundo.png', fit: BoxFit.cover),
           ),
           LayoutBuilder(
             builder: (context, constraints) {
@@ -38,8 +38,8 @@ class StorySharePreviewScreen extends StatelessWidget {
                   height: height,
                   child: Material(
                     color: Colors.transparent,
-                    elevation: 12,
-                    shadowColor: colorScheme.onSurface.withValues(alpha: 0.12),
+                    elevation: 0,
+                    shadowColor: Colors.transparent,
                     borderRadius: BorderRadius.circular(34),
                     clipBehavior: Clip.antiAlias,
                     child: StoryShareWidget(story: story),

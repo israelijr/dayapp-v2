@@ -100,7 +100,7 @@ class _ShareStoryShareableScene extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset('assets/image/fundo.jpg', fit: BoxFit.cover),
+        Image.asset('assets/image/fundo.png', fit: BoxFit.cover),
         Center(
           child: FractionallySizedBox(
             widthFactor: 0.70,
