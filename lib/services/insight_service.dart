@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database_helper.dart';
 import '../models/insight.dart';
-import 'word_insight_analyzer.dart';
 
 /// Serviço responsável por calcular e cachear os insights automáticos.
 ///
@@ -27,7 +26,6 @@ class InsightService {
   static const int _maxInsights = 20;
 
   final DatabaseHelper _db = DatabaseHelper();
-  final WordInsightAnalyzer _wordInsightAnalyzer = const WordInsightAnalyzer();
 
   // ---------------------------------------------------------------------------
   // API pública
@@ -47,61 +45,6 @@ class InsightService {
 
     final insights = await _calculateAll(userId);
     await _saveCache(userId, insights);
-    return insights;
-  }
-
-  /// Analisa palavras recorrentes nas histórias do usuário.
-  Future<WordInsightAnalysis> analyzeWordAssociations(String userId) async {
-    final db = await _db.database;
-    final rows = await db.query(
-      'historia',
-      columns: ['titulo', 'descricao', 'humor'],
-      where: 'user_id = ? AND excluido IS NULL',
-      whereArgs: [userId],
-    );
-
-    final stories = rows
-        .map(
-          (row) => StoryTextEntry(
-            title: row['titulo'] as String? ?? '',
-            description: row['descricao'] as String?,
-            mood: row['humor'] as int? ?? 3,
-          ),
-        )
-        .toList(growable: false);
-    return _wordInsightAnalyzer.analyzeStories(stories);
-  }
-
-  /// Converte o resultado da análise textual em insights exibíveis.
-  List<Insight> createWordInsights(WordInsightAnalysis analysis) {
-    final insights = <Insight>[];
-
-    if (analysis.positiveWords.isNotEmpty) {
-      final words = analysis.positiveWords.map((item) => item.word).toList();
-      insights.add(
-        Insight(
-          type: InsightType.positiveWords,
-          icon: '🌤',
-          title: 'insightPositiveWordsTitle',
-          description: 'insightPositiveWords',
-          metadata: {'words': words, 'search_query': words.first},
-        ),
-      );
-    }
-
-    if (analysis.difficultWords.isNotEmpty) {
-      final words = analysis.difficultWords.map((item) => item.word).toList();
-      insights.add(
-        Insight(
-          type: InsightType.difficultWords,
-          icon: '🌧',
-          title: 'insightDifficultWordsTitle',
-          description: 'insightDifficultWords',
-          metadata: {'words': words, 'search_query': words.first},
-        ),
-      );
-    }
-
     return insights;
   }
 
@@ -129,7 +72,6 @@ class InsightService {
     final positiveTagFuture = calculatePositiveTag(userId);
     final bestWeekdayFuture = calculateBestWeekday(userId);
     final monthlySummaryFuture = calculateMonthlySummary(userId);
-    final wordAnalysisFuture = analyzeWordAssociations(userId);
     final storyBalanceFuture = calculateStoryBalance(userId);
     final writingTimeFuture = calculateWritingTime(userId);
     final energyChartFuture = calculateEnergyChart(userId);
@@ -138,17 +80,15 @@ class InsightService {
     final positiveTagInsight = await positiveTagFuture;
     final bestWeekdayInsight = await bestWeekdayFuture;
     final monthlySummaryInsight = await monthlySummaryFuture;
-    final wordInsights = createWordInsights(await wordAnalysisFuture);
     final storyBalanceInsight = await storyBalanceFuture;
     final writingTimeInsight = await writingTimeFuture;
     final energyChartInsight = await energyChartFuture;
 
-    // Prioridade: tendência > equilíbrio > horário > palavras > tag > dia > resumo > energia
+    // Prioridade: tendência > equilíbrio > horário > tag > dia > resumo > energia
     final ordered = <Insight>[];
     if (trendInsight != null) ordered.add(trendInsight);
     if (storyBalanceInsight != null) ordered.add(storyBalanceInsight);
     if (writingTimeInsight != null) ordered.add(writingTimeInsight);
-    ordered.addAll(wordInsights);
     if (positiveTagInsight != null) ordered.add(positiveTagInsight);
     if (bestWeekdayInsight != null) ordered.add(bestWeekdayInsight);
     if (monthlySummaryInsight != null) ordered.add(monthlySummaryInsight);

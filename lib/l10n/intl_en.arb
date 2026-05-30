@@ -5,7 +5,9 @@
   "language": "Language",
   "deviceDefault": "Device default",
   "defaultLabel": "Default",
-  "@defaultLabel": {"description": "Label used to indicate the default option, e.g. in chips"},
+  "@defaultLabel": {
+    "description": "Label used to indicate the default option, e.g. in chips"
+  },
   "@deviceDefault": {
     "description": "Label shown in language selection to use the device's default language",
     "type": "text"
@@ -52,19 +54,25 @@
   "timeAgoMinutes": "{count} min ago",
   "@timeAgoMinutes": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "timeAgoHours": "{count}h ago",
   "@timeAgoHours": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "timeAgoDays": "{count} day(s) ago",
   "@timeAgoDays": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "backup": "Backup",
@@ -93,24 +101,29 @@
   "backgroundLockSeconds": "{count} seconds",
   "@backgroundLockSeconds": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "backgroundLockOneMinute": "1 minute",
   "backgroundLockMinutes": "{count} minutes",
   "@backgroundLockMinutes": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "backgroundLockOneHour": "1 hour",
   "backgroundLockHours": "{count} hours",
   "@backgroundLockHours": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
-
   "statistics": "Statistics",
   "noStoriesYetTitle": "No stories yet",
   "noStoriesYetSubtitle": "Start recording your days to see statistics",
@@ -150,15 +163,21 @@
   "@aboutScreenVersionBuild": {
     "description": "About screen app version and build label",
     "placeholders": {
-      "version": {"type": "String"},
-      "build": {"type": "String"}
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
     }
   },
   "aboutScreenVersionShort": "Version {version}",
   "@aboutScreenVersionShort": {
     "description": "Short app version shown in about header",
     "placeholders": {
-      "version": {"type": "String"}
+      "version": {
+        "type": "String"
+      }
     }
   },
   "aboutScreenDevelopmentTitle": "Development",
@@ -179,7 +198,9 @@
   "@aboutScreenSupportEmailBody": {
     "description": "Support e-mail body prefilled on about screen",
     "placeholders": {
-      "version": {"type": "String"}
+      "version": {
+        "type": "String"
+      }
     }
   },
   "aboutScreenAcknowledgementsTitle": "Acknowledgments",
@@ -208,7 +229,12 @@
   "invalidEmail": "Enter a valid email.",
   "emailNotFound": "Email not found. Check and try again.",
   "codeSent": "Code sent to {email}! Check your inbox.",
-  "@codeSent": { "description": "Message shown when a verification code is sent", "placeholders": { "email": {} } },
+  "@codeSent": {
+    "description": "Message shown when a verification code is sent",
+    "placeholders": {
+      "email": {}
+    }
+  },
   "codeMustBe6": "The code must be 6 digits.",
   "codeVerified": "Code verified! Set your new password.",
   "codeInvalid": "Invalid or expired code. Try again.",
@@ -249,7 +275,12 @@
   "emailOrPasswordIncorrect": "Email or password incorrect",
   "noEmailRegistered": "No email registered. Configure it in settings.",
   "checkEmailOrUseCode": "Check your email at {email} or use the displayed code",
-  "@checkEmailOrUseCode": { "description": "Prompt to check email or enter code", "placeholders": { "email": {} } },
+  "@checkEmailOrUseCode": {
+    "description": "Prompt to check email or enter code",
+    "placeholders": {
+      "email": {}
+    }
+  },
   "errorGeneratingCode": "Error generating code. Try again.",
   "errorSendingCode": "Error sending code. Try again.",
   "enterRecoveryCodePrompt": "Enter the code sent to your email:",
@@ -257,9 +288,7 @@
   "enterPasswordToContinue": "Enter your password to continue",
   "enterPinToContinue": "Enter your PIN to continue",
   "useBiometricsToContinue": "Use your biometrics to continue",
-
   "usePin": "Use PIN",
-
   "noStoriesHere": "No stories to display here.",
   "storiesGroupedOrArchived": "They are either grouped or archived.",
   "useBiometrics": "Use Biometrics",
@@ -287,40 +316,96 @@
   "deleteLabel": "Delete",
   "movedToTrash": "Story moved to trash",
   "errorDeletingStory": "Error deleting story: {error}",
-  "@errorDeletingStory": { "description": "Error message when deleting story fails", "placeholders": { "error": {} } },
+  "@errorDeletingStory": {
+    "description": "Error message when deleting story fails",
+    "placeholders": {
+      "error": {}
+    }
+  },
   "noRecordsThisDay": "No records for this day",
-  "@noRecordsThisDay": { "description": "Message when there are no records on given day", "type": "text" },
+  "@noRecordsThisDay": {
+    "description": "Message when there are no records on given day",
+    "type": "text"
+  },
   "storyUngrouped": "Story ungrouped",
-  "@storyUngrouped": { "description": "Label showing story is ungrouped", "type": "text" },
+  "@storyUngrouped": {
+    "description": "Label showing story is ungrouped",
+    "type": "text"
+  },
   "save": "Save",
-  "@birthDate": { "description": "Label for birth date field", "type": "text" },
-  "@save": { "description": "Generic save button text", "type": "text" },
+  "@birthDate": {
+    "description": "Label for birth date field",
+    "type": "text"
+  },
+  "@save": {
+    "description": "Generic save button text",
+    "type": "text"
+  },
   "confirmDeletion": "Confirm deletion",
-  "@confirmDeletion": { "description": "Title for deletion confirmation dialog", "type": "text" },
+  "@confirmDeletion": {
+    "description": "Title for deletion confirmation dialog",
+    "type": "text"
+  },
   "groupDeletedSuccess": "Group deleted successfully",
-  "@groupDeletedSuccess": { "description": "Snackbar message when a group is deleted", "type": "text" },
+  "@groupDeletedSuccess": {
+    "description": "Snackbar message when a group is deleted",
+    "type": "text"
+  },
   "noGroupsFound": "No groups found",
-  "@noGroupsFound": { "description": "Displayed when no groups are found", "type": "text" },
+  "@noGroupsFound": {
+    "description": "Displayed when no groups are found",
+    "type": "text"
+  },
   "shareError": "Could not share",
-  "@shareError": { "description": "Error message when sharing fails", "type": "text" },
+  "@shareError": {
+    "description": "Error message when sharing fails",
+    "type": "text"
+  },
   "cannotDeletePhoto": "Cannot delete this photo",
-  "@cannotDeletePhoto": { "description": "Error shown when photo deletion fails", "type": "text" },
+  "@cannotDeletePhoto": {
+    "description": "Error shown when photo deletion fails",
+    "type": "text"
+  },
   "deletePhotoTitle": "Delete photo",
-  "@deletePhotoTitle": { "description": "Dialog title for photo deletion", "type": "text" },
+  "@deletePhotoTitle": {
+    "description": "Dialog title for photo deletion",
+    "type": "text"
+  },
   "deletePhotoConfirm": "Do you really want to delete this photo?",
-  "@deletePhotoConfirm": { "description": "Confirmation text for deleting a photo", "type": "text" },
+  "@deletePhotoConfirm": {
+    "description": "Confirmation text for deleting a photo",
+    "type": "text"
+  },
   "deleteGroupTitle": "Delete Group",
-  "@deleteGroupTitle": { "description": "Dialog title for group deletion", "type": "text" },
+  "@deleteGroupTitle": {
+    "description": "Dialog title for group deletion",
+    "type": "text"
+  },
   "share": "Share",
-  "@share": { "description": "Label for share action", "type": "text" },
+  "@share": {
+    "description": "Label for share action",
+    "type": "text"
+  },
   "scrapbookTemplateLabel": "Scrapbook",
-  "@scrapbookTemplateLabel": { "description": "Label for the Scrapbook story share template", "type": "text" },
+  "@scrapbookTemplateLabel": {
+    "description": "Label for the Scrapbook story share template",
+    "type": "text"
+  },
   "home": "Home",
-  "@home": { "description": "Label for home tab", "type": "text" },
+  "@home": {
+    "description": "Label for home tab",
+    "type": "text"
+  },
   "groups": "Groups",
-  "@groups": { "description": "Label for groups tab", "type": "text" },
+  "@groups": {
+    "description": "Label for groups tab",
+    "type": "text"
+  },
   "myStories": "My Stories",
-  "@myStories": { "description": "Title shown on the groups/archived stories screen", "type": "text" },
+  "@myStories": {
+    "description": "Title shown on the groups/archived stories screen",
+    "type": "text"
+  },
   "record": "record",
   "records": "records",
   "filterText": "Text",
@@ -344,15 +429,32 @@
   "laterLabel": "Later",
   "configureLabel": "Configure",
   "imageCopiedBase64": "Image copied to clipboard (base64)",
-  "@imageCopiedBase64": { "description": "Snackbar when image copied", "type": "text" },
+  "@imageCopiedBase64": {
+    "description": "Snackbar when image copied",
+    "type": "text"
+  },
   "newGroup": "New Group",
-  "@newGroup": { "description": "Label for creating new group", "type": "text" },
+  "@newGroup": {
+    "description": "Label for creating new group",
+    "type": "text"
+  },
   "editGroup": "Edit Group",
-  "@editGroup": { "description": "Label for editing a group", "type": "text" },
+  "@editGroup": {
+    "description": "Label for editing a group",
+    "type": "text"
+  },
   "chooseIcon": "Choose icon",
-  "@chooseIcon": { "description": "Prompt to choose icon", "type": "text" },
+  "@chooseIcon": {
+    "description": "Prompt to choose icon",
+    "type": "text"
+  },
   "groupDeleteWarning": "This group has {count} story(ies) linked. If deleted, those stories will return to the home screen (no group). Continue?",
-  "@groupDeleteWarning": { "description": "Warning shown when deleting a group with stories", "placeholders": { "count": {} } },
+  "@groupDeleteWarning": {
+    "description": "Warning shown when deleting a group with stories",
+    "placeholders": {
+      "count": {}
+    }
+  },
   "unarchive": "Unarchive",
   "group": "Group",
   "selectGroup": "Select Group",
@@ -371,7 +473,9 @@
   "backupZipSubtitle": "ZIP file with all your data",
   "backupZipExplanation": "Generates a ZIP file that you can save to OneDrive, Google Drive, email or any other location.",
   "backupLinuxExplanation": "Choose a folder and the backup ZIP will be saved directly to it.",
-  "@backupLinuxExplanation": { "description": "Explanation shown on the backup card when running on Linux desktop" },
+  "@backupLinuxExplanation": {
+    "description": "Explanation shown on the backup card when running on Linux desktop"
+  },
   "restoreSectionTitle": "Restore Backup",
   "restoreSectionDescription": "Select a backup file (ZIP) previously created to restore all your data.",
   "backupShareSubject": "DayApp Backup",
@@ -381,19 +485,25 @@
   "backupDeleteConfirm": "Are you sure you want to delete this backup?\n\n{fileName}",
   "@backupDeleteConfirm": {
     "placeholders": {
-      "fileName": {"type": "String"}
+      "fileName": {
+        "type": "String"
+      }
     }
   },
   "backupShareError": "Error sharing backup: {message}",
   "@backupShareError": {
     "placeholders": {
-      "message": {"type": "String"}
+      "message": {
+        "type": "String"
+      }
     }
   },
   "backupDeleteError": "Error deleting backup: {message}",
   "@backupDeleteError": {
     "placeholders": {
-      "message": {"type": "String"}
+      "message": {
+        "type": "String"
+      }
     }
   },
   "processing": "Processing...",
@@ -402,13 +512,17 @@
   "backupCreatedSuccess": "Backup file created! Use the share menu to save it.",
   "backupError": "Error creating backup: {message}",
   "@backupError": {
-    "placeholders": { "message": {} }
+    "placeholders": {
+      "message": {}
+    }
   },
   "restoreStarting": "Starting restore...",
   "restoreSuccess": "Restore completed successfully!",
   "restoreError": "Error restoring: {message}",
   "@restoreError": {
-    "placeholders": { "message": {} }
+    "placeholders": {
+      "message": {}
+    }
   },
   "restoreConfirmTitle": "⚠️ Confirm Restore",
   "restoreConfirmContent": "All current data will be replaced by the backup.\n\nThis action cannot be undone. Do you wish to continue?",
@@ -491,7 +605,6 @@
   "errorSelectAudios": "Error selecting audios: {message}",
   "errorLoadVideo": "Error loading video",
   "errorSelectImage": "Error selecting image",
-
   "imagePickerTitleMultiple": "Add Photos",
   "imagePickerTitleSingle": "Add Photo",
   "imagePickerChooseOptionMultiple": "Choose an option (gallery allows multiple photos):",
@@ -499,7 +612,6 @@
   "imagePickerGalleryMultiple": "Select from gallery",
   "imagePickerGallerySingle": "Pick from gallery",
   "imagePickerTakePhoto": "Take a photo",
-
   "audioPickerTitleMultiple": "Add Audios",
   "audioPickerTitleSingle": "Add Audio",
   "audioPickerChooseOptionMultiple": "Choose an option (files allow multiple audios):",
@@ -507,7 +619,6 @@
   "audioPickerSelectFilesMultiple": "Select audio files",
   "audioPickerSelectFilesSingle": "Pick audio file",
   "audioPickerRecord": "Record audio",
-
   "videoPickerTitleMultiple": "Add Videos",
   "videoPickerTitleSingle": "Add Video",
   "videoPickerChooseOptionMultiple": "Choose an option (files allow multiple videos):",
@@ -517,12 +628,10 @@
   "videoPickerRecord": "Record video",
   "successVideoAdded": "Video added successfully!",
   "successVideosAdded": "{count} videos added successfully!",
-
   "startRecording": "Start recording",
   "recordingPaused": "Recording paused",
   "recording": "Recording...",
   "readyToRecord": "Ready to record",
-
   "notificationDialogTitle": "Schedule Notification",
   "notificationDialogPrompt": "When would you like to be notified about this entry?",
   "emailAlreadyRegistered": "E-mail already registered.",
@@ -553,32 +662,122 @@
   "emptyTrashConfirm": "Do you want to permanently delete all {count} story(ies) in the trash? This action cannot be undone.",
   "emptyTrashLabel": "Empty trash",
   "errorTakePhoto": "Error taking photo: {message}",
-  "@successVideosAdded": {"placeholders": {"count": {}}},
-  "@errorSearch": {"placeholders": {"message": {}}},
-  "@errorSelectImages": {"placeholders": {"message": {}}},
-  "@errorTakePhoto": {"placeholders": {"message": {}}},
-  "@notificationDialogTitle": {"description": "Title for the notification scheduling dialog"},
-  "@notificationDialogPrompt": {"description": "Prompt asking when the user wants to be notified"},
-  "@notificationReminderTitle": {"description": "Title used for entry reminder notifications", "placeholders": {"title": {}}},
-  "@notificationReminderBody": {"description": "Body text for entry reminder notifications"},
-  "@successImagesAdded": {"placeholders": {"count": {}}},
-  "@restoreStoriesConfirm": {"placeholders": {"count": {}}},
-  "@permanentlyDeleteConfirm": {"description": "Confirmation when permanently deleting a story"},
-  "@deleteGroupConfirm": {"description": "Confirmation when deleting a group", "placeholders": {"name": {}}},
-  "@emptyTrashConfirm": {"placeholders": {"count": {}}},
-  "@errorPlayAudio": {"placeholders": {"message": {}}},
-  "@errorSelectVideos": {"placeholders": {"message": {}}},
-  "@errorSelectFile": {"placeholders": {"message": {}}},
-  "@errorRecordVideo": {"placeholders": {"message": {}}},
-  "@errorStartRecording": {"placeholders": {"message": {}}},
-  "@errorPauseRecording": {"placeholders": {"message": {}}},
-  "@errorResumeRecording": {"placeholders": {"message": {}}},
-  "@errorStopRecording": {"placeholders": {"message": {}}},
-  "@errorSelectAudios": {"placeholders": {"message": {}}},
-  "@errorCreateAccount": {"description": "Displayed when account creation fails"},
-  "@errorShare": {"description": "Displayed when sharing fails"},
-  "@errorLoadVideo": {"description": "Displayed when video fails to load"},
-  "@errorSelectImage": {"description": "Displayed when image selection fails"},
+  "@successVideosAdded": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@errorSearch": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorSelectImages": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorTakePhoto": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@notificationDialogTitle": {
+    "description": "Title for the notification scheduling dialog"
+  },
+  "@notificationDialogPrompt": {
+    "description": "Prompt asking when the user wants to be notified"
+  },
+  "@notificationReminderTitle": {
+    "description": "Title used for entry reminder notifications",
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "@notificationReminderBody": {
+    "description": "Body text for entry reminder notifications"
+  },
+  "@successImagesAdded": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@restoreStoriesConfirm": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@permanentlyDeleteConfirm": {
+    "description": "Confirmation when permanently deleting a story"
+  },
+  "@deleteGroupConfirm": {
+    "description": "Confirmation when deleting a group",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "@emptyTrashConfirm": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@errorPlayAudio": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorSelectVideos": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorSelectFile": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorRecordVideo": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorStartRecording": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorPauseRecording": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorResumeRecording": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorStopRecording": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorSelectAudios": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "@errorCreateAccount": {
+    "description": "Displayed when account creation fails"
+  },
+  "@errorShare": {
+    "description": "Displayed when sharing fails"
+  },
+  "@errorLoadVideo": {
+    "description": "Displayed when video fails to load"
+  },
+  "@errorSelectImage": {
+    "description": "Displayed when image selection fails"
+  },
   "notifications": "Notifications",
   "entryNotifications": "Entry notifications",
   "entryNotificationsInfo": "Entries with a date at least 2 hours ahead may have scheduled notifications.",
@@ -597,31 +796,57 @@
   "automaticBackupInfo": "When you log out, a backup will be created and you can choose where to save it (local folder, Google Drive, etc).",
   "automaticBackupInfoLocal": "On logout, a backup is automatically saved locally on your device. You can later export it to cloud storage if needed.",
   "incrementalBackupTitle": "Backup Folder",
-  "@incrementalBackupTitle": { "description": "Section title for backup folder configuration" },
+  "@incrementalBackupTitle": {
+    "description": "Section title for backup folder configuration"
+  },
   "incrementalBackupDescription": "Stories are automatically backed up to this folder whenever you save one.",
-  "@incrementalBackupDescription": { "description": "Description under the backup section" },
+  "@incrementalBackupDescription": {
+    "description": "Description under the backup section"
+  },
   "incrementalBackupFolderNotSet": "Folder not configured",
-  "@incrementalBackupFolderNotSet": { "description": "Subtitle shown when no backup folder has been selected" },
+  "@incrementalBackupFolderNotSet": {
+    "description": "Subtitle shown when no backup folder has been selected"
+  },
   "incrementalBackupFolderConfigured": "Folder configured",
-  "@incrementalBackupFolderConfigured": { "description": "Subtitle shown when a backup folder has been selected" },
+  "@incrementalBackupFolderConfigured": {
+    "description": "Subtitle shown when a backup folder has been selected"
+  },
   "incrementalBackupSelectFolder": "Select Folder",
-  "@incrementalBackupSelectFolder": { "description": "Button label to open SAF folder picker" },
+  "@incrementalBackupSelectFolder": {
+    "description": "Button label to open SAF folder picker"
+  },
   "incrementalBackupChangeFolder": "Change Folder",
-  "@incrementalBackupChangeFolder": { "description": "Button label to change the currently configured backup folder" },
+  "@incrementalBackupChangeFolder": {
+    "description": "Button label to change the currently configured backup folder"
+  },
   "incrementalBackupChangingFolder": "Copying files to new folder...",
-  "@incrementalBackupChangingFolder": { "description": "Progress message shown while migrating backup files to a new folder" },
+  "@incrementalBackupChangingFolder": {
+    "description": "Progress message shown while migrating backup files to a new folder"
+  },
   "incrementalBackupFolderChanged": "Backup folder updated.",
-  "@incrementalBackupFolderChanged": { "description": "Snackbar message when folder change is successful" },
+  "@incrementalBackupFolderChanged": {
+    "description": "Snackbar message when folder change is successful"
+  },
   "incrementalBackupWarningNoFolder": "Backup folder not set. Stories will not be backed up until you configure a folder in Settings.",
-  "@incrementalBackupWarningNoFolder": { "description": "Warning shown when saving a story but no backup folder is configured" },
+  "@incrementalBackupWarningNoFolder": {
+    "description": "Warning shown when saving a story but no backup folder is configured"
+  },
   "incrementalBackupSyncDone": "Backed up",
-  "@incrementalBackupSyncDone": { "description": "Tooltip/label for the sync-done icon shown briefly after saving a story" },
+  "@incrementalBackupSyncDone": {
+    "description": "Tooltip/label for the sync-done icon shown briefly after saving a story"
+  },
   "backupSetupTitle": "Set Up Backup Folder",
-  "@backupSetupTitle": { "description": "Dialog title for first-time backup folder setup prompt" },
+  "@backupSetupTitle": {
+    "description": "Dialog title for first-time backup folder setup prompt"
+  },
   "backupSetupContent": "Choose a folder where your stories will be backed up automatically. This ensures your data is always safe.",
-  "@backupSetupContent": { "description": "Dialog content for first-time backup folder setup prompt" },
+  "@backupSetupContent": {
+    "description": "Dialog content for first-time backup folder setup prompt"
+  },
   "backupSavedToFolder": "Saving backup to configured folder...",
-  "@backupSavedToFolder": { "description": "Progress message shown while copying the backup zip to the configured folder" },
+  "@backupSavedToFolder": {
+    "description": "Progress message shown while copying the backup zip to the configured folder"
+  },
   "biometricsNotAvailable": "Not available on this device",
   "biometricsDisabled": "Biometrics disabled",
   "biometricConfiguredInfo": "Biometrics is configured. You can log in using your fingerprint or face recognition.",
@@ -646,40 +871,48 @@
   "edit": "Edit",
   "previewTitle": "Preview - {title}",
   "@previewTitle": {
-    "placeholders": { "title": {} }
+    "placeholders": {
+      "title": {}
+    }
   },
   "archiveLabel": "Archive",
   "storyArchived": "Story archived",
   "undo": "Undo",
   "ungroup": "Ungroup",
   "noStoriesInGroup": "No stories in group {group}",
-  "@noStoriesInGroup": { "placeholders": { "group": {} } },
+  "@noStoriesInGroup": {
+    "placeholders": {
+      "group": {}
+    }
+  },
   "exportPdfError": "Error exporting PDF: {error}",
   "@exportPdfError": {
-    "placeholders": { "error": {} }
+    "placeholders": {
+      "error": {}
+    }
   },
-
   "titleRequired": "Title is required!",
   "errorSavingStory": "Error saving story: {error}",
-  "@errorSavingStory": { "placeholders": { "error": {} } },
-
+  "@errorSavingStory": {
+    "placeholders": {
+      "error": {}
+    }
+  },
   "exportPdfFieldsRequired": "Title and description are required to export.",
-
   "exportHistory": "Export Story",
   "exportHistoryPrompt": "Do you want to save before exporting or just preview?",
-
   "preview": "Preview",
   "saveAndExport": "Save and export",
-
   "untitled": "Untitled",
-
   "errorLoadingFile": "Error loading file: {error}",
-  "@errorLoadingFile": { "placeholders": { "error": {} } },
-
+  "@errorLoadingFile": {
+    "placeholders": {
+      "error": {}
+    }
+  },
   "discard": "Discard",
   "discardStoryTitle": "Discard story?",
   "unsavedStoryPrompt": "You have a new unsaved story. Leave without saving?",
-
   "changeDateTooltip": "Change date",
   "storyTitleLabel": "Title",
   "storyTitleHint": "Enter the title",
@@ -691,709 +924,1576 @@
   "videosSection": "Videos",
   "importTxtTooltip": "Import .txt",
   "expandTooltip": "Expand",
-
   "photoTooltip": "Photo",
   "videoTooltip": "Video",
   "audioTooltip": "Audio",
   "emojiTooltip": "Emoji",
-
   "editDescription": "Edit Description",
-
   "editStory": "Edit Story",
   "discardChangesTitle": "Discard changes?",
   "discardChangesPrompt": "You have unsaved changes. Leave without saving?",
-
   "archivedStateLabel": "Archived",
   "archiveSubtitle": "Hide from home screen",
-  "@appTitle": { "description": "Label for appTitle", "type": "text" },
-  "@settings": { "description": "Label for settings", "type": "text" },
-  "@language": { "description": "Label for language", "type": "text" },
-  "@english": { "description": "Label for english", "type": "text" },
-  "@spanish": { "description": "Label for spanish", "type": "text" },
-  "@french": { "description": "Label for french", "type": "text" },
-  "@italian": { "description": "Label for italian", "type": "text" },
-  "@portuguese": { "description": "Label for portuguese", "type": "text" },
-  "@tryAgain": { "description": "Label for tryAgain", "type": "text" },
-  "@theme": { "description": "Label for theme", "type": "text" },
-  "@pinUnlock": { "description": "Label for pinUnlock", "type": "text" },
-  "@changePin": { "description": "Label for changePin", "type": "text" },
-  "@enableBiometrics": { "description": "Label for enableBiometrics", "type": "text" },
-  "@information": { "description": "Label for information", "type": "text" },
-  "@email": { "description": "Label for email", "type": "text" },
-  "@password": { "description": "Label for password", "type": "text" },
-  "@configurePin": { "description": "Label for configurePin", "type": "text" },
-  "@biometrics": { "description": "Label for biometrics", "type": "text" },
-  "@backgroundLock": { "description": "Label for backgroundLock", "type": "text" },
-  "@statistics": { "description": "Label for statistics", "type": "text" },
-  "@manageGroups": { "description": "Label for manageGroups", "type": "text" },
-  "@trash": { "description": "Label for trash", "type": "text" },
-  "@help": { "description": "Label for help", "type": "text" },
-  "@about": { "description": "Label for about", "type": "text" },
-  "@logout": { "description": "Label for logout", "type": "text" },
-  "@createAccount": { "description": "Label for createAccount", "type": "text" },
-  "@name": { "description": "Label for name", "type": "text" },
-  "@confirmPassword": { "description": "Label for confirmPassword", "type": "text" },
-  "@createAccountButton": { "description": "Label for createAccountButton", "type": "text" },
-  "@alreadyHaveAccount": { "description": "Label for alreadyHaveAccount", "type": "text" },
-  "@needHelp": { "description": "Label for needHelp", "type": "text" },
-  "@currentPinLabel": { "description": "Label for currentPinLabel", "type": "text" },
-  "@newPinLabel": { "description": "Label for newPinLabel", "type": "text" },
-  "@pinLabel": { "description": "Label for pinLabel", "type": "text" },
-  "@confirmPin": { "description": "Label for confirmPin", "type": "text" },
-  "@enterCurrentPin": { "description": "Label for enterCurrentPin", "type": "text" },
-  "@enterPin": { "description": "Label for enterPin", "type": "text" },
-  "@pinLengthError": { "description": "Message for pinLengthError", "type": "text" },
-  "@pinsDoNotMatch": { "description": "Message for pinsDoNotMatch", "type": "text" },
-  "@pinIncorrect": { "description": "Message for pinIncorrect", "type": "text" },
-  "@pinChangedSuccess": { "description": "Message for pinChangedSuccess", "type": "text" },
-  "@pinConfiguredSuccess": { "description": "Message for pinConfiguredSuccess", "type": "text" },
-  "@informYourEmail": { "description": "Message for informYourEmail", "type": "text" },
-  "@invalidEmail": { "description": "Message for invalidEmail", "type": "text" },
-  "@emailNotFound": { "description": "Message for emailNotFound", "type": "text" },
-  "@codeMustBe6": { "description": "Message for codeMustBe6", "type": "text" },
-  "@codeVerified": { "description": "Message for codeVerified", "type": "text" },
-  "@codeInvalid": { "description": "Message for codeInvalid", "type": "text" },
-  "@enterNewPassword": { "description": "Message for enterNewPassword", "type": "text" },
-  "@passwordResetSuccess": { "description": "Message for passwordResetSuccess", "type": "text" },
-  "@errorResetPassword": { "description": "Message for errorResetPassword", "type": "text" },
-  "@passwordsDoNotMatch": { "description": "Message for passwordsDoNotMatch", "type": "text" },
-  "@resendCodeSuccess": { "description": "Message for resendCodeSuccess", "type": "text" },
-  "@resendCodeError": { "description": "Message for resendCodeError", "type": "text" },
-  "@passwordMinLength": { "description": "Message for passwordMinLength", "type": "text" },
-  "@sendCode": { "description": "Label for sendCode", "type": "text" },
-  "@unlock": { "description": "Label for unlock", "type": "text" },
-  "@fullName": { "description": "Label for fullName", "type": "text" },
-  "@nameRequired": { "description": "Message for nameRequired", "type": "text" },
-  "@nameMinLength": { "description": "Message for nameMinLength", "type": "text" },
-  "@emailRequired": { "description": "Message for emailRequired", "type": "text" },
-  "@emailInvalid": { "description": "Message for emailInvalid", "type": "text" },
-  "@welcomeBack": { "description": "Label for welcomeBack", "type": "text" },
-  "@accessAccount": { "description": "Label for accessAccount", "type": "text" },
-  "@enterPassword": { "description": "Label for enterPassword", "type": "text" },
-  "@signIn": { "description": "Label for signIn", "type": "text" },
-  "@forgotPassword": { "description": "Label for forgotPassword", "type": "text" },
-  "@noAccountCreateHere": { "description": "Label for noAccountCreateHere", "type": "text" },
-  "@privacyPolicy": { "description": "Label for privacyPolicy", "type": "text" },
-  "@biometricsEnabledSuccess": { "description": "Message for biometricsEnabledSuccess", "type": "text" },
-  "@biometricLoginError": { "description": "Message for biometricLoginError", "type": "text" },
-  "@invalidCredentials": { "description": "Message for invalidCredentials", "type": "text" },
-  "@profileUpdatedSuccess": { "description": "Message for profileUpdatedSuccess", "type": "text" },
-  "@profileUpdateError": { "description": "Message for profileUpdateError", "type": "text" },
-  "@unlockAppReason": { "description": "Message for unlockAppReason", "type": "text" },
-  "@fillEmailAndPassword": { "description": "Message for fillEmailAndPassword", "type": "text" },
-  "@emailOrPasswordIncorrect": { "description": "Message for emailOrPasswordIncorrect", "type": "text" },
-  "@noEmailRegistered": { "description": "Message for noEmailRegistered", "type": "text" },
-  "@errorGeneratingCode": { "description": "Message for errorGeneratingCode", "type": "text" },
-  "@errorSendingCode": { "description": "Message for errorSendingCode", "type": "text" },
-  "@recoverPinTitle": { "description": "Label for recoverPinTitle", "type": "text" },
-  "@enterRecoveryCodePrompt": { "description": "Label for enterRecoveryCodePrompt", "type": "text" },
-  "@enterPasswordToContinue": { "description": "Label for enterPasswordToContinue", "type": "text" },
-  "@enterPinToContinue": { "description": "Label for enterPinToContinue", "type": "text" },
-  "@useBiometricsToContinue": { "description": "Label for useBiometricsToContinue", "type": "text" },
-  "@unlockTitle": { "description": "Label for unlockTitle", "type": "text" },
-  "@search": { "description": "Label for search", "type": "text" },
-  "@backupRecommendation": { "description": "Label for backupRecommendation", "type": "text" },
-  "@cancel": { "description": "Label for cancel", "type": "text" },
-  "@performBackup": { "description": "Label for performBackup", "type": "text" },
-  "@deleteStoryTitle": { "description": "Label for deleteStoryTitle", "type": "text" },
-  "@deleteStoryConfirm": { "description": "Message for deleteStoryConfirm", "type": "text" },
-  "@deleteLabel": { "description": "Label for deleteLabel", "type": "text" },
-  "@movedToTrash": { "description": "Message for movedToTrash", "type": "text" },
-  "@unarchive": { "description": "Label for unarchive", "type": "text" },
-  "@group": { "description": "Label for group", "type": "text" },
-  "@archivedTitle": { "description": "Label for archivedTitle", "type": "text" },
-  "@toggleToIcons": { "description": "Label for toggleToIcons", "type": "text" },
-  "@toggleToCards": { "description": "Label for toggleToCards", "type": "text" },
-  "@menu": { "description": "Label for menu", "type": "text" },
-  "@editProfile": { "description": "Label for editProfile", "type": "text" },
-  "@editTip": { "description": "Label for editTip", "type": "text" },
-  "@exportPdf": { "description": "Label for exportPdf", "type": "text" },
-  "@close": { "description": "Label for close", "type": "text" },
-  "@newStory": { "description": "Label for newStory", "type": "text" },
-  "@noArchivedStories": { "description": "Label for noArchivedStories", "type": "text" },
-  "@edit": { "description": "Label for edit", "type": "text" },
-  "@archiveLabel": { "description": "Label for archiveLabel", "type": "text" },
-  "@storyArchived": { "description": "Message for storyArchived", "type": "text" },
-  "@undo": { "description": "Label for undo", "type": "text" },
-  "@ungroup": { "description": "Label for ungroup", "type": "text" },
+  "@appTitle": {
+    "description": "Label for appTitle",
+    "type": "text"
+  },
+  "@settings": {
+    "description": "Label for settings",
+    "type": "text"
+  },
+  "@language": {
+    "description": "Label for language",
+    "type": "text"
+  },
+  "@english": {
+    "description": "Label for english",
+    "type": "text"
+  },
+  "@spanish": {
+    "description": "Label for spanish",
+    "type": "text"
+  },
+  "@french": {
+    "description": "Label for french",
+    "type": "text"
+  },
+  "@italian": {
+    "description": "Label for italian",
+    "type": "text"
+  },
+  "@portuguese": {
+    "description": "Label for portuguese",
+    "type": "text"
+  },
+  "@tryAgain": {
+    "description": "Label for tryAgain",
+    "type": "text"
+  },
+  "@theme": {
+    "description": "Label for theme",
+    "type": "text"
+  },
+  "@pinUnlock": {
+    "description": "Label for pinUnlock",
+    "type": "text"
+  },
+  "@changePin": {
+    "description": "Label for changePin",
+    "type": "text"
+  },
+  "@enableBiometrics": {
+    "description": "Label for enableBiometrics",
+    "type": "text"
+  },
+  "@information": {
+    "description": "Label for information",
+    "type": "text"
+  },
+  "@email": {
+    "description": "Label for email",
+    "type": "text"
+  },
+  "@password": {
+    "description": "Label for password",
+    "type": "text"
+  },
+  "@configurePin": {
+    "description": "Label for configurePin",
+    "type": "text"
+  },
+  "@biometrics": {
+    "description": "Label for biometrics",
+    "type": "text"
+  },
+  "@backgroundLock": {
+    "description": "Label for backgroundLock",
+    "type": "text"
+  },
+  "@statistics": {
+    "description": "Label for statistics",
+    "type": "text"
+  },
+  "@manageGroups": {
+    "description": "Label for manageGroups",
+    "type": "text"
+  },
+  "@trash": {
+    "description": "Label for trash",
+    "type": "text"
+  },
+  "@help": {
+    "description": "Label for help",
+    "type": "text"
+  },
+  "@about": {
+    "description": "Label for about",
+    "type": "text"
+  },
+  "@logout": {
+    "description": "Label for logout",
+    "type": "text"
+  },
+  "@createAccount": {
+    "description": "Label for createAccount",
+    "type": "text"
+  },
+  "@name": {
+    "description": "Label for name",
+    "type": "text"
+  },
+  "@confirmPassword": {
+    "description": "Label for confirmPassword",
+    "type": "text"
+  },
+  "@createAccountButton": {
+    "description": "Label for createAccountButton",
+    "type": "text"
+  },
+  "@alreadyHaveAccount": {
+    "description": "Label for alreadyHaveAccount",
+    "type": "text"
+  },
+  "@needHelp": {
+    "description": "Label for needHelp",
+    "type": "text"
+  },
+  "@currentPinLabel": {
+    "description": "Label for currentPinLabel",
+    "type": "text"
+  },
+  "@newPinLabel": {
+    "description": "Label for newPinLabel",
+    "type": "text"
+  },
+  "@pinLabel": {
+    "description": "Label for pinLabel",
+    "type": "text"
+  },
+  "@confirmPin": {
+    "description": "Label for confirmPin",
+    "type": "text"
+  },
+  "@enterCurrentPin": {
+    "description": "Label for enterCurrentPin",
+    "type": "text"
+  },
+  "@enterPin": {
+    "description": "Label for enterPin",
+    "type": "text"
+  },
+  "@pinLengthError": {
+    "description": "Message for pinLengthError",
+    "type": "text"
+  },
+  "@pinsDoNotMatch": {
+    "description": "Message for pinsDoNotMatch",
+    "type": "text"
+  },
+  "@pinIncorrect": {
+    "description": "Message for pinIncorrect",
+    "type": "text"
+  },
+  "@pinChangedSuccess": {
+    "description": "Message for pinChangedSuccess",
+    "type": "text"
+  },
+  "@pinConfiguredSuccess": {
+    "description": "Message for pinConfiguredSuccess",
+    "type": "text"
+  },
+  "@informYourEmail": {
+    "description": "Message for informYourEmail",
+    "type": "text"
+  },
+  "@invalidEmail": {
+    "description": "Message for invalidEmail",
+    "type": "text"
+  },
+  "@emailNotFound": {
+    "description": "Message for emailNotFound",
+    "type": "text"
+  },
+  "@codeMustBe6": {
+    "description": "Message for codeMustBe6",
+    "type": "text"
+  },
+  "@codeVerified": {
+    "description": "Message for codeVerified",
+    "type": "text"
+  },
+  "@codeInvalid": {
+    "description": "Message for codeInvalid",
+    "type": "text"
+  },
+  "@enterNewPassword": {
+    "description": "Message for enterNewPassword",
+    "type": "text"
+  },
+  "@passwordResetSuccess": {
+    "description": "Message for passwordResetSuccess",
+    "type": "text"
+  },
+  "@errorResetPassword": {
+    "description": "Message for errorResetPassword",
+    "type": "text"
+  },
+  "@passwordsDoNotMatch": {
+    "description": "Message for passwordsDoNotMatch",
+    "type": "text"
+  },
+  "@resendCodeSuccess": {
+    "description": "Message for resendCodeSuccess",
+    "type": "text"
+  },
+  "@resendCodeError": {
+    "description": "Message for resendCodeError",
+    "type": "text"
+  },
+  "@passwordMinLength": {
+    "description": "Message for passwordMinLength",
+    "type": "text"
+  },
+  "@sendCode": {
+    "description": "Label for sendCode",
+    "type": "text"
+  },
+  "@unlock": {
+    "description": "Label for unlock",
+    "type": "text"
+  },
+  "@fullName": {
+    "description": "Label for fullName",
+    "type": "text"
+  },
+  "@nameRequired": {
+    "description": "Message for nameRequired",
+    "type": "text"
+  },
+  "@nameMinLength": {
+    "description": "Message for nameMinLength",
+    "type": "text"
+  },
+  "@emailRequired": {
+    "description": "Message for emailRequired",
+    "type": "text"
+  },
+  "@emailInvalid": {
+    "description": "Message for emailInvalid",
+    "type": "text"
+  },
+  "@welcomeBack": {
+    "description": "Label for welcomeBack",
+    "type": "text"
+  },
+  "@accessAccount": {
+    "description": "Label for accessAccount",
+    "type": "text"
+  },
+  "@enterPassword": {
+    "description": "Label for enterPassword",
+    "type": "text"
+  },
+  "@signIn": {
+    "description": "Label for signIn",
+    "type": "text"
+  },
+  "@forgotPassword": {
+    "description": "Label for forgotPassword",
+    "type": "text"
+  },
+  "@noAccountCreateHere": {
+    "description": "Label for noAccountCreateHere",
+    "type": "text"
+  },
+  "@privacyPolicy": {
+    "description": "Label for privacyPolicy",
+    "type": "text"
+  },
+  "@biometricsEnabledSuccess": {
+    "description": "Message for biometricsEnabledSuccess",
+    "type": "text"
+  },
+  "@biometricLoginError": {
+    "description": "Message for biometricLoginError",
+    "type": "text"
+  },
+  "@invalidCredentials": {
+    "description": "Message for invalidCredentials",
+    "type": "text"
+  },
+  "@profileUpdatedSuccess": {
+    "description": "Message for profileUpdatedSuccess",
+    "type": "text"
+  },
+  "@profileUpdateError": {
+    "description": "Message for profileUpdateError",
+    "type": "text"
+  },
+  "@unlockAppReason": {
+    "description": "Message for unlockAppReason",
+    "type": "text"
+  },
+  "@fillEmailAndPassword": {
+    "description": "Message for fillEmailAndPassword",
+    "type": "text"
+  },
+  "@emailOrPasswordIncorrect": {
+    "description": "Message for emailOrPasswordIncorrect",
+    "type": "text"
+  },
+  "@noEmailRegistered": {
+    "description": "Message for noEmailRegistered",
+    "type": "text"
+  },
+  "@errorGeneratingCode": {
+    "description": "Message for errorGeneratingCode",
+    "type": "text"
+  },
+  "@errorSendingCode": {
+    "description": "Message for errorSendingCode",
+    "type": "text"
+  },
+  "@recoverPinTitle": {
+    "description": "Label for recoverPinTitle",
+    "type": "text"
+  },
+  "@enterRecoveryCodePrompt": {
+    "description": "Label for enterRecoveryCodePrompt",
+    "type": "text"
+  },
+  "@enterPasswordToContinue": {
+    "description": "Label for enterPasswordToContinue",
+    "type": "text"
+  },
+  "@enterPinToContinue": {
+    "description": "Label for enterPinToContinue",
+    "type": "text"
+  },
+  "@useBiometricsToContinue": {
+    "description": "Label for useBiometricsToContinue",
+    "type": "text"
+  },
+  "@unlockTitle": {
+    "description": "Label for unlockTitle",
+    "type": "text"
+  },
+  "@search": {
+    "description": "Label for search",
+    "type": "text"
+  },
+  "@backupRecommendation": {
+    "description": "Label for backupRecommendation",
+    "type": "text"
+  },
+  "@cancel": {
+    "description": "Label for cancel",
+    "type": "text"
+  },
+  "@performBackup": {
+    "description": "Label for performBackup",
+    "type": "text"
+  },
+  "@deleteStoryTitle": {
+    "description": "Label for deleteStoryTitle",
+    "type": "text"
+  },
+  "@deleteStoryConfirm": {
+    "description": "Message for deleteStoryConfirm",
+    "type": "text"
+  },
+  "@deleteLabel": {
+    "description": "Label for deleteLabel",
+    "type": "text"
+  },
+  "@movedToTrash": {
+    "description": "Message for movedToTrash",
+    "type": "text"
+  },
+  "@unarchive": {
+    "description": "Label for unarchive",
+    "type": "text"
+  },
+  "@group": {
+    "description": "Label for group",
+    "type": "text"
+  },
+  "@archivedTitle": {
+    "description": "Label for archivedTitle",
+    "type": "text"
+  },
+  "@toggleToIcons": {
+    "description": "Label for toggleToIcons",
+    "type": "text"
+  },
+  "@toggleToCards": {
+    "description": "Label for toggleToCards",
+    "type": "text"
+  },
+  "@menu": {
+    "description": "Label for menu",
+    "type": "text"
+  },
+  "@editProfile": {
+    "description": "Label for editProfile",
+    "type": "text"
+  },
+  "@editTip": {
+    "description": "Label for editTip",
+    "type": "text"
+  },
+  "@exportPdf": {
+    "description": "Label for exportPdf",
+    "type": "text"
+  },
+  "@close": {
+    "description": "Label for close",
+    "type": "text"
+  },
+  "@newStory": {
+    "description": "Label for newStory",
+    "type": "text"
+  },
+  "@noArchivedStories": {
+    "description": "Label for noArchivedStories",
+    "type": "text"
+  },
+  "@edit": {
+    "description": "Label for edit",
+    "type": "text"
+  },
+  "@archiveLabel": {
+    "description": "Label for archiveLabel",
+    "type": "text"
+  },
+  "@storyArchived": {
+    "description": "Message for storyArchived",
+    "type": "text"
+  },
+  "@undo": {
+    "description": "Label for undo",
+    "type": "text"
+  },
+  "@ungroup": {
+    "description": "Label for ungroup",
+    "type": "text"
+  },
   "chooseEmoji": "Choose an emoji",
-  "@chooseEmoji": { "description": "Title of the emoji selection modal" },
+  "@chooseEmoji": {
+    "description": "Title of the emoji selection modal"
+  },
   "emojiGroupSentimentos": "Feelings",
-  "@emojiGroupSentimentos": { "description": "Emoji group: feelings/emotions" },
+  "@emojiGroupSentimentos": {
+    "description": "Emoji group: feelings/emotions"
+  },
   "emojiGroupAnimais": "Animals",
-  "@emojiGroupAnimais": { "description": "Emoji group: animals" },
+  "@emojiGroupAnimais": {
+    "description": "Emoji group: animals"
+  },
   "emojiGroupVegetais": "Plants",
-  "@emojiGroupVegetais": { "description": "Emoji group: plants/vegetables" },
+  "@emojiGroupVegetais": {
+    "description": "Emoji group: plants/vegetables"
+  },
   "emojiGroupCeu": "Sky",
-  "@emojiGroupCeu": { "description": "Emoji group: sky/nature" },
+  "@emojiGroupCeu": {
+    "description": "Emoji group: sky/nature"
+  },
   "emojiGroupObjetos": "Objects",
-  "@emojiGroupObjetos": { "description": "Emoji group: objects" },
+  "@emojiGroupObjetos": {
+    "description": "Emoji group: objects"
+  },
   "emojiGroupAlimentos": "Food",
-  "@emojiGroupAlimentos": { "description": "Emoji group: food" },
+  "@emojiGroupAlimentos": {
+    "description": "Emoji group: food"
+  },
   "emojiGroupLugares": "Places",
-  "@emojiGroupLugares": { "description": "Emoji group: places" },
+  "@emojiGroupLugares": {
+    "description": "Emoji group: places"
+  },
   "emojiGroupSimbolos": "Symbols",
-  "@emojiGroupSimbolos": { "description": "Emoji group: symbols" },
+  "@emojiGroupSimbolos": {
+    "description": "Emoji group: symbols"
+  },
   "moodQuestion": "How did you feel in this story?",
-  "@moodQuestion": { "description": "Question asking the user about their mood/feeling" },
+  "@moodQuestion": {
+    "description": "Question asking the user about their mood/feeling"
+  },
   "moodVeryDifficult": "Very difficult",
-  "@moodVeryDifficult": { "description": "Mood option: very difficult" },
+  "@moodVeryDifficult": {
+    "description": "Mood option: very difficult"
+  },
   "moodDifficult": "Difficult",
-  "@moodDifficult": { "description": "Mood option: difficult" },
+  "@moodDifficult": {
+    "description": "Mood option: difficult"
+  },
   "moodNeutral": "Neutral",
-  "@moodNeutral": { "description": "Mood option: neutral" },
+  "@moodNeutral": {
+    "description": "Mood option: neutral"
+  },
   "moodGood": "Good",
-  "@moodGood": { "description": "Mood option: good" },
+  "@moodGood": {
+    "description": "Mood option: good"
+  },
   "moodVeryGood": "Very good",
-  "@moodVeryGood": { "description": "Mood option: very good" },
+  "@moodVeryGood": {
+    "description": "Mood option: very good"
+  },
   "energyQuestion": "How was your energy?",
-  "@energyQuestion": { "description": "Question asking the user about their energy level" },
+  "@energyQuestion": {
+    "description": "Question asking the user about their energy level"
+  },
   "energyLow": "Low",
-  "@energyLow": { "description": "Energy level: low" },
+  "@energyLow": {
+    "description": "Energy level: low"
+  },
   "energyNormal": "Normal",
-  "@energyNormal": { "description": "Energy level: normal" },
+  "@energyNormal": {
+    "description": "Energy level: normal"
+  },
   "energyHigh": "High",
-  "@energyHigh": { "description": "Energy level: high" },
-
+  "@energyHigh": {
+    "description": "Energy level: high"
+  },
   "tagsHint": "Type and press Enter or comma",
-  "@tagsHint": { "description": "Hint text for the tags input field" },
+  "@tagsHint": {
+    "description": "Hint text for the tags input field"
+  },
   "addTag": "Add tag",
-  "@addTag": { "description": "Tooltip for the add tag button" },
+  "@addTag": {
+    "description": "Tooltip for the add tag button"
+  },
   "tagLongPressHint": "Long press to rename",
-  "@tagLongPressHint": { "description": "Tooltip shown on tag chips" },
+  "@tagLongPressHint": {
+    "description": "Tooltip shown on tag chips"
+  },
   "renameTagTitle": "Rename tag",
-  "@renameTagTitle": { "description": "Title of the rename tag dialog" },
+  "@renameTagTitle": {
+    "description": "Title of the rename tag dialog"
+  },
   "renameTagWarning": "Renaming will affect all stories that use this tag.",
-  "@renameTagWarning": { "description": "Warning shown when renaming a tag" },
+  "@renameTagWarning": {
+    "description": "Warning shown when renaming a tag"
+  },
   "tagNameLabel": "Tag name",
-  "@tagNameLabel": { "description": "Label for the tag name text field" },
-
+  "@tagNameLabel": {
+    "description": "Label for the tag name text field"
+  },
   "insightDiscovery": "Discovery",
-  "@insightDiscovery": { "description": "Title of the best-weekday insight card" },
+  "@insightDiscovery": {
+    "description": "Title of the best-weekday insight card"
+  },
   "insightPattern": "Pattern found",
-  "@insightPattern": { "description": "Title of the positive-tag insight card" },
+  "@insightPattern": {
+    "description": "Title of the positive-tag insight card"
+  },
   "insightTrend": "📈 Trend",
-  "@insightTrend": { "description": "Title of the mood trend insight card" },
+  "@insightTrend": {
+    "description": "Title of the mood trend insight card"
+  },
   "insightMonthlySummary": "📊 Your month in stories",
-  "@insightMonthlySummary": { "description": "Title of the monthly summary insight card" },
-  "insightPositiveWordsTitle": "Positive words",
-  "@insightPositiveWordsTitle": { "description": "Title of the positive word insight card" },
-  "insightDifficultWordsTitle": "Difficult words",
-  "@insightDifficultWordsTitle": { "description": "Title of the difficult word insight card" },
-
+  "@insightMonthlySummary": {
+    "description": "Title of the monthly summary insight card"
+  },
   "insightBestWeekday": "{weekday} is usually your most positive day.",
   "@insightBestWeekday": {
     "description": "Body text of the best-weekday insight",
-    "placeholders": { "weekday": { "type": "String" } }
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
   },
   "insightPositiveTag": "Stories tagged #{tag} tend to have a better mood.",
   "@insightPositiveTag": {
     "description": "Body text of the positive-tag insight",
-    "placeholders": { "tag": { "type": "String" } }
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
   },
   "insightTrendPositive": "Your mood has been improving over the last 7 days compared to the last 30 days.",
-  "@insightTrendPositive": { "description": "Body text of the positive trend insight" },
-  "insightPositiveWords": "Words that appear often in your most positive stories: {words}.",
-  "@insightPositiveWords": {
-    "description": "Body text of the positive words insight",
-    "placeholders": { "words": { "type": "String" } }
-  },
-  "insightDifficultWords": "Words that appear often in your more difficult stories: {words}.",
-  "@insightDifficultWords": {
-    "description": "Body text of the difficult words insight",
-    "placeholders": { "words": { "type": "String" } }
+  "@insightTrendPositive": {
+    "description": "Body text of the positive trend insight"
   },
   "insightMonthlySummaryText": "Entries: {entries}\nAvg mood: {mood}\nAvg energy: {energy}",
   "@insightMonthlySummaryText": {
     "description": "Body text of the monthly summary insight (without tag line)",
     "placeholders": {
-      "entries": { "type": "int" },
-      "mood": { "type": "String" },
-      "energy": { "type": "String" }
+      "entries": {
+        "type": "int"
+      },
+      "mood": {
+        "type": "String"
+      },
+      "energy": {
+        "type": "String"
+      }
     }
   },
   "insightMonthlySummaryWithTag": "Entries: {entries}\nAvg mood: {mood}\nAvg energy: {energy}\nTop tag: #{tag}",
   "@insightMonthlySummaryWithTag": {
     "description": "Body text of the monthly summary insight with top tag",
     "placeholders": {
-      "entries": { "type": "int" },
-      "mood": { "type": "String" },
-      "energy": { "type": "String" },
-      "tag": { "type": "String" }
+      "entries": {
+        "type": "int"
+      },
+      "mood": {
+        "type": "String"
+      },
+      "energy": {
+        "type": "String"
+      },
+      "tag": {
+        "type": "String"
+      }
     }
   },
-
   "insightSeeStories": "See stories",
-  "@insightSeeStories": { "description": "Action button on insight cards that have a related tag" },
-
+  "@insightSeeStories": {
+    "description": "Action button on insight cards that have a related tag"
+  },
   "weekdaySunday": "Sunday",
-  "@weekdaySunday": { "description": "Day of the week" },
+  "@weekdaySunday": {
+    "description": "Day of the week"
+  },
   "weekdayMonday": "Monday",
-  "@weekdayMonday": { "description": "Day of the week" },
+  "@weekdayMonday": {
+    "description": "Day of the week"
+  },
   "weekdayTuesday": "Tuesday",
-  "@weekdayTuesday": { "description": "Day of the week" },
+  "@weekdayTuesday": {
+    "description": "Day of the week"
+  },
   "weekdayWednesday": "Wednesday",
-  "@weekdayWednesday": { "description": "Day of the week" },
+  "@weekdayWednesday": {
+    "description": "Day of the week"
+  },
   "weekdayThursday": "Thursday",
-  "@weekdayThursday": { "description": "Day of the week" },
+  "@weekdayThursday": {
+    "description": "Day of the week"
+  },
   "weekdayFriday": "Friday",
-  "@weekdayFriday": { "description": "Day of the week" },
+  "@weekdayFriday": {
+    "description": "Day of the week"
+  },
   "weekdaySaturday": "Saturday",
-  "@weekdaySaturday": { "description": "Day of the week" },
-
+  "@weekdaySaturday": {
+    "description": "Day of the week"
+  },
   "insightDismiss": "Dismiss",
-  "@insightDismiss": { "description": "Tooltip and label for the X button to dismiss an insight" },
+  "@insightDismiss": {
+    "description": "Tooltip and label for the X button to dismiss an insight"
+  },
   "insightStoryBalanceTitle": "Story Balance",
-  "@insightStoryBalanceTitle": { "description": "Title of the story balance insight" },
+  "@insightStoryBalanceTitle": {
+    "description": "Title of the story balance insight"
+  },
   "insightStoryBalancePositive": "You recorded more positive stories in the last 10 days. Keep it up!",
-  "@insightStoryBalancePositive": { "description": "Insight description when positive stories prevail" },
+  "@insightStoryBalancePositive": {
+    "description": "Insight description when positive stories prevail"
+  },
   "insightStoryBalanceDifficult": "You recorded more difficult stories in the last 10 days. Take care of yourself!",
-  "@insightStoryBalanceDifficult": { "description": "Insight description when difficult stories prevail" },
+  "@insightStoryBalanceDifficult": {
+    "description": "Insight description when difficult stories prevail"
+  },
   "insightWritingTimeTitle": "Writing Time",
-  "@insightWritingTimeTitle": { "description": "Title of the writing time-of-day insight" },
+  "@insightWritingTimeTitle": {
+    "description": "Title of the writing time-of-day insight"
+  },
   "insightWritingTimeMorning": "You wrote more in the morning this week.",
-  "@insightWritingTimeMorning": { "description": "Insight: user writes more in the morning" },
+  "@insightWritingTimeMorning": {
+    "description": "Insight: user writes more in the morning"
+  },
   "insightWritingTimeAfternoon": "You wrote more in the afternoon this week.",
-  "@insightWritingTimeAfternoon": { "description": "Insight: user writes more in the afternoon" },
+  "@insightWritingTimeAfternoon": {
+    "description": "Insight: user writes more in the afternoon"
+  },
   "insightWritingTimeNight": "You wrote more at night this week.",
-  "@insightWritingTimeNight": { "description": "Insight: user writes more at night" },
+  "@insightWritingTimeNight": {
+    "description": "Insight: user writes more at night"
+  },
   "insightEnergyChartTitle": "Energy — Last 7 Days",
-  "@insightEnergyChartTitle": { "description": "Title of the weekly energy chart insight (Premium)" },
+  "@insightEnergyChartTitle": {
+    "description": "Title of the weekly energy chart insight (Premium)"
+  },
   "insightEnergyChartSubtitle": "Your energy trend this week",
-  "@insightEnergyChartSubtitle": { "description": "Subtitle of the energy chart insight card" },
+  "@insightEnergyChartSubtitle": {
+    "description": "Subtitle of the energy chart insight card"
+  },
   "insightPremiumRequired": "This is a Premium feature. Upgrade to unlock this insight.",
-  "@insightPremiumRequired": { "description": "Message shown on locked Premium insights" },
+  "@insightPremiumRequired": {
+    "description": "Message shown on locked Premium insights"
+  },
   "insightPremiumCTA": "Upgrade",
-  "@insightPremiumCTA": { "description": "CTA button to see Premium plans" },
+  "@insightPremiumCTA": {
+    "description": "CTA button to see Premium plans"
+  },
   "insightDevModeActive": "Dev mode: all insights visible",
-  "@insightDevModeActive": { "description": "Banner shown in development mode when all insights are forced visible" },
+  "@insightDevModeActive": {
+    "description": "Banner shown in development mode when all insights are forced visible"
+  },
   "backupProgressCreating": "Creating backup file...",
-  "@backupProgressCreating": { "description": "Progress message: creating backup file" },
+  "@backupProgressCreating": {
+    "description": "Progress message: creating backup file"
+  },
   "backupProgressCopyingDb": "Copying database...",
-  "@backupProgressCopyingDb": { "description": "Progress message: copying database" },
+  "@backupProgressCopyingDb": {
+    "description": "Progress message: copying database"
+  },
   "backupProgressCopyingVideos": "Copying videos...",
-  "@backupProgressCopyingVideos": { "description": "Progress message: copying videos" },
+  "@backupProgressCopyingVideos": {
+    "description": "Progress message: copying videos"
+  },
   "backupProgressCopyingVideo": "Copying video {current}/{total}...",
   "@backupProgressCopyingVideo": {
     "description": "Progress message: copying a single video",
-    "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } }
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "backupProgressCopyingPhotos": "Copying photos...",
-  "@backupProgressCopyingPhotos": { "description": "Progress message: copying photos" },
+  "@backupProgressCopyingPhotos": {
+    "description": "Progress message: copying photos"
+  },
   "backupProgressCopyingPhoto": "Copying photo {current}/{total}...",
   "@backupProgressCopyingPhoto": {
     "description": "Progress message: copying a single photo",
-    "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } }
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "backupProgressCopyingAudios": "Copying audios...",
-  "@backupProgressCopyingAudios": { "description": "Progress message: copying audios" },
+  "@backupProgressCopyingAudios": {
+    "description": "Progress message: copying audios"
+  },
   "backupProgressCopyingAudio": "Copying audio {current}/{total}...",
   "@backupProgressCopyingAudio": {
     "description": "Progress message: copying a single audio",
-    "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } }
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "backupProgressCreatingMetadata": "Creating metadata...",
-  "@backupProgressCreatingMetadata": { "description": "Progress message: creating metadata" },
+  "@backupProgressCreatingMetadata": {
+    "description": "Progress message: creating metadata"
+  },
   "backupProgressCompressing": "Compressing files...",
-  "@backupProgressCompressing": { "description": "Progress message: compressing files" },
+  "@backupProgressCompressing": {
+    "description": "Progress message: compressing files"
+  },
   "backupProgressSuccess": "Backup created successfully!",
-  "@backupProgressSuccess": { "description": "Progress message: backup created successfully" },
+  "@backupProgressSuccess": {
+    "description": "Progress message: backup created successfully"
+  },
   "backupShareText": "Complete DayApp backup with database and videos",
-  "@backupShareText": { "description": "Text shown in the share sheet when sharing backup" },
-
+  "@backupShareText": {
+    "description": "Text shown in the share sheet when sharing backup"
+  },
   "errorBackupDbNotFound": "Database not found.",
-  "@errorBackupDbNotFound": { "description": "Error thrown when the database file is missing during backup" },
+  "@errorBackupDbNotFound": {
+    "description": "Error thrown when the database file is missing during backup"
+  },
   "errorBackupFileNotFound": "Backup file not found.",
-  "@errorBackupFileNotFound": { "description": "Error thrown when the backup ZIP file is missing" },
+  "@errorBackupFileNotFound": {
+    "description": "Error thrown when the backup ZIP file is missing"
+  },
   "errorBackupDbNotFoundInFile": "Database not found in backup file. Extracted files: {count}",
   "@errorBackupDbNotFoundInFile": {
     "description": "Error thrown when the database is missing inside the backup ZIP",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-
   "restoreProgressExtracting": "Extracting backup file...",
-  "@restoreProgressExtracting": { "description": "Progress message: extracting ZIP" },
+  "@restoreProgressExtracting": {
+    "description": "Progress message: extracting ZIP"
+  },
   "restoreProgressZipContains": "ZIP contains {count} files...",
   "@restoreProgressZipContains": {
     "description": "Progress message: how many files the ZIP has",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "restoreProgressBackingUpCurrent": "Backing up current database...",
-  "@restoreProgressBackingUpCurrent": { "description": "Progress message: backing up current DB before restore" },
+  "@restoreProgressBackingUpCurrent": {
+    "description": "Progress message: backing up current DB before restore"
+  },
   "restoreProgressClosingDb": "Closing database connections...",
-  "@restoreProgressClosingDb": { "description": "Progress message: closing DB connections" },
+  "@restoreProgressClosingDb": {
+    "description": "Progress message: closing DB connections"
+  },
   "restoreProgressRestoringDb": "Restoring database...",
-  "@restoreProgressRestoringDb": { "description": "Progress message: restoring database" },
+  "@restoreProgressRestoringDb": {
+    "description": "Progress message: restoring database"
+  },
   "restoreProgressCopyingRestoredDb": "Copying restored database...",
-  "@restoreProgressCopyingRestoredDb": { "description": "Progress message: copying restored DB" },
+  "@restoreProgressCopyingRestoredDb": {
+    "description": "Progress message: copying restored DB"
+  },
   "restoreProgressRestoringVideos": "Restoring videos...",
-  "@restoreProgressRestoringVideos": { "description": "Progress message: restoring videos" },
+  "@restoreProgressRestoringVideos": {
+    "description": "Progress message: restoring videos"
+  },
   "restoreProgressRestoringVideo": "Restoring video {current}/{total}...",
   "@restoreProgressRestoringVideo": {
     "description": "Progress message: restoring a single video",
-    "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } }
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "restoreProgressRestoringPhotos": "Restoring photos...",
-  "@restoreProgressRestoringPhotos": { "description": "Progress message: restoring photos" },
+  "@restoreProgressRestoringPhotos": {
+    "description": "Progress message: restoring photos"
+  },
   "restoreProgressRestoringPhoto": "Restoring photo {current}/{total}...",
   "@restoreProgressRestoringPhoto": {
     "description": "Progress message: restoring a single photo",
-    "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } }
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "restoreProgressRestoringAudios": "Restoring audios...",
-  "@restoreProgressRestoringAudios": { "description": "Progress message: restoring audios" },
+  "@restoreProgressRestoringAudios": {
+    "description": "Progress message: restoring audios"
+  },
   "restoreProgressRestoringAudio": "Restoring audio {current}/{total}...",
   "@restoreProgressRestoringAudio": {
     "description": "Progress message: restoring a single audio",
-    "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } }
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "restoreProgressReinitializingDb": "Reinitializing database...",
-  "@restoreProgressReinitializingDb": { "description": "Progress message: reinitializing database after restore" },
+  "@restoreProgressReinitializingDb": {
+    "description": "Progress message: reinitializing database after restore"
+  },
   "restoreProgressDbStats": "Database restored: {active} active, {deleted} in trash.",
   "@restoreProgressDbStats": {
     "description": "Progress message showing how many stories were restored",
-    "placeholders": { "active": { "type": "int" }, "deleted": { "type": "int" } }
+    "placeholders": {
+      "active": {
+        "type": "int"
+      },
+      "deleted": {
+        "type": "int"
+      }
+    }
   },
   "resendCodeButton": "Resend code",
-  "@resendCodeButton": { "description": "Button to resend recovery code via email" },
+  "@resendCodeButton": {
+    "description": "Button to resend recovery code via email"
+  },
   "codeExpiresIn": "Code expires in {minutes} minutes",
   "@codeExpiresIn": {
     "description": "Message showing how many minutes until recovery code expires",
-    "placeholders": { "minutes": { "type": "int" } }
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   },
   "backToStart": "Back to start",
-  "@backToStart": { "description": "Button to go back to the first step of recovery" },
+  "@backToStart": {
+    "description": "Button to go back to the first step of recovery"
+  },
   "code": "Code",
-  "@code": { "description": "Label for recovery code" },
+  "@code": {
+    "description": "Label for recovery code"
+  },
   "pin": "PIN",
-  "@pin": { "description": "Label for PIN field" },
+  "@pin": {
+    "description": "Label for PIN field"
+  },
   "enterCode": "Enter code",
-  "@enterCode": { "description": "Title for entering recovery code" },
+  "@enterCode": {
+    "description": "Title for entering recovery code"
+  },
   "codeCheckDescription": "Enter the 6-digit code that was sent to your email.",
-  "@codeCheckDescription": { "description": "Description for code verification step" },
+  "@codeCheckDescription": {
+    "description": "Description for code verification step"
+  },
   "defineNewPin": "Define a new secure PIN for your account.",
-  "@defineNewPin": { "description": "Description for setting new PIN" },
+  "@defineNewPin": {
+    "description": "Description for setting new PIN"
+  },
   "sendCodeButton": "Send code",
-  "@sendCodeButton": { "description": "Button to send recovery code" },
+  "@sendCodeButton": {
+    "description": "Button to send recovery code"
+  },
   "verifyCode": "Verify code",
-  "@verifyCode": { "description": "Button to verify recovery code" },
+  "@verifyCode": {
+    "description": "Button to verify recovery code"
+  },
   "resetPin": "Reset PIN",
-  "@resetPin": { "description": "Button to reset PIN" },
-  "@recoveryCodeLabel": { "description": "Label for recovery code input field" },
-
+  "@resetPin": {
+    "description": "Button to reset PIN"
+  },
+  "@recoveryCodeLabel": {
+    "description": "Label for recovery code input field"
+  },
   "storyPreviewMoodVeryDifficultNarrative": "This was a very difficult story",
-  "@storyPreviewMoodVeryDifficultNarrative": { "description": "Narrative text for mood level 1 in story preview" },
+  "@storyPreviewMoodVeryDifficultNarrative": {
+    "description": "Narrative text for mood level 1 in story preview"
+  },
   "storyPreviewMoodDifficultNarrative": "This was a difficult story",
-  "@storyPreviewMoodDifficultNarrative": { "description": "Narrative text for mood level 2 in story preview" },
+  "@storyPreviewMoodDifficultNarrative": {
+    "description": "Narrative text for mood level 2 in story preview"
+  },
   "storyPreviewMoodNeutralNarrative": "It was neutral in terms of feeling",
-  "@storyPreviewMoodNeutralNarrative": { "description": "Narrative text for mood level 3 in story preview" },
+  "@storyPreviewMoodNeutralNarrative": {
+    "description": "Narrative text for mood level 3 in story preview"
+  },
   "storyPreviewMoodGoodNarrative": "A good story",
-  "@storyPreviewMoodGoodNarrative": { "description": "Narrative text for mood level 4 in story preview" },
+  "@storyPreviewMoodGoodNarrative": {
+    "description": "Narrative text for mood level 4 in story preview"
+  },
   "storyPreviewMoodVeryGoodNarrative": "A very good story",
-  "@storyPreviewMoodVeryGoodNarrative": { "description": "Narrative text for mood level 5 in story preview" },
+  "@storyPreviewMoodVeryGoodNarrative": {
+    "description": "Narrative text for mood level 5 in story preview"
+  },
   "storyPreviewEnergyLowNarrative": "I was feeling low on energy",
-  "@storyPreviewEnergyLowNarrative": { "description": "Narrative text for energy level 1 in story preview" },
+  "@storyPreviewEnergyLowNarrative": {
+    "description": "Narrative text for energy level 1 in story preview"
+  },
   "storyPreviewEnergyNormalNarrative": "My energy was normal",
-  "@storyPreviewEnergyNormalNarrative": { "description": "Narrative text for energy level 2 in story preview" },
+  "@storyPreviewEnergyNormalNarrative": {
+    "description": "Narrative text for energy level 2 in story preview"
+  },
   "storyPreviewEnergyHighNarrative": "I was feeling very high energy",
-  "@storyPreviewEnergyHighNarrative": { "description": "Narrative text for energy level 3 in story preview" },
-
+  "@storyPreviewEnergyHighNarrative": {
+    "description": "Narrative text for energy level 3 in story preview"
+  },
   "premiumPlan": "Premium",
-  "@premiumPlan": { "description": "Label for Premium plan" },
+  "@premiumPlan": {
+    "description": "Label for Premium plan"
+  },
   "premiumFeature": "Premium feature",
-  "@premiumFeature": { "description": "Short snackbar message when user taps a locked Premium feature" },
+  "@premiumFeature": {
+    "description": "Short snackbar message when user taps a locked Premium feature"
+  },
   "freePlan": "Free",
-  "@freePlan": { "description": "Label for Free plan" },
+  "@freePlan": {
+    "description": "Label for Free plan"
+  },
   "currentPlan": "Current plan",
-  "@currentPlan": { "description": "Label showing the current plan" },
+  "@currentPlan": {
+    "description": "Label showing the current plan"
+  },
   "premiumDebugTitle": "Premium Debug",
-  "@premiumDebugTitle": { "description": "Title of the hidden premium debug screen" },
+  "@premiumDebugTitle": {
+    "description": "Title of the hidden premium debug screen"
+  },
   "premiumDebugSubtitle": "Development only — not visible in production",
-  "@premiumDebugSubtitle": { "description": "Subtitle of the hidden premium debug screen" },
+  "@premiumDebugSubtitle": {
+    "description": "Subtitle of the hidden premium debug screen"
+  },
   "premiumDebugActivate": "Activate Premium (debug)",
-  "@premiumDebugActivate": { "description": "Button to activate premium in debug mode" },
+  "@premiumDebugActivate": {
+    "description": "Button to activate premium in debug mode"
+  },
   "premiumDebugDeactivate": "Deactivate Premium (return to Free)",
-  "@premiumDebugDeactivate": { "description": "Button to deactivate premium in debug mode" },
+  "@premiumDebugDeactivate": {
+    "description": "Button to deactivate premium in debug mode"
+  },
   "premiumDebugStatus": "Status: {plan}",
   "@premiumDebugStatus": {
     "description": "Current premium status line",
-    "placeholders": { "plan": { "type": "String" } }
+    "placeholders": {
+      "plan": {
+        "type": "String"
+      }
+    }
   },
   "premiumDebugSource": "Source: {source}",
   "@premiumDebugSource": {
     "description": "Source that activated premium",
-    "placeholders": { "source": { "type": "String" } }
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
   },
   "premiumDebugWarning": "This screen is only available in debug builds. It will not appear in production.",
-  "@premiumDebugWarning": { "description": "Warning shown on the debug premium screen" },
+  "@premiumDebugWarning": {
+    "description": "Warning shown on the debug premium screen"
+  },
   "premiumDebugFeatures": "Features controlled by plan",
-  "@premiumDebugFeatures": { "description": "Section title listing features per plan" },
+  "@premiumDebugFeatures": {
+    "description": "Section title listing features per plan"
+  },
   "premiumDebugNoSource": "none",
-  "@premiumDebugNoSource": { "description": "Shown when no premium source is recorded" },
+  "@premiumDebugNoSource": {
+    "description": "Shown when no premium source is recorded"
+  },
   "autoBackupPremiumRequired": "Automatic backups are a Premium feature. Upgrade to access saved backups, restore points and storage management.",
-  "@autoBackupPremiumRequired": { "description": "Message shown to Free users in the auto backup section" },
+  "@autoBackupPremiumRequired": {
+    "description": "Message shown to Free users in the auto backup section"
+  },
   "autoBackupStorageInfo": "{count, plural, =0{No backups saved} =1{1 backup · {size}} other{{count} backups · {size}}}",
   "@autoBackupStorageInfo": {
     "description": "Backup count and total size shown in settings",
-    "placeholders": { "count": { "type": "int" }, "size": { "type": "String" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
   },
   "chaptersTitle": "Chapters",
-  "@chaptersTitle": { "description": "Title for chapters screen and quick access" },
+  "@chaptersTitle": {
+    "description": "Title for chapters screen and quick access"
+  },
   "collectionsTitle": "Collections",
-  "@collectionsTitle": { "description": "Header title for the Collections screen" },
+  "@collectionsTitle": {
+    "description": "Header title for the Collections screen"
+  },
   "collectionsSubtitle": "Your moments organized into chapters and groups, like a life library.",
-  "@collectionsSubtitle": { "description": "Header subtitle for the Collections screen" },
+  "@collectionsSubtitle": {
+    "description": "Header subtitle for the Collections screen"
+  },
   "groupsTabLabel": "Groups",
-  "@groupsTabLabel": { "description": "Label for the groups tab inside the Collections screen" },
+  "@groupsTabLabel": {
+    "description": "Label for the groups tab inside the Collections screen"
+  },
   "chapterShortcutToggle": "Show/hide chapters card on Home",
-  "@chapterShortcutToggle": { "description": "Tooltip for toggling chapter shortcut card visibility" },
+  "@chapterShortcutToggle": {
+    "description": "Tooltip for toggling chapter shortcut card visibility"
+  },
   "chaptersHomeCardTitle": "Your life by chapters",
-  "@chaptersHomeCardTitle": { "description": "Title of chapters shortcut card shown on Home" },
+  "@chaptersHomeCardTitle": {
+    "description": "Title of chapters shortcut card shown on Home"
+  },
   "chaptersHomeCardSubtitle": "Your stories hold moments. Your chapters reveal the journey.",
-  "@chaptersHomeCardSubtitle": { "description": "Subtitle of chapters shortcut card on Home" },
+  "@chaptersHomeCardSubtitle": {
+    "description": "Subtitle of chapters shortcut card on Home"
+  },
   "chaptersPremiumRequired": "Chapters and automatic suggestions are Premium features.",
-  "@chaptersPremiumRequired": { "description": "Message shown when chapters feature is locked for Free users" },
+  "@chaptersPremiumRequired": {
+    "description": "Message shown when chapters feature is locked for Free users"
+  },
   "themePremiumRequired": "Custom themes are a Premium feature.",
-  "@themePremiumRequired": { "description": "Message shown when a premium theme is selected by a Free user" },
+  "@themePremiumRequired": {
+    "description": "Message shown when a premium theme is selected by a Free user"
+  },
   "chapterSuggestions": "Suggested chapters",
-  "@chapterSuggestions": { "description": "Section title for automatic chapter suggestions" },
+  "@chapterSuggestions": {
+    "description": "Section title for automatic chapter suggestions"
+  },
   "chapterCreated": "Chapter created successfully.",
-  "@chapterCreated": { "description": "Success message after creating a chapter" },
+  "@chapterCreated": {
+    "description": "Success message after creating a chapter"
+  },
   "chapterEditTitle": "Edit chapter",
-  "@chapterEditTitle": { "description": "Title of chapter edit dialog" },
+  "@chapterEditTitle": {
+    "description": "Title of chapter edit dialog"
+  },
   "chapterDescriptionHint": "Enter a description for this chapter (optional)",
-  "@chapterDescriptionHint": { "description": "Placeholder for chapter description field" },
+  "@chapterDescriptionHint": {
+    "description": "Placeholder for chapter description field"
+  },
   "chapterUpdated": "Chapter updated successfully.",
-  "@chapterUpdated": { "description": "Success message after updating chapter" },
+  "@chapterUpdated": {
+    "description": "Success message after updating chapter"
+  },
   "chapterDeleteConfirmTitle": "Delete chapter",
-  "@chapterDeleteConfirmTitle": { "description": "Title of chapter deletion confirmation dialog" },
-  "chapterDeleteConfirmMessage": "Delete chapter \u201c{title}\u201d? The linked stories will not be deleted.",
-  "@chapterDeleteConfirmMessage": { "description": "Message for chapter deletion confirmation dialog", "placeholders": { "title": { "type": "String" } } },
+  "@chapterDeleteConfirmTitle": {
+    "description": "Title of chapter deletion confirmation dialog"
+  },
+  "chapterDeleteConfirmMessage": "Delete chapter “{title}”? The linked stories will not be deleted.",
+  "@chapterDeleteConfirmMessage": {
+    "description": "Message for chapter deletion confirmation dialog",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "chapterDeleted": "Chapter deleted successfully.",
-  "@chapterDeleted": { "description": "Success message after deleting chapter" },
+  "@chapterDeleted": {
+    "description": "Success message after deleting chapter"
+  },
   "chapterCreateManual": "Create chapter manually",
-  "@chapterCreateManual": { "description": "Button to create chapter manually" },
+  "@chapterCreateManual": {
+    "description": "Button to create chapter manually"
+  },
   "chapterCreateTitle": "Create Chapter",
-  "@chapterCreateTitle": { "description": "Title of the manual chapter creation screen" },
+  "@chapterCreateTitle": {
+    "description": "Title of the manual chapter creation screen"
+  },
   "chapterTitle": "Title",
-  "@chapterTitle": { "description": "Label for chapter title field" },
+  "@chapterTitle": {
+    "description": "Label for chapter title field"
+  },
   "chapterTitleHint": "Ex: Job change",
-  "@chapterTitleHint": { "description": "Hint for chapter title field" },
+  "@chapterTitleHint": {
+    "description": "Hint for chapter title field"
+  },
   "chapterDescription": "Description",
-  "@chapterDescription": { "description": "Label for chapter description field" },
+  "@chapterDescription": {
+    "description": "Label for chapter description field"
+  },
   "chapterPhoto": "Chapter photo",
-  "@chapterPhoto": { "description": "Label for chapter photo section" },
+  "@chapterPhoto": {
+    "description": "Label for chapter photo section"
+  },
   "chapterPhotoActionLabel": "Chapter Photo",
-  "@chapterPhotoActionLabel": { "description": "Label for the command button to choose chapter photo" },
+  "@chapterPhotoActionLabel": {
+    "description": "Label for the command button to choose chapter photo"
+  },
   "chapterAddPhoto": "Add photo",
-  "@chapterAddPhoto": { "description": "Button to add a chapter photo" },
+  "@chapterAddPhoto": {
+    "description": "Button to add a chapter photo"
+  },
   "chapterChangePhoto": "Change photo",
-  "@chapterChangePhoto": { "description": "Button to change chapter photo" },
+  "@chapterChangePhoto": {
+    "description": "Button to change chapter photo"
+  },
   "chapterRemovePhoto": "Remove photo",
-  "@chapterRemovePhoto": { "description": "Button to remove chapter photo" },
+  "@chapterRemovePhoto": {
+    "description": "Button to remove chapter photo"
+  },
   "chapterSelectEntries": "Select related stories (title + date)",
-  "@chapterSelectEntries": { "description": "Label for selecting stories to compose a chapter" },
+  "@chapterSelectEntries": {
+    "description": "Label for selecting stories to compose a chapter"
+  },
   "chapterMinimumEntries": "Minimum: 3 stories per chapter.",
-  "@chapterMinimumEntries": { "description": "Validation message for minimum stories in a chapter" },
+  "@chapterMinimumEntries": {
+    "description": "Validation message for minimum stories in a chapter"
+  },
   "chapterPeriod": "Stories from {start} - {end}",
   "@chapterPeriod": {
     "description": "Period label for chapter",
-    "placeholders": { "start": { "type": "String" }, "end": { "type": "String" } }
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
   },
   "chapterEntriesCount": "Stories: {count}",
   "@chapterEntriesCount": {
     "description": "Count of stories in chapter",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "chapterAverageMood": "Average mood: {mood}",
   "@chapterAverageMood": {
     "description": "Average mood metric in chapter",
-    "placeholders": { "mood": { "type": "String" } }
+    "placeholders": {
+      "mood": {
+        "type": "String"
+      }
+    }
   },
   "chapterTopTags": "Top tags: {tags}",
   "@chapterTopTags": {
     "description": "Top tags listed in chapter summary",
-    "placeholders": { "tags": { "type": "String" } }
+    "placeholders": {
+      "tags": {
+        "type": "String"
+      }
+    }
   },
   "chapterCreateFromSuggestion": "Create chapter",
-  "@chapterCreateFromSuggestion": { "description": "Button to accept suggestion and create chapter" },
+  "@chapterCreateFromSuggestion": {
+    "description": "Button to accept suggestion and create chapter"
+  },
   "chapterCreateMyLabel": "Create my Chapter",
-  "@chapterCreateMyLabel": { "description": "Main button label to create a manual chapter" },
+  "@chapterCreateMyLabel": {
+    "description": "Main button label to create a manual chapter"
+  },
   "chapterIgnoreLabel": "Ignore",
-  "@chapterIgnoreLabel": { "description": "Button to ignore chapter suggestion" },
+  "@chapterIgnoreLabel": {
+    "description": "Button to ignore chapter suggestion"
+  },
   "chapterSuggestionMoreStories": "and {count} more stor{count, plural, =1{y} other{ies}}",
   "@chapterSuggestionMoreStories": {
     "description": "Footer of suggestion preview indicating how many stories were omitted",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "chapterNoItems": "Your next chapter starts here.",
-  "@chapterNoItems": { "description": "Empty state text for chapters list" },
+  "@chapterNoItems": {
+    "description": "Empty state text for chapters list"
+  },
   "chapterFilterAll": "All",
-  "@chapterFilterAll": { "description": "Filter to show all chapters" },
+  "@chapterFilterAll": {
+    "description": "Filter to show all chapters"
+  },
   "chapterFilterAutomatic": "Automatic",
-  "@chapterFilterAutomatic": { "description": "Filter to show only automatic chapters" },
+  "@chapterFilterAutomatic": {
+    "description": "Filter to show only automatic chapters"
+  },
   "chapterFilterManual": "Manual",
-  "@chapterFilterManual": { "description": "Filter to show only manual chapters" },
+  "@chapterFilterManual": {
+    "description": "Filter to show only manual chapters"
+  },
   "chapterNoSearchResults": "No chapters matched the current filters.",
-  "@chapterNoSearchResults": { "description": "Empty state when search or filter finds no chapters" },
+  "@chapterNoSearchResults": {
+    "description": "Empty state when search or filter finds no chapters"
+  },
   "chapterSortLabel": "Sort by",
-  "@chapterSortLabel": { "description": "Label for chapter sort selector" },
+  "@chapterSortLabel": {
+    "description": "Label for chapter sort selector"
+  },
   "chapterSortNewest": "Newest period",
-  "@chapterSortNewest": { "description": "Option to sort chapters by newest period" },
+  "@chapterSortNewest": {
+    "description": "Option to sort chapters by newest period"
+  },
   "chapterSortOldest": "Oldest period",
-  "@chapterSortOldest": { "description": "Option to sort chapters by oldest period" },
+  "@chapterSortOldest": {
+    "description": "Option to sort chapters by oldest period"
+  },
   "chapterSortTitle": "Title",
-  "@chapterSortTitle": { "description": "Option to sort chapters by title" },
+  "@chapterSortTitle": {
+    "description": "Option to sort chapters by title"
+  },
   "chapterSortStories": "Most stories",
-  "@chapterSortStories": { "description": "Option to sort chapters by story count" },
+  "@chapterSortStories": {
+    "description": "Option to sort chapters by story count"
+  },
   "chapterEntriesAndMood": "{count} stories - avg mood {mood}",
   "@chapterEntriesAndMood": {
     "description": "Short chapter list subtitle",
-    "placeholders": { "count": { "type": "int" }, "mood": { "type": "String" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "mood": {
+        "type": "String"
+      }
+    }
   },
   "chapterOpenLabel": "Open",
-  "@chapterOpenLabel": { "description": "Button label to open chapters screen" },
+  "@chapterOpenLabel": {
+    "description": "Button label to open chapters screen"
+  },
   "chapterIntroSubtitle": "Organize your stories with meaning and relive your memories in order",
-  "@chapterIntroSubtitle": { "description": "Subtitle of the chapters intro screen" },
+  "@chapterIntroSubtitle": {
+    "description": "Subtitle of the chapters intro screen"
+  },
   "chapterIntroGroupTitle": "Bring connected moments together",
-  "@chapterIntroGroupTitle": { "description": "Title of the first intro block for chapters" },
+  "@chapterIntroGroupTitle": {
+    "description": "Title of the first intro block for chapters"
+  },
   "chapterIntroGroupBody": "Gather multiple posts into one chapter to follow the full trajectory of a special theme or moment.",
-  "@chapterIntroGroupBody": { "description": "Body of the first intro block for chapters" },
+  "@chapterIntroGroupBody": {
+    "description": "Body of the first intro block for chapters"
+  },
   "chapterIntroTimelineTitle": "Relive your story from beginning to end",
-  "@chapterIntroTimelineTitle": { "description": "Title of the second intro block for chapters" },
+  "@chapterIntroTimelineTitle": {
+    "description": "Title of the second intro block for chapters"
+  },
   "chapterIntroTimelineBody": "Browse memories in chronological order and see how each moment evolved over time.",
-  "@chapterIntroTimelineBody": { "description": "Body of the second intro block for chapters" },
+  "@chapterIntroTimelineBody": {
+    "description": "Body of the second intro block for chapters"
+  },
   "chapterIntroPhaseTitle": "One chapter for each phase",
-  "@chapterIntroPhaseTitle": { "description": "Title of the third intro block for chapters" },
+  "@chapterIntroPhaseTitle": {
+    "description": "Title of the third intro block for chapters"
+  },
   "chapterIntroPhaseBody": "Trips, college, family, work, dreams, goals, or special memories. You decide how to tell your story.",
-  "@chapterIntroPhaseBody": { "description": "Body of the third intro block for chapters" },
+  "@chapterIntroPhaseBody": {
+    "description": "Body of the third intro block for chapters"
+  },
   "chapterIntroCtaTitle": "Ready to organize your memories?",
-  "@chapterIntroCtaTitle": { "description": "Title of the final call-to-action on chapters intro" },
+  "@chapterIntroCtaTitle": {
+    "description": "Title of the final call-to-action on chapters intro"
+  },
   "chapterIntroCtaBody": "Start by creating your first chapter now",
-  "@chapterIntroCtaBody": { "description": "Subtitle of the final call-to-action on chapters intro" },
+  "@chapterIntroCtaBody": {
+    "description": "Subtitle of the final call-to-action on chapters intro"
+  },
   "chapterIntroShowOnOpen": "Show this screen when opening Chapters",
-  "@chapterIntroShowOnOpen": { "description": "Checkbox to control whether intro appears when opening Chapters" },
+  "@chapterIntroShowOnOpen": {
+    "description": "Checkbox to control whether intro appears when opening Chapters"
+  },
   "chapterLinkSectionTitle": "Chapters",
-  "@chapterLinkSectionTitle": { "description": "Section title for linking a story to chapters" },
+  "@chapterLinkSectionTitle": {
+    "description": "Section title for linking a story to chapters"
+  },
   "chapterLinkConfigure": "Configure",
-  "@chapterLinkConfigure": { "description": "Button label to configure chapter linking" },
+  "@chapterLinkConfigure": {
+    "description": "Button label to configure chapter linking"
+  },
   "chapterLinkDialogTitle": "Add this story to chapters",
-  "@chapterLinkDialogTitle": { "description": "Dialog title for chapter linking in create/edit story" },
+  "@chapterLinkDialogTitle": {
+    "description": "Dialog title for chapter linking in create/edit story"
+  },
   "chapterLinkModeNone": "Do not add",
-  "@chapterLinkModeNone": { "description": "Option to not link story to any chapter" },
+  "@chapterLinkModeNone": {
+    "description": "Option to not link story to any chapter"
+  },
   "chapterLinkModeExisting": "Add to existing chapter",
-  "@chapterLinkModeExisting": { "description": "Option to link story to an existing chapter" },
+  "@chapterLinkModeExisting": {
+    "description": "Option to link story to an existing chapter"
+  },
   "chapterLinkModeNew": "Create new chapter",
-  "@chapterLinkModeNew": { "description": "Option to create a new chapter while saving story" },
+  "@chapterLinkModeNew": {
+    "description": "Option to create a new chapter while saving story"
+  },
   "chapterSelectExistingLabel": "Select chapter",
-  "@chapterSelectExistingLabel": { "description": "Label for existing chapter dropdown" },
+  "@chapterSelectExistingLabel": {
+    "description": "Label for existing chapter dropdown"
+  },
   "chapterSelectExistingRequired": "Select an existing chapter.",
-  "@chapterSelectExistingRequired": { "description": "Validation message when existing chapter is not selected" },
+  "@chapterSelectExistingRequired": {
+    "description": "Validation message when existing chapter is not selected"
+  },
   "chapterTitleRequired": "Chapter title is required.",
-  "@chapterTitleRequired": { "description": "Validation message when chapter title is empty" },
+  "@chapterTitleRequired": {
+    "description": "Validation message when chapter title is empty"
+  },
   "chapterMinimumRelatedWithCurrent": "Select at least 2 related stories. With the current one, the minimum is 3.",
-  "@chapterMinimumRelatedWithCurrent": { "description": "Validation/help text for minimum related stories when creating chapter from create/edit flow" },
+  "@chapterMinimumRelatedWithCurrent": {
+    "description": "Validation/help text for minimum related stories when creating chapter from create/edit flow"
+  },
   "chapterLinkSummaryNone": "Not linked to any chapter.",
-  "@chapterLinkSummaryNone": { "description": "Summary text when no chapter linking is configured" },
+  "@chapterLinkSummaryNone": {
+    "description": "Summary text when no chapter linking is configured"
+  },
   "chapterLinkSummaryExisting": "Will be added to an existing chapter when saving.",
-  "@chapterLinkSummaryExisting": { "description": "Summary text when linking to existing chapter is configured" },
+  "@chapterLinkSummaryExisting": {
+    "description": "Summary text when linking to existing chapter is configured"
+  },
   "chapterLinkSummaryNew": "{count, plural, =1{New chapter with 1 story} other{New chapter with {count} stories}}",
   "@chapterLinkSummaryNew": {
     "description": "Summary text when creating new chapter from create/edit flow",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "moreOptions": "More options",
-  "@moreOptions": { "description": "Generic label for overflow menu with additional options" },
+  "@moreOptions": {
+    "description": "Generic label for overflow menu with additional options"
+  },
   "homeHeaderLargeCards": "View in large cards",
-  "@homeHeaderLargeCards": { "description": "Tooltip/label to display stories in large cards on Home" },
+  "@homeHeaderLargeCards": {
+    "description": "Tooltip/label to display stories in large cards on Home"
+  },
   "homeHeaderCompactCards": "View in compact cards",
-  "@homeHeaderCompactCards": { "description": "Tooltip/label to display stories in compact cards on Home" },
+  "@homeHeaderCompactCards": {
+    "description": "Tooltip/label to display stories in compact cards on Home"
+  },
   "homeHeaderOpenCalendarTooltip": "Open calendar",
-  "@homeHeaderOpenCalendarTooltip": { "description": "Tooltip for calendar button in Home header" },
+  "@homeHeaderOpenCalendarTooltip": {
+    "description": "Tooltip for calendar button in Home header"
+  },
   "insightHistoryTitle": "Insight History",
-  "@insightHistoryTitle": { "description": "Title of the insight history screen" },
+  "@insightHistoryTitle": {
+    "description": "Title of the insight history screen"
+  },
   "insightHistoryEmpty": "No insights recorded yet.",
-  "@insightHistoryEmpty": { "description": "Empty state message on insight history screen" },
+  "@insightHistoryEmpty": {
+    "description": "Empty state message on insight history screen"
+  },
   "insightHistoryClearAll": "Clear history",
-  "@insightHistoryClearAll": { "description": "Button to clear all insight history" },
+  "@insightHistoryClearAll": {
+    "description": "Button to clear all insight history"
+  },
   "insightHistoryClearConfirm": "Clear all insight history? This action cannot be undone.",
-  "@insightHistoryClearConfirm": { "description": "Confirmation dialog body for clearing insight history" },
+  "@insightHistoryClearConfirm": {
+    "description": "Confirmation dialog body for clearing insight history"
+  },
   "insightHistorySeenOn": "Seen on {date}",
-  "@insightHistorySeenOn": { "description": "Label showing when an insight was seen", "placeholders": { "date": { "type": "String" } } },
+  "@insightHistorySeenOn": {
+    "description": "Label showing when an insight was seen",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "insightHistoryFilterAll": "All",
-  "@insightHistoryFilterAll": { "description": "Filter chip label: show all insight types" },
+  "@insightHistoryFilterAll": {
+    "description": "Filter chip label: show all insight types"
+  },
   "insightHistoryFilterFree": "Free",
-  "@insightHistoryFilterFree": { "description": "Filter chip label: show only free tier insights" },
+  "@insightHistoryFilterFree": {
+    "description": "Filter chip label: show only free tier insights"
+  },
   "insightHistoryFilterPremium": "Premium",
-  "@insightHistoryFilterPremium": { "description": "Filter chip label: show only premium insights" },
+  "@insightHistoryFilterPremium": {
+    "description": "Filter chip label: show only premium insights"
+  },
   "insightHistorySearch": "Search insights",
-  "@insightHistorySearch": { "description": "Hint text for the search field on insight history screen" },
+  "@insightHistorySearch": {
+    "description": "Hint text for the search field on insight history screen"
+  },
   "pdfBackgroundColor": "Background color",
-  "@pdfBackgroundColor": { "description": "Label for the PDF background color selector" },
+  "@pdfBackgroundColor": {
+    "description": "Label for the PDF background color selector"
+  },
   "pdfBackgroundNone": "None",
-  "@pdfBackgroundNone": { "description": "Option: no background color in the PDF" },
+  "@pdfBackgroundNone": {
+    "description": "Option: no background color in the PDF"
+  },
   "pdfBackgroundBeige": "Beige/cream",
-  "@pdfBackgroundBeige": { "description": "Option: beige/cream background color in the PDF" },
+  "@pdfBackgroundBeige": {
+    "description": "Option: beige/cream background color in the PDF"
+  },
   "pdfBackgroundBlue": "Pale blue",
-  "@pdfBackgroundBlue": { "description": "Option: pale blue background color in the PDF" },
+  "@pdfBackgroundBlue": {
+    "description": "Option: pale blue background color in the PDF"
+  },
   "pdfBackgroundGreen": "Pale green",
-  "@pdfBackgroundGreen": { "description": "Option: pale green background color in the PDF" },
+  "@pdfBackgroundGreen": {
+    "description": "Option: pale green background color in the PDF"
+  },
   "pdfBackgroundGray": "Light gray",
-  "@pdfBackgroundGray": { "description": "Option: light gray background color in the PDF" },
+  "@pdfBackgroundGray": {
+    "description": "Option: light gray background color in the PDF"
+  },
   "exportPdfPremiumRequired": "Exporting to PDF is a Premium feature. Upgrade your plan to access it.",
-  "@exportPdfPremiumRequired": { "description": "SnackBar shown when a Free user tries to export to PDF" },
+  "@exportPdfPremiumRequired": {
+    "description": "SnackBar shown when a Free user tries to export to PDF"
+  },
   "changeEmail": "Change Email",
-  "@changeEmail": { "description": "Button/title to change the user email" },
+  "@changeEmail": {
+    "description": "Button/title to change the user email"
+  },
   "changePassword": "Change Password",
-  "@changePassword": { "description": "Button/title to change the user password" },
+  "@changePassword": {
+    "description": "Button/title to change the user password"
+  },
   "currentPassword": "Current Password",
-  "@currentPassword": { "description": "Label for the current password field" },
+  "@currentPassword": {
+    "description": "Label for the current password field"
+  },
   "wrongCurrentPassword": "Current password is incorrect.",
-  "@wrongCurrentPassword": { "description": "Error shown when current password verification fails" },
+  "@wrongCurrentPassword": {
+    "description": "Error shown when current password verification fails"
+  },
   "passwordChangedSuccess": "Password changed successfully.",
-  "@passwordChangedSuccess": { "description": "Success message after password change" },
+  "@passwordChangedSuccess": {
+    "description": "Success message after password change"
+  },
   "emailChangedSuccess": "Email changed successfully.",
-  "@emailChangedSuccess": { "description": "Success message after email change" },
+  "@emailChangedSuccess": {
+    "description": "Success message after email change"
+  },
   "newPasswordMinLength": "New password must be at least 4 characters.",
-  "@newPasswordMinLength": { "description": "Validation error when new password is too short (min 4 chars)" },
+  "@newPasswordMinLength": {
+    "description": "Validation error when new password is too short (min 4 chars)"
+  },
   "fillAllFields": "Please fill in all fields.",
-  "@fillAllFields": { "description": "Error shown when one or more required fields are empty" },
-
+  "@fillAllFields": {
+    "description": "Error shown when one or more required fields are empty"
+  },
   "backupInfoDialogTitle": "About backup",
-  "@backupInfoDialogTitle": { "description": "Title of the backup info dialog" },
+  "@backupInfoDialogTitle": {
+    "description": "Title of the backup info dialog"
+  },
   "backupInfoDialogContent": "📦  What is included in the backup\n• All your stories (texts, photos, audios, videos)\n• App database\n• Chapter photos\n\n📂  How to store your backup\nAfter creation, use the share menu to save the file wherever you like — OneDrive, Google Drive, e-mail or any other service.",
-  "@backupInfoDialogContent": { "description": "Full content of the backup info dialog" },
-
+  "@backupInfoDialogContent": {
+    "description": "Full content of the backup info dialog"
+  },
   "backupPasswordDialogTitle": "Protect your backup",
-  "@backupPasswordDialogTitle": { "description": "Title of the export password dialog" },
+  "@backupPasswordDialogTitle": {
+    "description": "Title of the export password dialog"
+  },
   "backupPasswordDescription": "Set a password to encrypt your backup file. The contents will be protected and unreadable to anyone who does not have this password.",
-  "@backupPasswordDescription": { "description": "Description shown in the export password dialog" },
+  "@backupPasswordDescription": {
+    "description": "Description shown in the export password dialog"
+  },
   "backupPasswordWarningTitle": "⚠️  Important — read before continuing",
-  "@backupPasswordWarningTitle": { "description": "Title of the warning section in the export password dialog" },
+  "@backupPasswordWarningTitle": {
+    "description": "Title of the warning section in the export password dialog"
+  },
   "backupPasswordWarning": "This password is known only to you. It is not stored anywhere in the app or on our servers.\n\nIf you forget it, the backup file will be permanently inaccessible — not even our team will be able to help you recover the data.\n\nStore this password in a safe place before proceeding.",
-  "@backupPasswordWarning": { "description": "Warning text shown in the export password dialog" },
+  "@backupPasswordWarning": {
+    "description": "Warning text shown in the export password dialog"
+  },
   "backupPasswordField": "Password",
-  "@backupPasswordField": { "description": "Label for the password field in the export password dialog" },
+  "@backupPasswordField": {
+    "description": "Label for the password field in the export password dialog"
+  },
   "backupPasswordConfirmField": "Confirm password",
-  "@backupPasswordConfirmField": { "description": "Label for the confirm password field in the export password dialog" },
+  "@backupPasswordConfirmField": {
+    "description": "Label for the confirm password field in the export password dialog"
+  },
   "backupPasswordMismatch": "The passwords do not match. Please try again.",
-  "@backupPasswordMismatch": { "description": "Validation error when passwords do not match" },
+  "@backupPasswordMismatch": {
+    "description": "Validation error when passwords do not match"
+  },
   "backupPasswordTooShort": "Password must be at least 6 characters.",
-  "@backupPasswordTooShort": { "description": "Validation error when password is too short" },
+  "@backupPasswordTooShort": {
+    "description": "Validation error when password is too short"
+  },
   "backupPasswordEmpty": "Please enter a password.",
-  "@backupPasswordEmpty": { "description": "Validation error when password field is empty" },
+  "@backupPasswordEmpty": {
+    "description": "Validation error when password field is empty"
+  },
   "backupCreateEncrypted": "Create encrypted backup",
-  "@backupCreateEncrypted": { "description": "Button label to create the encrypted backup" },
-
+  "@backupCreateEncrypted": {
+    "description": "Button label to create the encrypted backup"
+  },
   "restorePasswordDialogTitle": "Enter the backup password",
-  "@restorePasswordDialogTitle": { "description": "Title of the restore password dialog" },
+  "@restorePasswordDialogTitle": {
+    "description": "Title of the restore password dialog"
+  },
   "restorePasswordDescription": "If you set a password when creating this backup, enter it below.\n\nIf the backup was created without a password, leave the field blank.",
-  "@restorePasswordDescription": { "description": "Description shown in the restore password dialog" },
+  "@restorePasswordDescription": {
+    "description": "Description shown in the restore password dialog"
+  },
   "restorePasswordField": "Password (leave blank if none was set)",
-  "@restorePasswordField": { "description": "Label for the password field in the restore password dialog" },
+  "@restorePasswordField": {
+    "description": "Label for the password field in the restore password dialog"
+  },
   "restorePasswordWrong": "Incorrect password or unreadable backup. Check the password and try again.",
-  "@restorePasswordWrong": { "description": "Error shown when the restore password is incorrect" },
+  "@restorePasswordWrong": {
+    "description": "Error shown when the restore password is incorrect"
+  },
   "restoreContinue": "Continue",
-  "@restoreContinue": { "description": "Button label to continue with restore" }
+  "@restoreContinue": {
+    "description": "Button label to continue with restore"
+  }
 }
-

@@ -290,10 +290,6 @@ class InsightCard extends StatelessWidget {
         return l10n.insightDiscovery;
       case InsightType.positiveTag:
         return l10n.insightPattern;
-      case InsightType.positiveWords:
-        return l10n.insightPositiveWordsTitle;
-      case InsightType.difficultWords:
-        return l10n.insightDifficultWordsTitle;
       case InsightType.trend:
         return l10n.insightTrend;
       case InsightType.monthlySummary:
@@ -317,10 +313,6 @@ class InsightCard extends StatelessWidget {
         return _resolveBestWeekday(l10n);
       case InsightType.positiveTag:
         return _resolvePositiveTag(l10n);
-      case InsightType.positiveWords:
-        return _resolvePositiveWords(l10n);
-      case InsightType.difficultWords:
-        return _resolveDifficultWords(l10n);
       case InsightType.trend:
         return l10n.insightTrendPositive;
       case InsightType.monthlySummary:
@@ -343,14 +335,6 @@ class InsightCard extends StatelessWidget {
   String _resolvePositiveTag(AppLocalizations l10n) {
     final tag = insight.metadata?['tag'] as String? ?? '';
     return l10n.insightPositiveTag(tag);
-  }
-
-  String _resolvePositiveWords(AppLocalizations l10n) {
-    return l10n.insightPositiveWords(_resolveWordsList());
-  }
-
-  String _resolveDifficultWords(AppLocalizations l10n) {
-    return l10n.insightDifficultWords(_resolveWordsList());
   }
 
   String _resolveMonthlySummary(AppLocalizations l10n) {
@@ -393,14 +377,6 @@ class InsightCard extends StatelessWidget {
       default:
         return l10n.insightWritingTimeNight;
     }
-  }
-
-  String _resolveWordsList() {
-    final words = insight.metadata?['words'] as List<dynamic>? ?? const [];
-    return words
-        .whereType<String>()
-        .where((word) => word.isNotEmpty)
-        .join(', ');
   }
 
   String? _resolveSearchQuery() {

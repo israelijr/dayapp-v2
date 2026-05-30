@@ -1836,12 +1836,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get insightMonthlySummary => '📊 Your month in stories';
 
   @override
-  String get insightPositiveWordsTitle => 'Positive words';
-
-  @override
-  String get insightDifficultWordsTitle => 'Difficult words';
-
-  @override
   String insightBestWeekday(String weekday) {
     return '$weekday is usually your most positive day.';
   }
@@ -1854,16 +1848,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get insightTrendPositive =>
       'Your mood has been improving over the last 7 days compared to the last 30 days.';
-
-  @override
-  String insightPositiveWords(String words) {
-    return 'Words that appear often in your most positive stories: $words.';
-  }
-
-  @override
-  String insightDifficultWords(String words) {
-    return 'Words that appear often in your more difficult stories: $words.';
-  }
 
   @override
   String insightMonthlySummaryText(int entries, String mood, String energy) {

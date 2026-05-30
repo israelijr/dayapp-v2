@@ -5,7 +5,9 @@
   "language": "Lingua",
   "deviceDefault": "Lingua del dispositivo",
   "defaultLabel": "Predefinito",
-  "@defaultLabel": {"description": "Etichetta per indicare l'opzione predefinita, ad esempio nei chip"},
+  "@defaultLabel": {
+    "description": "Etichetta per indicare l'opzione predefinita, ad esempio nei chip"
+  },
   "@deviceDefault": {
     "description": "Etichetta per usare la lingua predefinita del dispositivo",
     "type": "text"
@@ -52,19 +54,25 @@
   "timeAgoMinutes": "{count} min fa",
   "@timeAgoMinutes": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "timeAgoHours": "{count}h fa",
   "@timeAgoHours": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "timeAgoDays": "{count} giorno/i fa",
   "@timeAgoDays": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "backup": "Backup",
@@ -93,21 +101,27 @@
   "backgroundLockSeconds": "{count} secondi",
   "@backgroundLockSeconds": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "backgroundLockOneMinute": "1 minuto",
   "backgroundLockMinutes": "{count} minuti",
   "@backgroundLockMinutes": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "backgroundLockOneHour": "1 ora",
   "backgroundLockHours": "{count} ore",
   "@backgroundLockHours": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "statistics": "Statistiche",
@@ -149,15 +163,21 @@
   "@aboutScreenVersionBuild": {
     "description": "Etichetta versione e build nella schermata Informazioni",
     "placeholders": {
-      "version": {"type": "String"},
-      "build": {"type": "String"}
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
     }
   },
   "aboutScreenVersionShort": "Versione {version}",
   "@aboutScreenVersionShort": {
     "description": "Versione breve dell'app mostrata nell'intestazione Informazioni",
     "placeholders": {
-      "version": {"type": "String"}
+      "version": {
+        "type": "String"
+      }
     }
   },
   "aboutScreenDevelopmentTitle": "Sviluppo",
@@ -178,7 +198,9 @@
   "@aboutScreenSupportEmailBody": {
     "description": "Corpo dell'e-mail di supporto precompilato nella schermata Informazioni",
     "placeholders": {
-      "version": {"type": "String"}
+      "version": {
+        "type": "String"
+      }
     }
   },
   "aboutScreenAcknowledgementsTitle": "Ringraziamenti",
@@ -207,7 +229,12 @@
   "invalidEmail": "Inserisci un'e-mail valida.",
   "emailNotFound": "E-mail non trovata. Controlla e riprova.",
   "codeSent": "Codice inviato a {email}! Controlla la tua casella.",
-  "@codeSent": {"description": "Messaggio mostrato quando viene inviato un codice di verifica", "placeholders": {"email": {}}},
+  "@codeSent": {
+    "description": "Messaggio mostrato quando viene inviato un codice di verifica",
+    "placeholders": {
+      "email": {}
+    }
+  },
   "codeMustBe6": "Il codice deve essere di 6 cifre.",
   "codeVerified": "Codice verificato! Imposta la tua nuova password.",
   "codeInvalid": "Codice non valido o scaduto. Riprova.",
@@ -248,7 +275,12 @@
   "emailOrPasswordIncorrect": "E-mail o password errate",
   "noEmailRegistered": "Nessuna e-mail registrata. Configurala nelle impostazioni.",
   "checkEmailOrUseCode": "Controlla la tua e-mail a {email} o usa il codice mostrato",
-  "@checkEmailOrUseCode": {"description": "Richiesta di controllare l'e-mail o inserire il codice", "placeholders": {"email": {}}},
+  "@checkEmailOrUseCode": {
+    "description": "Richiesta di controllare l'e-mail o inserire il codice",
+    "placeholders": {
+      "email": {}
+    }
+  },
   "errorGeneratingCode": "Errore durante la generazione del codice. Riprova.",
   "errorSendingCode": "Errore durante l'invio del codice. Riprova.",
   "enterRecoveryCodePrompt": "Inserisci il codice inviato alla tua e-mail:",
@@ -284,39 +316,92 @@
   "deleteLabel": "Elimina",
   "movedToTrash": "Storia spostata nel cestino",
   "errorDeletingStory": "Errore durante l'eliminazione della storia: {error}",
-  "@errorDeletingStory": {"description": "Messaggio di errore quando l'eliminazione della storia fallisce", "placeholders": {"error": {}}},
+  "@errorDeletingStory": {
+    "description": "Messaggio di errore quando l'eliminazione della storia fallisce",
+    "placeholders": {
+      "error": {}
+    }
+  },
   "noRecordsThisDay": "Nessuna registrazione per questo giorno",
-  "@noRecordsThisDay": {"description": "Messaggio quando non ci sono registrazioni in un dato giorno", "type": "text"},
+  "@noRecordsThisDay": {
+    "description": "Messaggio quando non ci sono registrazioni in un dato giorno",
+    "type": "text"
+  },
   "storyUngrouped": "Storia senza gruppo",
-  "@storyUngrouped": {"description": "Etichetta che indica che una storia non è in nessun gruppo", "type": "text"},
+  "@storyUngrouped": {
+    "description": "Etichetta che indica che una storia non è in nessun gruppo",
+    "type": "text"
+  },
   "save": "Salva",
-  "@save": {"description": "Testo generico del pulsante Salva", "type": "text"},
+  "@save": {
+    "description": "Testo generico del pulsante Salva",
+    "type": "text"
+  },
   "confirmDeletion": "Conferma eliminazione",
-  "@confirmDeletion": {"description": "Titolo del dialogo di conferma eliminazione", "type": "text"},
+  "@confirmDeletion": {
+    "description": "Titolo del dialogo di conferma eliminazione",
+    "type": "text"
+  },
   "groupDeletedSuccess": "Gruppo eliminato con successo",
-  "@groupDeletedSuccess": {"description": "Messaggio snackbar quando un gruppo viene eliminato", "type": "text"},
+  "@groupDeletedSuccess": {
+    "description": "Messaggio snackbar quando un gruppo viene eliminato",
+    "type": "text"
+  },
   "noGroupsFound": "Nessun gruppo trovato",
-  "@noGroupsFound": {"description": "Mostrato quando non vengono trovati gruppi", "type": "text"},
+  "@noGroupsFound": {
+    "description": "Mostrato quando non vengono trovati gruppi",
+    "type": "text"
+  },
   "shareError": "Impossibile condividere",
-  "@shareError": {"description": "Messaggio di errore quando la condivisione fallisce", "type": "text"},
+  "@shareError": {
+    "description": "Messaggio di errore quando la condivisione fallisce",
+    "type": "text"
+  },
   "cannotDeletePhoto": "Impossibile eliminare questa foto",
-  "@cannotDeletePhoto": {"description": "Errore quando l'eliminazione della foto fallisce", "type": "text"},
+  "@cannotDeletePhoto": {
+    "description": "Errore quando l'eliminazione della foto fallisce",
+    "type": "text"
+  },
   "deletePhotoTitle": "Elimina foto",
-  "@deletePhotoTitle": {"description": "Titolo del dialogo di eliminazione foto", "type": "text"},
+  "@deletePhotoTitle": {
+    "description": "Titolo del dialogo di eliminazione foto",
+    "type": "text"
+  },
   "deletePhotoConfirm": "Vuoi davvero eliminare questa foto?",
-  "@deletePhotoConfirm": {"description": "Testo di conferma per l'eliminazione di una foto", "type": "text"},
+  "@deletePhotoConfirm": {
+    "description": "Testo di conferma per l'eliminazione di una foto",
+    "type": "text"
+  },
   "deleteGroupTitle": "Elimina gruppo",
-  "@deleteGroupTitle": {"description": "Titolo del dialogo di eliminazione gruppo", "type": "text"},
+  "@deleteGroupTitle": {
+    "description": "Titolo del dialogo di eliminazione gruppo",
+    "type": "text"
+  },
   "share": "Condividi",
-  "@share": {"description": "Etichetta dell'azione condividi", "type": "text"},
+  "@share": {
+    "description": "Etichetta dell'azione condividi",
+    "type": "text"
+  },
   "scrapbookTemplateLabel": "Scrapbook",
-  "@scrapbookTemplateLabel": { "description": "Etichetta per il template di condivisione storia Scrapbook", "type": "text" },
+  "@scrapbookTemplateLabel": {
+    "description": "Etichetta per il template di condivisione storia Scrapbook",
+    "type": "text"
+  },
   "home": "Home",
-  "@home": {"description": "Etichetta della scheda home", "type": "text"},
+  "@home": {
+    "description": "Etichetta della scheda home",
+    "type": "text"
+  },
   "groups": "Gruppi",
-  "@groups": {"description": "Etichetta della scheda gruppi", "type": "text"},
+  "@groups": {
+    "description": "Etichetta della scheda gruppi",
+    "type": "text"
+  },
   "myStories": "Le mie storie",
-  "@myStories": {"description": "Titolo mostrato nella schermata gruppi/storie archiviate", "type": "text"},
+  "@myStories": {
+    "description": "Titolo mostrato nella schermata gruppi/storie archiviate",
+    "type": "text"
+  },
   "record": "registrazione",
   "records": "registrazioni",
   "filterText": "Testo",
@@ -340,15 +425,32 @@
   "laterLabel": "Più tardi",
   "configureLabel": "Configura",
   "imageCopiedBase64": "Immagine copiata negli appunti (base64)",
-  "@imageCopiedBase64": {"description": "Snackbar quando l'immagine è copiata", "type": "text"},
+  "@imageCopiedBase64": {
+    "description": "Snackbar quando l'immagine è copiata",
+    "type": "text"
+  },
   "newGroup": "Nuovo gruppo",
-  "@newGroup": {"description": "Etichetta per creare un nuovo gruppo", "type": "text"},
+  "@newGroup": {
+    "description": "Etichetta per creare un nuovo gruppo",
+    "type": "text"
+  },
   "editGroup": "Modifica gruppo",
-  "@editGroup": {"description": "Etichetta per modificare un gruppo", "type": "text"},
+  "@editGroup": {
+    "description": "Etichetta per modificare un gruppo",
+    "type": "text"
+  },
   "chooseIcon": "Scegli icona",
-  "@chooseIcon": {"description": "Richiesta di scegliere un'icona", "type": "text"},
+  "@chooseIcon": {
+    "description": "Richiesta di scegliere un'icona",
+    "type": "text"
+  },
   "groupDeleteWarning": "Questo gruppo ha {count} storia/e collegata/e. Se eliminato, queste storie torneranno alla schermata principale (senza gruppo). Continuare?",
-  "@groupDeleteWarning": {"description": "Avviso mostrato quando si elimina un gruppo con storie", "placeholders": {"count": {}}},
+  "@groupDeleteWarning": {
+    "description": "Avviso mostrato quando si elimina un gruppo con storie",
+    "placeholders": {
+      "count": {}
+    }
+  },
   "unarchive": "Ripristina archivio",
   "group": "Gruppo",
   "selectGroup": "Seleziona gruppo",
@@ -367,7 +469,9 @@
   "backupZipSubtitle": "File ZIP con tutti i tuoi dati",
   "backupZipExplanation": "Genera un file ZIP che puoi salvare su OneDrive, Google Drive, via e-mail o in qualsiasi altra posizione.",
   "backupLinuxExplanation": "Scegli una cartella e il backup ZIP verrà salvato direttamente al suo interno.",
-  "@backupLinuxExplanation": { "description": "Spiegazione mostrata nella scheda di backup su Linux desktop" },
+  "@backupLinuxExplanation": {
+    "description": "Spiegazione mostrata nella scheda di backup su Linux desktop"
+  },
   "restoreSectionTitle": "Ripristina backup",
   "restoreSectionDescription": "Seleziona un file di backup (ZIP) precedentemente creato per ripristinare tutti i tuoi dati.",
   "backupShareSubject": "Backup DayApp",
@@ -377,19 +481,25 @@
   "backupDeleteConfirm": "Sei sicuro di voler eliminare questo backup?\n\n{fileName}",
   "@backupDeleteConfirm": {
     "placeholders": {
-      "fileName": {"type": "String"}
+      "fileName": {
+        "type": "String"
+      }
     }
   },
   "backupShareError": "Errore durante la condivisione del backup: {message}",
   "@backupShareError": {
     "placeholders": {
-      "message": {"type": "String"}
+      "message": {
+        "type": "String"
+      }
     }
   },
   "backupDeleteError": "Errore durante l'eliminazione del backup: {message}",
   "@backupDeleteError": {
     "placeholders": {
-      "message": {"type": "String"}
+      "message": {
+        "type": "String"
+      }
     }
   },
   "processing": "Elaborazione in corso...",
@@ -398,13 +508,17 @@
   "backupCreatedSuccess": "File di backup creato! Usa il menu di condivisione per salvarlo.",
   "backupError": "Errore durante la creazione del backup: {message}",
   "@backupError": {
-    "placeholders": {"message": {}}
+    "placeholders": {
+      "message": {}
+    }
   },
   "restoreStarting": "Avvio del ripristino...",
   "restoreSuccess": "Ripristino completato con successo!",
   "restoreError": "Errore durante il ripristino: {message}",
   "@restoreError": {
-    "placeholders": {"message": {}}
+    "placeholders": {
+      "message": {}
+    }
   },
   "restoreConfirmTitle": "⚠️ Conferma ripristino",
   "restoreConfirmContent": "Tutti i dati attuali saranno sostituiti dal backup.\n\nQuesta azione non può essere annullata. Vuoi continuare?",
@@ -510,7 +624,11 @@
   "videoPickerRecord": "Registra video",
   "successVideoAdded": "Video aggiunto con successo!",
   "successVideosAdded": "{count} video aggiunti con successo!",
-  "@successVideosAdded": {"placeholders": {"count": {}}},
+  "@successVideosAdded": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "startRecording": "Avvia registrazione",
   "recordingPaused": "Registrazione in pausa",
   "recording": "Registrazione...",
@@ -521,39 +639,75 @@
   "successNotificationScheduled": "Notifica pianificata con successo",
   "notificationReminderTitle": "Promemoria: {title}",
   "notificationReminderBody": "Hai una voce programmata",
-  "@notificationReminderTitle": {"description": "Titolo usato per le notifiche di promemoria delle voci", "placeholders": {"title": {}}},
-  "@notificationReminderBody": {"description": "Body text for entry reminder notifications"},
+  "@notificationReminderTitle": {
+    "description": "Titolo usato per le notifiche di promemoria delle voci",
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "@notificationReminderBody": {
+    "description": "Body text for entry reminder notifications"
+  },
   "successImageAdded": "Immagine aggiunta con successo!",
   "successImagesAdded": "{count} immagini aggiunte con successo!",
-  "@successImagesAdded": {"placeholders": {"count": {}}},
+  "@successImagesAdded": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "errorSearch": "Errore durante la ricerca: {message}",
-  "@errorSearch": {"placeholders": {"message": {}}},
+  "@errorSearch": {
+    "placeholders": {
+      "message": {}
+    }
+  },
   "successStoryRestored": "Storia ripristinata con successo",
   "successStoryDeletedPermanently": "Storia eliminata definitivamente",
   "trashAlreadyEmpty": "Il cestino è già vuoto",
   "successVideoRecorded": "Video registrato con successo!",
   "permissionMicrophoneDenied": "Permesso microfono non concesso",
   "errorSelectImages": "Errore durante la selezione delle immagini: {message}",
-  "@errorSelectImages": {"placeholders": {"message": {}}},
+  "@errorSelectImages": {
+    "placeholders": {
+      "message": {}
+    }
+  },
   "successPhotoCaptured": "Foto acquisita con successo!",
   "restoreStoriesTitle": "Ripristina storie",
   "restoreStoriesConfirm": "Vuoi ripristinare {count} storia/e selezionata/e?",
-  "@restoreStoriesConfirm": {"placeholders": {"count": {}}},
+  "@restoreStoriesConfirm": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "restoreLabel": "Ripristina",
   "permanentlyDeleteTitle": "Elimina definitivamente",
   "permanentlyDeleteConfirm": "Questa azione non può essere annullata. Vuoi davvero eliminare definitivamente questa storia?",
   "permanentlyDeleteLabel": "Elimina definitivamente",
   "deleteGroupConfirm": "Vuoi rimuovere il gruppo \"{name}\" dalle tue storie?",
-  "@deleteGroupConfirm": {"description": "Conferma quando si elimina un gruppo", "placeholders": {"name": {}}},
+  "@deleteGroupConfirm": {
+    "description": "Conferma quando si elimina un gruppo",
+    "placeholders": {
+      "name": {}
+    }
+  },
   "recoverPinTitle": "Recupera PIN",
   "recoverPinDescription": "Invieremo un codice di recupero alla tua e-mail registrata.",
   "sendCode": "Invia codice",
   "emptyTrashTitle": "Svuota cestino",
   "emptyTrashConfirm": "Vuoi eliminare definitivamente tutte le {count} storia/e nel cestino? Questa azione non può essere annullata.",
-  "@emptyTrashConfirm": {"placeholders": {"count": {}}},
+  "@emptyTrashConfirm": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "emptyTrashLabel": "Svuota cestino",
   "errorTakePhoto": "Errore durante lo scatto della foto: {message}",
-  "@errorTakePhoto": {"placeholders": {"message": {}}},
+  "@errorTakePhoto": {
+    "placeholders": {
+      "message": {}
+    }
+  },
   "notifications": "Notifiche",
   "entryNotifications": "Notifiche delle voci",
   "entryNotificationsInfo": "Le voci con una data almeno 2 ore in anticipo possono avere notifiche pianificate.",
@@ -572,31 +726,57 @@
   "automaticBackupInfo": "Al logout, verrà creato un backup e puoi scegliere dove salvarlo (cartella locale, Google Drive, ecc.).",
   "automaticBackupInfoLocal": "Al logout, un backup viene automaticamente salvato localmente sul tuo dispositivo. Puoi esportarlo su cloud storage in seguito se necessario.",
   "incrementalBackupTitle": "Cartella di backup",
-  "@incrementalBackupTitle": {"description": "Titolo della sezione di configurazione della cartella di backup"},
+  "@incrementalBackupTitle": {
+    "description": "Titolo della sezione di configurazione della cartella di backup"
+  },
   "incrementalBackupDescription": "Le storie vengono automaticamente salvate in questa cartella ogni volta che ne salvi una.",
-  "@incrementalBackupDescription": {"description": "Descrizione sotto la sezione backup"},
+  "@incrementalBackupDescription": {
+    "description": "Descrizione sotto la sezione backup"
+  },
   "incrementalBackupFolderNotSet": "Cartella non configurata",
-  "@incrementalBackupFolderNotSet": {"description": "Sottotitolo mostrato quando non è stata selezionata nessuna cartella di backup"},
+  "@incrementalBackupFolderNotSet": {
+    "description": "Sottotitolo mostrato quando non è stata selezionata nessuna cartella di backup"
+  },
   "incrementalBackupFolderConfigured": "Cartella configurata",
-  "@incrementalBackupFolderConfigured": {"description": "Sottotitolo mostrato quando una cartella di backup è stata selezionata"},
+  "@incrementalBackupFolderConfigured": {
+    "description": "Sottotitolo mostrato quando una cartella di backup è stata selezionata"
+  },
   "incrementalBackupSelectFolder": "Seleziona cartella",
-  "@incrementalBackupSelectFolder": {"description": "Etichetta del pulsante per aprire il selettore di cartelle"},
+  "@incrementalBackupSelectFolder": {
+    "description": "Etichetta del pulsante per aprire il selettore di cartelle"
+  },
   "incrementalBackupChangeFolder": "Cambia cartella",
-  "@incrementalBackupChangeFolder": {"description": "Etichetta del pulsante per cambiare la cartella di backup configurata"},
+  "@incrementalBackupChangeFolder": {
+    "description": "Etichetta del pulsante per cambiare la cartella di backup configurata"
+  },
   "incrementalBackupChangingFolder": "Copia dei file nella nuova cartella...",
-  "@incrementalBackupChangingFolder": {"description": "Messaggio di progresso durante la migrazione dei file di backup a una nuova cartella"},
+  "@incrementalBackupChangingFolder": {
+    "description": "Messaggio di progresso durante la migrazione dei file di backup a una nuova cartella"
+  },
   "incrementalBackupFolderChanged": "Cartella di backup aggiornata.",
-  "@incrementalBackupFolderChanged": {"description": "Messaggio snackbar quando il cambio di cartella ha successo"},
+  "@incrementalBackupFolderChanged": {
+    "description": "Messaggio snackbar quando il cambio di cartella ha successo"
+  },
   "incrementalBackupWarningNoFolder": "Cartella di backup non configurata. Le storie non saranno salvate finché non configuri una cartella nelle Impostazioni.",
-  "@incrementalBackupWarningNoFolder": {"description": "Avviso mostrato durante il salvataggio di una storia senza cartella di backup configurata"},
+  "@incrementalBackupWarningNoFolder": {
+    "description": "Avviso mostrato durante il salvataggio di una storia senza cartella di backup configurata"
+  },
   "incrementalBackupSyncDone": "Salvato",
-  "@incrementalBackupSyncDone": {"description": "Tooltip/etichetta per l'icona di sincronizzazione completata dopo il salvataggio di una storia"},
+  "@incrementalBackupSyncDone": {
+    "description": "Tooltip/etichetta per l'icona di sincronizzazione completata dopo il salvataggio di una storia"
+  },
   "backupSetupTitle": "Configura cartella di backup",
-  "@backupSetupTitle": {"description": "Titolo del dialogo di configurazione iniziale della cartella di backup"},
+  "@backupSetupTitle": {
+    "description": "Titolo del dialogo di configurazione iniziale della cartella di backup"
+  },
   "backupSetupContent": "Scegli una cartella dove le tue storie verranno salvate automaticamente. Questo garantisce che i tuoi dati siano sempre al sicuro.",
-  "@backupSetupContent": {"description": "Contenuto del dialogo di configurazione iniziale della cartella di backup"},
+  "@backupSetupContent": {
+    "description": "Contenuto del dialogo di configurazione iniziale della cartella di backup"
+  },
   "backupSavedToFolder": "Salvataggio del backup nella cartella configurata...",
-  "@backupSavedToFolder": {"description": "Messaggio di progresso durante la copia del backup ZIP nella cartella configurata"},
+  "@backupSavedToFolder": {
+    "description": "Messaggio di progresso durante la copia del backup ZIP nella cartella configurata"
+  },
   "biometricsNotAvailable": "Non disponibile su questo dispositivo",
   "biometricsDisabled": "Biometria disabilitata",
   "biometricConfiguredInfo": "La biometria è configurata. Puoi accedere con l'impronta digitale o il riconoscimento facciale.",
@@ -621,21 +801,33 @@
   "edit": "Modifica",
   "previewTitle": "Anteprima - {title}",
   "@previewTitle": {
-    "placeholders": {"title": {}}
+    "placeholders": {
+      "title": {}
+    }
   },
   "archiveLabel": "Archivia",
   "storyArchived": "Storia archiviata",
   "undo": "Annulla",
   "ungroup": "Rimuovi dal gruppo",
   "noStoriesInGroup": "Nessuna storia nel gruppo {group}",
-  "@noStoriesInGroup": {"placeholders": {"group": {}}},
+  "@noStoriesInGroup": {
+    "placeholders": {
+      "group": {}
+    }
+  },
   "exportPdfError": "Errore durante l'esportazione PDF: {error}",
   "@exportPdfError": {
-    "placeholders": {"error": {}}
+    "placeholders": {
+      "error": {}
+    }
   },
   "titleRequired": "Il titolo è obbligatorio!",
   "errorSavingStory": "Errore durante il salvataggio della storia: {error}",
-  "@errorSavingStory": {"placeholders": {"error": {}}},
+  "@errorSavingStory": {
+    "placeholders": {
+      "error": {}
+    }
+  },
   "exportPdfFieldsRequired": "Titolo e descrizione sono obbligatori per l'esportazione.",
   "exportHistory": "Esporta storia",
   "exportHistoryPrompt": "Vuoi salvare prima di esportare o solo visualizzare in anteprima?",
@@ -643,7 +835,11 @@
   "saveAndExport": "Salva ed esporta",
   "untitled": "Senza titolo",
   "errorLoadingFile": "Errore durante il caricamento del file: {error}",
-  "@errorLoadingFile": {"placeholders": {"error": {}}},
+  "@errorLoadingFile": {
+    "placeholders": {
+      "error": {}
+    }
+  },
   "discard": "Ignora",
   "discardStoryTitle": "Ignorare la storia?",
   "unsavedStoryPrompt": "Hai una nuova storia non salvata. Uscire senza salvare?",
@@ -669,569 +865,1118 @@
   "archivedStateLabel": "Archiviato",
   "archiveSubtitle": "Nascondi dalla schermata principale",
   "chooseEmoji": "Scegli un emoji",
-  "@chooseEmoji": {"description": "Titolo del modal di selezione emoji"},
+  "@chooseEmoji": {
+    "description": "Titolo del modal di selezione emoji"
+  },
   "emojiGroupSentimentos": "Sentimenti",
-  "@emojiGroupSentimentos": {"description": "Gruppo emoji: sentimenti/emozioni"},
+  "@emojiGroupSentimentos": {
+    "description": "Gruppo emoji: sentimenti/emozioni"
+  },
   "emojiGroupAnimais": "Animali",
-  "@emojiGroupAnimais": {"description": "Gruppo emoji: animali"},
+  "@emojiGroupAnimais": {
+    "description": "Gruppo emoji: animali"
+  },
   "emojiGroupVegetais": "Piante",
-  "@emojiGroupVegetais": {"description": "Gruppo emoji: piante/vegetali"},
+  "@emojiGroupVegetais": {
+    "description": "Gruppo emoji: piante/vegetali"
+  },
   "emojiGroupCeu": "Cielo",
-  "@emojiGroupCeu": {"description": "Gruppo emoji: cielo/natura"},
+  "@emojiGroupCeu": {
+    "description": "Gruppo emoji: cielo/natura"
+  },
   "emojiGroupObjetos": "Oggetti",
-  "@emojiGroupObjetos": {"description": "Gruppo emoji: oggetti"},
+  "@emojiGroupObjetos": {
+    "description": "Gruppo emoji: oggetti"
+  },
   "emojiGroupAlimentos": "Cibo",
-  "@emojiGroupAlimentos": {"description": "Gruppo emoji: cibo"},
+  "@emojiGroupAlimentos": {
+    "description": "Gruppo emoji: cibo"
+  },
   "emojiGroupLugares": "Luoghi",
-  "@emojiGroupLugares": {"description": "Gruppo emoji: luoghi"},
+  "@emojiGroupLugares": {
+    "description": "Gruppo emoji: luoghi"
+  },
   "emojiGroupSimbolos": "Simboli",
-  "@emojiGroupSimbolos": {"description": "Gruppo emoji: simboli"},
+  "@emojiGroupSimbolos": {
+    "description": "Gruppo emoji: simboli"
+  },
   "moodQuestion": "Come ti sei sentito in questa storia?",
-  "@moodQuestion": {"description": "Domanda sull'umore/sentimento dell'utente"},
+  "@moodQuestion": {
+    "description": "Domanda sull'umore/sentimento dell'utente"
+  },
   "moodVeryDifficult": "Molto difficile",
-  "@moodVeryDifficult": {"description": "Opzione umore: molto difficile"},
+  "@moodVeryDifficult": {
+    "description": "Opzione umore: molto difficile"
+  },
   "moodDifficult": "Difficile",
-  "@moodDifficult": {"description": "Opzione umore: difficile"},
+  "@moodDifficult": {
+    "description": "Opzione umore: difficile"
+  },
   "moodNeutral": "Neutro",
-  "@moodNeutral": {"description": "Opzione umore: neutro"},
+  "@moodNeutral": {
+    "description": "Opzione umore: neutro"
+  },
   "moodGood": "Bene",
-  "@moodGood": {"description": "Opzione umore: bene"},
+  "@moodGood": {
+    "description": "Opzione umore: bene"
+  },
   "moodVeryGood": "Molto bene",
-  "@moodVeryGood": {"description": "Opzione umore: molto bene"},
+  "@moodVeryGood": {
+    "description": "Opzione umore: molto bene"
+  },
   "energyQuestion": "Come era la tua energia?",
-  "@energyQuestion": {"description": "Domanda sul livello di energia dell'utente"},
+  "@energyQuestion": {
+    "description": "Domanda sul livello di energia dell'utente"
+  },
   "energyLow": "Bassa",
-  "@energyLow": {"description": "Livello energia: basso"},
+  "@energyLow": {
+    "description": "Livello energia: basso"
+  },
   "energyNormal": "Normale",
-  "@energyNormal": {"description": "Livello energia: normale"},
+  "@energyNormal": {
+    "description": "Livello energia: normale"
+  },
   "energyHigh": "Alta",
-  "@energyHigh": {"description": "Livello energia: alto"},
+  "@energyHigh": {
+    "description": "Livello energia: alto"
+  },
   "tagsHint": "Digita e premi Invio o virgola",
-  "@tagsHint": {"description": "Testo suggerimento per il campo tag"},
+  "@tagsHint": {
+    "description": "Testo suggerimento per il campo tag"
+  },
   "addTag": "Aggiungi tag",
-  "@addTag": {"description": "Tooltip per il pulsante aggiungi tag"},
+  "@addTag": {
+    "description": "Tooltip per il pulsante aggiungi tag"
+  },
   "tagLongPressHint": "Pressione lunga per rinominare",
-  "@tagLongPressHint": {"description": "Tooltip mostrato sui chip tag"},
+  "@tagLongPressHint": {
+    "description": "Tooltip mostrato sui chip tag"
+  },
   "renameTagTitle": "Rinomina tag",
-  "@renameTagTitle": {"description": "Titolo del dialogo di rinomina tag"},
+  "@renameTagTitle": {
+    "description": "Titolo del dialogo di rinomina tag"
+  },
   "renameTagWarning": "La rinomina influenzerà tutte le storie che usano questo tag.",
-  "@renameTagWarning": {"description": "Avviso mostrato durante la rinomina di un tag"},
+  "@renameTagWarning": {
+    "description": "Avviso mostrato durante la rinomina di un tag"
+  },
   "tagNameLabel": "Nome tag",
-  "@tagNameLabel": {"description": "Etichetta per il campo di testo del nome tag"},
+  "@tagNameLabel": {
+    "description": "Etichetta per il campo di testo del nome tag"
+  },
   "insightDiscovery": "Scoperta",
-  "@insightDiscovery": {"description": "Titolo della scheda insight del miglior giorno della settimana"},
+  "@insightDiscovery": {
+    "description": "Titolo della scheda insight del miglior giorno della settimana"
+  },
   "insightPattern": "Schema trovato",
-  "@insightPattern": {"description": "Titolo della scheda insight dei tag positivi"},
+  "@insightPattern": {
+    "description": "Titolo della scheda insight dei tag positivi"
+  },
   "insightTrend": "📈 Tendenza",
-  "@insightTrend": {"description": "Titolo della scheda insight della tendenza umore"},
+  "@insightTrend": {
+    "description": "Titolo della scheda insight della tendenza umore"
+  },
   "insightMonthlySummary": "📊 Il tuo mese in storie",
-  "@insightMonthlySummary": {"description": "Titolo della scheda insight del riepilogo mensile"},
-  "insightPositiveWordsTitle": "Parole positive",
-  "@insightPositiveWordsTitle": {"description": "Titolo della scheda insight delle parole positive"},
-  "insightDifficultWordsTitle": "Parole difficili",
-  "@insightDifficultWordsTitle": {"description": "Titolo della scheda insight delle parole difficili"},
+  "@insightMonthlySummary": {
+    "description": "Titolo della scheda insight del riepilogo mensile"
+  },
   "insightBestWeekday": "{weekday} è di solito il tuo giorno più positivo.",
   "@insightBestWeekday": {
     "description": "Testo della scheda insight del miglior giorno della settimana",
-    "placeholders": {"weekday": {"type": "String"}}
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
   },
   "insightPositiveTag": "Le storie con tag #{tag} tendono ad avere un umore migliore.",
   "@insightPositiveTag": {
     "description": "Testo della scheda insight dei tag positivi",
-    "placeholders": {"tag": {"type": "String"}}
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
   },
   "insightTrendPositive": "Il tuo umore è migliorato negli ultimi 7 giorni rispetto agli ultimi 30 giorni.",
-  "@insightTrendPositive": {"description": "Testo della scheda insight della tendenza positiva"},
-  "insightPositiveWords": "Parole che compaiono spesso nelle tue storie più positive: {words}.",
-  "@insightPositiveWords": {
-    "description": "Testo della scheda insight delle parole positive",
-    "placeholders": {"words": {"type": "String"}}
-  },
-  "insightDifficultWords": "Parole che compaiono spesso nelle tue storie più difficili: {words}.",
-  "@insightDifficultWords": {
-    "description": "Testo della scheda insight delle parole difficili",
-    "placeholders": {"words": {"type": "String"}}
+  "@insightTrendPositive": {
+    "description": "Testo della scheda insight della tendenza positiva"
   },
   "insightMonthlySummaryText": "Voci: {entries}\nUmore med.: {mood}\nEnergia med.: {energy}",
   "@insightMonthlySummaryText": {
     "description": "Testo del riepilogo mensile (senza riga tag)",
     "placeholders": {
-      "entries": {"type": "int"},
-      "mood": {"type": "String"},
-      "energy": {"type": "String"}
+      "entries": {
+        "type": "int"
+      },
+      "mood": {
+        "type": "String"
+      },
+      "energy": {
+        "type": "String"
+      }
     }
   },
   "insightMonthlySummaryWithTag": "Voci: {entries}\nUmore med.: {mood}\nEnergia med.: {energy}\nTag principale: #{tag}",
   "@insightMonthlySummaryWithTag": {
     "description": "Testo del riepilogo mensile con tag principale",
     "placeholders": {
-      "entries": {"type": "int"},
-      "mood": {"type": "String"},
-      "energy": {"type": "String"},
-      "tag": {"type": "String"}
+      "entries": {
+        "type": "int"
+      },
+      "mood": {
+        "type": "String"
+      },
+      "energy": {
+        "type": "String"
+      },
+      "tag": {
+        "type": "String"
+      }
     }
   },
   "insightSeeStories": "Vedi storie",
-  "@insightSeeStories": {"description": "Pulsante azione sulle schede insight con un tag correlato"},
+  "@insightSeeStories": {
+    "description": "Pulsante azione sulle schede insight con un tag correlato"
+  },
   "weekdaySunday": "Domenica",
-  "@weekdaySunday": {"description": "Giorno della settimana"},
+  "@weekdaySunday": {
+    "description": "Giorno della settimana"
+  },
   "weekdayMonday": "Lunedì",
-  "@weekdayMonday": {"description": "Giorno della settimana"},
+  "@weekdayMonday": {
+    "description": "Giorno della settimana"
+  },
   "weekdayTuesday": "Martedì",
-  "@weekdayTuesday": {"description": "Giorno della settimana"},
+  "@weekdayTuesday": {
+    "description": "Giorno della settimana"
+  },
   "weekdayWednesday": "Mercoledì",
-  "@weekdayWednesday": {"description": "Giorno della settimana"},
+  "@weekdayWednesday": {
+    "description": "Giorno della settimana"
+  },
   "weekdayThursday": "Giovedì",
-  "@weekdayThursday": {"description": "Giorno della settimana"},
+  "@weekdayThursday": {
+    "description": "Giorno della settimana"
+  },
   "weekdayFriday": "Venerdì",
-  "@weekdayFriday": {"description": "Giorno della settimana"},
+  "@weekdayFriday": {
+    "description": "Giorno della settimana"
+  },
   "weekdaySaturday": "Sabato",
-  "@weekdaySaturday": {"description": "Giorno della settimana"},
+  "@weekdaySaturday": {
+    "description": "Giorno della settimana"
+  },
   "insightDismiss": "Ignora",
-  "@insightDismiss": {"description": "Tooltip ed etichetta del pulsante X per ignorare un insight"},
+  "@insightDismiss": {
+    "description": "Tooltip ed etichetta del pulsante X per ignorare un insight"
+  },
   "insightStoryBalanceTitle": "Equilibrio storie",
-  "@insightStoryBalanceTitle": {"description": "Titolo della scheda insight di equilibrio delle storie"},
+  "@insightStoryBalanceTitle": {
+    "description": "Titolo della scheda insight di equilibrio delle storie"
+  },
   "insightStoryBalancePositive": "Hai registrato più storie positive negli ultimi 10 giorni. Continua così!",
-  "@insightStoryBalancePositive": {"description": "Insight quando le storie positive prevalgono"},
+  "@insightStoryBalancePositive": {
+    "description": "Insight quando le storie positive prevalgono"
+  },
   "insightStoryBalanceDifficult": "Hai registrato più storie difficili negli ultimi 10 giorni. Prenditi cura di te!",
-  "@insightStoryBalanceDifficult": {"description": "Insight quando le storie difficili prevalgono"},
+  "@insightStoryBalanceDifficult": {
+    "description": "Insight quando le storie difficili prevalgono"
+  },
   "insightWritingTimeTitle": "Orario di scrittura",
-  "@insightWritingTimeTitle": {"description": "Titolo della scheda insight dell'orario di scrittura"},
+  "@insightWritingTimeTitle": {
+    "description": "Titolo della scheda insight dell'orario di scrittura"
+  },
   "insightWritingTimeMorning": "Hai scritto di più al mattino questa settimana.",
-  "@insightWritingTimeMorning": {"description": "Insight: l'utente scrive di più al mattino"},
+  "@insightWritingTimeMorning": {
+    "description": "Insight: l'utente scrive di più al mattino"
+  },
   "insightWritingTimeAfternoon": "Hai scritto di più nel pomeriggio questa settimana.",
-  "@insightWritingTimeAfternoon": {"description": "Insight: l'utente scrive di più nel pomeriggio"},
+  "@insightWritingTimeAfternoon": {
+    "description": "Insight: l'utente scrive di più nel pomeriggio"
+  },
   "insightWritingTimeNight": "Hai scritto di più la notte questa settimana.",
-  "@insightWritingTimeNight": {"description": "Insight: l'utente scrive di più la notte"},
+  "@insightWritingTimeNight": {
+    "description": "Insight: l'utente scrive di più la notte"
+  },
   "insightEnergyChartTitle": "Energia — Ultimi 7 giorni",
-  "@insightEnergyChartTitle": {"description": "Titolo della scheda insight del grafico energia settimanale (Premium)"},
+  "@insightEnergyChartTitle": {
+    "description": "Titolo della scheda insight del grafico energia settimanale (Premium)"
+  },
   "insightEnergyChartSubtitle": "La tua tendenza energetica questa settimana",
-  "@insightEnergyChartSubtitle": {"description": "Sottotitolo della scheda insight del grafico energia"},
+  "@insightEnergyChartSubtitle": {
+    "description": "Sottotitolo della scheda insight del grafico energia"
+  },
   "insightPremiumRequired": "Questa è una funzionalità Premium. Aggiorna per sbloccare questo insight.",
-  "@insightPremiumRequired": {"description": "Messaggio mostrato sugli insight Premium bloccati"},
+  "@insightPremiumRequired": {
+    "description": "Messaggio mostrato sugli insight Premium bloccati"
+  },
   "insightPremiumCTA": "Aggiorna",
-  "@insightPremiumCTA": {"description": "Pulsante CTA per vedere i piani Premium"},
+  "@insightPremiumCTA": {
+    "description": "Pulsante CTA per vedere i piani Premium"
+  },
   "insightDevModeActive": "Modalità sviluppatore: tutti gli insight visibili",
-  "@insightDevModeActive": {"description": "Banner mostrato in modalità sviluppo quando tutti gli insight sono visibili"},
+  "@insightDevModeActive": {
+    "description": "Banner mostrato in modalità sviluppo quando tutti gli insight sono visibili"
+  },
   "backupProgressCreating": "Creazione del file di backup...",
-  "@backupProgressCreating": {"description": "Messaggio di progresso: creazione del file di backup"},
+  "@backupProgressCreating": {
+    "description": "Messaggio di progresso: creazione del file di backup"
+  },
   "backupProgressCopyingDb": "Copia del database...",
-  "@backupProgressCopyingDb": {"description": "Messaggio di progresso: copia del database"},
+  "@backupProgressCopyingDb": {
+    "description": "Messaggio di progresso: copia del database"
+  },
   "backupProgressCopyingVideos": "Copia dei video...",
-  "@backupProgressCopyingVideos": {"description": "Messaggio di progresso: copia dei video"},
+  "@backupProgressCopyingVideos": {
+    "description": "Messaggio di progresso: copia dei video"
+  },
   "backupProgressCopyingVideo": "Copia del video {current}/{total}...",
   "@backupProgressCopyingVideo": {
     "description": "Messaggio di progresso: copia di un singolo video",
-    "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "backupProgressCopyingPhotos": "Copia delle foto...",
-  "@backupProgressCopyingPhotos": {"description": "Messaggio di progresso: copia delle foto"},
+  "@backupProgressCopyingPhotos": {
+    "description": "Messaggio di progresso: copia delle foto"
+  },
   "backupProgressCopyingPhoto": "Copia della foto {current}/{total}...",
   "@backupProgressCopyingPhoto": {
     "description": "Messaggio di progresso: copia di una singola foto",
-    "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "backupProgressCopyingAudios": "Copia degli audio...",
-  "@backupProgressCopyingAudios": {"description": "Messaggio di progresso: copia degli audio"},
+  "@backupProgressCopyingAudios": {
+    "description": "Messaggio di progresso: copia degli audio"
+  },
   "backupProgressCopyingAudio": "Copia dell'audio {current}/{total}...",
   "@backupProgressCopyingAudio": {
     "description": "Messaggio di progresso: copia di un singolo audio",
-    "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "backupProgressCreatingMetadata": "Creazione dei metadati...",
-  "@backupProgressCreatingMetadata": {"description": "Messaggio di progresso: creazione dei metadati"},
+  "@backupProgressCreatingMetadata": {
+    "description": "Messaggio di progresso: creazione dei metadati"
+  },
   "backupProgressCompressing": "Compressione dei file...",
-  "@backupProgressCompressing": {"description": "Messaggio di progresso: compressione dei file"},
+  "@backupProgressCompressing": {
+    "description": "Messaggio di progresso: compressione dei file"
+  },
   "backupProgressSuccess": "Backup creato con successo!",
-  "@backupProgressSuccess": {"description": "Messaggio di progresso: backup creato con successo"},
+  "@backupProgressSuccess": {
+    "description": "Messaggio di progresso: backup creato con successo"
+  },
   "backupShareText": "Backup completo DayApp con database e video",
-  "@backupShareText": {"description": "Testo mostrato nel menu di condivisione durante la condivisione del backup"},
+  "@backupShareText": {
+    "description": "Testo mostrato nel menu di condivisione durante la condivisione del backup"
+  },
   "errorBackupDbNotFound": "Database non trovato.",
-  "@errorBackupDbNotFound": {"description": "Errore quando il file del database è mancante durante il backup"},
+  "@errorBackupDbNotFound": {
+    "description": "Errore quando il file del database è mancante durante il backup"
+  },
   "errorBackupFileNotFound": "File di backup non trovato.",
-  "@errorBackupFileNotFound": {"description": "Errore quando il file ZIP di backup è mancante"},
+  "@errorBackupFileNotFound": {
+    "description": "Errore quando il file ZIP di backup è mancante"
+  },
   "errorBackupDbNotFoundInFile": "Database non trovato nel file di backup. File estratti: {count}",
   "@errorBackupDbNotFoundInFile": {
     "description": "Errore quando il database è assente dallo ZIP di backup",
-    "placeholders": {"count": {"type": "int"}}
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "restoreProgressExtracting": "Estrazione del file di backup...",
-  "@restoreProgressExtracting": {"description": "Messaggio di progresso: estrazione dello ZIP"},
+  "@restoreProgressExtracting": {
+    "description": "Messaggio di progresso: estrazione dello ZIP"
+  },
   "restoreProgressZipContains": "Lo ZIP contiene {count} file...",
   "@restoreProgressZipContains": {
     "description": "Messaggio di progresso: quanti file ha lo ZIP",
-    "placeholders": {"count": {"type": "int"}}
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "restoreProgressBackingUpCurrent": "Backup del database attuale...",
-  "@restoreProgressBackingUpCurrent": {"description": "Messaggio di progresso: backup del database attuale prima del ripristino"},
+  "@restoreProgressBackingUpCurrent": {
+    "description": "Messaggio di progresso: backup del database attuale prima del ripristino"
+  },
   "restoreProgressClosingDb": "Chiusura delle connessioni al database...",
-  "@restoreProgressClosingDb": {"description": "Messaggio di progresso: chiusura delle connessioni al database"},
+  "@restoreProgressClosingDb": {
+    "description": "Messaggio di progresso: chiusura delle connessioni al database"
+  },
   "restoreProgressRestoringDb": "Ripristino del database...",
-  "@restoreProgressRestoringDb": {"description": "Messaggio di progresso: ripristino del database"},
+  "@restoreProgressRestoringDb": {
+    "description": "Messaggio di progresso: ripristino del database"
+  },
   "restoreProgressCopyingRestoredDb": "Copia del database ripristinato...",
-  "@restoreProgressCopyingRestoredDb": {"description": "Messaggio di progresso: copia del database ripristinato"},
+  "@restoreProgressCopyingRestoredDb": {
+    "description": "Messaggio di progresso: copia del database ripristinato"
+  },
   "restoreProgressRestoringVideos": "Ripristino dei video...",
-  "@restoreProgressRestoringVideos": {"description": "Messaggio di progresso: ripristino dei video"},
+  "@restoreProgressRestoringVideos": {
+    "description": "Messaggio di progresso: ripristino dei video"
+  },
   "restoreProgressRestoringVideo": "Ripristino del video {current}/{total}...",
   "@restoreProgressRestoringVideo": {
     "description": "Messaggio di progresso: ripristino di un singolo video",
-    "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "restoreProgressRestoringPhotos": "Ripristino delle foto...",
-  "@restoreProgressRestoringPhotos": {"description": "Messaggio di progresso: ripristino delle foto"},
+  "@restoreProgressRestoringPhotos": {
+    "description": "Messaggio di progresso: ripristino delle foto"
+  },
   "restoreProgressRestoringPhoto": "Ripristino della foto {current}/{total}...",
   "@restoreProgressRestoringPhoto": {
     "description": "Messaggio di progresso: ripristino di una singola foto",
-    "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "restoreProgressRestoringAudios": "Ripristino degli audio...",
-  "@restoreProgressRestoringAudios": {"description": "Messaggio di progresso: ripristino degli audio"},
+  "@restoreProgressRestoringAudios": {
+    "description": "Messaggio di progresso: ripristino degli audio"
+  },
   "restoreProgressRestoringAudio": "Ripristino dell'audio {current}/{total}...",
   "@restoreProgressRestoringAudio": {
     "description": "Messaggio di progresso: ripristino di un singolo audio",
-    "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   },
   "restoreProgressReinitializingDb": "Reinizializzazione del database...",
-  "@restoreProgressReinitializingDb": {"description": "Messaggio di progresso: reinizializzazione del database dopo il ripristino"},
+  "@restoreProgressReinitializingDb": {
+    "description": "Messaggio di progresso: reinizializzazione del database dopo il ripristino"
+  },
   "restoreProgressDbStats": "Database ripristinato: {active} attivi, {deleted} nel cestino.",
   "@restoreProgressDbStats": {
     "description": "Messaggio di progresso che mostra quante storie sono state ripristinate",
-    "placeholders": {"active": {"type": "int"}, "deleted": {"type": "int"}}
+    "placeholders": {
+      "active": {
+        "type": "int"
+      },
+      "deleted": {
+        "type": "int"
+      }
+    }
   },
   "resendCodeButton": "Invia nuovo codice",
-  "@resendCodeButton": {"description": "Pulsante per reinviare il codice di recupero via e-mail"},
+  "@resendCodeButton": {
+    "description": "Pulsante per reinviare il codice di recupero via e-mail"
+  },
   "codeExpiresIn": "Il codice scade tra {minutes} minuti",
   "@codeExpiresIn": {
     "description": "Messaggio che indica in quanti minuti scade il codice di recupero",
-    "placeholders": {"minutes": {"type": "int"}}
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   },
   "backToStart": "Torna all'inizio",
-  "@backToStart": {"description": "Pulsante per tornare al primo passo del recupero"},
+  "@backToStart": {
+    "description": "Pulsante per tornare al primo passo del recupero"
+  },
   "code": "Codice",
-  "@code": {"description": "Etichetta per il codice di recupero"},
+  "@code": {
+    "description": "Etichetta per il codice di recupero"
+  },
   "pin": "PIN",
-  "@pin": {"description": "Etichetta per il campo PIN"},
+  "@pin": {
+    "description": "Etichetta per il campo PIN"
+  },
   "enterCode": "Inserisci codice",
-  "@enterCode": {"description": "Titolo per l'inserimento del codice di recupero"},
+  "@enterCode": {
+    "description": "Titolo per l'inserimento del codice di recupero"
+  },
   "codeCheckDescription": "Inserisci il codice a 6 cifre che è stato inviato alla tua e-mail.",
-  "@codeCheckDescription": {"description": "Descrizione per il passaggio di verifica del codice"},
+  "@codeCheckDescription": {
+    "description": "Descrizione per il passaggio di verifica del codice"
+  },
   "defineNewPin": "Definisci un nuovo PIN sicuro per il tuo account.",
-  "@defineNewPin": {"description": "Descrizione per l'impostazione di un nuovo PIN"},
+  "@defineNewPin": {
+    "description": "Descrizione per l'impostazione di un nuovo PIN"
+  },
   "sendCodeButton": "Invia codice",
-  "@sendCodeButton": {"description": "Pulsante per inviare il codice di recupero"},
+  "@sendCodeButton": {
+    "description": "Pulsante per inviare il codice di recupero"
+  },
   "verifyCode": "Verifica codice",
-  "@verifyCode": {"description": "Pulsante per verificare il codice di recupero"},
+  "@verifyCode": {
+    "description": "Pulsante per verificare il codice di recupero"
+  },
   "resetPin": "Reimposta PIN",
-  "@resetPin": {"description": "Pulsante per reimpostare il PIN"},
+  "@resetPin": {
+    "description": "Pulsante per reimpostare il PIN"
+  },
   "storyPreviewMoodVeryDifficultNarrative": "Questa è stata una storia molto difficile",
-  "@storyPreviewMoodVeryDifficultNarrative": {"description": "Testo narrativo per sentimento livello 1 nell'anteprima storia"},
+  "@storyPreviewMoodVeryDifficultNarrative": {
+    "description": "Testo narrativo per sentimento livello 1 nell'anteprima storia"
+  },
   "storyPreviewMoodDifficultNarrative": "Questa è stata una storia difficile",
-  "@storyPreviewMoodDifficultNarrative": {"description": "Testo narrativo per sentimento livello 2 nell'anteprima storia"},
+  "@storyPreviewMoodDifficultNarrative": {
+    "description": "Testo narrativo per sentimento livello 2 nell'anteprima storia"
+  },
   "storyPreviewMoodNeutralNarrative": "È stato neutro in termini di sentimento",
-  "@storyPreviewMoodNeutralNarrative": {"description": "Testo narrativo per sentimento livello 3 nell'anteprima storia"},
+  "@storyPreviewMoodNeutralNarrative": {
+    "description": "Testo narrativo per sentimento livello 3 nell'anteprima storia"
+  },
   "storyPreviewMoodGoodNarrative": "Una buona storia",
-  "@storyPreviewMoodGoodNarrative": {"description": "Testo narrativo per sentimento livello 4 nell'anteprima storia"},
+  "@storyPreviewMoodGoodNarrative": {
+    "description": "Testo narrativo per sentimento livello 4 nell'anteprima storia"
+  },
   "storyPreviewMoodVeryGoodNarrative": "Una storia molto buona",
-  "@storyPreviewMoodVeryGoodNarrative": {"description": "Testo narrativo per sentimento livello 5 nell'anteprima storia"},
+  "@storyPreviewMoodVeryGoodNarrative": {
+    "description": "Testo narrativo per sentimento livello 5 nell'anteprima storia"
+  },
   "storyPreviewEnergyLowNarrative": "Ero con energia bassa",
-  "@storyPreviewEnergyLowNarrative": {"description": "Testo narrativo per energia livello 1 nell'anteprima storia"},
+  "@storyPreviewEnergyLowNarrative": {
+    "description": "Testo narrativo per energia livello 1 nell'anteprima storia"
+  },
   "storyPreviewEnergyNormalNarrative": "La mia energia era normale",
-  "@storyPreviewEnergyNormalNarrative": {"description": "Testo narrativo per energia livello 2 nell'anteprima storia"},
+  "@storyPreviewEnergyNormalNarrative": {
+    "description": "Testo narrativo per energia livello 2 nell'anteprima storia"
+  },
   "storyPreviewEnergyHighNarrative": "Ero con energia molto alta",
-  "@storyPreviewEnergyHighNarrative": {"description": "Testo narrativo per energia livello 3 nell'anteprima storia"},
+  "@storyPreviewEnergyHighNarrative": {
+    "description": "Testo narrativo per energia livello 3 nell'anteprima storia"
+  },
   "premiumPlan": "Premium",
-  "@premiumPlan": {"description": "Etichetta del piano Premium"},
+  "@premiumPlan": {
+    "description": "Etichetta del piano Premium"
+  },
   "premiumFeature": "Funzionalità Premium",
-  "@premiumFeature": {"description": "Messaggio snackbar breve quando l'utente tocca una funzionalità Premium bloccata"},
+  "@premiumFeature": {
+    "description": "Messaggio snackbar breve quando l'utente tocca una funzionalità Premium bloccata"
+  },
   "freePlan": "Gratuito",
-  "@freePlan": {"description": "Etichetta del piano Gratuito"},
+  "@freePlan": {
+    "description": "Etichetta del piano Gratuito"
+  },
   "currentPlan": "Piano attuale",
-  "@currentPlan": {"description": "Etichetta che mostra il piano attuale"},
+  "@currentPlan": {
+    "description": "Etichetta che mostra il piano attuale"
+  },
   "premiumDebugTitle": "Debug Premium",
-  "@premiumDebugTitle": {"description": "Titolo della schermata di debug Premium nascosta"},
+  "@premiumDebugTitle": {
+    "description": "Titolo della schermata di debug Premium nascosta"
+  },
   "premiumDebugSubtitle": "Solo sviluppo — non visibile in produzione",
-  "@premiumDebugSubtitle": {"description": "Sottotitolo della schermata di debug Premium nascosta"},
+  "@premiumDebugSubtitle": {
+    "description": "Sottotitolo della schermata di debug Premium nascosta"
+  },
   "premiumDebugActivate": "Attiva Premium (debug)",
-  "@premiumDebugActivate": {"description": "Pulsante per attivare il premium in modalità debug"},
+  "@premiumDebugActivate": {
+    "description": "Pulsante per attivare il premium in modalità debug"
+  },
   "premiumDebugDeactivate": "Disattiva Premium (torna a Gratuito)",
-  "@premiumDebugDeactivate": {"description": "Pulsante per disattivare il premium in modalità debug"},
+  "@premiumDebugDeactivate": {
+    "description": "Pulsante per disattivare il premium in modalità debug"
+  },
   "premiumDebugStatus": "Stato: {plan}",
   "@premiumDebugStatus": {
     "description": "Riga dello stato premium attuale",
-    "placeholders": {"plan": {"type": "String"}}
+    "placeholders": {
+      "plan": {
+        "type": "String"
+      }
+    }
   },
   "premiumDebugSource": "Fonte: {source}",
   "@premiumDebugSource": {
     "description": "Fonte che ha attivato il premium",
-    "placeholders": {"source": {"type": "String"}}
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
   },
   "premiumDebugWarning": "Questa schermata è disponibile solo nelle versioni di debug. Non apparirà in produzione.",
-  "@premiumDebugWarning": {"description": "Avviso mostrato nella schermata di debug premium"},
+  "@premiumDebugWarning": {
+    "description": "Avviso mostrato nella schermata di debug premium"
+  },
   "premiumDebugFeatures": "Funzionalità controllate dal piano",
-  "@premiumDebugFeatures": {"description": "Titolo di sezione che elenca le funzionalità per piano"},
+  "@premiumDebugFeatures": {
+    "description": "Titolo di sezione che elenca le funzionalità per piano"
+  },
   "premiumDebugNoSource": "nessuno",
-  "@premiumDebugNoSource": {"description": "Mostrato quando non è registrata nessuna fonte premium"},
+  "@premiumDebugNoSource": {
+    "description": "Mostrato quando non è registrata nessuna fonte premium"
+  },
   "autoBackupPremiumRequired": "I backup automatici sono una funzionalità Premium. Aggiorna per accedere ai backup salvati, ai punti di ripristino e alla gestione dello storage.",
-  "@autoBackupPremiumRequired": {"description": "Messaggio mostrato agli utenti gratuiti nella sezione backup automatico"},
+  "@autoBackupPremiumRequired": {
+    "description": "Messaggio mostrato agli utenti gratuiti nella sezione backup automatico"
+  },
   "autoBackupStorageInfo": "{count, plural, =0{Nessun backup salvato} =1{1 backup · {size}} other{{count} backup · {size}}}",
   "@autoBackupStorageInfo": {
     "description": "Numero di backup e dimensione totale mostrati nelle impostazioni",
-    "placeholders": {"count": {"type": "int"}, "size": {"type": "String"}}
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
   },
   "chaptersTitle": "Capitoli",
-  "@chaptersTitle": {"description": "Titolo per la schermata capitoli e l'accesso rapido"},
+  "@chaptersTitle": {
+    "description": "Titolo per la schermata capitoli e l'accesso rapido"
+  },
   "collectionsTitle": "Collezioni",
-  "@collectionsTitle": {"description": "Titolo dell'intestazione della schermata Collezioni"},
+  "@collectionsTitle": {
+    "description": "Titolo dell'intestazione della schermata Collezioni"
+  },
   "collectionsSubtitle": "I tuoi momenti organizzati in capitoli e gruppi, come una biblioteca di vita.",
-  "@collectionsSubtitle": {"description": "Sottotitolo dell'intestazione della schermata Collezioni"},
+  "@collectionsSubtitle": {
+    "description": "Sottotitolo dell'intestazione della schermata Collezioni"
+  },
   "groupsTabLabel": "Gruppi",
-  "@groupsTabLabel": {"description": "Etichetta della scheda Gruppi nella schermata Collezioni"},
+  "@groupsTabLabel": {
+    "description": "Etichetta della scheda Gruppi nella schermata Collezioni"
+  },
   "chapterShortcutToggle": "Mostra/nascondi la scheda capitoli nella Home",
-  "@chapterShortcutToggle": {"description": "Tooltip per alternare la visibilità della scheda di scorciatoia capitoli"},
+  "@chapterShortcutToggle": {
+    "description": "Tooltip per alternare la visibilità della scheda di scorciatoia capitoli"
+  },
   "chaptersHomeCardTitle": "La tua vita per capitoli",
-  "@chaptersHomeCardTitle": {"description": "Titolo della scheda di scorciatoia capitoli sulla Home"},
+  "@chaptersHomeCardTitle": {
+    "description": "Titolo della scheda di scorciatoia capitoli sulla Home"
+  },
   "chaptersHomeCardSubtitle": "Le tue storie custodiscono momenti. I tuoi capitoli rivelano il percorso.",
-  "@chaptersHomeCardSubtitle": {"description": "Sottotitolo della scheda di scorciatoia capitoli sulla Home"},
+  "@chaptersHomeCardSubtitle": {
+    "description": "Sottotitolo della scheda di scorciatoia capitoli sulla Home"
+  },
   "chaptersPremiumRequired": "I capitoli e i suggerimenti automatici sono funzionalità Premium.",
-  "@chaptersPremiumRequired": {"description": "Messaggio mostrato quando la funzionalità capitoli è bloccata per gli utenti gratuiti"},
+  "@chaptersPremiumRequired": {
+    "description": "Messaggio mostrato quando la funzionalità capitoli è bloccata per gli utenti gratuiti"
+  },
   "themePremiumRequired": "I temi personalizzati sono una funzionalità Premium.",
-  "@themePremiumRequired": {"description": "Messaggio mostrato quando un tema premium è selezionato da un utente gratuito"},
+  "@themePremiumRequired": {
+    "description": "Messaggio mostrato quando un tema premium è selezionato da un utente gratuito"
+  },
   "chapterSuggestions": "Capitoli suggeriti",
-  "@chapterSuggestions": {"description": "Titolo di sezione per i suggerimenti automatici di capitoli"},
+  "@chapterSuggestions": {
+    "description": "Titolo di sezione per i suggerimenti automatici di capitoli"
+  },
   "chapterCreated": "Capitolo creato con successo.",
-  "@chapterCreated": {"description": "Messaggio di successo dopo la creazione di un capitolo"},
+  "@chapterCreated": {
+    "description": "Messaggio di successo dopo la creazione di un capitolo"
+  },
   "chapterEditTitle": "Modifica capitolo",
-  "@chapterEditTitle": {"description": "Titolo del dialogo di modifica capitolo"},
+  "@chapterEditTitle": {
+    "description": "Titolo del dialogo di modifica capitolo"
+  },
   "chapterDescriptionHint": "Inserisci una descrizione per questo capitolo (facoltativo)",
-  "@chapterDescriptionHint": {"description": "Segnaposto per il campo descrizione del capitolo"},
+  "@chapterDescriptionHint": {
+    "description": "Segnaposto per il campo descrizione del capitolo"
+  },
   "chapterUpdated": "Capitolo aggiornato con successo.",
-  "@chapterUpdated": {"description": "Messaggio di successo dopo l'aggiornamento del capitolo"},
+  "@chapterUpdated": {
+    "description": "Messaggio di successo dopo l'aggiornamento del capitolo"
+  },
   "chapterDeleteConfirmTitle": "Elimina capitolo",
-  "@chapterDeleteConfirmTitle": {"description": "Titolo del dialogo di conferma eliminazione capitolo"},
-  "chapterDeleteConfirmMessage": "Eliminare il capitolo \u201c{title}\u201d? Le storie collegate non verranno eliminate.",
-  "@chapterDeleteConfirmMessage": {"description": "Messaggio del dialogo di conferma eliminazione capitolo", "placeholders": {"title": {"type": "String"}}},
+  "@chapterDeleteConfirmTitle": {
+    "description": "Titolo del dialogo di conferma eliminazione capitolo"
+  },
+  "chapterDeleteConfirmMessage": "Eliminare il capitolo “{title}”? Le storie collegate non verranno eliminate.",
+  "@chapterDeleteConfirmMessage": {
+    "description": "Messaggio del dialogo di conferma eliminazione capitolo",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "chapterDeleted": "Capitolo eliminato con successo.",
-  "@chapterDeleted": {"description": "Messaggio di successo dopo l'eliminazione del capitolo"},
+  "@chapterDeleted": {
+    "description": "Messaggio di successo dopo l'eliminazione del capitolo"
+  },
   "chapterCreateManual": "Crea capitolo manualmente",
-  "@chapterCreateManual": {"description": "Pulsante per creare un capitolo manualmente"},
+  "@chapterCreateManual": {
+    "description": "Pulsante per creare un capitolo manualmente"
+  },
   "chapterCreateTitle": "Crea Capitolo",
-  "@chapterCreateTitle": {"description": "Titolo della schermata di creazione manuale del capitolo"},
+  "@chapterCreateTitle": {
+    "description": "Titolo della schermata di creazione manuale del capitolo"
+  },
   "chapterTitle": "Titolo",
-  "@chapterTitle": {"description": "Etichetta per il campo titolo del capitolo"},
+  "@chapterTitle": {
+    "description": "Etichetta per il campo titolo del capitolo"
+  },
   "chapterTitleHint": "Es: Cambio di lavoro",
-  "@chapterTitleHint": {"description": "Suggerimento per il campo titolo del capitolo"},
+  "@chapterTitleHint": {
+    "description": "Suggerimento per il campo titolo del capitolo"
+  },
   "chapterDescription": "Descrizione",
-  "@chapterDescription": {"description": "Etichetta per il campo descrizione del capitolo"},
+  "@chapterDescription": {
+    "description": "Etichetta per il campo descrizione del capitolo"
+  },
   "chapterPhoto": "Foto del capitolo",
-  "@chapterPhoto": {"description": "Etichetta per la sezione foto del capitolo"},
+  "@chapterPhoto": {
+    "description": "Etichetta per la sezione foto del capitolo"
+  },
   "chapterPhotoActionLabel": "Foto del Capitolo",
-  "@chapterPhotoActionLabel": {"description": "Etichetta del pulsante comando per scegliere foto del capitolo"},
+  "@chapterPhotoActionLabel": {
+    "description": "Etichetta del pulsante comando per scegliere foto del capitolo"
+  },
   "chapterAddPhoto": "Aggiungi foto",
-  "@chapterAddPhoto": {"description": "Pulsante per aggiungere una foto del capitolo"},
+  "@chapterAddPhoto": {
+    "description": "Pulsante per aggiungere una foto del capitolo"
+  },
   "chapterChangePhoto": "Cambia foto",
-  "@chapterChangePhoto": {"description": "Pulsante per cambiare la foto del capitolo"},
+  "@chapterChangePhoto": {
+    "description": "Pulsante per cambiare la foto del capitolo"
+  },
   "chapterRemovePhoto": "Rimuovi foto",
-  "@chapterRemovePhoto": {"description": "Pulsante per rimuovere la foto del capitolo"},
+  "@chapterRemovePhoto": {
+    "description": "Pulsante per rimuovere la foto del capitolo"
+  },
   "chapterSelectEntries": "Seleziona storie correlate (titolo + data)",
-  "@chapterSelectEntries": {"description": "Etichetta per la selezione delle storie per comporre un capitolo"},
+  "@chapterSelectEntries": {
+    "description": "Etichetta per la selezione delle storie per comporre un capitolo"
+  },
   "chapterMinimumEntries": "Minimo: 3 storie per capitolo.",
-  "@chapterMinimumEntries": {"description": "Messaggio di validazione per il numero minimo di storie in un capitolo"},
+  "@chapterMinimumEntries": {
+    "description": "Messaggio di validazione per il numero minimo di storie in un capitolo"
+  },
   "chapterPeriod": "Storie dal {start} - {end}",
   "@chapterPeriod": {
     "description": "Etichetta del periodo per il capitolo",
-    "placeholders": {"start": {"type": "String"}, "end": {"type": "String"}}
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
   },
   "chapterEntriesCount": "Storie: {count}",
   "@chapterEntriesCount": {
     "description": "Numero di storie nel capitolo",
-    "placeholders": {"count": {"type": "int"}}
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "chapterAverageMood": "Umore medio: {mood}",
   "@chapterAverageMood": {
     "description": "Metrica umore medio nel capitolo",
-    "placeholders": {"mood": {"type": "String"}}
+    "placeholders": {
+      "mood": {
+        "type": "String"
+      }
+    }
   },
   "chapterTopTags": "Tag principali: {tags}",
   "@chapterTopTags": {
     "description": "Tag principali elencati nel riepilogo del capitolo",
-    "placeholders": {"tags": {"type": "String"}}
+    "placeholders": {
+      "tags": {
+        "type": "String"
+      }
+    }
   },
   "chapterCreateFromSuggestion": "Crea capitolo",
-  "@chapterCreateFromSuggestion": {"description": "Pulsante per accettare il suggerimento e creare un capitolo"},
+  "@chapterCreateFromSuggestion": {
+    "description": "Pulsante per accettare il suggerimento e creare un capitolo"
+  },
   "chapterCreateMyLabel": "Crea il mio Capitolo",
-  "@chapterCreateMyLabel": {"description": "Etichetta del pulsante principale per creare capitolo manuale"},
+  "@chapterCreateMyLabel": {
+    "description": "Etichetta del pulsante principale per creare capitolo manuale"
+  },
   "chapterIgnoreLabel": "Ignora",
-  "@chapterIgnoreLabel": {"description": "Pulsante per ignorare il suggerimento di capitolo"},
+  "@chapterIgnoreLabel": {
+    "description": "Pulsante per ignorare il suggerimento di capitolo"
+  },
   "chapterSuggestionMoreStories": "e {count} altra/e storia/e",
   "@chapterSuggestionMoreStories": {
     "description": "Piè di pagina dell'anteprima del suggerimento che indica quante storie sono state omesse",
-    "placeholders": {"count": {"type": "int"}}
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "chapterNoItems": "Il tuo prossimo capitolo inizia qui.",
-  "@chapterNoItems": {"description": "Testo di stato vuoto per la lista dei capitoli"},
+  "@chapterNoItems": {
+    "description": "Testo di stato vuoto per la lista dei capitoli"
+  },
   "chapterFilterAll": "Tutti",
-  "@chapterFilterAll": {"description": "Filtro per mostrare tutti i capitoli"},
+  "@chapterFilterAll": {
+    "description": "Filtro per mostrare tutti i capitoli"
+  },
   "chapterFilterAutomatic": "Automatici",
-  "@chapterFilterAutomatic": {"description": "Filtro per mostrare solo i capitoli automatici"},
+  "@chapterFilterAutomatic": {
+    "description": "Filtro per mostrare solo i capitoli automatici"
+  },
   "chapterFilterManual": "Manuali",
-  "@chapterFilterManual": {"description": "Filtro per mostrare solo i capitoli manuali"},
+  "@chapterFilterManual": {
+    "description": "Filtro per mostrare solo i capitoli manuali"
+  },
   "chapterNoSearchResults": "Nessun capitolo corrispondente ai filtri attuali.",
-  "@chapterNoSearchResults": {"description": "Stato vuoto quando la ricerca o il filtro non trova capitoli"},
+  "@chapterNoSearchResults": {
+    "description": "Stato vuoto quando la ricerca o il filtro non trova capitoli"
+  },
   "chapterSortLabel": "Ordina per",
-  "@chapterSortLabel": {"description": "Etichetta per il selettore di ordinamento dei capitoli"},
+  "@chapterSortLabel": {
+    "description": "Etichetta per il selettore di ordinamento dei capitoli"
+  },
   "chapterSortNewest": "Periodo più recente",
-  "@chapterSortNewest": {"description": "Opzione per ordinare i capitoli per periodo più recente"},
+  "@chapterSortNewest": {
+    "description": "Opzione per ordinare i capitoli per periodo più recente"
+  },
   "chapterSortOldest": "Periodo più vecchio",
-  "@chapterSortOldest": {"description": "Opzione per ordinare i capitoli per periodo più vecchio"},
+  "@chapterSortOldest": {
+    "description": "Opzione per ordinare i capitoli per periodo più vecchio"
+  },
   "chapterSortTitle": "Titolo",
-  "@chapterSortTitle": {"description": "Opzione per ordinare i capitoli per titolo"},
+  "@chapterSortTitle": {
+    "description": "Opzione per ordinare i capitoli per titolo"
+  },
   "chapterSortStories": "Più storie",
-  "@chapterSortStories": {"description": "Opzione per ordinare i capitoli per numero di storie"},
+  "@chapterSortStories": {
+    "description": "Opzione per ordinare i capitoli per numero di storie"
+  },
   "chapterEntriesAndMood": "{count} storie - umore med. {mood}",
   "@chapterEntriesAndMood": {
     "description": "Sottotitolo breve della lista capitoli",
-    "placeholders": {"count": {"type": "int"}, "mood": {"type": "String"}}
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "mood": {
+        "type": "String"
+      }
+    }
   },
   "chapterOpenLabel": "Apri",
-  "@chapterOpenLabel": {"description": "Etichetta del pulsante per aprire la schermata capitoli"},
+  "@chapterOpenLabel": {
+    "description": "Etichetta del pulsante per aprire la schermata capitoli"
+  },
   "chapterIntroSubtitle": "Organizza le tue storie in modo significativo e rivivi i tuoi ricordi in ordine",
-  "@chapterIntroSubtitle": {"description": "Sottotitolo della schermata introduttiva dei capitoli"},
+  "@chapterIntroSubtitle": {
+    "description": "Sottotitolo della schermata introduttiva dei capitoli"
+  },
   "chapterIntroGroupTitle": "Unisci momenti collegati",
-  "@chapterIntroGroupTitle": {"description": "Titolo del primo blocco introduttivo dei capitoli"},
+  "@chapterIntroGroupTitle": {
+    "description": "Titolo del primo blocco introduttivo dei capitoli"
+  },
   "chapterIntroGroupBody": "Riunisci più post in un unico capitolo per seguire l'intero percorso di un tema o momento speciale.",
-  "@chapterIntroGroupBody": {"description": "Testo del primo blocco introduttivo dei capitoli"},
+  "@chapterIntroGroupBody": {
+    "description": "Testo del primo blocco introduttivo dei capitoli"
+  },
   "chapterIntroTimelineTitle": "Rivivi la tua storia dall'inizio alla fine",
-  "@chapterIntroTimelineTitle": {"description": "Titolo del secondo blocco introduttivo dei capitoli"},
+  "@chapterIntroTimelineTitle": {
+    "description": "Titolo del secondo blocco introduttivo dei capitoli"
+  },
   "chapterIntroTimelineBody": "Sfoglia i ricordi in ordine cronologico e guarda come ogni momento si è evoluto nel tempo.",
-  "@chapterIntroTimelineBody": {"description": "Testo del secondo blocco introduttivo dei capitoli"},
+  "@chapterIntroTimelineBody": {
+    "description": "Testo del secondo blocco introduttivo dei capitoli"
+  },
   "chapterIntroPhaseTitle": "Un capitolo per ogni fase",
-  "@chapterIntroPhaseTitle": {"description": "Titolo del terzo blocco introduttivo dei capitoli"},
+  "@chapterIntroPhaseTitle": {
+    "description": "Titolo del terzo blocco introduttivo dei capitoli"
+  },
   "chapterIntroPhaseBody": "Viaggi, università, famiglia, lavoro, sogni, obiettivi o ricordi speciali. Decidi tu come raccontare la tua storia.",
-  "@chapterIntroPhaseBody": {"description": "Testo del terzo blocco introduttivo dei capitoli"},
+  "@chapterIntroPhaseBody": {
+    "description": "Testo del terzo blocco introduttivo dei capitoli"
+  },
   "chapterIntroCtaTitle": "Pronto a organizzare i tuoi ricordi?",
-  "@chapterIntroCtaTitle": {"description": "Titolo della chiamata all'azione finale nell'introduzione dei capitoli"},
+  "@chapterIntroCtaTitle": {
+    "description": "Titolo della chiamata all'azione finale nell'introduzione dei capitoli"
+  },
   "chapterIntroCtaBody": "Inizia creando subito il tuo primo capitolo",
-  "@chapterIntroCtaBody": {"description": "Sottotitolo della chiamata all'azione finale nell'introduzione dei capitoli"},
+  "@chapterIntroCtaBody": {
+    "description": "Sottotitolo della chiamata all'azione finale nell'introduzione dei capitoli"
+  },
   "chapterIntroShowOnOpen": "Mostra questa schermata all'apertura dei Capitoli",
-  "@chapterIntroShowOnOpen": {"description": "Checkbox per controllare se mostrare l'introduzione all'apertura dei Capitoli"},
+  "@chapterIntroShowOnOpen": {
+    "description": "Checkbox per controllare se mostrare l'introduzione all'apertura dei Capitoli"
+  },
   "chapterLinkSectionTitle": "Capitoli",
-  "@chapterLinkSectionTitle": {"description": "Titolo di sezione per collegare una storia ai capitoli"},
+  "@chapterLinkSectionTitle": {
+    "description": "Titolo di sezione per collegare una storia ai capitoli"
+  },
   "chapterLinkConfigure": "Configura",
-  "@chapterLinkConfigure": {"description": "Etichetta del pulsante per configurare il collegamento ai capitoli"},
+  "@chapterLinkConfigure": {
+    "description": "Etichetta del pulsante per configurare il collegamento ai capitoli"
+  },
   "chapterLinkDialogTitle": "Aggiungi questa storia ai capitoli",
-  "@chapterLinkDialogTitle": {"description": "Titolo del dialogo per il collegamento ai capitoli durante la creazione/modifica storia"},
+  "@chapterLinkDialogTitle": {
+    "description": "Titolo del dialogo per il collegamento ai capitoli durante la creazione/modifica storia"
+  },
   "chapterLinkModeNone": "Non aggiungere",
-  "@chapterLinkModeNone": {"description": "Opzione per non collegare la storia a nessun capitolo"},
+  "@chapterLinkModeNone": {
+    "description": "Opzione per non collegare la storia a nessun capitolo"
+  },
   "chapterLinkModeExisting": "Aggiungi a un capitolo esistente",
-  "@chapterLinkModeExisting": {"description": "Opzione per collegare la storia a un capitolo esistente"},
+  "@chapterLinkModeExisting": {
+    "description": "Opzione per collegare la storia a un capitolo esistente"
+  },
   "chapterLinkModeNew": "Crea nuovo capitolo",
-  "@chapterLinkModeNew": {"description": "Opzione per creare un nuovo capitolo durante il salvataggio della storia"},
+  "@chapterLinkModeNew": {
+    "description": "Opzione per creare un nuovo capitolo durante il salvataggio della storia"
+  },
   "chapterSelectExistingLabel": "Seleziona capitolo",
-  "@chapterSelectExistingLabel": {"description": "Etichetta per il menu a discesa del capitolo esistente"},
+  "@chapterSelectExistingLabel": {
+    "description": "Etichetta per il menu a discesa del capitolo esistente"
+  },
   "chapterSelectExistingRequired": "Seleziona un capitolo esistente.",
-  "@chapterSelectExistingRequired": {"description": "Messaggio di validazione quando il capitolo esistente non è selezionato"},
+  "@chapterSelectExistingRequired": {
+    "description": "Messaggio di validazione quando il capitolo esistente non è selezionato"
+  },
   "chapterTitleRequired": "Il titolo del capitolo è obbligatorio.",
-  "@chapterTitleRequired": {"description": "Messaggio di validazione quando il titolo del capitolo è vuoto"},
+  "@chapterTitleRequired": {
+    "description": "Messaggio di validazione quando il titolo del capitolo è vuoto"
+  },
   "chapterMinimumRelatedWithCurrent": "Seleziona almeno 2 storie correlate. Con quella corrente, il minimo è 3.",
-  "@chapterMinimumRelatedWithCurrent": {"description": "Testo di validazione/aiuto per il numero minimo di storie correlate durante la creazione del capitolo"},
+  "@chapterMinimumRelatedWithCurrent": {
+    "description": "Testo di validazione/aiuto per il numero minimo di storie correlate durante la creazione del capitolo"
+  },
   "chapterLinkSummaryNone": "Non collegata a nessun capitolo.",
-  "@chapterLinkSummaryNone": {"description": "Testo di riepilogo quando non è configurato nessun collegamento al capitolo"},
+  "@chapterLinkSummaryNone": {
+    "description": "Testo di riepilogo quando non è configurato nessun collegamento al capitolo"
+  },
   "chapterLinkSummaryExisting": "Verrà aggiunto a un capitolo esistente al salvataggio.",
-  "@chapterLinkSummaryExisting": {"description": "Testo di riepilogo quando è configurato il collegamento a un capitolo esistente"},
+  "@chapterLinkSummaryExisting": {
+    "description": "Testo di riepilogo quando è configurato il collegamento a un capitolo esistente"
+  },
   "chapterLinkSummaryNew": "{count, plural, =1{Nuovo capitolo con 1 storia} other{Nuovo capitolo con {count} storie}}",
   "@chapterLinkSummaryNew": {
     "description": "Testo di riepilogo durante la creazione di un nuovo capitolo",
-    "placeholders": {"count": {"type": "int"}}
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "moreOptions": "Altre opzioni",
-  "@moreOptions": {"description": "Etichetta generica per il menu overflow con opzioni aggiuntive"},
+  "@moreOptions": {
+    "description": "Etichetta generica per il menu overflow con opzioni aggiuntive"
+  },
   "homeHeaderLargeCards": "Visualizza in schede grandi",
-  "@homeHeaderLargeCards": {"description": "Tooltip/etichetta per visualizzare le storie in schede grandi sulla Home"},
+  "@homeHeaderLargeCards": {
+    "description": "Tooltip/etichetta per visualizzare le storie in schede grandi sulla Home"
+  },
   "homeHeaderCompactCards": "Visualizza in schede compatte",
-  "@homeHeaderCompactCards": {"description": "Tooltip/etichetta per visualizzare le storie in schede compatte sulla Home"},
+  "@homeHeaderCompactCards": {
+    "description": "Tooltip/etichetta per visualizzare le storie in schede compatte sulla Home"
+  },
   "homeHeaderOpenCalendarTooltip": "Apri calendario",
-  "@homeHeaderOpenCalendarTooltip": {"description": "Tooltip per il pulsante calendario nell'intestazione della Home"},
+  "@homeHeaderOpenCalendarTooltip": {
+    "description": "Tooltip per il pulsante calendario nell'intestazione della Home"
+  },
   "insightHistoryTitle": "Cronologia insight",
-  "@insightHistoryTitle": {"description": "Titolo della schermata cronologia insight"},
+  "@insightHistoryTitle": {
+    "description": "Titolo della schermata cronologia insight"
+  },
   "insightHistoryEmpty": "Nessun insight registrato ancora.",
-  "@insightHistoryEmpty": {"description": "Messaggio di stato vuoto nella schermata cronologia insight"},
+  "@insightHistoryEmpty": {
+    "description": "Messaggio di stato vuoto nella schermata cronologia insight"
+  },
   "insightHistoryClearAll": "Cancella cronologia",
-  "@insightHistoryClearAll": {"description": "Pulsante per cancellare tutta la cronologia insight"},
+  "@insightHistoryClearAll": {
+    "description": "Pulsante per cancellare tutta la cronologia insight"
+  },
   "insightHistoryClearConfirm": "Cancellare tutta la cronologia degli insight? Questa azione non può essere annullata.",
-  "@insightHistoryClearConfirm": {"description": "Corpo del dialogo di conferma per la cancellazione della cronologia insight"},
+  "@insightHistoryClearConfirm": {
+    "description": "Corpo del dialogo di conferma per la cancellazione della cronologia insight"
+  },
   "insightHistorySeenOn": "Visto il {date}",
-  "@insightHistorySeenOn": {"description": "Etichetta che mostra quando un insight è stato visto", "placeholders": {"date": {"type": "String"}}},
+  "@insightHistorySeenOn": {
+    "description": "Etichetta che mostra quando un insight è stato visto",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "insightHistoryFilterAll": "Tutti",
-  "@insightHistoryFilterAll": {"description": "Etichetta chip filtro: mostra tutti i tipi di insight"},
+  "@insightHistoryFilterAll": {
+    "description": "Etichetta chip filtro: mostra tutti i tipi di insight"
+  },
   "insightHistoryFilterFree": "Gratuito",
-  "@insightHistoryFilterFree": {"description": "Etichetta chip filtro: mostra solo gli insight gratuiti"},
+  "@insightHistoryFilterFree": {
+    "description": "Etichetta chip filtro: mostra solo gli insight gratuiti"
+  },
   "insightHistoryFilterPremium": "Premium",
-  "@insightHistoryFilterPremium": {"description": "Etichetta chip filtro: mostra solo gli insight premium"},
+  "@insightHistoryFilterPremium": {
+    "description": "Etichetta chip filtro: mostra solo gli insight premium"
+  },
   "insightHistorySearch": "Cerca insight",
-  "@insightHistorySearch": {"description": "Testo suggerimento per il campo di ricerca nella schermata cronologia insight"},
+  "@insightHistorySearch": {
+    "description": "Testo suggerimento per il campo di ricerca nella schermata cronologia insight"
+  },
   "pdfBackgroundColor": "Colore di sfondo",
-  "@pdfBackgroundColor": {"description": "Etichetta per il selettore colore di sfondo del PDF"},
+  "@pdfBackgroundColor": {
+    "description": "Etichetta per il selettore colore di sfondo del PDF"
+  },
   "pdfBackgroundNone": "Nessuno",
-  "@pdfBackgroundNone": {"description": "Opzione: nessun colore di sfondo nel PDF"},
+  "@pdfBackgroundNone": {
+    "description": "Opzione: nessun colore di sfondo nel PDF"
+  },
   "pdfBackgroundBeige": "Beige/crema",
-  "@pdfBackgroundBeige": {"description": "Opzione: colore di sfondo beige/crema nel PDF"},
+  "@pdfBackgroundBeige": {
+    "description": "Opzione: colore di sfondo beige/crema nel PDF"
+  },
   "pdfBackgroundBlue": "Azzurro",
-  "@pdfBackgroundBlue": {"description": "Opzione: colore di sfondo azzurro nel PDF"},
+  "@pdfBackgroundBlue": {
+    "description": "Opzione: colore di sfondo azzurro nel PDF"
+  },
   "pdfBackgroundGreen": "Verde chiaro",
-  "@pdfBackgroundGreen": {"description": "Opzione: colore di sfondo verde chiaro nel PDF"},
+  "@pdfBackgroundGreen": {
+    "description": "Opzione: colore di sfondo verde chiaro nel PDF"
+  },
   "pdfBackgroundGray": "Grigio chiaro",
-  "@pdfBackgroundGray": {"description": "Opzione: colore di sfondo grigio chiaro nel PDF"},
+  "@pdfBackgroundGray": {
+    "description": "Opzione: colore di sfondo grigio chiaro nel PDF"
+  },
   "exportPdfPremiumRequired": "L'esportazione in PDF è una funzionalità Premium. Aggiorna il tuo piano per accedervi.",
-  "@exportPdfPremiumRequired": {"description": "SnackBar mostrato quando un utente gratuito cerca di esportare in PDF"},
+  "@exportPdfPremiumRequired": {
+    "description": "SnackBar mostrato quando un utente gratuito cerca di esportare in PDF"
+  },
   "changeEmail": "Cambia e-mail",
-  "@changeEmail": {"description": "Pulsante/titolo per cambiare l'e-mail dell'utente"},
+  "@changeEmail": {
+    "description": "Pulsante/titolo per cambiare l'e-mail dell'utente"
+  },
   "changePassword": "Cambia password",
-  "@changePassword": {"description": "Pulsante/titolo per cambiare la password dell'utente"},
+  "@changePassword": {
+    "description": "Pulsante/titolo per cambiare la password dell'utente"
+  },
   "currentPassword": "Password attuale",
-  "@currentPassword": {"description": "Etichetta per il campo password attuale"},
+  "@currentPassword": {
+    "description": "Etichetta per il campo password attuale"
+  },
   "wrongCurrentPassword": "La password attuale è errata.",
-  "@wrongCurrentPassword": {"description": "Errore mostrato quando la verifica della password attuale fallisce"},
+  "@wrongCurrentPassword": {
+    "description": "Errore mostrato quando la verifica della password attuale fallisce"
+  },
   "passwordChangedSuccess": "Password modificata con successo.",
-  "@passwordChangedSuccess": {"description": "Messaggio di successo dopo il cambio password"},
+  "@passwordChangedSuccess": {
+    "description": "Messaggio di successo dopo il cambio password"
+  },
   "emailChangedSuccess": "E-mail modificata con successo.",
-  "@emailChangedSuccess": {"description": "Messaggio di successo dopo il cambio e-mail"},
+  "@emailChangedSuccess": {
+    "description": "Messaggio di successo dopo il cambio e-mail"
+  },
   "newPasswordMinLength": "La nuova password deve essere di almeno 4 caratteri.",
-  "@newPasswordMinLength": {"description": "Errore di validazione quando la nuova password è troppo corta (min 4 caratteri)"},
+  "@newPasswordMinLength": {
+    "description": "Errore di validazione quando la nuova password è troppo corta (min 4 caratteri)"
+  },
   "fillAllFields": "Compila tutti i campi.",
-  "@fillAllFields": {"description": "Errore mostrato quando uno o più campi obbligatori sono vuoti"},
+  "@fillAllFields": {
+    "description": "Errore mostrato quando uno o più campi obbligatori sono vuoti"
+  },
   "backupInfoDialogTitle": "Informazioni sul backup",
-  "@backupInfoDialogTitle": { "description": "Titolo del dialogo informazioni backup" },
+  "@backupInfoDialogTitle": {
+    "description": "Titolo del dialogo informazioni backup"
+  },
   "backupInfoDialogContent": "📦  Cosa è incluso nel backup\n• Tutte le tue storie (testi, foto, audio, video)\n• Database dell'app\n• Foto dei capitoli\n\n📂  Come conservare il backup\nDopo la creazione, usa il menu di condivisione per salvare il file dove preferisci — OneDrive, Google Drive, e-mail o qualsiasi altro servizio.",
-  "@backupInfoDialogContent": { "description": "Contenuto completo del dialogo informazioni backup" },
-
+  "@backupInfoDialogContent": {
+    "description": "Contenuto completo del dialogo informazioni backup"
+  },
   "backupPasswordDialogTitle": "Proteggi il tuo backup",
-  "@backupPasswordDialogTitle": {"description": "Titolo del dialogo password di esportazione"},
+  "@backupPasswordDialogTitle": {
+    "description": "Titolo del dialogo password di esportazione"
+  },
   "backupPasswordDescription": "Imposta una password per crittografare il tuo file di backup. Il contenuto sarà protetto e illeggibile per chiunque non abbia questa password.",
-  "@backupPasswordDescription": {"description": "Descrizione mostrata nel dialogo password di esportazione"},
+  "@backupPasswordDescription": {
+    "description": "Descrizione mostrata nel dialogo password di esportazione"
+  },
   "backupPasswordWarningTitle": "⚠️  Importante — leggi prima di continuare",
-  "@backupPasswordWarningTitle": {"description": "Titolo della sezione avviso nel dialogo password di esportazione"},
+  "@backupPasswordWarningTitle": {
+    "description": "Titolo della sezione avviso nel dialogo password di esportazione"
+  },
   "backupPasswordWarning": "Questa password è nota solo a te. Non viene memorizzata da nessuna parte nell'app né sui nostri server.\n\nSe la dimentichi, il file di backup sarà definitivamente inaccessibile — nemmeno il nostro team potrà aiutarti a recuperare i dati.\n\nConserva questa password in un posto sicuro prima di continuare.",
-  "@backupPasswordWarning": {"description": "Testo avviso mostrato nel dialogo password di esportazione"},
+  "@backupPasswordWarning": {
+    "description": "Testo avviso mostrato nel dialogo password di esportazione"
+  },
   "backupPasswordField": "Password",
-  "@backupPasswordField": {"description": "Etichetta per il campo password nel dialogo password di esportazione"},
+  "@backupPasswordField": {
+    "description": "Etichetta per il campo password nel dialogo password di esportazione"
+  },
   "backupPasswordConfirmField": "Conferma password",
-  "@backupPasswordConfirmField": {"description": "Etichetta per il campo conferma password nel dialogo password di esportazione"},
+  "@backupPasswordConfirmField": {
+    "description": "Etichetta per il campo conferma password nel dialogo password di esportazione"
+  },
   "backupPasswordMismatch": "Le password non corrispondono. Riprova.",
-  "@backupPasswordMismatch": {"description": "Errore di validazione quando le password non corrispondono"},
+  "@backupPasswordMismatch": {
+    "description": "Errore di validazione quando le password non corrispondono"
+  },
   "backupPasswordTooShort": "La password deve essere di almeno 6 caratteri.",
-  "@backupPasswordTooShort": {"description": "Errore di validazione quando la password è troppo corta"},
+  "@backupPasswordTooShort": {
+    "description": "Errore di validazione quando la password è troppo corta"
+  },
   "backupPasswordEmpty": "Inserisci una password.",
-  "@backupPasswordEmpty": {"description": "Errore di validazione quando il campo password è vuoto"},
+  "@backupPasswordEmpty": {
+    "description": "Errore di validazione quando il campo password è vuoto"
+  },
   "backupCreateEncrypted": "Crea backup crittografato",
-  "@backupCreateEncrypted": {"description": "Etichetta del pulsante per creare il backup crittografato"},
+  "@backupCreateEncrypted": {
+    "description": "Etichetta del pulsante per creare il backup crittografato"
+  },
   "restorePasswordDialogTitle": "Inserisci la password del backup",
-  "@restorePasswordDialogTitle": {"description": "Titolo del dialogo password di ripristino"},
+  "@restorePasswordDialogTitle": {
+    "description": "Titolo del dialogo password di ripristino"
+  },
   "restorePasswordDescription": "Se hai impostato una password durante la creazione di questo backup, inseriscila qui sotto.\n\nSe il backup è stato creato senza password, lascia il campo vuoto.",
-  "@restorePasswordDescription": {"description": "Descrizione mostrata nel dialogo password di ripristino"},
+  "@restorePasswordDescription": {
+    "description": "Descrizione mostrata nel dialogo password di ripristino"
+  },
   "restorePasswordField": "Password (lascia vuoto se non ne è stata impostata una)",
-  "@restorePasswordField": {"description": "Etichetta per il campo password nel dialogo password di ripristino"},
+  "@restorePasswordField": {
+    "description": "Etichetta per il campo password nel dialogo password di ripristino"
+  },
   "restorePasswordWrong": "Password errata o backup illeggibile. Controlla la password e riprova.",
-  "@restorePasswordWrong": {"description": "Errore mostrato quando la password di ripristino è errata"},
+  "@restorePasswordWrong": {
+    "description": "Errore mostrato quando la password di ripristino è errata"
+  },
   "restoreContinue": "Continua",
-  "@restoreContinue": {"description": "Etichetta del pulsante per continuare con il ripristino"}
+  "@restoreContinue": {
+    "description": "Etichetta del pulsante per continuare con il ripristino"
+  }
 }

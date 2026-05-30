@@ -148,13 +148,7 @@ class CapituloSugestaoService {
         : rawDescription;
 
     final text = '${entry.titulo} $description'.trim();
-    final tokens = _analyzer
-        .tokenize(
-          text,
-          minWordLength: 4,
-          stopwords: WordInsightAnalyzer.defaultStopwords,
-        )
-        .toSet();
+    final tokens = _analyzer.tokenize(text, minWordLength: 4).toSet();
 
     return _EntryFeatures(tags: tagParts, tokens: tokens);
   }

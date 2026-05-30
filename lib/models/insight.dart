@@ -4,13 +4,11 @@ import 'dart:convert';
 enum InsightType {
   bestWeekday,
   positiveTag,
-  positiveWords, // PREMIUM
-  difficultWords, // PREMIUM
   trend,
   monthlySummary, // PREMIUM
   storyBalance, // FREE: proporção positivas vs difíceis (últimos 10 dias)
   writingTime, // FREE: período do dia mais frequente de escrita (esta semana)
-  energyChart; // PREMIUM: gráfico de energia dos últimos 7 dias
+  energyChart; // gráfico de energia dos últimos 7 dias
 
   /// Converte para string armazenável (cache, banco).
   String get value {
@@ -19,10 +17,6 @@ enum InsightType {
         return 'best_weekday';
       case InsightType.positiveTag:
         return 'positive_tag';
-      case InsightType.positiveWords:
-        return 'positive_words';
-      case InsightType.difficultWords:
-        return 'difficult_words';
       case InsightType.trend:
         return 'trend';
       case InsightType.monthlySummary:
@@ -43,10 +37,6 @@ enum InsightType {
         return InsightType.bestWeekday;
       case 'positive_tag':
         return InsightType.positiveTag;
-      case 'positive_words':
-        return InsightType.positiveWords;
-      case 'difficult_words':
-        return InsightType.difficultWords;
       case 'trend':
         return InsightType.trend;
       case 'monthly_summary':
@@ -66,10 +56,7 @@ enum InsightType {
   /// Indica se este tipo de insight é exclusivo para usuários Premium.
   bool get isPremium {
     switch (this) {
-      case InsightType.positiveWords:
-      case InsightType.difficultWords:
       case InsightType.monthlySummary:
-      case InsightType.energyChart:
         return true;
       default:
         return false;
