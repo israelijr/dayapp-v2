@@ -120,6 +120,14 @@ class InsightProvider with ChangeNotifier {
     }
   }
 
+  /// Garante que um insight será exibido no próximo carregamento,
+  /// removendo qualquer ciclo de vida de dispensas anteriores.
+  Future<void> showInsightOnNextLoad(String userId, InsightType type) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_dismissedKey(userId, type));
+    await prefs.remove(_shownKey(userId, type));
+  }
+
   /// Dispensa manualmente um insight.
   ///
   /// - Em devMode: persiste a data (YYYY-MM-DD); o insight reaparece no dia seguinte.
@@ -186,6 +194,11 @@ class InsightProvider with ChangeNotifier {
     final visible = <Insight>[];
 
     for (final insight in allInsights) {
+      if (insight.type == InsightType.energyChart) {
+        visible.add(insight);
+        continue;
+      }
+
       final shownKey = _shownKey(userId, insight.type);
       final dismissedKey = _dismissedKey(userId, insight.type);
 

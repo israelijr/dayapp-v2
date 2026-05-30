@@ -971,105 +971,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             final userId =
                 Provider.of<AuthProvider>(context, listen: false).user?.id ??
                 '';
-            final devMode = insightProvider.devMode;
-            final hasDevBanner = devMode && insights.isNotEmpty;
-            final extraDevBanner = hasDevBanner ? 1 : 0;
-            final headerCount = 1 + extraDevBanner + insights.length;
-
-            Widget devModeBanner() {
-              final colorScheme = Theme.of(context).colorScheme;
-              final l10n = AppLocalizations.of(context)!;
-              final currentFilter = insightProvider.tierFilter;
-              return Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.tertiary.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: colorScheme.tertiary.withValues(alpha: 0.35),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.developer_mode,
-                          size: 14,
-                          color: colorScheme.tertiary,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          l10n.insightDevModeActive,
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.4,
-                            color: colorScheme.tertiary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    // Controle de filtro por tier (Free / Premium / Todos)
-                    SegmentedButton<InsightTierFilter>(
-                      style: SegmentedButton.styleFrom(
-                        textStyle: GoogleFonts.plusJakartaSans(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      segments: InsightTierFilter.values
-                          .map(
-                            (f) => ButtonSegment<InsightTierFilter>(
-                              value: f,
-                              label: Text(f.label),
-                            ),
-                          )
-                          .toList(),
-                      selected: {currentFilter},
-                      onSelectionChanged: (selected) {
-                        insightProvider.tierFilter = selected.first;
-                      },
-                    ),
-                    const SizedBox(height: 6),
-                    // Botão de acesso rápido ao histórico
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton.icon(
-                        style: TextButton.styleFrom(
-                          foregroundColor: colorScheme.tertiary,
-                          textStyle: GoogleFonts.plusJakartaSans(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          visualDensity: VisualDensity.compact,
-                        ),
-                        icon: const Icon(Icons.history, size: 14),
-                        label: Text(l10n.insightHistoryTitle),
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed('/insight-history'),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
+            final headerCount = 1 + insights.length;
 
             /// Constrói um InsightCard com todos os callbacks configurados.
             Widget buildInsightCard(Insight insight) {
@@ -1092,6 +994,9 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                     ),
                   );
                 },
+                onDoubleTap: insight.type == InsightType.energyChart
+                    ? () => insightProvider.refresh(userId)
+                    : null,
               );
             }
 
@@ -1112,23 +1017,8 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                   return greetingBanner();
                 }
 
-                if (hasDevBanner && index == 1) {
-                  return devModeBanner();
-                }
-
                 if (index < headerCount) {
-                  final insightIndex = index - 1 - extraDevBanner;
-                  return buildInsightCard(insights[insightIndex]);
-                }
-
-                // Banner de modo desenvolvimento
-                if (hasDevBanner && index == 1) {
-                  return devModeBanner();
-                }
-
-                // Cards de insights no topo (abaixo da saudação)
-                if (index < headerCount) {
-                  final insightIndex = index - 1 - extraDevBanner;
+                  final insightIndex = index - 1;
                   return buildInsightCard(insights[insightIndex]);
                 }
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/generated/app_localizations.dart';
@@ -28,6 +30,9 @@ class InsightCard extends StatelessWidget {
   /// Chamado quando o usuário dispensa (fecha) o insight.
   final VoidCallback? onDismiss;
 
+  /// Chamado quando o usuário tocar duas vezes no insight.
+  final VoidCallback? onDoubleTap;
+
   /// Chamado quando o usuário toca no CTA de upgrade para Premium.
   final VoidCallback? onPremiumCTA;
 
@@ -35,6 +40,7 @@ class InsightCard extends StatelessWidget {
     required this.insight,
     this.onSeeStories,
     this.onDismiss,
+    this.onDoubleTap,
     this.onPremiumCTA,
     super.key,
   });
@@ -56,106 +62,132 @@ class InsightCard extends StatelessWidget {
         searchQuery != null &&
         searchQuery.isNotEmpty;
 
+    final cardColor = insight.type == InsightType.energyChart
+        ? colorScheme.surface.withValues(alpha: 0.88)
+        : colorScheme.secondaryContainer;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: AnimatedContainer(
         duration: AppDurations.short,
-        child: Card(
-          elevation: 0,
-          color: colorScheme.secondaryContainer,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(
-              color: colorScheme.secondary.withValues(alpha: 0.25),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onDoubleTap: onDoubleTap,
+          child: Card(
+            elevation: 0,
+            color: cardColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: colorScheme.secondary.withValues(alpha: 0.25),
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Cabeçalho: ícone + título + badge premium + botão dispensar
-                Row(
-                  children: [
-                    Text(insight.icon, style: const TextStyle(fontSize: 20)),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              title,
-                              style: theme.textTheme.titleSmall?.copyWith(
-                                color: colorScheme.onSecondaryContainer,
-                                fontWeight: FontWeight.bold,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (insight.type != InsightType.energyChart) ...[
+                    // Cabeçalho: ícone + título + badge premium + botão dispensar
+                    Row(
+                      children: [
+                        Text(
+                          insight.icon,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  title,
+                                  style: GoogleFonts.playfairDisplay(
+                                    textStyle: theme.textTheme.titleSmall
+                                        ?.copyWith(
+                                          color:
+                                              colorScheme.onSecondaryContainer,
+                                          fontWeight: FontWeight.w600,
+                                          height: 1.1,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              if (insight.isPremium) ...[
+                                const SizedBox(width: 6),
+                                Icon(
+                                  Icons.workspace_premium,
+                                  size: 14,
+                                  color: colorScheme.primary,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        if (onDismiss != null)
+                          IconButton(
+                            tooltip: l10n.insightDismiss,
+                            icon: const Icon(Icons.close, size: 18),
+                            onPressed: onDismiss,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(
+                              minWidth: 28,
+                              minHeight: 28,
+                            ),
+                            color: colorScheme.onSecondaryContainer.withValues(
+                              alpha: 0.6,
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+
+                  // Corpo: conteúdo bloqueado ou conteúdo normal
+                  if (isLocked)
+                    _buildPremiumLock(context, l10n, theme, colorScheme)
+                  else if (insight.type == InsightType.energyChart)
+                    _buildEnergyChartCard(l10n, theme, colorScheme, onDismiss)
+                  else ...[
+                    Text(
+                      description,
+                      style: GoogleFonts.plusJakartaSans(
+                        textStyle: theme.textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSecondaryContainer,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                    // Botão "Ver histórias"
+                    if (showButton) ...[
+                      const SizedBox(height: 4),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () => onSeeStories!(searchQuery),
+                          style: TextButton.styleFrom(
+                            foregroundColor: colorScheme.secondary,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
+                            ),
+                          ),
+                          child: Text(
+                            l10n.insightSeeStories,
+                            style: GoogleFonts.plusJakartaSans(
+                              textStyle: theme.textTheme.labelLarge?.copyWith(
+                                color: colorScheme.secondary,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
-                          if (insight.isPremium) ...[
-                            const SizedBox(width: 6),
-                            Icon(
-                              Icons.workspace_premium,
-                              size: 14,
-                              color: colorScheme.primary,
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                    if (onDismiss != null)
-                      IconButton(
-                        tooltip: l10n.insightDismiss,
-                        icon: const Icon(Icons.close, size: 18),
-                        onPressed: onDismiss,
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(
-                          minWidth: 28,
-                          minHeight: 28,
-                        ),
-                        color: colorScheme.onSecondaryContainer.withValues(
-                          alpha: 0.6,
                         ),
                       ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-
-                // Corpo: conteúdo bloqueado ou conteúdo normal
-                if (isLocked)
-                  _buildPremiumLock(context, l10n, theme, colorScheme)
-                else ...[
-                  Text(
-                    description,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSecondaryContainer,
-                    ),
-                  ),
-                  // Gráfico de barras de energia (apenas para InsightType.energyChart)
-                  if (insight.type == InsightType.energyChart) ...[
-                    const SizedBox(height: 12),
-                    _buildEnergyChart(l10n, colorScheme),
-                  ],
-                  // Botão "Ver histórias"
-                  if (showButton) ...[
-                    const SizedBox(height: 4),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () => onSeeStories!(searchQuery),
-                        style: TextButton.styleFrom(
-                          foregroundColor: colorScheme.secondary,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
-                        ),
-                        child: Text(l10n.insightSeeStories),
-                      ),
-                    ),
+                    ],
                   ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
@@ -212,69 +244,200 @@ class InsightCard extends StatelessWidget {
     );
   }
 
+  Widget _buildEnergyChartCard(
+    AppLocalizations l10n,
+    ThemeData theme,
+    ColorScheme colorScheme,
+    VoidCallback? onDismiss,
+  ) {
+    final today = DateTime.now();
+    final start = today.subtract(const Duration(days: 6));
+    final periodLabel = l10n.chapterPeriod(
+      DateFormat('dd/MM').format(start),
+      DateFormat('dd/MM').format(today),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _resolveTitle(l10n),
+                    style: GoogleFonts.playfairDisplay(
+                      textStyle: theme.textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onSecondaryContainer,
+                        fontWeight: FontWeight.w600,
+                        height: 1.05,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    periodLabel,
+                    style: GoogleFonts.plusJakartaSans(
+                      textStyle: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSecondaryContainer.withValues(
+                          alpha: 0.74,
+                        ),
+                        height: 1.45,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    _resolveDescription(l10n),
+                    style: GoogleFonts.plusJakartaSans(
+                      textStyle: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSecondaryContainer.withValues(
+                          alpha: 0.74,
+                        ),
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: colorScheme.primary.withValues(alpha: 0.18),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.auto_graph,
+                size: 24,
+                color: colorScheme.primary,
+              ),
+            ),
+            if (onDismiss != null) ...[
+              const SizedBox(width: 8),
+              IconButton(
+                tooltip: l10n.insightDismiss,
+                icon: const Icon(Icons.close, size: 18),
+                onPressed: onDismiss,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                color: colorScheme.onSecondaryContainer.withValues(alpha: 0.6),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 18),
+        _buildEnergyChart(l10n, theme, colorScheme),
+      ],
+    );
+  }
+
   // ---------------------------------------------------------------------------
   // Gráfico de barras de energia
   // ---------------------------------------------------------------------------
 
-  Widget _buildEnergyChart(AppLocalizations l10n, ColorScheme colorScheme) {
-    final energyData =
-        (insight.metadata?['energy_data'] as List<dynamic>?)
-            ?.map((e) => (e as num).toInt())
+  Widget _buildEnergyChart(
+    AppLocalizations l10n,
+    ThemeData theme,
+    ColorScheme colorScheme,
+  ) {
+    final moodData =
+        (insight.metadata?['mood_data'] as List<dynamic>?)
+            ?.map((e) => (e as num).toDouble())
             .toList() ??
-        List.filled(7, 0);
+        List.filled(7, 0.0);
     final weekdayIndices =
         (insight.metadata?['weekday_indices'] as List<dynamic>?)
             ?.map((e) => (e as num).toInt())
             .toList() ??
         List.generate(7, (i) => i);
 
-    const maxBarHeight = 50.0;
-    const barWidth = 24.0;
+    const maxBarHeight = 98.0;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (var i = 0; i < energyData.length && i < weekdayIndices.length; i++)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+        SizedBox(
+          height: maxBarHeight,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // Barra proporcional à energia (1-3); 0 = sem dado
-              Container(
-                width: barWidth,
-                height: energyData[i] == 0
-                    ? 4
-                    : maxBarHeight * (energyData[i] / 3),
-                decoration: BoxDecoration(
-                  color: _barColor(energyData[i], colorScheme),
-                  borderRadius: BorderRadius.circular(4),
+              for (
+                var i = 0;
+                i < moodData.length && i < weekdayIndices.length;
+                i++
+              )
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: moodData[i] == 0
+                            ? 16
+                            : (16 +
+                                  (maxBarHeight - 16) *
+                                      ((moodData[i].clamp(1.0, 5.0) - 1) / 4)),
+                        width: 34,
+                        decoration: BoxDecoration(
+                          color: _barColor(moodData[i], colorScheme),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              // Abreviação do dia da semana
-              Text(
-                _weekdayAbbr(l10n, weekdayIndices[i]),
-                style: TextStyle(
-                  fontSize: 10,
-                  color: colorScheme.onSecondaryContainer.withValues(
-                    alpha: 0.65,
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            for (
+              var i = 0;
+              i < moodData.length && i < weekdayIndices.length;
+              i++
+            )
+              Expanded(
+                child: Text(
+                  _weekdayAbbr(l10n, weekdayIndices[i]).toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.plusJakartaSans(
+                    textStyle: theme.textTheme.labelSmall?.copyWith(
+                      color: colorScheme.onSecondaryContainer.withValues(
+                        alpha: 0.7,
+                      ),
+                      fontSize: 10,
+                      letterSpacing: 0.6,
+                    ),
                   ),
                 ),
               ),
-            ],
-          ),
+          ],
+        ),
       ],
     );
   }
 
-  Color _barColor(int energy, ColorScheme colorScheme) {
-    switch (energy) {
+  Color _barColor(double mood, ColorScheme colorScheme) {
+    final value = mood.round();
+    switch (value) {
       case 1:
         return colorScheme.error.withValues(alpha: 0.75);
       case 2:
-        return colorScheme.tertiary.withValues(alpha: 0.8);
+        return colorScheme.error.withValues(alpha: 0.55);
       case 3:
-        return colorScheme.primary.withValues(alpha: 0.85);
+        return colorScheme.secondary.withValues(alpha: 0.7);
+      case 4:
+        return colorScheme.tertiary.withValues(alpha: 0.85);
+      case 5:
+        return colorScheme.primary.withValues(alpha: 0.88);
       default:
         return colorScheme.surfaceContainerHighest;
     }
@@ -299,7 +462,7 @@ class InsightCard extends StatelessWidget {
       case InsightType.writingTime:
         return l10n.insightWritingTimeTitle;
       case InsightType.energyChart:
-        return l10n.insightEnergyChartTitle;
+        return _resolveMoodChartTitle(l10n);
     }
   }
 
@@ -322,6 +485,42 @@ class InsightCard extends StatelessWidget {
       case InsightType.writingTime:
         return _resolveWritingTime(l10n);
       case InsightType.energyChart:
+        return _resolveMoodChartSubtitle(l10n);
+    }
+  }
+
+  String _resolveMoodChartTitle(AppLocalizations l10n) {
+    switch (l10n.localeName) {
+      case 'pt':
+      case 'pt_BR':
+        return 'Humor — 7 Dias';
+      case 'en':
+        return 'Mood — Last 7 Days';
+      case 'es':
+        return 'Humor — 7 Días';
+      case 'fr':
+        return 'Humeur — 7 derniers jours';
+      case 'it':
+        return 'Umore — Ultimi 7 giorni';
+      default:
+        return l10n.insightEnergyChartTitle;
+    }
+  }
+
+  String _resolveMoodChartSubtitle(AppLocalizations l10n) {
+    switch (l10n.localeName) {
+      case 'pt':
+      case 'pt_BR':
+        return 'Sua variação de humor essa semana';
+      case 'en':
+        return 'Your mood variation this week';
+      case 'es':
+        return 'Tu variación de humor esta semana';
+      case 'fr':
+        return 'Votre variation d\'humeur cette semaine';
+      case 'it':
+        return 'La tua variazione di umore questa settimana';
+      default:
         return l10n.insightEnergyChartSubtitle;
     }
   }

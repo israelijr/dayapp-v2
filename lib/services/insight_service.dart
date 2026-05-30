@@ -410,7 +410,7 @@ class InsightService {
   // Cálculo: Gráfico de Energia — 7 dias (PREMIUM)
   // ---------------------------------------------------------------------------
 
-  /// Coleta a energia média por dia nos últimos 7 dias e retorna um insight
+  /// Coleta o humor médio por dia nos últimos 7 dias e retorna um insight
   /// com os dados para renderizar o gráfico de barras.
   /// Retorna null se houver menos de 3 dias com registro.
   Future<Insight?> calculateEnergyChart(String userId) async {
@@ -420,7 +420,7 @@ class InsightService {
       SELECT
         date(data)           AS day,
         strftime('%w', data) AS weekday_idx,
-        AVG(energia)         AS avg_energy
+        AVG(humor)           AS avg_mood
       FROM historia
       WHERE user_id = ?
         AND excluido IS NULL
@@ -431,34 +431,35 @@ class InsightService {
       [userId],
     );
 
-    // Monta mapa dia → energia média
-    final energyByDay = <String, double>{};
+    // Monta mapa dia → humor médio
+    final moodByDay = <String, double>{};
     for (final row in rows) {
       final day = row['day'] as String?;
       if (day != null) {
-        energyByDay[day] = (row['avg_energy'] as num?)?.toDouble() ?? 0.0;
+        moodByDay[day] = (row['avg_mood'] as num?)?.toDouble() ?? 0.0;
       }
     }
 
     // Preenche os 7 dias (do mais antigo ao mais recente)
     final now = DateTime.now();
-    final energyData = <int>[];
+    final moodData = <double>[];
     final weekdayIdxs = <int>[];
 
     for (var i = 6; i >= 0; i--) {
       final day = now.subtract(Duration(days: i));
       final dayStr =
           '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
-      energyData.add(energyByDay[dayStr]?.round() ?? 0);
+      moodData.add(moodByDay[dayStr] ?? 0.0);
       // Converte Dart weekday (1=Seg..7=Dom) para SQLite (0=Dom..6=Sáb)
       weekdayIdxs.add(day.weekday % 7);
     }
 
-    final daysWithData = energyData.where((e) => e > 0).length;
+    final daysWithData = moodData.where((value) => value > 0).length;
     if (daysWithData < 3) return null;
 
-    final avgEnergy =
-        energyData.where((e) => e > 0).reduce((a, b) => a + b) / daysWithData;
+    final avgMood =
+        moodData.where((value) => value > 0).reduce((a, b) => a + b) /
+        daysWithData;
 
     return Insight(
       type: InsightType.energyChart,
@@ -466,9 +467,9 @@ class InsightService {
       title: 'insightEnergyChartTitle',
       description: 'insightEnergyChartSubtitle',
       metadata: {
-        'energy_data': energyData,
+        'mood_data': moodData,
         'weekday_indices': weekdayIdxs,
-        'avg_energy': avgEnergy,
+        'avg_mood': avgMood,
       },
     );
   }

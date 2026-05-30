@@ -85,6 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
           // Atualiza o status de login no PinProvider
           // skipPinCheck: true porque o usuário acabou de se autenticar com biometria
           pinProvider.updateUserLoginStatus(true, skipPinCheck: true);
+
+          if (!mounted) return;
           navigator.pushReplacementNamed('/home');
         } else {
           setState(() {
@@ -120,6 +122,9 @@ class _LoginScreenState extends State<LoginScreen> {
       // skipPinCheck: true porque o usuário acabou de se autenticar com email/senha
       pinProvider.updateUserLoginStatus(true, skipPinCheck: true);
 
+      if (!mounted) return;
+
+      if (!mounted) return;
       // Se o login foi bem-sucedido e o usuário marcou para habilitar biometria
       if (enableBiometric && biometricAvailable) {
         await _biometricService.enableBiometric(
