@@ -2141,6 +2141,10 @@
   "@chapterCreateFromSuggestion": {
     "description": "Button to accept suggestion and create chapter"
   },
+  "chapterViewSuggestions": "View suggestions",
+  "@chapterViewSuggestions": {
+    "description": "Button to view suggested chapter groups"
+  },
   "chapterCreateMyLabel": "Create my Chapter",
   "@chapterCreateMyLabel": {
     "description": "Main button label to create a manual chapter"

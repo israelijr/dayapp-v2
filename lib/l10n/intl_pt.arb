@@ -2040,6 +2040,10 @@
   "@chapterCreateFromSuggestion": {
     "description": "Botão para aceitar sugestão e criar capítulo"
   },
+  "chapterViewSuggestions": "Ver sugestões",
+  "@chapterViewSuggestions": {
+    "description": "Botão para ver capítulos sugeridos"
+  },
   "chapterCreateMyLabel": "Criar meu Capítulo",
   "@chapterCreateMyLabel": {
     "description": "Rótulo do botão principal para criar capítulo manual"

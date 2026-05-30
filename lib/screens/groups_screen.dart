@@ -9,8 +9,11 @@ import '../db/capitulo_helper.dart';
 import '../db/grupo_helper.dart';
 import '../l10n/app_localizations.dart';
 import '../models/capitulo.dart';
+import '../models/capitulo_sugestao.dart';
 import '../models/grupo.dart';
 import '../providers/auth_provider.dart';
+import '../providers/premium_provider.dart';
+import '../services/capitulo_sugestao_service.dart';
 import 'archived_stories_screen.dart';
 import 'chapters_screen.dart';
 import 'group_stories_screen.dart';
@@ -27,11 +30,13 @@ class GroupsScreen extends StatefulWidget {
 class _GroupsScreenState extends State<GroupsScreen>
     with TickerProviderStateMixin {
   final CapituloHelper _capituloHelper = CapituloHelper();
+  final CapituloSugestaoService _sugestaoService = CapituloSugestaoService();
   late final TabController _tabController;
 
   List<Grupo> _grupos = [];
   Map<String, int> _grupoCounts = {};
   List<CapituloResumo> _capitulos = [];
+  List<CapituloSugestao> _sugestoes = const [];
   bool _isLoading = true;
 
   @override
@@ -66,10 +71,14 @@ class _GroupsScreenState extends State<GroupsScreen>
       if (userId != null) {
         final grupoHelper = GrupoHelper();
 
+        final premium = Provider.of<PremiumProvider>(context, listen: false);
         final todosGrupos = await grupoHelper.getGruposByUser(userId);
         final capitulos = await _capituloHelper.getCapitulosResumoByUser(
           userId,
         );
+        final sugestoes = premium.isPremium
+            ? await _sugestaoService.sugerirCapitulos(userId)
+            : const <CapituloSugestao>[];
 
         final gruposComHistorias = <Grupo>[];
         final counts = <String, int>{};
@@ -93,6 +102,7 @@ class _GroupsScreenState extends State<GroupsScreen>
           _grupos = gruposComHistorias;
           _grupoCounts = counts;
           _capitulos = capitulos;
+          _sugestoes = sugestoes;
         });
       }
     } finally {
@@ -277,6 +287,61 @@ class _GroupsScreenState extends State<GroupsScreen>
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSuggestionBanner(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final suggestion = _sugestoes.first;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Card(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.chapterSuggestions,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.chapterSuggestionMoreStories(
+                        suggestion.entradas.length,
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              FilledButton(
+                onPressed: () => _navigateAndRefresh(const ChaptersScreen()),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.onPrimaryContainer,
+                  foregroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
+                ),
+                child: Text(l10n.chapterViewSuggestions),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -503,6 +568,8 @@ class _GroupsScreenState extends State<GroupsScreen>
                                     horizontal: 16,
                                   ),
                                   children: [
+                                    if (_sugestoes.isNotEmpty)
+                                      _buildSuggestionBanner(context),
                                     Center(child: Text(l10n.chapterNoItems)),
                                   ],
                                 )
@@ -513,12 +580,21 @@ class _GroupsScreenState extends State<GroupsScreen>
                                     16,
                                     16,
                                   ),
-                                  itemCount: _capitulos.length,
-                                  itemBuilder: (context, index) =>
-                                      _buildChapterCard(
-                                        context,
-                                        _capitulos[index],
-                                      ),
+                                  itemCount:
+                                      _capitulos.length +
+                                      (_sugestoes.isNotEmpty ? 1 : 0),
+                                  itemBuilder: (context, index) {
+                                    if (_sugestoes.isNotEmpty && index == 0) {
+                                      return _buildSuggestionBanner(context);
+                                    }
+                                    final chapterIndex = _sugestoes.isNotEmpty
+                                        ? index - 1
+                                        : index;
+                                    return _buildChapterCard(
+                                      context,
+                                      _capitulos[chapterIndex],
+                                    );
+                                  },
                                 ),
                         ),
                         RefreshIndicator(

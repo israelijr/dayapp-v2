@@ -4148,6 +4148,12 @@ abstract class AppLocalizations {
   /// **'Create chapter'**
   String get chapterCreateFromSuggestion;
 
+  /// Button to view suggested chapter groups
+  ///
+  /// In en, this message translates to:
+  /// **'View suggestions'**
+  String get chapterViewSuggestions;
+
   /// Main button label to create a manual chapter
   ///
   /// In en, this message translates to:

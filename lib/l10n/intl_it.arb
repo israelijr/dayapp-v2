@@ -1624,6 +1624,10 @@
   "@chapterCreateFromSuggestion": {
     "description": "Pulsante per accettare il suggerimento e creare un capitolo"
   },
+  "chapterViewSuggestions": "Vedi suggerimenti",
+  "@chapterViewSuggestions": {
+    "description": "Pulsante per vedere i capitoli suggeriti"
+  },
   "chapterCreateMyLabel": "Crea il mio Capitolo",
   "@chapterCreateMyLabel": {
     "description": "Etichetta del pulsante principale per creare capitolo manuale"

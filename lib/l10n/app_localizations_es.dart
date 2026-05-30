@@ -2311,6 +2311,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get chapterCreateFromSuggestion => 'Crear capítulo';
 
   @override
+  String get chapterViewSuggestions => 'Ver sugerencias';
+
+  @override
   String get chapterCreateMyLabel => 'Crear mi Capítulo';
 
   @override

@@ -58,36 +58,7 @@ class CapituloSugestaoService {
         entry.id!: _buildFeatures(entry, tagNomesMap[entry.id!] ?? ''),
     };
 
-    final grupos = <List<Historia>>[];
-    List<Historia> atual = [];
-
-    for (final entry in candidatas) {
-      if (atual.isEmpty) {
-        atual.add(entry);
-        continue;
-      }
-
-      final ultimo = atual.last;
-      final dias = entry.data.difference(ultimo.data).inDays;
-      final similaridade = _similaridadeEntre(
-        featureMap[ultimo.id!]!,
-        featureMap[entry.id!]!,
-      );
-
-      if (dias <= _maxDiasEntreEntradas &&
-          similaridade >= _similaridadeMinima) {
-        atual.add(entry);
-      } else {
-        if (atual.length >= _minEntradasPorCapitulo) {
-          grupos.add(List<Historia>.from(atual));
-        }
-        atual = [entry];
-      }
-    }
-
-    if (atual.length >= _minEntradasPorCapitulo) {
-      grupos.add(List<Historia>.from(atual));
-    }
+    final grupos = _buildSuggestionGroups(candidatas, featureMap);
 
     final sugestoes = <CapituloSugestao>[];
     for (final grupo in grupos) {
@@ -172,6 +143,63 @@ class CapituloSugestaoService {
     return inter / uniao;
   }
 
+  List<List<Historia>> _buildSuggestionGroups(
+    List<Historia> candidatas,
+    Map<int, _EntryFeatures> featureMap,
+  ) {
+    if (candidatas.length < _minEntradasPorCapitulo) {
+      return const [];
+    }
+
+    final adjacency = List.generate(candidatas.length, (_) => <int>{});
+
+    for (var i = 0; i < candidatas.length; i++) {
+      for (var j = i + 1; j < candidatas.length; j++) {
+        final dias = candidatas[j].data.difference(candidatas[i].data).inDays;
+        if (dias > _maxDiasEntreEntradas) break;
+
+        final similaridade = _similaridadeEntre(
+          featureMap[candidatas[i].id!]!,
+          featureMap[candidatas[j].id!]!,
+        );
+
+        if (similaridade >= _similaridadeMinima) {
+          adjacency[i].add(j);
+          adjacency[j].add(i);
+        }
+      }
+    }
+
+    final visited = List<bool>.filled(candidatas.length, false);
+    final groups = <List<Historia>>[];
+
+    for (var start = 0; start < candidatas.length; start++) {
+      if (visited[start]) continue;
+
+      final stack = <int>[start];
+      final component = <Historia>[];
+
+      while (stack.isNotEmpty) {
+        final index = stack.removeLast();
+        if (visited[index]) continue;
+        visited[index] = true;
+        component.add(candidatas[index]);
+        for (final neighbour in adjacency[index]) {
+          if (!visited[neighbour]) {
+            stack.add(neighbour);
+          }
+        }
+      }
+
+      if (component.length >= _minEntradasPorCapitulo) {
+        component.sort((a, b) => a.data.compareTo(b.data));
+        groups.add(component);
+      }
+    }
+
+    return groups;
+  }
+
   List<String> _topByCount(Map<String, int> source, {required int limit}) {
     final entries = source.entries.toList()
       ..sort((a, b) {
@@ -185,6 +213,23 @@ class CapituloSugestaoService {
         .toList(growable: false);
   }
 
+  static const Set<String> _chapterTitleStopwords = {
+    'teste',
+    'testes',
+    'historia',
+    'histórias',
+    'memoria',
+    'memórias',
+    'dia',
+    'dias',
+    'fotos',
+    'ruim',
+    'bom',
+    'muito',
+    'coisa',
+    'coisas',
+  };
+
   String _sugerirTitulo(
     List<String> topTags,
     List<String> topPalavras,
@@ -195,9 +240,19 @@ class CapituloSugestaoService {
       return _capitalize(tag);
     }
 
+    final titleCandidates = topPalavras
+        .where((palavra) => !_chapterTitleStopwords.contains(palavra))
+        .toList(growable: false);
+
+    if (titleCandidates.isNotEmpty) {
+      if (titleCandidates.length >= 2) {
+        return '${_capitalize(titleCandidates[0])} & ${_capitalize(titleCandidates[1])}';
+      }
+      return _capitalize(titleCandidates.first);
+    }
+
     if (topPalavras.isNotEmpty) {
-      final palavra = topPalavras.first;
-      return _capitalize(palavra);
+      return _capitalize(topPalavras.first);
     }
 
     return grupo.first.titulo;
@@ -214,17 +269,34 @@ class CapituloSugestaoService {
   ) {
     if (grupo.length <= 1) return 0.0;
 
-    double soma = 0;
-    int pares = 0;
-    for (var i = 1; i < grupo.length; i++) {
-      final anterior = features[grupo[i - 1].id!]!;
-      final atual = features[grupo[i].id!]!;
-      soma += _similaridadeEntre(anterior, atual);
-      pares += 1;
+    final similaritySum = <double>[];
+    for (var i = 0; i < grupo.length; i++) {
+      for (var j = i + 1; j < grupo.length; j++) {
+        final score = _similaridadeEntre(
+          features[grupo[i].id!]!,
+          features[grupo[j].id!]!,
+        );
+        similaritySum.add(score);
+      }
     }
 
-    final media = pares == 0 ? 0.0 : soma / pares;
-    return double.parse(media.toStringAsFixed(2));
+    final averageSimilarity = similaritySum.isEmpty
+        ? 0.0
+        : similaritySum.reduce((a, b) => a + b) / similaritySum.length;
+
+    final sizeBonus = ((grupo.length - _minEntradasPorCapitulo) / 4).clamp(
+      0.0,
+      1.0,
+    );
+    final periodDays = grupo.last.data.difference(grupo.first.data).inDays;
+    final timeBonus = (1.0 - (periodDays / _maxDiasEntreEntradas)).clamp(
+      0.0,
+      1.0,
+    );
+
+    final score =
+        (averageSimilarity * 0.6) + (sizeBonus * 0.25) + (timeBonus * 0.15);
+    return double.parse(score.toStringAsFixed(2));
   }
 }
 

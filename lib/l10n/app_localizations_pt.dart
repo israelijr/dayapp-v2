@@ -2296,6 +2296,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get chapterCreateFromSuggestion => 'Criar capítulo';
 
   @override
+  String get chapterViewSuggestions => 'Ver sugestões';
+
+  @override
   String get chapterCreateMyLabel => 'Criar meu Capítulo';
 
   @override
@@ -4885,6 +4888,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get chapterCreateFromSuggestion => 'Criar capítulo';
+
+  @override
+  String get chapterViewSuggestions => 'Ver sugestões';
 
   @override
   String get chapterCreateMyLabel => 'Criar meu Capítulo';

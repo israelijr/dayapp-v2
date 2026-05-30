@@ -36,6 +36,44 @@ class StoryTextEntry {
 class WordInsightAnalyzer {
   static const int defaultMinWordLength = 4;
 
+  static const Set<String> _stopwords = {
+    // Português
+    'acima', 'ainda', 'antes', 'aquilo', 'aquela', 'aquelas', 'aquele',
+    'aqueles', 'assim', 'comigo', 'conosco', 'contudo', 'depois', 'dessa',
+    'desse', 'deste', 'desta', 'disso', 'disto', 'entre', 'esta', 'estas',
+    'este', 'estes', 'final', 'muito', 'muitos', 'muitas', 'nao', 'nesta',
+    'neste', 'nosso', 'nossa', 'normal', 'onde', 'outras', 'outros', 'para',
+    'pelo', 'pela', 'pelos', 'pelas', 'pode', 'poder', 'porque', 'quais',
+    'qual', 'quando', 'seja', 'sejam', 'sera', 'serei', 'seremos', 'seria',
+    'tudo', 'todos', 'todas', 'tambem', 'temos', 'tenho', 'tenha', 'ter',
+    'essa', 'esse', 'isso', 'la', 'porem', 'quer', 'querer', 'quanto', 'sendo',
+    'sobre', 'sob', 'desde', 'dos', 'das', 'dele', 'dela', 'deles', 'delas',
+    'esteja', 'seu', 'sua', 'seus', 'suas',
+
+    // English
+    'about',
+    'after',
+    'again',
+    'against',
+    'between',
+    'could',
+    'couldn',
+    'couldnt',
+    'during',
+    'every',
+    'first',
+    'found',
+    'from',
+    'here',
+    'into',
+    'last',
+    'later',
+    'more', 'most', 'much', 'must', 'never', 'other', 'ought', 'over', 'really',
+    'same', 'should', 'shouldn', 'shouldnt', 'since', 'still', 'such', 'than',
+    'then', 'there', 'these', 'they', 'this', 'those', 'through', 'under',
+    'until', 'very', 'your', 'insert',
+  };
+
   static const Map<String, String> _accentMap = {
     'à': 'a',
     'á': 'a',
@@ -93,6 +131,7 @@ class WordInsightAnalyzer {
         .where((token) => token.isNotEmpty)
         .where((token) => token.length >= minWordLength)
         .where((token) => !RegExp(r'\d').hasMatch(token))
+        .where((token) => !_stopwords.contains(token))
         .toList(growable: false);
   }
 }
