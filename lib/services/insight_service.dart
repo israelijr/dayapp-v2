@@ -74,7 +74,7 @@ class InsightService {
     final monthlySummaryFuture = calculateMonthlySummary(userId);
     final storyBalanceFuture = calculateStoryBalance(userId);
     final writingTimeFuture = calculateWritingTime(userId);
-    final energyChartFuture = calculateEnergyChart(userId);
+    final moodChartFuture = calculateMoodChart(userId);
 
     final trendInsight = await trendFuture;
     final positiveTagInsight = await positiveTagFuture;
@@ -82,7 +82,7 @@ class InsightService {
     final monthlySummaryInsight = await monthlySummaryFuture;
     final storyBalanceInsight = await storyBalanceFuture;
     final writingTimeInsight = await writingTimeFuture;
-    final energyChartInsight = await energyChartFuture;
+    final moodChartInsight = await moodChartFuture;
 
     // Prioridade: tendência > equilíbrio > horário > tag > dia > resumo > energia
     final ordered = <Insight>[];
@@ -92,7 +92,7 @@ class InsightService {
     if (positiveTagInsight != null) ordered.add(positiveTagInsight);
     if (bestWeekdayInsight != null) ordered.add(bestWeekdayInsight);
     if (monthlySummaryInsight != null) ordered.add(monthlySummaryInsight);
-    if (energyChartInsight != null) ordered.add(energyChartInsight);
+    if (moodChartInsight != null) ordered.add(moodChartInsight);
 
     // Limita ao máximo configurado
     return ordered.take(_maxInsights).toList();
@@ -407,13 +407,13 @@ class InsightService {
   }
 
   // ---------------------------------------------------------------------------
-  // Cálculo: Gráfico de Energia — 7 dias (PREMIUM)
+  // Cálculo: Gráfico de Humor — 7 dias (PREMIUM)
   // ---------------------------------------------------------------------------
 
   /// Coleta o humor médio por dia nos últimos 7 dias e retorna um insight
   /// com os dados para renderizar o gráfico de barras.
   /// Retorna null se houver menos de 3 dias com registro.
-  Future<Insight?> calculateEnergyChart(String userId) async {
+  Future<Insight?> calculateMoodChart(String userId) async {
     final db = await _db.database;
     final rows = await db.rawQuery(
       '''
@@ -464,8 +464,8 @@ class InsightService {
     return Insight(
       type: InsightType.energyChart,
       icon: '⚡',
-      title: 'insightEnergyChartTitle',
-      description: 'insightEnergyChartSubtitle',
+      title: 'insightMoodChartTitle',
+      description: 'insightMoodChartSubtitle',
       metadata: {
         'mood_data': moodData,
         'weekday_indices': weekdayIdxs,

@@ -8,7 +8,7 @@ enum InsightType {
   monthlySummary, // PREMIUM
   storyBalance, // FREE: proporção positivas vs difíceis (últimos 10 dias)
   writingTime, // FREE: período do dia mais frequente de escrita (esta semana)
-  energyChart; // gráfico de energia dos últimos 7 dias
+  energyChart; // gráfico de humor dos últimos 7 dias
 
   /// Converte para string armazenável (cache, banco).
   String get value {

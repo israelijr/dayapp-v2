@@ -21,9 +21,7 @@ import '../models/historia.dart';
 import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../providers/pin_provider.dart';
-import '../providers/premium_provider.dart';
 import '../services/emoji_service.dart';
-import '../services/pdf_export_service.dart';
 import '../theme/animation_durations.dart';
 import '../widgets/audio_recorder_widget.dart';
 import '../widgets/compact_audio_icon.dart';
@@ -36,7 +34,6 @@ import '../widgets/mood_energy_selectors.dart';
 import '../widgets/rich_text_editor_widget.dart';
 import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
-import 'pdf_preview_screen.dart';
 import 'rich_text_editor_screen.dart';
 
 class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
@@ -744,82 +741,6 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
     }
   }
 
-  Future<void> _exportToPdf() async {
-    // Bloqueia exportação de PDF para usuários Free
-    if (!context.read<PremiumProvider>().canExportPdf) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            // ignore: use_build_context_synchronously
-            AppLocalizations.of(context)!.exportPdfPremiumRequired,
-          ),
-        ),
-      );
-      return;
-    }
-    // ignore: use_build_context_synchronously
-    final loc = AppLocalizations.of(context)!;
-    // Validação mínima
-    final plainText = richTextController.document.toPlainText().trim();
-    if (titleController.text.trim().isEmpty || plainText.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(loc.exportPdfFieldsRequired)));
-      return;
-    }
-
-    // Gera o PDF e mostra o preview com opções Cancel/Compartilhar/Salvar
-    final titleText = titleController.text.trim().isEmpty
-        ? loc.untitled
-        : _capitalizeText(titleController.text.trim());
-    final pdfBytes = await PdfExportService.generatePdfFromHistoria(
-      title: titleText,
-      content: plainText,
-      date: selectedDate,
-      images: fotos,
-      tags: _selectedTags.isEmpty
-          ? null
-          : _selectedTags.map((t) => t.nome).join(', '),
-      emoticon: selectedEmoticon,
-      locale: loc.localeName,
-    );
-
-    final filename =
-        'historia_${widget.historia.id ?? DateTime.now().millisecondsSinceEpoch}.pdf';
-    if (!mounted) return;
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => PdfPreviewScreen(
-          initialPdfBytes: pdfBytes,
-          onGenerate: (highQuality, bgColor) =>
-              PdfExportService.generatePdfFromHistoria(
-                title: titleText,
-                content: plainText,
-                date: selectedDate,
-                images: fotos,
-                tags: _selectedTags.isEmpty
-                    ? null
-                    : _selectedTags.map((t) => t.nome).join(', '),
-                emoticon: selectedEmoticon,
-                highQuality: highQuality,
-                backgroundColorHex: bgColor,
-                locale: loc.localeName,
-              ),
-          filename: filename,
-          title: AppLocalizations.of(
-            context,
-          )!.previewTitle(titleController.text.trim()),
-          onSave: () async {
-            final ok = await _save(navigateAfterSave: false);
-            return ok;
-          },
-        ),
-      ),
-    );
-  }
-
   @override
   void dispose() {
     titleController.removeListener(_checkForChanges);
@@ -881,13 +802,6 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
         appBar: AppBar(
           title: Text(loc.editStory),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.picture_as_pdf),
-              tooltip: loc.exportPdf,
-              onPressed: () async {
-                await _exportToPdf();
-              },
-            ),
             TextButton(
               onPressed: () async => await _save(),
               child: Text(

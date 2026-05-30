@@ -9,19 +9,15 @@ import 'package:provider/provider.dart';
 
 import '../db/database_helper.dart';
 import '../db/historia_foto_helper.dart';
-import '../helpers/rich_text_helper.dart';
 import '../models/historia.dart';
 import '../providers/auth_provider.dart';
-import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
-import '../services/pdf_export_service.dart';
 import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
 import 'create_historia_screen.dart';
 import 'edit_historia_screen.dart';
 import 'group_selection_screen.dart';
-import 'pdf_preview_screen.dart';
 
 class ArchivedStoriesScreen extends StatefulWidget {
   const ArchivedStoriesScreen({super.key});
@@ -111,71 +107,6 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
         return '😭';
       default:
         return null; // Já é um emoji Unicode
-    }
-  }
-
-  Future<void> _exportHistoria(Historia historia) async {
-    // Bloqueia exportação de PDF para usuários Free
-    if (!context.read<PremiumProvider>().canExportPdf) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.exportPdfPremiumRequired),
-        ),
-      );
-      return;
-    }
-    try {
-      // Captura o locale antes do primeiro await para evitar uso de context após async
-      final localeName = AppLocalizations.of(context)!.localeName;
-      final fotosData = await HistoriaFotoHelper().getFotosComBytesByHistoria(
-        historia.id ?? 0,
-      );
-      final images = fotosData.map((f) => f.bytes).toList();
-      final content = RichTextHelper.jsonToPlainText(historia.descricao);
-      final pdfBytes = await PdfExportService.generatePdfFromHistoria(
-        title: historia.titulo,
-        content: content,
-        date: historia.data,
-        images: images,
-        tags: historia.tag,
-        emoticon: historia.emoticon,
-        locale: localeName,
-      );
-      final filename =
-          'historia_${historia.id ?? DateTime.now().millisecondsSinceEpoch}.pdf';
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PdfPreviewScreen(
-            initialPdfBytes: pdfBytes,
-            onGenerate: (highQuality, bgColor) =>
-                PdfExportService.generatePdfFromHistoria(
-                  title: historia.titulo,
-                  content: content,
-                  date: historia.data,
-                  images: images,
-                  tags: historia.tag,
-                  emoticon: historia.emoticon,
-                  highQuality: highQuality,
-                  backgroundColorHex: bgColor,
-                  locale: localeName,
-                ),
-            filename: filename,
-            title: AppLocalizations.of(context)!.previewTitle(historia.titulo),
-            onSave: null,
-          ),
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.exportPdfError(e.toString()),
-          ),
-        ),
-      );
     }
   }
 
@@ -562,20 +493,12 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
                 });
               } else if (value == 'delete') {
                 await _deleteHistoria(historia);
-              } else if (value == 'export') {
-                await _exportHistoria(historia);
               }
             },
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: 'edit',
                 child: Text(AppLocalizations.of(context)?.edit ?? 'Editar'),
-              ),
-              PopupMenuItem(
-                value: 'export',
-                child: Text(
-                  AppLocalizations.of(context)?.exportPdf ?? 'Exportar PDF',
-                ),
               ),
               PopupMenuItem(
                 value: 'delete',

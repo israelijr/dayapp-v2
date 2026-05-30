@@ -150,11 +150,6 @@ class PremiumDebugScreen extends StatelessWidget {
                 enabled: premium.canUsePremiumThemes,
                 plan: l10n.premiumPlan,
               ),
-              _FeatureRow(
-                label: l10n.exportPdf,
-                enabled: premium.canExportPdf,
-                plan: l10n.premiumPlan,
-              ),
               // Adicione novas features aqui conforme forem sendo criadas.
               // Exemplo futuro:
               // _FeatureRow(

@@ -18,11 +18,9 @@ import '../helpers/rich_text_helper.dart';
 import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../providers/pin_provider.dart';
-import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../services/emoji_service.dart';
 import '../services/incremental_backup_service.dart';
-import '../services/pdf_export_service.dart';
 import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/audio_recorder_widget.dart';
@@ -36,7 +34,6 @@ import '../widgets/mood_energy_selectors.dart';
 import '../widgets/rich_text_editor_widget.dart';
 import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
-import 'pdf_preview_screen.dart';
 import 'rich_text_editor_screen.dart';
 
 // Note: This file implements two UI features requested by the team:
@@ -432,138 +429,6 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
     }
   }
 
-  Future<void> _exportToPdf() async {
-    // Bloqueia exportação de PDF para usuários Free
-    if (!context.read<PremiumProvider>().canExportPdf) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.exportPdfPremiumRequired),
-        ),
-      );
-      return;
-    }
-    // Valida título e descrição
-    final plainText = richTextController.document.toPlainText().trim();
-    if (titleController.text.trim().isEmpty || plainText.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.exportPdfFieldsRequired),
-        ),
-      );
-      return;
-    }
-
-    // Pergunta ao usuário se quer salvar direto ou só preview
-    final choice = await showDialog<String>(
-      context: context,
-      builder: (ctx) {
-        final loc = AppLocalizations.of(ctx)!;
-        return AlertDialog(
-          title: Text(loc.exportHistory),
-          content: Text(loc.exportHistoryPrompt),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, 'cancel'),
-              child: Text(loc.cancel),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, 'preview'),
-              child: Text(loc.preview),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, 'save'),
-              child: Text(loc.saveAndExport),
-            ),
-          ],
-        );
-      },
-    );
-    if (choice == null || choice == 'cancel') return;
-
-    setState(() {
-      _isLoading = true;
-    });
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      if (!mounted) return; // garantimos contexto
-      final loc = AppLocalizations.of(context)!;
-      final titleText = titleController.text.trim().isEmpty
-          ? loc.untitled
-          : _capitalizeText(titleController.text.trim());
-
-      // Se escolheu salvar e exportar, salva primeiro sem navegar
-      if (choice == 'save') {
-        final savedId = await _saveHistoria(navigateAfterSave: false);
-        if (savedId == null) return; // erro ao salvar
-      }
-
-      final pdfBytes = await PdfExportService.generatePdfFromHistoria(
-        title: titleText,
-        content: plainText,
-        date: selectedDate,
-        images: fotos,
-        tags: _selectedTags.isEmpty
-            ? null
-            : _selectedTags.map((t) => t.nome).join(', '),
-        emoticon: selectedEmoticon,
-        locale: loc.localeName,
-      );
-
-      final filename = 'historia_${DateTime.now().millisecondsSinceEpoch}.pdf';
-
-      // Mostrar preview antes de qualquer ação (cancelar/compartilhar/salvar)
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PdfPreviewScreen(
-            initialPdfBytes: pdfBytes,
-            onGenerate: (highQuality, bgColor) =>
-                PdfExportService.generatePdfFromHistoria(
-                  title: titleText,
-                  content: plainText,
-                  date: selectedDate,
-                  images: fotos,
-                  tags: _selectedTags.isEmpty
-                      ? null
-                      : _selectedTags.map((t) => t.nome).join(', '),
-                  emoticon: selectedEmoticon,
-                  highQuality: highQuality,
-                  backgroundColorHex: bgColor,
-                  locale: loc.localeName,
-                ),
-            filename: filename,
-            title: AppLocalizations.of(context)!.previewTitle(titleText),
-            onSave: () async {
-              // Salva sem navegar para a Home
-              final savedId = await _saveHistoria(navigateAfterSave: false);
-              return savedId != null;
-            },
-          ),
-        ),
-      );
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.exportPdfError(e.toString()),
-            ),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
   void _expandDescriptionEditor() async {
     final navigator = Navigator.of(context);
     final richTextJson = RichTextHelper.controllerToJson(richTextController);
@@ -767,11 +632,6 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                   ),
                 ),
               ),
-            IconButton(
-              icon: const Icon(Icons.picture_as_pdf),
-              tooltip: loc.exportPdf,
-              onPressed: _isLoading ? null : _exportToPdf,
-            ),
             if (_isLoading)
               const Padding(
                 padding: EdgeInsets.all(16.0),

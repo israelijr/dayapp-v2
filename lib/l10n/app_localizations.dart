@@ -4400,6 +4400,36 @@ abstract class AppLocalizations {
   /// **'Open calendar'**
   String get homeHeaderOpenCalendarTooltip;
 
+  /// Morning greeting shown on the Home welcome card
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get homeGreetingMorning;
+
+  /// Afternoon greeting shown on the Home welcome card
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get homeGreetingAfternoon;
+
+  /// Evening greeting shown on the Home welcome card
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get homeGreetingEvening;
+
+  /// Subtitle text shown below the welcome greeting on Home
+  ///
+  /// In en, this message translates to:
+  /// **'Here are your stories'**
+  String get homeStoriesSubtitle;
+
+  /// Label for the Home switch that shows all stories
+  ///
+  /// In en, this message translates to:
+  /// **'Show all'**
+  String get homeShowAllStoriesLabel;
+
   /// Title of the insight history screen
   ///
   /// In en, this message translates to:

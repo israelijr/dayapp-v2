@@ -15,7 +15,7 @@ import '../widgets/mood_energy_selectors.dart';
 /// ```
 /// [ícone] [título]  [X dispensar]
 /// [descrição]
-/// [gráfico de barras]  ← apenas InsightType.energyChart
+/// [gráfico de barras]  ← apenas InsightType.energyChart (humor)
 /// [ Ver histórias ]    ← opcional
 /// ```
 ///
@@ -148,7 +148,7 @@ class InsightCard extends StatelessWidget {
                   if (isLocked)
                     _buildPremiumLock(context, l10n, theme, colorScheme)
                   else if (insight.type == InsightType.energyChart)
-                    _buildEnergyChartCard(l10n, theme, colorScheme, onDismiss)
+                    _buildMoodChartCard(l10n, theme, colorScheme, onDismiss)
                   else ...[
                     Text(
                       description,
@@ -244,7 +244,7 @@ class InsightCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEnergyChartCard(
+  Widget _buildMoodChartCard(
     AppLocalizations l10n,
     ThemeData theme,
     ColorScheme colorScheme,
@@ -332,16 +332,16 @@ class InsightCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 18),
-        _buildEnergyChart(l10n, theme, colorScheme),
+        _buildMoodChart(l10n, theme, colorScheme),
       ],
     );
   }
 
   // ---------------------------------------------------------------------------
-  // Gráfico de barras de energia
+  // Gráfico de barras de humor
   // ---------------------------------------------------------------------------
 
-  Widget _buildEnergyChart(
+  Widget _buildMoodChart(
     AppLocalizations l10n,
     ThemeData theme,
     ColorScheme colorScheme,
@@ -503,7 +503,7 @@ class InsightCard extends StatelessWidget {
       case 'it':
         return 'Umore — Ultimi 7 giorni';
       default:
-        return l10n.insightEnergyChartTitle;
+        return 'Mood — Last 7 Days';
     }
   }
 
@@ -521,7 +521,7 @@ class InsightCard extends StatelessWidget {
       case 'it':
         return 'La tua variazione di umore questa settimana';
       default:
-        return l10n.insightEnergyChartSubtitle;
+        return 'Your mood variation this week';
     }
   }
 

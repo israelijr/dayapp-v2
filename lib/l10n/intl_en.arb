@@ -2327,6 +2327,26 @@
   "@homeHeaderOpenCalendarTooltip": {
     "description": "Tooltip for calendar button in Home header"
   },
+  "homeGreetingMorning": "Good morning",
+  "@homeGreetingMorning": {
+    "description": "Morning greeting shown on the Home welcome card"
+  },
+  "homeGreetingAfternoon": "Good afternoon",
+  "@homeGreetingAfternoon": {
+    "description": "Afternoon greeting shown on the Home welcome card"
+  },
+  "homeGreetingEvening": "Good evening",
+  "@homeGreetingEvening": {
+    "description": "Evening greeting shown on the Home welcome card"
+  },
+  "homeStoriesSubtitle": "Here are your stories",
+  "@homeStoriesSubtitle": {
+    "description": "Subtitle text shown below the welcome greeting on Home"
+  },
+  "homeShowAllStoriesLabel": "Show all",
+  "@homeShowAllStoriesLabel": {
+    "description": "Label for the Home switch that shows all stories"
+  },
   "insightHistoryTitle": "Insight History",
   "@insightHistoryTitle": {
     "description": "Title of the insight history screen"

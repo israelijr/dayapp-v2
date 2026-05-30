@@ -1810,6 +1810,26 @@
   "@homeHeaderOpenCalendarTooltip": {
     "description": "Info-bulle pour le bouton calendrier dans l'en-tête de l'accueil"
   },
+  "homeGreetingMorning": "Bonjour",
+  "@homeGreetingMorning": {
+    "description": "Salutation du matin affichée sur la carte de bienvenue de la Home"
+  },
+  "homeGreetingAfternoon": "Bon après-midi",
+  "@homeGreetingAfternoon": {
+    "description": "Salutation de l'après-midi affichée sur la carte de bienvenue de la Home"
+  },
+  "homeGreetingEvening": "Bonsoir",
+  "@homeGreetingEvening": {
+    "description": "Salutation du soir affichée sur la carte de bienvenue de la Home"
+  },
+  "homeStoriesSubtitle": "Voici vos histoires",
+  "@homeStoriesSubtitle": {
+    "description": "Texte de sous-titre affiché sous la salutation sur la Home"
+  },
+  "homeShowAllStoriesLabel": "Voir tout",
+  "@homeShowAllStoriesLabel": {
+    "description": "Libellé du switch sur la Home pour afficher toutes les histoires"
+  },
   "insightHistoryTitle": "Historique des aperçus",
   "@insightHistoryTitle": {
     "description": "Titre de l'écran d'historique des aperçus"

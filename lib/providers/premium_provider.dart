@@ -50,9 +50,6 @@ class PremiumProvider with ChangeNotifier {
   /// Libera temas extras além do conjunto padrão gratuito.
   bool get canUsePremiumThemes => _isPremium;
 
-  /// Libera exportações avançadas em PDF.
-  bool get canExportPdf => _isPremium;
-
   /// Libera a experiência de capítulos e sugestões automáticas.
   bool get canUseChapters => _isPremium;
 

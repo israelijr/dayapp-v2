@@ -50,9 +50,6 @@ dependencies:
   package_info_plus: ^9.0.1
   mailer: ^7.1.0
   flutter_timezone: ^5.0.1
-  # PDF export
-  pdf: ^3.10.2
-  printing: ^5.11.0
   animations: ^2.0.11
   google_fonts: ^6.2.1
 

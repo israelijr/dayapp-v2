@@ -2432,6 +2432,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeHeaderOpenCalendarTooltip => 'Open calendar';
 
   @override
+  String get homeGreetingMorning => 'Good morning';
+
+  @override
+  String get homeGreetingAfternoon => 'Good afternoon';
+
+  @override
+  String get homeGreetingEvening => 'Good evening';
+
+  @override
+  String get homeStoriesSubtitle => 'Here are your stories';
+
+  @override
+  String get homeShowAllStoriesLabel => 'Show all';
+
+  @override
   String get insightHistoryTitle => 'Insight History';
 
   @override

@@ -2141,6 +2141,26 @@
   "@homeHeaderOpenCalendarTooltip": {
     "description": "Tooltip del botón para abrir calendario en el encabezado de Inicio"
   },
+  "homeGreetingMorning": "Buenos días",
+  "@homeGreetingMorning": {
+    "description": "Saludo de la mañana mostrado en la tarjeta de bienvenida de Home"
+  },
+  "homeGreetingAfternoon": "Buenas tardes",
+  "@homeGreetingAfternoon": {
+    "description": "Saludo de la tarde mostrado en la tarjeta de bienvenida de Home"
+  },
+  "homeGreetingEvening": "Buenas noches",
+  "@homeGreetingEvening": {
+    "description": "Saludo de la noche mostrado en la tarjeta de bienvenida de Home"
+  },
+  "homeStoriesSubtitle": "Aquí están tus historias",
+  "@homeStoriesSubtitle": {
+    "description": "Texto de subtítulo mostrado debajo del saludo en Home"
+  },
+  "homeShowAllStoriesLabel": "Ver todas",
+  "@homeShowAllStoriesLabel": {
+    "description": "Etiqueta del switch en Home para mostrar todas las historias"
+  },
   "insightHistoryTitle": "Historial de Insights",
   "@insightHistoryTitle": {
     "description": "Título de la pantalla de historial de insights"

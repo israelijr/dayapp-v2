@@ -2444,6 +2444,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeHeaderOpenCalendarTooltip => 'Ver calendário';
 
   @override
+  String get homeGreetingMorning => 'Bom dia';
+
+  @override
+  String get homeGreetingAfternoon => 'Boa tarde';
+
+  @override
+  String get homeGreetingEvening => 'Boa noite';
+
+  @override
+  String get homeStoriesSubtitle => 'Aqui estão suas histórias';
+
+  @override
+  String get homeShowAllStoriesLabel => 'Ver todas';
+
+  @override
   String get insightHistoryTitle => 'Histórico de Insights';
 
   @override
@@ -5018,6 +5033,21 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get homeHeaderOpenCalendarTooltip => 'Ver calendário';
+
+  @override
+  String get homeGreetingMorning => 'Bom dia';
+
+  @override
+  String get homeGreetingAfternoon => 'Boa tarde';
+
+  @override
+  String get homeGreetingEvening => 'Boa noite';
+
+  @override
+  String get homeStoriesSubtitle => 'Aqui estão suas histórias';
+
+  @override
+  String get homeShowAllStoriesLabel => 'Ver todas';
 
   @override
   String get insightHistoryTitle => 'Histórico de Insights';

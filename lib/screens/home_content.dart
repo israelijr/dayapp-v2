@@ -206,6 +206,7 @@ class _HomeContentState extends State<HomeContent> {
   static const int _pageSize = 15; // Número de histórias por página
 
   bool _isCardView = true;
+  bool _showAllStories = false;
 
   // Controle de paginação
   final ScrollController _scrollController = ScrollController();
@@ -253,6 +254,13 @@ class _HomeContentState extends State<HomeContent> {
     }
   }
 
+  void _toggleShowAllStories(bool value) {
+    setState(() {
+      _showAllStories = value;
+    });
+    _loadInitialData();
+  }
+
   /// Carrega mais dados (próxima página)
   Future<void> _loadMoreData() async {
     if (_isLoadingMore || !_hasMoreData) return;
@@ -276,19 +284,21 @@ class _HomeContentState extends State<HomeContent> {
     final userId = auth.user?.id ?? '';
     final db = await DatabaseHelper().database;
 
-    final activeCountResult = await db.rawQuery(
-      'SELECT COUNT(*) AS cnt FROM historia WHERE user_id = ? AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL',
+    final queryCountResult = await db.rawQuery(
+      'SELECT COUNT(*) AS cnt FROM historia WHERE user_id = ? ${_showAllStories ? 'AND excluido IS NULL' : 'AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL'}',
       [userId],
     );
-    final activeCount = (activeCountResult.first['cnt'] ?? 0) as int;
+    final availableCount = (queryCountResult.first['cnt'] ?? 0) as int;
+    final whereClause = _showAllStories
+        ? 'user_id = ? AND excluido IS NULL'
+        : 'user_id = ? AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL';
 
     final activeResults = await db.query(
       'historia',
-      where:
-          'user_id = ? AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL',
+      where: whereClause,
       whereArgs: [userId],
       orderBy: 'data DESC',
-      limit: activeCount > 5 ? _pageSize : 5,
+      limit: availableCount > 5 ? _pageSize : 5,
       offset: offset,
     );
 
@@ -296,7 +306,21 @@ class _HomeContentState extends State<HomeContent> {
         .map((map) => Historia.fromMap(map))
         .toList(growable: false);
 
-    if (activeCount > 5) {
+    if (_showAllStories) {
+      if (mounted) {
+        setState(() {
+          final existingIds = _historias.map((h) => h.id).toSet();
+          final filteredHistorias = activeHistorias
+              .where((h) => !existingIds.contains(h.id))
+              .toList();
+          _historias.addAll(filteredHistorias);
+          _hasMoreData = activeHistorias.length == _pageSize;
+        });
+      }
+      return;
+    }
+
+    if (availableCount > 5) {
       if (mounted) {
         setState(() {
           final existingIds = _historias.map((h) => h.id).toSet();
@@ -742,6 +766,8 @@ class _HomeContentState extends State<HomeContent> {
         return _PaginatedHomeContent(
           key: ValueKey(refreshProvider.refreshCounter),
           isCardView: _isCardView,
+          showAllStories: _showAllStories,
+          onToggleShowAllStories: _toggleShowAllStories,
           historias: _historias,
           isInitialLoading: _isInitialLoading,
           isLoadingMore: _isLoadingMore,
@@ -758,6 +784,8 @@ class _HomeContentState extends State<HomeContent> {
 
 class _PaginatedHomeContent extends StatefulWidget {
   final bool isCardView;
+  final bool showAllStories;
+  final ValueChanged<bool> onToggleShowAllStories;
   final List<Historia> historias;
   final bool isInitialLoading;
   final bool isLoadingMore;
@@ -769,6 +797,8 @@ class _PaginatedHomeContent extends StatefulWidget {
 
   const _PaginatedHomeContent({
     required this.isCardView,
+    required this.showAllStories,
+    required this.onToggleShowAllStories,
     required this.historias,
     required this.isInitialLoading,
     required this.isLoadingMore,
@@ -885,6 +915,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             final storiesCount = widget.historias.length;
 
             Widget greetingBanner() {
+              final l10n = AppLocalizations.of(context)!;
               final user = Provider.of<AuthProvider>(
                 context,
                 listen: false,
@@ -892,10 +923,11 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
               final userName = user?.nome ?? '';
               final now = DateTime.now();
               final greeting = now.hour < 12
-                  ? 'Bom dia'
+                  ? l10n.homeGreetingMorning
                   : now.hour < 18
-                  ? 'Boa tarde'
-                  : 'Boa noite';
+                  ? l10n.homeGreetingAfternoon
+                  : l10n.homeGreetingEvening;
+
               return Container(
                 margin: const EdgeInsets.only(bottom: 16),
                 padding: const EdgeInsets.all(18),
@@ -921,14 +953,18 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                     ),
                   ],
                 ),
-                child: Row(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '$greeting${userName.isNotEmpty ? ', $userName' : ''}.',
+                    // PRIMEIRA LINHA: Texto (com quebra automática) e Logo alinhados ao centro vertical
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '$greeting${userName.isNotEmpty ? ',\n$userName' : ''}.', // Adicionado \n para forçar a quebra após a vírgula se preferir, ou deixe sem para quebrar apenas se faltar espaço
                             style: GoogleFonts.notoSerif(
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
@@ -938,9 +974,43 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                               ).colorScheme.onPrimaryContainer,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Aqui estão suas histórias recentes.',
+                        ),
+                        const SizedBox(width: 12),
+                        Container(
+                          width: 76,
+                          height: 76,
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHigh,
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.asset(
+                                'assets/image/LogoDayApp.png',
+                                width: 74,
+                                height: 74,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+
+                    // SEGUNDA LINHA: Texto e Elementos do Switch alinhados horizontalmente e verticalmente ao centro
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .spaceBetween, // Empurra o texto para um lado e o switch para o outro
+                      crossAxisAlignment: CrossAxisAlignment
+                          .center, // Alinha verticalmente ao centro da linha
+                      children: [
+                        Expanded(
+                          child: Text(
+                            l10n.homeStoriesSubtitle,
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -949,18 +1019,48 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                               ).colorScheme.onPrimaryContainer,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(18),
-                      child: Image.asset(
-                        'assets/image/LogoDayApp.png',
-                        width: 96,
-                        height: 96,
-                        fit: BoxFit.cover,
-                      ),
+                        ),
+                        const SizedBox(width: 8),
+                        // Agrupamento do label do switch + switch
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.homeShowAllStoriesLabel,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onPrimaryContainer,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Transform.scale(
+                              scale: 0.9,
+                              child: Switch.adaptive(
+                                value: widget.showAllStories,
+                                onChanged: widget.onToggleShowAllStories,
+                                activeThumbColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
+                                activeTrackColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary.withValues(alpha: 0.28),
+                                inactiveTrackColor: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer
+                                    .withValues(alpha: 0.3),
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),

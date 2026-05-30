@@ -2456,6 +2456,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get homeHeaderOpenCalendarTooltip => 'Apri calendario';
 
   @override
+  String get homeGreetingMorning => 'Buongiorno';
+
+  @override
+  String get homeGreetingAfternoon => 'Buon pomeriggio';
+
+  @override
+  String get homeGreetingEvening => 'Buonasera';
+
+  @override
+  String get homeStoriesSubtitle => 'Ecco le tue storie';
+
+  @override
+  String get homeShowAllStoriesLabel => 'Visualizza tutto';
+
+  @override
   String get insightHistoryTitle => 'Cronologia insight';
 
   @override
