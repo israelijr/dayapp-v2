@@ -39,6 +39,9 @@ class _GroupsScreenState extends State<GroupsScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this)
       ..addListener(_onTabChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onTabChanged?.call(_tabController.index);
+    });
     _loadCollections();
   }
 

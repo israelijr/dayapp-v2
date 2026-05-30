@@ -1216,7 +1216,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onPressed: () => Navigator.of(dialogBuilderContext).pop(),
             child: Text(AppLocalizations.of(context)!.cancel),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: () async {
               final email = emailController.text.trim();
               if (email.isEmpty || !email.contains('@')) {

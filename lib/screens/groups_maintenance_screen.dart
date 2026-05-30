@@ -216,9 +216,7 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                 if (index == _grupos.length) {
                   return Card(
                     margin: const EdgeInsets.only(bottom: 12),
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainerHighest,
+                    color: Theme.of(context).colorScheme.surfaceContainerLowest,
                     elevation: 3,
                     shadowColor: Theme.of(
                       context,
@@ -279,7 +277,7 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                 final grupo = _grupos[index];
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12),
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  color: Theme.of(context).colorScheme.surfaceContainerLowest,
                   elevation: 3,
                   shadowColor: Theme.of(
                     context,
