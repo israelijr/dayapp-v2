@@ -10,10 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
 
-import '../db/capitulo_helper.dart';
-import '../db/database_helper.dart';
 import '../helpers/chapter_filter_helper.dart';
 import '../helpers/rich_text_helper.dart';
 import '../models/capitulo.dart';
@@ -22,6 +19,8 @@ import '../models/historia.dart';
 import '../providers/auth_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
+import '../repositories/capitulo_repository.dart';
+import '../repositories/historia_repository.dart';
 import '../services/capitulo_sugestao_service.dart';
 import '../widgets/compact_historia_card.dart';
 import '../widgets/historia_media_widgets.dart';
@@ -33,8 +32,8 @@ Future<void> openCreateChapterScreen(BuildContext context) async {
   final userId = auth.user?.id;
   if (userId == null) return;
 
-  final capituloHelper = CapituloHelper();
-  final entradasComTags = await capituloHelper.listEntradasElegiveisComTags(
+  final capituloRepository = CapituloRepository();
+  final entradasComTags = await capituloRepository.listEntradasElegiveisComTags(
     userId,
   );
   if (!context.mounted) return;
@@ -82,7 +81,7 @@ Future<void> openCreateChapterScreen(BuildContext context) async {
     fotoPath: resultado.fotoPath,
   );
 
-  await capituloHelper.insertCapituloWithEntradas(
+  await capituloRepository.insertCapituloWithEntradas(
     capitulo,
     selectedEntries.map((entry) => entry.id!).toList(growable: false),
   );
@@ -172,7 +171,7 @@ class ChaptersScreen extends StatefulWidget {
 }
 
 class _ChaptersScreenState extends State<ChaptersScreen> {
-  final CapituloHelper _capituloHelper = CapituloHelper();
+  final CapituloRepository _capituloRepository = CapituloRepository();
   final CapituloSugestaoService _sugestaoService = CapituloSugestaoService();
 
   bool _isLoading = true;
@@ -207,7 +206,9 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
       _isLoading = true;
     });
 
-    final capitulos = await _capituloHelper.getCapitulosResumoByUser(userId);
+    final capitulos = await _capituloRepository.fetchCapitulosResumoByUser(
+      userId,
+    );
     final sugestoes = premium.isPremium
         ? await _sugestaoService.sugerirCapitulos(userId)
         : const <CapituloSugestao>[];
@@ -235,7 +236,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
       criadoAutomaticamente: true,
     );
 
-    await _capituloHelper.insertCapituloWithEntradas(
+    await _capituloRepository.insertCapituloWithEntradas(
       capitulo,
       sugestao.entradaIds,
     );
@@ -254,7 +255,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     final userId = auth.user?.id;
     if (userId == null) return;
 
-    await _capituloHelper.ignoreSuggestion(
+    await _capituloRepository.ignoreSuggestion(
       userId: userId,
       fingerprint: sugestao.fingerprint,
     );
@@ -268,9 +269,8 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     final userId = auth.user?.id;
     if (userId == null) return;
 
-    final entradasComTags = await _capituloHelper.listEntradasElegiveisComTags(
-      userId,
-    );
+    final entradasComTags = await _capituloRepository
+        .listEntradasElegiveisComTags(userId);
     if (!mounted) return;
 
     final entradas = entradasComTags.map((e) => e.historia).toList();
@@ -320,7 +320,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
       fotoPath: resultado.fotoPath,
     );
 
-    await _capituloHelper.insertCapituloWithEntradas(
+    await _capituloRepository.insertCapituloWithEntradas(
       capitulo,
       selectedEntries.map((entry) => entry.id!).toList(growable: false),
     );
@@ -540,8 +540,6 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
       DateFormat('dd/MM/yy', l10n.localeName).format(capitulo.dataInicio),
       DateFormat('dd/MM/yy', l10n.localeName).format(capitulo.dataFim),
     );
-    final hasChapterPhoto =
-        capitulo.fotoPath != null && File(capitulo.fotoPath!).existsSync();
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -591,7 +589,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                     color: colorScheme.onSurfaceVariant,
                   ),
                 ),
-                if (hasChapterPhoto) ...[
+                if (capitulo.fotoPath != null) ...[
                   const SizedBox(height: 10),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
@@ -600,6 +598,16 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                       width: double.infinity,
                       height: 160,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        width: double.infinity,
+                        height: 160,
+                        color: colorScheme.surfaceContainerHighest,
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.broken_image,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -635,7 +643,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
         ),
         openBuilder: (ctx, _) => _ChapterDetailsScreen(
           resumoInicial: resumo,
-          capituloHelper: _capituloHelper,
+          capituloRepository: _capituloRepository,
         ),
         onClosed: (changed) {
           if (changed == true) _loadData();
@@ -1664,18 +1672,18 @@ class ChapterDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return _ChapterDetailsScreen(
       resumoInicial: resumo,
-      capituloHelper: CapituloHelper(),
+      capituloRepository: CapituloRepository(),
     );
   }
 }
 
 class _ChapterDetailsScreen extends StatefulWidget {
   final CapituloResumo resumoInicial;
-  final CapituloHelper capituloHelper;
+  final CapituloRepository capituloRepository;
 
   const _ChapterDetailsScreen({
     required this.resumoInicial,
-    required this.capituloHelper,
+    required this.capituloRepository,
   });
 
   @override
@@ -1700,10 +1708,10 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
       _isLoading = true;
     });
 
-    final entradas = await widget.capituloHelper.getEntradasByCapitulo(
+    final entradas = await widget.capituloRepository.getEntradasByCapitulo(
       _resumo.capitulo.id!,
     );
-    final resumos = await widget.capituloHelper.getCapitulosResumoByUser(
+    final resumos = await widget.capituloRepository.fetchCapitulosResumoByUser(
       _resumo.capitulo.userId,
     );
     final resumoAtualizado = resumos
@@ -1725,7 +1733,7 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
     final userId = _resumo.capitulo.userId;
     if (userId.isEmpty) return;
 
-    final entradasComTags = await widget.capituloHelper
+    final entradasComTags = await widget.capituloRepository
         .listEntradasElegiveisComTags(userId);
     if (!mounted) return;
 
@@ -1783,7 +1791,7 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
       fotoPath: resultado.fotoPath,
     );
 
-    await widget.capituloHelper.updateCapituloWithEntradas(
+    await widget.capituloRepository.updateCapituloWithEntradas(
       capituloAtualizado,
       selectedEntries.map((entry) => entry.id!).toList(growable: false),
     );
@@ -1827,7 +1835,7 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
 
     if (confirmado != true) return;
 
-    await widget.capituloHelper.deleteCapitulo(capituloId);
+    await widget.capituloRepository.deleteCapitulo(capituloId);
 
     if (!mounted) return;
     _didChange = true;
@@ -1972,13 +1980,23 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Imagem ou placeholder colorido
-                          if (capitulo.fotoPath != null &&
-                              File(capitulo.fotoPath!).existsSync())
+                          if (capitulo.fotoPath != null)
                             Image.file(
                               File(capitulo.fotoPath!),
                               width: double.infinity,
                               height: 200,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    width: double.infinity,
+                                    height: 200,
+                                    color: colorScheme.surfaceContainerHighest,
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.broken_image,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
                             )
                           else
                             Container(
@@ -2100,6 +2118,7 @@ class _StoryHorizontalCard extends StatefulWidget {
 }
 
 class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
+  final HistoriaRepository _historiaRepository = HistoriaRepository();
   List<String> _tagNames = const [];
   int _fotos = 0;
   int _audios = 0;
@@ -2115,59 +2134,23 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
     final id = widget.historia.id;
     if (id == null) return;
 
-    final db = await DatabaseHelper().database;
-
-    // Carrega tags
-    final tagRows = await db.rawQuery(
-      '''
-      SELECT t.nome
-      FROM historia_tags ht
-      JOIN tags t ON t.id = ht.tag_id
-      WHERE ht.historia_id = ?
-      ORDER BY t.nome ASC
-      ''',
-      [id],
+    final tags = await _historiaRepository.fetchTagNamesForStory(id);
+    final attachmentCounts = await _historiaRepository.fetchAttachmentCounts(
+      id,
     );
 
-    // Conta anexos em queries separadas para simplicidade
-    final fotoCount =
-        Sqflite.firstIntValue(
-          await db.rawQuery(
-            'SELECT COUNT(*) FROM historia_fotos WHERE historia_id = ?',
-            [id],
-          ),
-        ) ??
-        0;
-    final audioCount =
-        Sqflite.firstIntValue(
-          await db.rawQuery(
-            'SELECT COUNT(*) FROM historia_audios WHERE historia_id = ?',
-            [id],
-          ),
-        ) ??
-        0;
-    final videoCount =
-        Sqflite.firstIntValue(
-          await db.rawQuery(
-            'SELECT COUNT(*) FROM historia_videos WHERE historia_id = ?',
-            [id],
-          ),
-        ) ??
-        0;
-
-    // Considera também a tag legada
     final legacyTag = widget.historia.tag;
-    final tags = tagRows.map((r) => r['nome'] as String).toList();
-    if (tags.isEmpty && legacyTag != null && legacyTag.isNotEmpty) {
-      tags.add(legacyTag);
+    final effectiveTags = tags.isNotEmpty ? tags : <String>[];
+    if (effectiveTags.isEmpty && legacyTag != null && legacyTag.isNotEmpty) {
+      effectiveTags.add(legacyTag);
     }
 
     if (mounted) {
       setState(() {
-        _tagNames = tags;
-        _fotos = fotoCount;
-        _audios = audioCount;
-        _videos = videoCount;
+        _tagNames = effectiveTags;
+        _fotos = attachmentCounts.fotos;
+        _audios = attachmentCounts.audios;
+        _videos = attachmentCounts.videos;
       });
     }
   }

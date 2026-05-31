@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../db/database_helper.dart';
 import '../models/historia.dart';
 import '../models/tag.dart';
@@ -151,6 +153,53 @@ class HistoriaRepository {
       orderBy: 'data DESC',
     );
     return results.map((map) => Historia.fromMap(map)).toList(growable: false);
+  }
+
+  Future<List<String>> fetchTagNamesForStory(int historiaId) async {
+    final db = await DatabaseHelper().database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT t.nome
+      FROM historia_tags ht
+      JOIN tags t ON t.id = ht.tag_id
+      WHERE ht.historia_id = ?
+      ORDER BY t.nome ASC
+      ''',
+      [historiaId],
+    );
+    return rows.map((row) => row['nome'] as String).toList(growable: false);
+  }
+
+  Future<({int fotos, int audios, int videos})> fetchAttachmentCounts(
+    int historiaId,
+  ) async {
+    final db = await DatabaseHelper().database;
+    final fotoCount =
+        Sqflite.firstIntValue(
+          await db.rawQuery(
+            'SELECT COUNT(*) FROM historia_fotos WHERE historia_id = ?',
+            [historiaId],
+          ),
+        ) ??
+        0;
+    final audioCount =
+        Sqflite.firstIntValue(
+          await db.rawQuery(
+            'SELECT COUNT(*) FROM historia_audios WHERE historia_id = ?',
+            [historiaId],
+          ),
+        ) ??
+        0;
+    final videoCount =
+        Sqflite.firstIntValue(
+          await db.rawQuery(
+            'SELECT COUNT(*) FROM historia_videos WHERE historia_id = ?',
+            [historiaId],
+          ),
+        ) ??
+        0;
+
+    return (fotos: fotoCount, audios: audioCount, videos: videoCount);
   }
 
   Future<void> updateHistoria(
