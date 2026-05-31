@@ -16,6 +16,7 @@ import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'db/database_helper.dart';
 import 'models/historia.dart';
 import 'providers/auth_provider.dart';
+import 'providers/home_layout_provider.dart';
 import 'providers/insight_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/pin_provider.dart';
@@ -512,6 +513,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider.value(value: widget.pinProvider),
         // Provider para controle de plano Free/Premium
         ChangeNotifierProvider(create: (_) => PremiumProvider()..load()),
+        // Provider para manter o modo de layout da Home (card/list)
+        ChangeNotifierProvider(create: (_) => HomeLayoutProvider()),
         // Provider para manter posição do scroll em listas
         ChangeNotifierProvider(create: (_) => ScrollPositionProvider()),
       ],

@@ -85,6 +85,14 @@ class BackupService {
   factory BackupService() => _instance;
   BackupService._internal();
 
+  Future<int> countPendingBackupStories() async {
+    final db = await DatabaseHelper().database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as cnt FROM historia WHERE (backed_up IS NULL OR backed_up = 0) AND excluido IS NULL',
+    );
+    return (result.first['cnt'] ?? 0) as int;
+  }
+
   /// Cria um arquivo ZIP com backup completo e permite compartilhar
   /// (para OneDrive, Google Drive, etc)
   Future<String> createBackupZipFile({
