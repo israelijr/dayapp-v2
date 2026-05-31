@@ -7,11 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../db/database_helper.dart';
 import '../db/historia_foto_helper.dart';
 import '../models/historia.dart';
 import '../providers/auth_provider.dart';
 import '../providers/refresh_provider.dart';
+import '../repositories/historia_repository.dart';
 import '../providers/scroll_position_provider.dart';
 import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
@@ -27,6 +27,7 @@ class ArchivedStoriesScreen extends StatefulWidget {
 }
 
 class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
+  final HistoriaRepository _historiaRepository = HistoriaRepository();
   bool _isCardView = true; // true = modo blocos, false = modo ícones
 
   // Controle de scroll para manter posição da lista
@@ -113,14 +114,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
   Future<List<Historia>> _fetchHistoriasArquivadas() async {
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final userId = auth.user?.id ?? '';
-    final db = await DatabaseHelper().database;
-    final result = await db.query(
-      'historia',
-      where: 'user_id = ? AND arquivado = ? AND excluido IS NULL',
-      whereArgs: [userId, 'sim'],
-      orderBy: 'data DESC',
-    );
-    return result.map((map) => Historia.fromMap(map)).toList();
+    return _historiaRepository.fetchArchivedStories(userId: userId);
   }
 
   Future<void> _deleteHistoria(Historia historia) async {
@@ -151,19 +145,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
     );
 
     if (confirm == true) {
-      final db = await DatabaseHelper().database;
-      // Soft delete: marca como excluído ao invés de deletar
-      await db.update(
-        'historia',
-        {
-          'excluido': 'sim',
-          'data_exclusao': DateTime.now().toIso8601String(),
-          'data_update': DateTime.now().toIso8601String(),
-          'backed_up': 0,
-        },
-        where: 'id = ?',
-        whereArgs: [historia.id],
-      );
+      await _historiaRepository.deleteHistoria(historia);
       if (!mounted) return;
       final refreshProvider = Provider.of<RefreshProvider>(
         context,
@@ -186,27 +168,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
     Historia historia, {
     Map<String, dynamic>? updates,
   }) async {
-    final db = await DatabaseHelper().database;
-    final Map<String, dynamic> updateData = {
-      'data_update': DateTime.now().toIso8601String(),
-    };
-
-    if (updates != null) {
-      updateData.addAll(updates);
-    }
-
-    // Se a atualização não explicitar o estado de backup, marcar como não salvo
-    // para que a história seja incluída no próximo backup.
-    if (!updateData.containsKey('backed_up')) {
-      updateData['backed_up'] = 0;
-    }
-
-    await db.update(
-      'historia',
-      updateData,
-      where: 'id = ?',
-      whereArgs: [historia.id],
-    );
+    await _historiaRepository.updateHistoria(historia, updates: updates);
     if (!mounted) return;
     final refreshProvider = Provider.of<RefreshProvider>(
       context,

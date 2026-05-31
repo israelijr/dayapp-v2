@@ -4,14 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../db/database_helper.dart';
-import '../db/historia_audio_helper.dart';
-import '../db/historia_foto_helper.dart';
-import '../db/historia_video_helper.dart';
 import '../models/historia.dart';
 import '../providers/auth_provider.dart';
 import '../providers/refresh_provider.dart';
-import '../services/file_utils.dart';
+import '../services/trash_service.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/historia_media_widgets.dart';
 import '../widgets/rich_text_viewer_widget.dart';
@@ -24,6 +20,7 @@ class TrashScreen extends StatefulWidget {
 }
 
 class _TrashScreenState extends State<TrashScreen> {
+  final TrashService _trashService = TrashService();
   final List<Historia> _selectedItems = [];
   bool _isSelectionMode = false;
   late Future<List<Historia>> _futureHistorias;
@@ -41,30 +38,10 @@ class _TrashScreenState extends State<TrashScreen> {
     }
   }
 
-  /// Exclui os arquivos de mídia associados a uma história (fotos, áudios, vídeos e capa).
-  Future<void> _deleteHistoriaMedia(Historia historia) async {
-    if (historia.id == null) return;
-    await HistoriaFotoHelper().deleteFotosByHistoria(historia.id!);
-    await HistoriaAudioHelper().deleteAudiosByHistoria(historia.id!);
-    await HistoriaVideoHelper().deleteVideosByHistoria(historia.id!);
-    await FileUtils.deleteFileIfExists(historia.fotoHistoria);
-  }
-
   Future<List<Historia>> _fetchDeletedHistorias() async {
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final userId = auth.user?.id ?? '';
-
-    // Garante que itens com mais de 30 dias não apareçam mais na lixeira.
-    await DatabaseHelper().deleteExpiredTrashStories(userId: userId);
-
-    final db = await DatabaseHelper().database;
-    final result = await db.query(
-      'historia',
-      where: 'user_id = ? AND excluido = ?',
-      whereArgs: [userId, 'sim'],
-      orderBy: 'data_exclusao DESC',
-    );
-    return result.map((map) => Historia.fromMap(map)).toList();
+    return _trashService.fetchDeletedStories(userId);
   }
 
   Future<void> _restoreSelected() async {
@@ -90,20 +67,7 @@ class _TrashScreenState extends State<TrashScreen> {
     );
 
     if (confirm == true) {
-      final db = await DatabaseHelper().database;
-      for (final historia in _selectedItems) {
-        await db.update(
-          'historia',
-          {
-            'excluido': null,
-            'data_exclusao': null,
-            'data_update': DateTime.now().toIso8601String(),
-            'backed_up': 0,
-          },
-          where: 'id = ?',
-          whereArgs: [historia.id],
-        );
-      }
+      await _trashService.restoreStories(_selectedItems);
       if (!mounted) return;
       final refreshProvider = Provider.of<RefreshProvider>(
         context,
@@ -150,11 +114,7 @@ class _TrashScreenState extends State<TrashScreen> {
     );
 
     if (confirm == true) {
-      final db = await DatabaseHelper().database;
-      for (final historia in _selectedItems) {
-        await _deleteHistoriaMedia(historia);
-        await db.delete('historia', where: 'id = ?', whereArgs: [historia.id]);
-      }
+      await _trashService.permanentlyDeleteStories(_selectedItems);
       if (!mounted) return;
       final refreshProvider = Provider.of<RefreshProvider>(
         context,
@@ -209,18 +169,10 @@ class _TrashScreenState extends State<TrashScreen> {
     );
 
     if (confirm == true) {
-      final db = await DatabaseHelper().database;
       // ignore: use_build_context_synchronously
       final auth = Provider.of<AuthProvider>(context, listen: false);
       final userId = auth.user?.id ?? '';
-      for (final historia in historias) {
-        await _deleteHistoriaMedia(historia);
-      }
-      await db.delete(
-        'historia',
-        where: 'user_id = ? AND excluido = ?',
-        whereArgs: [userId, 'sim'],
-      );
+      await _trashService.emptyTrash(userId);
       if (!mounted) return;
       final refreshProvider = Provider.of<RefreshProvider>(
         context,

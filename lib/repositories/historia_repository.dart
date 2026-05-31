@@ -226,6 +226,58 @@ class HistoriaRepository {
     );
   }
 
+  Future<List<Historia>> fetchArchivedStories({required String userId}) async {
+    final db = await DatabaseHelper().database;
+    final rows = await db.query(
+      _table,
+      where: 'user_id = ? AND arquivado = ? AND excluido IS NULL',
+      whereArgs: [userId, 'sim'],
+      orderBy: 'data DESC',
+    );
+    return rows.map((map) => Historia.fromMap(map)).toList(growable: false);
+  }
+
+  Future<List<Historia>> fetchDeletedStories({required String userId}) async {
+    final db = await DatabaseHelper().database;
+    final rows = await db.query(
+      _table,
+      where: 'user_id = ? AND excluido = ?',
+      whereArgs: [userId, 'sim'],
+      orderBy: 'data_exclusao DESC',
+    );
+    return rows.map((map) => Historia.fromMap(map)).toList(growable: false);
+  }
+
+  Future<void> restoreHistoria(Historia historia) async {
+    if (historia.id == null) return;
+
+    await updateHistoria(
+      historia,
+      updates: {
+        'excluido': null,
+        'data_exclusao': null,
+        'data_update': DateTime.now().toIso8601String(),
+        'backed_up': 0,
+      },
+    );
+  }
+
+  Future<void> deleteHistoriaPermanently(Historia historia) async {
+    if (historia.id == null) return;
+
+    final db = await DatabaseHelper().database;
+    await db.delete(_table, where: 'id = ?', whereArgs: [historia.id]);
+  }
+
+  Future<void> deleteStoriesPermanentlyByUser(String userId) async {
+    final db = await DatabaseHelper().database;
+    await db.delete(
+      _table,
+      where: 'user_id = ? AND excluido = ?',
+      whereArgs: [userId, 'sim'],
+    );
+  }
+
   Future<void> archiveHistoria(Historia historia) async {
     if (historia.id == null) return;
 
