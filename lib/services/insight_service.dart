@@ -1,18 +1,12 @@
-import 'package:flutter/foundation.dart' show debugPrint;
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../db/database_helper.dart';
 import '../models/insight.dart';
+import '../services/insight_preferences_service.dart';
 
 /// Serviço responsável por calcular e cachear os insights automáticos.
 ///
 /// Os insights são recalculados ao abrir a Home ou após 24h desde o
 /// último cálculo. O resultado é armazenado em SharedPreferences.
 class InsightService {
-  static const String _cacheKey = 'insight_cache';
-  static const String _cacheTimestampKey = 'insight_cache_timestamp';
-  static const Duration _cacheDuration = Duration(hours: 24);
-
   /// Número mínimo de histórias totais para gerar qualquer insight.
   static const int _minTotalHistorias = 5;
 
@@ -26,6 +20,8 @@ class InsightService {
   static const int _maxInsights = 20;
 
   final DatabaseHelper _db = DatabaseHelper();
+  final InsightPreferencesService _preferencesService =
+      InsightPreferencesService();
 
   // ---------------------------------------------------------------------------
   // API pública
@@ -39,12 +35,12 @@ class InsightService {
     bool forceRefresh = false,
   }) async {
     if (!forceRefresh) {
-      final cached = await _loadCache(userId);
+      final cached = await _preferencesService.loadCache(userId);
       if (cached != null) return cached;
     }
 
     final insights = await _calculateAll(userId);
-    await _saveCache(userId, insights);
+    await _preferencesService.saveCache(userId, insights);
     return insights;
   }
 
@@ -471,47 +467,6 @@ class InsightService {
         'weekday_indices': weekdayIdxs,
         'avg_mood': avgMood,
       },
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // Cache (SharedPreferences)
-  // ---------------------------------------------------------------------------
-
-  /// Chave de cache incluindo userId para isolamento entre contas.
-  String _cacheKeyFor(String userId) => '${_cacheKey}_$userId';
-  String _timestampKeyFor(String userId) => '${_cacheTimestampKey}_$userId';
-
-  /// Carrega do cache se ainda for válido (< 24h). Retorna null se expirado.
-  Future<List<Insight>?> _loadCache(String userId) async {
-    final prefs = await SharedPreferences.getInstance();
-    final timestampMs = prefs.getInt(_timestampKeyFor(userId));
-    if (timestampMs == null) return null;
-
-    final saved = DateTime.fromMillisecondsSinceEpoch(timestampMs);
-    if (DateTime.now().difference(saved) >= _cacheDuration) return null;
-
-    final json = prefs.getString(_cacheKeyFor(userId));
-    if (json == null || json.isEmpty) return null;
-
-    try {
-      return Insight.decodeList(json);
-    } catch (e) {
-      // Cache corrompido — ignora e recalcula
-      debugPrint('InsightService: cache corrompido para userId=$userId: $e');
-      await prefs.remove(_cacheKeyFor(userId));
-      await prefs.remove(_timestampKeyFor(userId));
-      return null;
-    }
-  }
-
-  /// Persiste a lista de insights e o timestamp no SharedPreferences.
-  Future<void> _saveCache(String userId, List<Insight> insights) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_cacheKeyFor(userId), Insight.encodeList(insights));
-    await prefs.setInt(
-      _timestampKeyFor(userId),
-      DateTime.now().millisecondsSinceEpoch,
     );
   }
 }
