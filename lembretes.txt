@@ -1,0 +1,7 @@
+5 fotos - fundo deve ser imagem desfocada c
+com imagens sobrepostas e desalinhadas
+
+
+mais de 5 fotos 
+deve ser estilo polaroid. fundo é a foto principal
+desfocada

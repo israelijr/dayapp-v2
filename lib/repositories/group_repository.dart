@@ -1,5 +1,6 @@
-import '../db/grupo_helper.dart';
 import '../db/database_helper.dart';
+import '../db/grupo_helper.dart';
+import '../models/grupo.dart';
 import '../models/historia.dart';
 import 'historia_repository.dart';
 
@@ -26,6 +27,30 @@ class GroupRepository {
       orderBy: 'data DESC',
     );
     return result.map((map) => Historia.fromMap(map)).toList(growable: false);
+  }
+
+  Future<List<Grupo>> fetchGroupsByUser(String userId) async {
+    return _grupoHelper.getGruposByUser(userId);
+  }
+
+  Future<int> insertGrupo(Grupo grupo) async {
+    return _grupoHelper.insertGrupo(grupo);
+  }
+
+  Future<int> updateGrupoAndRenameHistorias(Grupo grupo, String oldName) async {
+    return _grupoHelper.updateGrupoAndRenameHistorias(grupo, oldName);
+  }
+
+  Future<void> deleteGroupAndUpdateHistorias(
+    int groupId,
+    String groupName,
+    String userId,
+  ) async {
+    await _grupoHelper.deleteGrupoAndUpdateHistorias(
+      groupId,
+      groupName,
+      userId,
+    );
   }
 
   Future<void> deleteGroup({
