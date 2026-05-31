@@ -129,6 +129,7 @@ class _CreateAccountComplementScreenState
         'CreateAccountComplementScreen: erro ao salvar complemento: $e',
       );
     } finally {
+      // ignore: control_flow_in_finally
       if (!mounted) return;
       setState(() {
         loading = false;

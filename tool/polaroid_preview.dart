@@ -65,7 +65,7 @@ Future<Uint8List> _createSamplePhoto() async {
     Paint()..color = const Color(0xFF8C52FF),
   );
   canvas.drawRect(
-    Rect.fromLTWH(600, 480, 80, 40),
+    const Rect.fromLTWH(600, 480, 80, 40),
     Paint()..color = const Color(0xFF8C52FF),
   );
 
@@ -127,7 +127,7 @@ class PolaroidPreviewScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Polaroid Preview')),
-      body: Container(
+      body: ColoredBox(
         color: Colors.grey.shade200,
         child: SafeArea(
           child: ClipRRect(

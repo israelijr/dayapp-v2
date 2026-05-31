@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('tokenize removes stopwords and short words', () {
-    final analyzer = WordInsightAnalyzer();
+    const analyzer = WordInsightAnalyzer();
 
     final tokens = analyzer.tokenize(
       'A sua história tem muitas coisas sobre a vida e um teste final.',
@@ -24,7 +24,7 @@ void main() {
   });
 
   test('normalizeText removes accents and punctuation', () {
-    final analyzer = WordInsightAnalyzer();
+    const analyzer = WordInsightAnalyzer();
 
     final normalized = analyzer.normalizeText('Têm café, ação e coração!');
 

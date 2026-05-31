@@ -21,7 +21,6 @@ class PolaroidStackTemplate extends StatelessWidget {
   Widget build(BuildContext context) {
     final photos = story.images;
     final displayImages = photos.take(4).toList();
-    final extraCount = photos.length > 4 ? photos.length - 4 : 0;
     final colorScheme = Theme.of(context).colorScheme;
     final dateLabel = DateFormat(
       'dd MMM yyyy',

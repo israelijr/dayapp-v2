@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 String normalizedDescription(String? raw) {
   if (raw == null || raw.trim().isEmpty) {

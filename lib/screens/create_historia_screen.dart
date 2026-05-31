@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +15,6 @@ import '../helpers/notification_helper.dart';
 import '../helpers/rich_text_helper.dart';
 import '../models/tag.dart';
 import '../providers/auth_provider.dart';
-import '../providers/pin_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../services/emoji_service.dart';
 import '../services/incremental_backup_service.dart';
@@ -916,7 +913,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant,
+                color: theme.colorScheme.surfaceContainerHighest,
                 border: Border.all(
                   color: theme.colorScheme.outlineVariant,
                   width: 1,

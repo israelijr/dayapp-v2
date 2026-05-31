@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +18,6 @@ import '../helpers/rich_text_helper.dart';
 import '../models/historia.dart';
 import '../models/tag.dart';
 import '../providers/auth_provider.dart';
-import '../providers/pin_provider.dart';
 import '../services/emoji_service.dart';
 import '../theme/animation_durations.dart';
 import '../widgets/audio_recorder_widget.dart';
@@ -794,7 +791,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
               color: Theme.of(context).textTheme.titleLarge?.color,
             ),
           ),
-          actions: [],
+          actions: const [],
         ),
         body: Column(
           children: [
@@ -1114,7 +1111,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant,
+                color: theme.colorScheme.surfaceContainerHighest,
                 border: Border.all(
                   color: theme.colorScheme.outlineVariant,
                   width: 1,
