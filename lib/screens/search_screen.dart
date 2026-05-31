@@ -5,12 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../db/database_helper.dart';
 import '../db/tag_helper.dart';
 import '../models/historia.dart';
 import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../providers/refresh_provider.dart';
+import '../repositories/historia_repository.dart';
 import '../services/emoji_service.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/emoji_selection_modal.dart';
@@ -47,6 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
   String? _selectedEmoticon; // Emoji caractere selecionado (ex: 😄)
   String? _selectedEmojiTranslation; // Tradução do emoji (ex: Sorrir)
   List<Historia> _searchResults = [];
+  final HistoriaRepository _historiaRepository = HistoriaRepository();
   bool _isSearching = false;
   bool _hasSearched = false;
   bool _isLoadingEmojis = true;
@@ -98,8 +99,7 @@ class _SearchScreenState extends State<SearchScreen> {
     });
 
     try {
-      final db = await DatabaseHelper().database;
-      List<Map<String, dynamic>> results;
+      final List<Historia> results;
 
       switch (_currentSearchType) {
         case SearchType.text:
@@ -111,14 +111,9 @@ class _SearchScreenState extends State<SearchScreen> {
             });
             return;
           }
-          // Pesquisa no título ou descrição (DISTINCT para evitar duplicatas)
-          results = await db.query(
-            'historia',
-            distinct: true,
-            where:
-                'user_id = ? AND excluido IS NULL AND (titulo LIKE ? OR descricao LIKE ?)',
-            whereArgs: [userId, '%$query%', '%$query%'],
-            orderBy: 'data DESC',
+          results = await _historiaRepository.searchUserStoriesByText(
+            userId: userId,
+            query: query,
           );
           break;
 
@@ -131,20 +126,9 @@ class _SearchScreenState extends State<SearchScreen> {
             });
             return;
           }
-          // Pesquisa por tag usando a nova tabela de relações (busca por slug
-          // normalizado para ignorar acentos/capitalização)
-          final slug = Tag.generateSlug(tag);
-          results = await db.rawQuery(
-            '''
-            SELECT DISTINCT h.*
-            FROM historia h
-            INNER JOIN historia_tags ht ON ht.historia_id = h.id
-            INNER JOIN tags t ON t.id = ht.tag_id
-            WHERE h.user_id = ? AND h.excluido IS NULL
-              AND (t.slug LIKE ? OR t.nome LIKE ?)
-            ORDER BY h.data DESC
-            ''',
-            [userId, '%$slug%', '%$tag%'],
+          results = await _historiaRepository.searchUserStoriesByTag(
+            userId: userId,
+            tag: tag,
           );
           break;
 
@@ -156,18 +140,15 @@ class _SearchScreenState extends State<SearchScreen> {
             });
             return;
           }
-          // Pesquisa por emoticon
-          results = await db.query(
-            'historia',
-            where: 'user_id = ? AND excluido IS NULL AND emoticon = ?',
-            whereArgs: [userId, _selectedEmoticon],
-            orderBy: 'data DESC',
+          results = await _historiaRepository.searchUserStoriesByEmoticon(
+            userId: userId,
+            emoticon: _selectedEmoticon!,
           );
           break;
       }
 
       setState(() {
-        _searchResults = results.map((map) => Historia.fromMap(map)).toList();
+        _searchResults = results;
         _isSearching = false;
       });
     } catch (e) {
@@ -700,16 +681,9 @@ class _SearchScreenState extends State<SearchScreen> {
     Historia historia,
     Map<String, dynamic> updates,
   ) async {
-    final db = await DatabaseHelper().database;
-    await db.update(
-      'historia',
-      {
-        'data_update': DateTime.now().toIso8601String(),
-        'backed_up': 0,
-        ...updates,
-      },
-      where: 'id = ?',
-      whereArgs: [historia.id],
+    await _historiaRepository.updateHistoria(
+      historia,
+      updates: {'backed_up': 0, ...updates},
     );
   }
 

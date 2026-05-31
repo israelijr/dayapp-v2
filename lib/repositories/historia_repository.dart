@@ -1,5 +1,6 @@
 import '../db/database_helper.dart';
 import '../models/historia.dart';
+import '../models/tag.dart';
 
 class HistoriaRepository {
   static const String _table = 'historia';
@@ -96,6 +97,57 @@ class HistoriaRepository {
       _table,
       where: whereClause,
       whereArgs: [userId],
+      orderBy: 'data DESC',
+    );
+    return results.map((map) => Historia.fromMap(map)).toList(growable: false);
+  }
+
+  Future<List<Historia>> searchUserStoriesByText({
+    required String userId,
+    required String query,
+  }) async {
+    final db = await DatabaseHelper().database;
+    final results = await db.query(
+      _table,
+      distinct: true,
+      where:
+          'user_id = ? AND excluido IS NULL AND (titulo LIKE ? OR descricao LIKE ?)',
+      whereArgs: [userId, '%$query%', '%$query%'],
+      orderBy: 'data DESC',
+    );
+    return results.map((map) => Historia.fromMap(map)).toList(growable: false);
+  }
+
+  Future<List<Historia>> searchUserStoriesByTag({
+    required String userId,
+    required String tag,
+  }) async {
+    final db = await DatabaseHelper().database;
+    final slug = Tag.generateSlug(tag);
+    final results = await db.rawQuery(
+      '''
+      SELECT DISTINCT h.*
+      FROM $_table h
+      INNER JOIN historia_tags ht ON ht.historia_id = h.id
+      INNER JOIN tags t ON t.id = ht.tag_id
+      WHERE h.user_id = ? AND h.excluido IS NULL
+        AND (t.slug LIKE ? OR t.nome LIKE ?)
+      ORDER BY h.data DESC
+      ''',
+      [userId, '%$slug%', '%$tag%'],
+    );
+    return results.map((map) => Historia.fromMap(map)).toList(growable: false);
+  }
+
+  Future<List<Historia>> searchUserStoriesByEmoticon({
+    required String userId,
+    required String emoticon,
+  }) async {
+    final db = await DatabaseHelper().database;
+    final results = await db.query(
+      _table,
+      where: 'user_id = ? AND excluido IS NULL AND emoticon = ?',
+      whereArgs: [userId, emoticon],
       orderBy: 'data DESC',
     );
     return results.map((map) => Historia.fromMap(map)).toList(growable: false);
