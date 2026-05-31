@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../db/database_helper.dart';
 import '../providers/auth_provider.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/custom_text_field.dart';
@@ -77,16 +76,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     if (success) {
       navigator.pushNamed('/create_account_complement');
     } else {
-      // Verifica se o e-mail já existe no banco
-      final db = await DatabaseHelper().database;
-      final existing = await db.query(
-        'users',
-        where: 'email = ?',
-        whereArgs: [emailController.text.trim()],
-      );
+      final emailExists = await auth.emailExists(emailController.text.trim());
       if (!mounted) return;
       setState(() {
-        errorMessage = existing.isNotEmpty
+        errorMessage = emailExists
             ? AppLocalizations.of(context)!.emailAlreadyRegistered
             : AppLocalizations.of(context)!.errorCreateAccount;
       });
