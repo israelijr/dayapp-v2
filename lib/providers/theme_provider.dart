@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../services/theme_preferences_service.dart';
 import '../theme/custom_color_schemes.dart';
 
 class ThemeProvider with ChangeNotifier {
-  static const String _themeKey = 'theme_mode';
-  static const String _schemeKey = 'custom_scheme_key';
+  final ThemePreferencesService _preferencesService = ThemePreferencesService();
   ThemeMode _themeMode = ThemeMode.light;
   String? _selectedSchemeKey;
   bool _isLoaded = false;
