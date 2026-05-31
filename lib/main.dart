@@ -17,6 +17,7 @@ import 'db/database_helper.dart';
 import 'models/historia.dart';
 import 'providers/auth_provider.dart';
 import 'providers/home_layout_provider.dart';
+import 'providers/home_stories_provider.dart';
 import 'providers/insight_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/pin_provider.dart';
@@ -24,6 +25,7 @@ import 'providers/premium_provider.dart';
 import 'providers/refresh_provider.dart';
 import 'providers/scroll_position_provider.dart';
 import 'providers/theme_provider.dart';
+import 'repositories/historia_repository.dart';
 import 'screens/about_screen.dart';
 import 'screens/backup_manager_screen.dart';
 import 'screens/calendar_view_screen.dart';
@@ -508,6 +510,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider.value(value: widget.themeProvider),
         ChangeNotifierProvider.value(value: widget.refreshProvider),
         ChangeNotifierProvider.value(value: widget.localeProvider),
+        ChangeNotifierProvider(
+          create: (context) => HomeStoriesProvider(
+            repository: HistoriaRepository(),
+            authProvider: context.read<AuthProvider>(),
+            refreshProvider: context.read<RefreshProvider>(),
+          ),
+        ),
         // Provider para insights automáticos do feed da Home
         ChangeNotifierProvider(create: (_) => InsightProvider()),
         ChangeNotifierProvider.value(value: widget.pinProvider),

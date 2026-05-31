@@ -14,6 +14,7 @@ import '../helpers/audio_file_helper.dart';
 import '../helpers/photo_file_helper.dart';
 import '../helpers/video_file_helper.dart';
 import '../l10n/generated/app_localizations.dart';
+import '../repositories/historia_repository.dart';
 
 /// Entrypoint de isolate para criação de ZIP. Declarado como função top-level
 /// para poder ser passado a [Isolate.spawn]. Também usado pelo
@@ -86,11 +87,7 @@ class BackupService {
   BackupService._internal();
 
   Future<int> countPendingBackupStories() async {
-    final db = await DatabaseHelper().database;
-    final result = await db.rawQuery(
-      'SELECT COUNT(*) as cnt FROM historia WHERE (backed_up IS NULL OR backed_up = 0) AND excluido IS NULL',
-    );
-    return (result.first['cnt'] ?? 0) as int;
+    return HistoriaRepository().countPendingBackupStories();
   }
 
   /// Cria um arquivo ZIP com backup completo e permite compartilhar

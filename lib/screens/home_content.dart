@@ -8,11 +8,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../db/database_helper.dart';
 import '../db/historia_foto_helper.dart';
 import '../models/historia.dart';
 import '../models/insight.dart';
 import '../providers/auth_provider.dart';
+import '../providers/home_stories_provider.dart';
 import '../providers/insight_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
@@ -202,24 +202,13 @@ class HomeContent extends StatefulWidget {
 }
 
 class _HomeContentState extends State<HomeContent> {
-  // Constantes e estado do componente home
-  static const int _pageSize = 15; // Número de histórias por página
-
   bool _isCardView = true;
-  bool _showAllStories = false;
-
-  // Controle de paginação
   final ScrollController _scrollController = ScrollController();
-  final List<Historia> _historias = [];
-  bool _isLoadingMore = false;
-  bool _hasMoreData = true;
-  bool _isInitialLoading = true;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _loadInitialData();
   }
 
   @override
@@ -231,149 +220,107 @@ class _HomeContentState extends State<HomeContent> {
 
   /// Detecta scroll perto do final para carregar mais dados
   void _onScroll() {
+    if (!_scrollController.hasClients) return;
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      _loadMoreData();
+      context.read<HomeStoriesProvider>().loadMoreStories();
     }
   }
 
-  /// Carrega os dados iniciais (primeira página)
-  Future<void> _loadInitialData() async {
-    setState(() {
-      _isInitialLoading = true;
-      _historias.clear();
-      _hasMoreData = true;
-    });
-
-    await _fetchHistoriasPaginated(offset: 0);
-
-    if (mounted) {
-      setState(() {
-        _isInitialLoading = false;
-      });
-    }
-  }
-
-  void _toggleShowAllStories(bool value) {
-    setState(() {
-      _showAllStories = value;
-    });
-    _loadInitialData();
-  }
-
-  /// Carrega mais dados (próxima página)
-  Future<void> _loadMoreData() async {
-    if (_isLoadingMore || !_hasMoreData) return;
-
-    setState(() {
-      _isLoadingMore = true;
-    });
-
-    await _fetchHistoriasPaginated(offset: _historias.length);
-
-    if (mounted) {
-      setState(() {
-        _isLoadingMore = false;
-      });
-    }
-  }
-
-  /// Busca histórias com paginação
-  Future<void> _fetchHistoriasPaginated({required int offset}) async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final userId = auth.user?.id ?? '';
-    final db = await DatabaseHelper().database;
-
-    final queryCountResult = await db.rawQuery(
-      'SELECT COUNT(*) AS cnt FROM historia WHERE user_id = ? ${_showAllStories ? 'AND excluido IS NULL' : 'AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL'}',
-      [userId],
+  @override
+  Widget build(BuildContext context) {
+    _isCardView = widget.isCardView;
+    return Consumer<RefreshProvider>(
+      builder: (context, refreshProvider, child) {
+        return Consumer<HomeStoriesProvider>(
+          builder: (context, storiesProvider, _) {
+            return _PaginatedHomeContent(
+              key: ValueKey(
+                '${refreshProvider.refreshCounter}_${storiesProvider.showAllStories}',
+              ),
+              isCardView: _isCardView,
+              showAllStories: storiesProvider.showAllStories,
+              onToggleShowAllStories: storiesProvider.toggleShowAllStories,
+              historias: storiesProvider.historias,
+              isInitialLoading: storiesProvider.isInitialLoading,
+              isLoadingMore: storiesProvider.isLoadingMore,
+              hasMoreData: storiesProvider.hasMoreData,
+              scrollController: _scrollController,
+              onRefresh: storiesProvider.refreshStories,
+              buildCardView: _buildCardView,
+              buildIconView: _buildIconView,
+            );
+          },
+        );
+      },
     );
-    final availableCount = (queryCountResult.first['cnt'] ?? 0) as int;
-    final whereClause = _showAllStories
-        ? 'user_id = ? AND excluido IS NULL'
-        : 'user_id = ? AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL';
+  }
 
-    final activeResults = await db.query(
-      'historia',
-      where: whereClause,
-      whereArgs: [userId],
-      orderBy: 'data DESC',
-      limit: availableCount > 5 ? _pageSize : 5,
-      offset: offset,
+  Future<void> _deleteHistoria(Historia historia) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        final localizations = AppLocalizations.of(ctx)!;
+        return AlertDialog(
+          title: Text(localizations.deleteStoryTitle),
+          content: Text(localizations.deleteStoryConfirm),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(localizations.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(
+                localizations.deleteLabel,
+                style: TextStyle(color: Theme.of(ctx).colorScheme.error),
+              ),
+            ),
+          ],
+        );
+      },
     );
 
-    final activeHistorias = activeResults
-        .map((map) => Historia.fromMap(map))
-        .toList(growable: false);
+    if (confirm == true) {
+      if (!mounted) return;
+      final storiesProvider = context.read<HomeStoriesProvider>();
+      await storiesProvider.deleteStory(historia);
+      if (!mounted) return;
 
-    if (_showAllStories) {
-      if (mounted) {
-        setState(() {
-          final existingIds = _historias.map((h) => h.id).toSet();
-          final filteredHistorias = activeHistorias
-              .where((h) => !existingIds.contains(h.id))
-              .toList();
-          _historias.addAll(filteredHistorias);
-          _hasMoreData = activeHistorias.length == _pageSize;
-        });
-      }
-      return;
+      final localizations = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(localizations.movedToTrash)));
     }
+  }
 
-    if (availableCount > 5) {
-      if (mounted) {
-        setState(() {
-          final existingIds = _historias.map((h) => h.id).toSet();
-          final filteredHistorias = activeHistorias
-              .where((h) => !existingIds.contains(h.id))
-              .toList();
-          _historias.addAll(filteredHistorias);
-          _hasMoreData = activeHistorias.length == _pageSize;
-        });
-      }
-      return;
-    }
+  Future<void> _archiveWithUndo(Historia historia) async {
+    final previousGrupo = historia.grupo;
+    final storiesProvider = context.read<HomeStoriesProvider>();
+    await storiesProvider.archiveStory(historia);
 
-    if (offset > 0) {
-      // Não há paginação quando usamos o modo de completar até 5 histórias.
-      if (mounted) {
-        setState(() {
-          _hasMoreData = false;
-        });
-      }
-      return;
-    }
+    if (!mounted) return;
+    final localizations = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    final controller = messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+        content: Text(localizations.storyArchived),
+        action: SnackBarAction(
+          label: localizations.undo,
+          onPressed: () async {
+            await storiesProvider.updateStory(
+              historia,
+              updates: {'arquivado': null, 'grupo': previousGrupo},
+            );
+          },
+        ),
+      ),
+    );
 
-    final remaining = 5 - activeHistorias.length;
-    final List<Historia> combinedHistorias;
-    if (remaining > 0) {
-      final otherResults = await db.query(
-        'historia',
-        where:
-            'user_id = ? AND excluido IS NULL AND (grupo IS NOT NULL OR arquivado IS NOT NULL)',
-        whereArgs: [userId],
-        orderBy: 'data DESC',
-        limit: remaining,
-      );
-      final otherHistorias = otherResults
-          .map((map) => Historia.fromMap(map))
-          .toList(growable: false);
-      combinedHistorias = [...activeHistorias, ...otherHistorias]
-        ..sort((a, b) => b.data.compareTo(a.data));
-    } else {
-      combinedHistorias = activeHistorias;
-    }
-
-    if (mounted) {
-      setState(() {
-        final existingIds = _historias.map((h) => h.id).toSet();
-        final filteredHistorias = combinedHistorias
-            .where((h) => !existingIds.contains(h.id))
-            .toList();
-        _historias.addAll(filteredHistorias);
-        _hasMoreData = false;
-      });
-    }
+    Future.delayed(const Duration(seconds: 5), controller.close);
   }
 
   // Converte nomes de humor antigos para emojis Unicode
@@ -405,134 +352,6 @@ class _HomeContentState extends State<HomeContent> {
     }
   }
 
-  Future<void> _updateHistoria(
-    Historia historia, {
-    Map<String, dynamic>? updates,
-  }) async {
-    final db = await DatabaseHelper().database;
-    final Map<String, dynamic> updateData = {
-      'data_update': DateTime.now().toIso8601String(),
-    };
-
-    if (updates != null) updateData.addAll(updates);
-
-    // Se a atualização não explicitar o estado de backup, marcar como não salvo
-    // para que a história seja incluída no próximo backup.
-    if (!updateData.containsKey('backed_up')) {
-      updateData['backed_up'] = 0;
-    }
-
-    await db.update(
-      'historia',
-      updateData,
-      where: 'id = ?',
-      whereArgs: [historia.id],
-    );
-    if (!mounted) return;
-    final refreshProvider = Provider.of<RefreshProvider>(
-      context,
-      listen: false,
-    );
-    refreshProvider.refresh();
-  }
-
-  Future<void> _deleteHistoria(Historia historia) async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.deleteStoryTitle),
-        content: Text(AppLocalizations.of(context)!.deleteStoryConfirm),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(AppLocalizations.of(context)!.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(
-              AppLocalizations.of(context)!.deleteLabel,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    if (confirm == true) {
-      final db = await DatabaseHelper().database;
-      // Soft delete: marca como excluído ao invés de deletar
-      await db.update(
-        'historia',
-        {
-          'excluido': 'sim',
-          'data_exclusao': DateTime.now().toIso8601String(),
-          'data_update': DateTime.now().toIso8601String(),
-          'backed_up': 0,
-        },
-        where: 'id = ?',
-        whereArgs: [historia.id],
-      );
-      if (!mounted) return;
-      final refreshProvider = Provider.of<RefreshProvider>(
-        context,
-        listen: false,
-      );
-      refreshProvider.refresh();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.movedToTrash)),
-      );
-    }
-  }
-
-  Future<void> _archiveWithUndo(Historia historia) async {
-    final previousGrupo = historia.grupo;
-
-    // Atualiza o BD diretamente, sem disparar o refresh ainda,
-    // para que o Consumer<RefreshProvider> não reconstrua antes do snackbar.
-    final db = await DatabaseHelper().database;
-    await db.update(
-      'historia',
-      {
-        'arquivado': 'sim',
-        'grupo': null,
-        'data_update': DateTime.now().toIso8601String(),
-        'backed_up': 0,
-      },
-      where: 'id = ?',
-      whereArgs: [historia.id],
-    );
-
-    if (!mounted) return;
-    final localizations = AppLocalizations.of(context)!;
-    final messenger = ScaffoldMessenger.of(context);
-    messenger.hideCurrentSnackBar();
-    final controller = messenger.showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 4),
-        behavior: SnackBarBehavior.floating,
-        content: Text(localizations.storyArchived),
-        action: SnackBarAction(
-          label: localizations.undo,
-          onPressed: () async {
-            await _updateHistoria(
-              historia,
-              updates: {'arquivado': null, 'grupo': previousGrupo},
-            );
-          },
-        ),
-      ),
-    );
-    // Backup: fecha o snackbar após 5 s sem depender de mounted
-    Future.delayed(const Duration(seconds: 5), controller.close);
-
-    // Dispara o refresh no próximo frame, após o snackbar já estar na fila.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      Provider.of<RefreshProvider>(context, listen: false).refresh();
-    });
-  }
-
   Future<void> _openStoryPreview(Historia historia) async {
     try {
       await _warmupStoryPreviewMedia(
@@ -545,7 +364,8 @@ class _HomeContentState extends State<HomeContent> {
     if (!mounted) return;
 
     final heroTag = _storyHeroTag(historia);
-    final action = await Navigator.of(context).push<StoryPreviewAction>(
+    final navigator = Navigator.of(context);
+    final action = await navigator.push<StoryPreviewAction>(
       MaterialPageRoute(
         builder: (_) => StoryPreviewScreen(
           historia: historia,
@@ -565,7 +385,8 @@ class _HomeContentState extends State<HomeContent> {
     }
 
     if (action == StoryPreviewAction.edit) {
-      final updated = await Navigator.of(context).push(
+      final navigator = Navigator.of(context);
+      final updated = await navigator.push(
         RouteTransitionHelper.slideUpRotateTransition(
           EditHistoriaScreen(historia: historia),
         ),
@@ -650,11 +471,12 @@ class _HomeContentState extends State<HomeContent> {
           SlidableAction(
             onPressed: (context) async {
               final navigator = Navigator.of(context);
+              final storiesProvider = context.read<HomeStoriesProvider>();
               final selectedGroup = await navigator.push<String>(
                 MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
               );
               if (selectedGroup != null) {
-                await _updateHistoria(
+                await storiesProvider.updateStory(
                   historia,
                   updates: {'grupo': selectedGroup},
                 );
@@ -720,12 +542,16 @@ class _HomeContentState extends State<HomeContent> {
           await _archiveWithUndo(historia);
           return true;
         } else if (direction == DismissDirection.endToStart) {
-          final selectedGroup = await Navigator.push<String>(
-            context,
+          final navigator = Navigator.of(context);
+          final storiesProvider = context.read<HomeStoriesProvider>();
+          final selectedGroup = await navigator.push<String>(
             MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
           );
           if (selectedGroup != null) {
-            await _updateHistoria(historia, updates: {'grupo': selectedGroup});
+            await storiesProvider.updateStory(
+              historia,
+              updates: {'grupo': selectedGroup},
+            );
           }
         }
         return false;
@@ -753,31 +579,6 @@ class _HomeContentState extends State<HomeContent> {
           onDoubleTap: () => _openStoryPreview(historia),
         ),
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _isCardView = widget.isCardView;
-    return Consumer<RefreshProvider>(
-      builder: (context, refreshProvider, child) {
-        // Recarrega dados quando o RefreshProvider é atualizado
-        // Usa o refreshCounter como chave para detectar mudanças
-        return _PaginatedHomeContent(
-          key: ValueKey(refreshProvider.refreshCounter),
-          isCardView: _isCardView,
-          showAllStories: _showAllStories,
-          onToggleShowAllStories: _toggleShowAllStories,
-          historias: _historias,
-          isInitialLoading: _isInitialLoading,
-          isLoadingMore: _isLoadingMore,
-          hasMoreData: _hasMoreData,
-          scrollController: _scrollController,
-          onRefresh: _loadInitialData,
-          buildCardView: _buildCardView,
-          buildIconView: _buildIconView,
-        );
-      },
     );
   }
 }
