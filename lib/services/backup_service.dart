@@ -154,11 +154,7 @@ class BackupService {
 
       // 3. Marcar histórias como já salvas em backup
       try {
-        final db = await DatabaseHelper().database;
-        // Marca somente histórias não excluídas
-        await db.update('historia', {
-          'backed_up': 1,
-        }, where: 'excluido IS NULL');
+        await HistoriaRepository().markAllStoriesBackedUp();
       } catch (e) {
         // Não quebrar o fluxo de backup se a marcação falhar
       }
@@ -1007,23 +1003,16 @@ Versão: 2.0.0
       // Aguardar um pouco mais para garantir
       await Future.delayed(const Duration(milliseconds: 500));
 
-      // Forçar reabertura do banco para carregar os dados restaurados
-      final db = await DatabaseHelper().database;
-
       // Verificação: contar registros para confirmar que o banco foi carregado
-      final deletedCount = await db.rawQuery(
-        "SELECT COUNT(*) as cnt FROM historia WHERE excluido = 'sim'",
+      final deletedCount = await HistoriaRepository().countStories(
+        where: 'excluido = ?',
+        whereArgs: ['sim'],
       );
-      final activeCount = await db.rawQuery(
-        'SELECT COUNT(*) as cnt FROM historia WHERE excluido IS NULL',
+      final activeCount = await HistoriaRepository().countStories(
+        where: 'excluido IS NULL',
       );
 
-      onProgress?.call(
-        l10n.restoreProgressDbStats(
-          activeCount.first['cnt'] as int,
-          deletedCount.first['cnt'] as int,
-        ),
-      );
+      onProgress?.call(l10n.restoreProgressDbStats(activeCount, deletedCount));
 
       onProgress?.call(l10n.restoreSuccess);
       onProgressValue?.call(1.0);

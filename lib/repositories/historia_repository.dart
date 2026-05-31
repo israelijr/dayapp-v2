@@ -232,6 +232,24 @@ class HistoriaRepository {
     );
   }
 
+  Future<void> markAllStoriesBackedUp({bool excludeDeleted = true}) async {
+    final db = await DatabaseHelper().database;
+    if (excludeDeleted) {
+      await db.update(_table, {'backed_up': 1}, where: 'excluido IS NULL');
+    } else {
+      await db.update(_table, {'backed_up': 1});
+    }
+  }
+
+  Future<int> countStories({String? where, List<Object?>? whereArgs}) async {
+    final db = await DatabaseHelper().database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS cnt FROM $_table${where != null ? ' WHERE $where' : ''}',
+      whereArgs,
+    );
+    return (result.first['cnt'] ?? 0) as int;
+  }
+
   Future<bool> saveEditedHistoria({
     required Historia historia,
     required String titulo,
