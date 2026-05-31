@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../services/locale_preferences_service.dart';
 
 /// Provider para gerenciar a seleção de idioma do app.
-/// Armazena a preferência em `SharedPreferences`.
+/// Armazena a preferência em `SharedPreferences` via serviço.
 class LocaleProvider extends ChangeNotifier {
-  static const _prefsKey = 'app_locale_selection';
+  final LocalePreferencesService _preferencesService =
+      LocalePreferencesService();
 
   /// 'system' | 'en' | 'es'
   String _selection = 'system';
@@ -17,8 +19,9 @@ class LocaleProvider extends ChangeNotifier {
 
   /// Carrega a seleção salva (assíncrono)
   Future<void> load() async {
-    final prefs = await SharedPreferences.getInstance();
-    _selection = prefs.getString(_prefsKey) ?? 'system';
+    final storedSelection =
+        await _preferencesService.loadSelection() ?? 'system';
+    _selection = storedSelection;
     // Em algumas versões antigas gravávamos o locale completo (ex: en_US).
     // Normalizamos já aqui para evitar que um valor inesperado seja salvo
     // novamente caso o usuário abra o diálogo de idioma posteriormente.
@@ -26,7 +29,6 @@ class LocaleProvider extends ChangeNotifier {
       _selection = _selection.split('_').first;
     }
     _applySelection(notify: false);
-    // registro simples para debug durante desenvolvimento
     debugPrint('LocaleProvider.load -> selection=$_selection locale=$_locale');
   }
 
@@ -75,8 +77,7 @@ class LocaleProvider extends ChangeNotifier {
     );
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_prefsKey, sel);
+      await _preferencesService.saveSelection(sel);
     } catch (e) {
       // Silencia erros de escrita - não é crítico para o uso imediato.
     }
