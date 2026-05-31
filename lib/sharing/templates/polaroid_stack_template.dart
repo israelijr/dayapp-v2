@@ -274,6 +274,18 @@ class PolaroidStackTemplate extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      'DayApp',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black.withValues(alpha: 0.55),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

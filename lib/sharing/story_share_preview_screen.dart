@@ -36,13 +36,6 @@ class StorySharePreviewScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: FilledButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: Text(l10n.share),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         backgroundColor: colorScheme.surface,
@@ -53,6 +46,13 @@ class StorySharePreviewScreen extends StatelessWidget {
                       ),
                       onPressed: () => Navigator.of(context).pop(false),
                       child: Text(l10n.close),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: Text(l10n.share),
                     ),
                   ),
                 ],

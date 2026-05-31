@@ -43,19 +43,6 @@ class HeroMemoryTemplate extends StatelessWidget {
         final smallWidth = width * 0.28;
         final smallHeight = height * 0.23;
 
-        // =============================
-        // FOTOS: TAMANHO E INCLINAÇÃO
-        // Foto 1 (esquerda): principal
-        //   - Inclinação: altere o valor de 'angle' em Transform.rotate (atualmente -0.06)
-        //   - Tamanho: width/height do SizedBox (atualmente double.infinity)
-        // Foto 2 (superior direita): secondaryPhotos[0]
-        //   - Inclinação: 'angle' em Transform.rotate (atualmente 0.06)
-        //   - Tamanho: width: smallWidth + 20, height: smallHeight
-        // Foto 3 (inferior direita): secondaryPhotos[1]
-        //   - Inclinação: 'angle' em Transform.rotate (atualmente -0.065)
-        //   - Tamanho: width: smallWidth + 150, height: smallHeight + 80
-        // =============================
-
         Widget buildPhotoCard(Uint8List? bytes, double rotation) {
           return Transform.rotate(
             angle: rotation,
@@ -129,8 +116,7 @@ class HeroMemoryTemplate extends StatelessWidget {
                   // - Aumente o flex do card de texto
                   // =============================
                   Expanded(
-                    flex:
-                        6, // <-- reduz o espaço das fotos para aumentar o card
+                    flex: 4,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -138,11 +124,10 @@ class HeroMemoryTemplate extends StatelessWidget {
                           flex: 6,
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            // Foto 1 (esquerda)
                             child: Transform.rotate(
-                              angle: -0.06, // <-- Inclinação da foto 1
+                              angle: -0.06,
                               child: SizedBox(
-                                width: double.infinity, // <-- Tamanho da foto 1
+                                width: double.infinity,
                                 height: double.infinity,
                                 child: buildPhotoCard(primaryPhoto, 0),
                               ),
@@ -159,13 +144,10 @@ class HeroMemoryTemplate extends StatelessWidget {
                                   alignment: Alignment.topCenter,
                                   child: Transform.translate(
                                     offset: const Offset(-25, 0),
-                                    // Foto 2 (superior direita)
                                     child: Transform.rotate(
-                                      angle: 0.06, // <-- Inclinação da foto 2
+                                      angle: 0.06,
                                       child: SizedBox(
-                                        width:
-                                            smallWidth +
-                                            20, // <-- Tamanho da foto 2
+                                        width: smallWidth + 20,
                                         height: smallHeight,
                                         child: buildPhotoCard(
                                           secondaryPhotos.isNotEmpty
@@ -184,13 +166,10 @@ class HeroMemoryTemplate extends StatelessWidget {
                                   alignment: Alignment.bottomCenter,
                                   child: Transform.translate(
                                     offset: const Offset(-20, 0),
-                                    // Foto 3 (inferior direita)
                                     child: Transform.rotate(
-                                      angle: -0.065, // <-- Inclinação da foto 3
+                                      angle: -0.065,
                                       child: SizedBox(
-                                        width:
-                                            smallWidth +
-                                            150, // <-- Tamanho da foto 3
+                                        width: smallWidth + 150,
                                         height: smallHeight + 80,
                                         child: buildPhotoCard(
                                           secondaryPhotos.length > 1
@@ -210,12 +189,8 @@ class HeroMemoryTemplate extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: innerGap),
-                  // =============================
-                  // Card da história (bloco de texto)
-                  // flex: 3 para aumentar o tamanho do card em cerca de 70%
-                  // =============================
                   Expanded(
-                    flex: 3, // <-- aumenta o tamanho do card
+                    flex: 6,
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.symmetric(
@@ -244,35 +219,37 @@ class HeroMemoryTemplate extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                story.title,
-                                softWrap: true,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.playfairDisplay(
-                                  fontSize: width * 0.052,
-                                  fontWeight: FontWeight.w500,
-                                  color: colorScheme.onSurface,
-                                  height: 1.02,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                normalizedDescription(story.description),
-                                maxLines: 4,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 13,
-                                  height: 1.5,
-                                  color: colorScheme.onSurface.withValues(
-                                    alpha: 0.88,
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  story.title,
+                                  softWrap: true,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.playfairDisplay(
+                                    fontSize: width * 0.052,
+                                    fontWeight: FontWeight.w500,
+                                    color: colorScheme.onSurface,
+                                    height: 1.02,
                                   ),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 12),
+                                Text(
+                                  normalizedDescription(story.description),
+                                  maxLines: 8,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 13,
+                                    height: 1.5,
+                                    color: colorScheme.onSurface.withValues(
+                                      alpha: 0.88,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Row(
                             children: [
@@ -299,6 +276,18 @@ class HeroMemoryTemplate extends StatelessWidget {
                                 ),
                               ],
                             ],
+                          ),
+                          const SizedBox(height: 8),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'DayApp',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
                           ),
                         ],
                       ),

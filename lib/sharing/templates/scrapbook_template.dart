@@ -126,6 +126,18 @@ class ScrapbookTemplate extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 10),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              'DayApp',
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onSurface.withValues(alpha: 0.64),
+              ),
+            ),
+          ),
         ],
       );
     }
