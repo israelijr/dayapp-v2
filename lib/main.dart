@@ -21,6 +21,7 @@ import 'providers/home_layout_provider.dart';
 import 'providers/home_stories_provider.dart';
 import 'providers/insight_provider.dart';
 import 'providers/locale_provider.dart';
+import 'providers/notification_preferences_provider.dart';
 import 'providers/pin_provider.dart';
 import 'providers/premium_provider.dart';
 import 'providers/refresh_provider.dart';
@@ -522,6 +523,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // Provider para insights automáticos do feed da Home
         ChangeNotifierProvider(create: (_) => InsightProvider()),
         ChangeNotifierProvider.value(value: widget.pinProvider),
+        ChangeNotifierProvider(
+          create: (_) => NotificationPreferencesProvider()..load(),
+        ),
         // Provider para controle de plano Free/Premium
         ChangeNotifierProvider(create: (_) => PremiumProvider()..load()),
         // Provider para manter o modo de layout da Home (card/list)

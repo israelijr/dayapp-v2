@@ -6,11 +6,11 @@ import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
 import '../providers/locale_provider.dart';
+import '../providers/notification_preferences_provider.dart';
 import '../providers/pin_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/theme_provider.dart';
 import '../services/biometric_service.dart';
-import '../services/engagement_service.dart';
 import '../services/inactivity_service.dart';
 import '../services/notification_preferences_service.dart';
 import '../services/pin_recovery_service.dart';
@@ -31,19 +31,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final BiometricService _biometricService = BiometricService();
   final InactivityService _inactivityService = InactivityService();
   final PinRecoveryService _recoveryService = PinRecoveryService();
-  final NotificationPreferencesService _notificationService =
-      NotificationPreferencesService();
-  final EngagementService _engagementService = EngagementService();
   bool _biometricAvailable = false;
   bool _biometricEnabled = false;
   bool _pinEnabled = false;
   int _backgroundLockTimeout =
       InactivityService.defaultBackgroundTimeoutSeconds;
-  bool _notificationEnabled = true;
-  int _notificationAdvance =
-      NotificationPreferencesService.defaultAdvanceMinutes;
-  // ignore: unused_field
-  bool _engagementNotificationsEnabled = true;
   String? _userEmail;
   late PinProvider _pinProvider;
 
@@ -64,7 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _checkBiometricStatus();
     _checkPinStatus();
     _loadBackgroundLockTimeout();
-    _loadNotificationPreferences();
+    context.read<NotificationPreferencesProvider>().load();
     _loadUserEmail();
   }
 
@@ -186,18 +178,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final email = await _recoveryService.getUserEmail(userId: auth.user?.id);
     setState(() {
       _userEmail = email;
-    });
-  }
-
-  Future<void> _loadNotificationPreferences() async {
-    final enabled = await _notificationService.isNotificationEnabled();
-    final advance = await _notificationService.getDefaultNotificationAdvance();
-    final engagementEnabled = await _engagementService.isEnabled();
-
-    setState(() {
-      _notificationEnabled = enabled;
-      _notificationAdvance = advance;
-      _engagementNotificationsEnabled = engagementEnabled;
     });
   }
 
@@ -1286,45 +1266,56 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ],
           ),
         ),
-        ListTile(
-          leading: const Icon(Icons.notifications),
-          title: Text(loc.entryNotifications),
-          subtitle: Text(_notificationEnabled ? loc.enabled : loc.disabled),
-          trailing: Switch(
-            value: _notificationEnabled,
-            onChanged: (value) async {
-              await _notificationService.setNotificationEnabled(value);
-              await _loadNotificationPreferences();
-            },
-          ),
+        Consumer<NotificationPreferencesProvider>(
+          builder: (context, notificationProvider, child) {
+            return Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.notifications),
+                  title: Text(loc.entryNotifications),
+                  subtitle: Text(
+                    notificationProvider.notificationEnabled
+                        ? loc.enabled
+                        : loc.disabled,
+                  ),
+                  trailing: Switch(
+                    value: notificationProvider.notificationEnabled,
+                    onChanged: (value) async {
+                      await notificationProvider.setNotificationEnabled(value);
+                    },
+                  ),
+                ),
+                if (notificationProvider.notificationEnabled)
+                  ListTile(
+                    leading: const Icon(Icons.access_time),
+                    title: Text(loc.defaultAdvanceTitle),
+                    subtitle: Text(
+                      NotificationPreferencesService.getAdvanceLabel(
+                        notificationProvider.notificationAdvance,
+                      ),
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: _showNotificationAdvanceDialog,
+                    dense: true,
+                  ),
+                if (notificationProvider.notificationEnabled)
+                  ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    title: Text(loc.information),
+                    subtitle: Text(loc.entryNotificationsInfo),
+                    dense: true,
+                  ),
+                if (notificationProvider.notificationEnabled && kDebugMode)
+                  ListTile(
+                    leading: const Icon(Icons.bug_report_outlined),
+                    title: Text(loc.notificationScheduleModeTitle),
+                    subtitle: Text(loc.notificationScheduleModeInexact),
+                    dense: true,
+                  ),
+              ],
+            );
+          },
         ),
-        if (_notificationEnabled)
-          ListTile(
-            leading: const Icon(Icons.access_time),
-            title: Text(loc.defaultAdvanceTitle),
-            subtitle: Text(
-              NotificationPreferencesService.getAdvanceLabel(
-                _notificationAdvance,
-              ),
-            ),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: _showNotificationAdvanceDialog,
-            dense: true,
-          ),
-        if (_notificationEnabled)
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: Text(loc.information),
-            subtitle: Text(loc.entryNotificationsInfo),
-            dense: true,
-          ),
-        if (_notificationEnabled && kDebugMode)
-          ListTile(
-            leading: const Icon(Icons.bug_report_outlined),
-            title: Text(loc.notificationScheduleModeTitle),
-            subtitle: Text(loc.notificationScheduleModeInexact),
-            dense: true,
-          ),
         // const Divider(),
         // ... (comentado permanece igual)
       ],
@@ -1341,6 +1332,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _showNotificationAdvanceDialog() {
     final loc = AppLocalizations.of(context)!;
+    final notificationProvider = Provider.of<NotificationPreferencesProvider>(
+      context,
+      listen: false,
+    );
 
     showDialog(
       context: context,
@@ -1352,14 +1347,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Text(loc.notificationAdvancePrompt),
             const SizedBox(height: 16),
             RadioGroup<int>(
-              groupValue: _notificationAdvance,
+              groupValue: notificationProvider.notificationAdvance,
               onChanged: (value) async {
                 if (value != null) {
-                  Navigator.of(context).pop(); // Fecha antes do await
-                  await _notificationService.setDefaultNotificationAdvance(
-                    value,
-                  );
-                  await _loadNotificationPreferences();
+                  Navigator.of(context).pop();
+                  await notificationProvider.setNotificationAdvance(value);
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
