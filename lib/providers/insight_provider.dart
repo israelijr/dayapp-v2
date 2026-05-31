@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/insight.dart';
 import '../services/insight_history_service.dart';
+import '../services/insight_preferences_service.dart';
 import '../services/insight_service.dart';
 
 /// Filtro de tier para exibição dos insights (disponível em modo de desenvolvimento).
@@ -35,6 +35,8 @@ enum InsightTierFilter {
 class InsightProvider with ChangeNotifier {
   final InsightService _service = InsightService();
   final InsightHistoryService _historyService = InsightHistoryService();
+  final InsightPreferencesService _preferencesService =
+      InsightPreferencesService();
 
   /// Insights após filtro de ciclo de vida, antes do filtro de tier.
   List<Insight> _lifecycleFiltered = [];
@@ -43,13 +45,6 @@ class InsightProvider with ChangeNotifier {
 
   /// Filtro de tier ativo (apenas relevante em devMode).
   InsightTierFilter _tierFilter = InsightTierFilter.all;
-
-  // Prefixos de chaves no SharedPreferences
-  static const String _shownAtPrefix = 'insight_shown_';
-  static const String _dismissedAtPrefix = 'insight_dismissed_';
-
-  /// Prefixo para dispensas diárias em dev mode.
-  static const String _devDismissedPrefix = 'insight_dev_dismissed_';
 
   /// Duração que um insight permanece visível antes de desaparecer automaticamente.
   static const Duration _visibilityDuration = Duration(days: 1);
@@ -123,9 +118,8 @@ class InsightProvider with ChangeNotifier {
   /// Garante que um insight será exibido no próximo carregamento,
   /// removendo qualquer ciclo de vida de dispensas anteriores.
   Future<void> showInsightOnNextLoad(String userId, InsightType type) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_dismissedKey(userId, type));
-    await prefs.remove(_shownKey(userId, type));
+    await _preferencesService.removeDismissed(userId, type);
+    await _preferencesService.removeShown(userId, type);
   }
 
   /// Dispensa manualmente um insight.
@@ -139,22 +133,21 @@ class InsightProvider with ChangeNotifier {
         .toList();
     notifyListeners();
 
-    final prefs = await SharedPreferences.getInstance();
-
     if (devMode) {
-      // Dev: persiste apenas a data; no dia seguinte o registro é ignorado
-      await prefs.setString(
-        _devDismissedKey(userId, type),
+      await _preferencesService.saveDevDismissed(
+        userId,
+        type,
         _dateString(DateTime.now()),
       );
       return;
     }
 
-    await prefs.setInt(
-      _dismissedKey(userId, type),
+    await _preferencesService.saveDismissedTimestamp(
+      userId,
+      type,
       DateTime.now().millisecondsSinceEpoch,
     );
-    await prefs.remove(_shownKey(userId, type));
+    await _preferencesService.removeShown(userId, type);
   }
 
   // ---------------------------------------------------------------------------
@@ -167,29 +160,27 @@ class InsightProvider with ChangeNotifier {
   ) async {
     if (devMode) {
       // Dev: oculta apenas os dispensados hoje; no dia seguinte reaparecem
-      final prefs = await SharedPreferences.getInstance();
       final today = _dateString(DateTime.now());
       final visible = <Insight>[];
 
       for (final insight in allInsights) {
-        final key = _devDismissedKey(userId, insight.type);
-        final dismissedDate = prefs.getString(key);
+        final dismissedDate = await _preferencesService.loadDevDismissed(
+          userId,
+          insight.type,
+        );
         if (dismissedDate == today) {
           continue; // dispensado hoje — não exibir
         }
-        // Dispensado em dia anterior: limpa o registro e reexibe
         if (dismissedDate != null) {
-          await prefs.remove(key);
+          await _preferencesService.removeDevDismissed(userId, insight.type);
         }
         visible.add(insight);
-        // Registra no histórico (ignora falha — não crítico)
         _saveToHistory(userId, insight);
       }
       return visible;
     }
 
     // Produção: ciclo de vida completo (expiração + cooldown)
-    final prefs = await SharedPreferences.getInstance();
     final now = DateTime.now();
     final visible = <Insight>[];
 
@@ -199,28 +190,39 @@ class InsightProvider with ChangeNotifier {
         continue;
       }
 
-      final shownKey = _shownKey(userId, insight.type);
-      final dismissedKey = _dismissedKey(userId, insight.type);
-
-      final dismissedMs = prefs.getInt(dismissedKey);
+      final dismissedMs = await _preferencesService.loadDismissedTimestamp(
+        userId,
+        insight.type,
+      );
 
       if (dismissedMs != null) {
         // Insight foi dispensado (manualmente ou auto-expirado)
         final dismissed = DateTime.fromMillisecondsSinceEpoch(dismissedMs);
         if (now.difference(dismissed) >= _cooldownDuration) {
           // Cooldown encerrou: limpa e reapresenta
-          await prefs.remove(dismissedKey);
-          await prefs.setInt(shownKey, now.millisecondsSinceEpoch);
+          await _preferencesService.removeDismissed(userId, insight.type);
+          await _preferencesService.saveShownTimestamp(
+            userId,
+            insight.type,
+            now.millisecondsSinceEpoch,
+          );
           visible.add(insight);
           _saveToHistory(userId, insight);
         }
         // Else: ainda em cooldown → não exibe
       } else {
         // Nunca foi dispensado
-        final shownMs = prefs.getInt(shownKey);
+        final shownMs = await _preferencesService.loadShownTimestamp(
+          userId,
+          insight.type,
+        );
         if (shownMs == null) {
           // Primeira exibição: registra timestamp
-          await prefs.setInt(shownKey, now.millisecondsSinceEpoch);
+          await _preferencesService.saveShownTimestamp(
+            userId,
+            insight.type,
+            now.millisecondsSinceEpoch,
+          );
           visible.add(insight);
           _saveToHistory(userId, insight);
         } else {
@@ -230,11 +232,12 @@ class InsightProvider with ChangeNotifier {
             visible.add(insight);
           } else {
             // Auto-expirou: marca como dispensado para iniciar o cooldown
-            await prefs.setInt(
-              dismissedKey,
+            await _preferencesService.saveDismissedTimestamp(
+              userId,
+              insight.type,
               shownAt.add(_visibilityDuration).millisecondsSinceEpoch,
             );
-            await prefs.remove(shownKey);
+            await _preferencesService.removeShown(userId, insight.type);
             // Não adiciona à lista visível
           }
         }
@@ -259,15 +262,6 @@ class InsightProvider with ChangeNotifier {
   // ---------------------------------------------------------------------------
   // Helpers de chave para SharedPreferences
   // ---------------------------------------------------------------------------
-
-  String _shownKey(String userId, InsightType type) =>
-      '$_shownAtPrefix${userId}_${type.value}';
-
-  String _dismissedKey(String userId, InsightType type) =>
-      '$_dismissedAtPrefix${userId}_${type.value}';
-
-  String _devDismissedKey(String userId, InsightType type) =>
-      '$_devDismissedPrefix${userId}_${type.value}';
 
   /// Formata uma data como string YYYY-MM-DD para comparação de calendário.
   String _dateString(DateTime date) =>
