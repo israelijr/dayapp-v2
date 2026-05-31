@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -57,9 +59,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       _nameController.text = user.nome;
       _emailController.text = user.email;
       _selectedDate = user.dtNascimento;
-      final locale = Localizations.localeOf(context).toString();
       _birthDateController.text = user.dtNascimento != null
-          ? DateFormat.yMd(locale).format(user.dtNascimento!)
+          ? _formatBirthDate(user.dtNascimento!)
           : '';
       _pickedImagePath = user.fotoPerfil;
     }
@@ -84,10 +85,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
-        _birthDateController.text = DateFormat.yMd(
-          Localizations.localeOf(context).toString(),
-        ).format(picked);
+        _birthDateController.text = _formatBirthDate(picked);
       });
+    }
+  }
+
+  String _formatBirthDate(DateTime date) {
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
+
+  DateTime? _parseBirthDate(String text) {
+    try {
+      return DateFormat('dd/MM/yyyy').parseStrict(text);
+    } catch (_) {
+      return null;
     }
   }
 
@@ -99,11 +110,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       _errorMessage = null;
     });
 
+    final birthDateText = _birthDateController.text.trim();
+    DateTime? birthDate;
+    if (birthDateText.isNotEmpty) {
+      birthDate = _parseBirthDate(birthDateText);
+      if (birthDate == null) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = AppLocalizations.of(context)!.invalidBirthDate;
+        });
+        return;
+      }
+    }
+
     final authProvider = context.read<AuthProvider>();
     final success = await authProvider.updateUser(
       nome: _nameController.text.trim(),
       email: _emailController.text.trim(),
-      dtNascimento: _selectedDate,
+      dtNascimento: birthDate,
       fotoPerfil:
           _pickedImagePath ??
           authProvider.user!.fotoPerfil, // mantém nova foto (ou a atual)
@@ -404,17 +428,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.editProfile),
+        title: Text(
+          AppLocalizations.of(context)!.editProfile,
+          style: GoogleFonts.notoSerif(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color:
+                Theme.of(context).appBarTheme.foregroundColor ??
+                Theme.of(context).colorScheme.primary,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: _isLoading ? null : _saveProfile,
             child: Text(
               AppLocalizations.of(context)!.save,
-              style: TextStyle(
+              style: GoogleFonts.plusJakartaSans(
                 color: _isLoading
                     ? Theme.of(context).colorScheme.onSurfaceVariant
                     : Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -508,8 +541,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               const SizedBox(height: 32),
               TextFormField(
                 controller: _nameController,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.fullName,
+                  labelStyle: GoogleFonts.plusJakartaSans(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -525,8 +565,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.email,
+                  labelStyle: GoogleFonts.plusJakartaSans(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -544,18 +591,48 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _birthDateController,
-                readOnly: true,
-                onTap: () => _selectDate(context),
+                keyboardType: TextInputType.datetime,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(10),
+                  _BirthDateInputFormatter(),
+                ],
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.birthDate,
-                  suffixIcon: const Icon(Icons.calendar_today),
+                  labelStyle: GoogleFonts.plusJakartaSans(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  hintText: AppLocalizations.of(context)!.birthDateFormat,
+                  hintStyle: GoogleFonts.plusJakartaSans(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.calendar_today),
+                    onPressed: () => _selectDate(context),
+                  ),
                 ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return null;
+                  }
+                  if (_parseBirthDate(value.trim()) == null) {
+                    return AppLocalizations.of(context)!.invalidBirthDate;
+                  }
+                  return null;
+                },
               ),
               if (_errorMessage != null) ...[
                 const SizedBox(height: 16),
                 Text(
                   _errorMessage!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  style: GoogleFonts.plusJakartaSans(
+                    color: Theme.of(context).colorScheme.error,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
               const SizedBox(height: 32),
@@ -574,7 +651,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         )
                       : Text(
                           AppLocalizations.of(context)!.save,
-                          style: const TextStyle(fontSize: 16),
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                 ),
               ),
@@ -585,7 +665,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.email_outlined),
-                  label: Text(AppLocalizations.of(context)!.changeEmail),
+                  label: Text(
+                    AppLocalizations.of(context)!.changeEmail,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   onPressed: _showChangeEmailDialog,
                 ),
               ),
@@ -594,7 +679,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.lock_outline),
-                  label: Text(AppLocalizations.of(context)!.changePassword),
+                  label: Text(
+                    AppLocalizations.of(context)!.changePassword,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   onPressed: _showChangePasswordDialog,
                 ),
               ),
@@ -602,6 +692,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BirthDateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digitsOnly = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final limitedDigits = digitsOnly.length > 8
+        ? digitsOnly.substring(0, 8)
+        : digitsOnly;
+
+    final buffer = StringBuffer();
+    for (var i = 0; i < limitedDigits.length; i++) {
+      if (i == 2 || i == 4) {
+        buffer.write('/');
+      }
+      buffer.write(limitedDigits[i]);
+    }
+
+    final masked = buffer.toString();
+    return TextEditingValue(
+      text: masked,
+      selection: TextSelection.collapsed(offset: masked.length),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -11,9 +12,6 @@ import '../services/insight_history_service.dart';
 import '../widgets/insight_card.dart';
 
 /// Tela que exibe o histórico de insights gerados para o usuário.
-///
-/// Acesso: configurações → "Histórico de Insights"
-/// (ou botão no banner dev da Home)
 class InsightHistoryScreen extends StatefulWidget {
   const InsightHistoryScreen({super.key});
 
@@ -82,44 +80,72 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final isPremiumUser = context
+        .watch<PremiumProvider>()
+        .isPremium; // Movido para cá para melhor controle de reatividade
+
+    final screenTheme = theme.copyWith(
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(theme.textTheme),
+      primaryTextTheme: GoogleFonts.plusJakartaSansTextTheme(
+        theme.primaryTextTheme,
+      ),
+    );
     final colorScheme = theme.colorScheme;
 
     return ChangeNotifierProvider.value(
       value: _provider,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.insightHistoryTitle),
-          actions: [
-            Consumer<InsightHistoryProvider>(
-              builder: (_, provider, __) {
-                if (provider.entries.isEmpty && !provider.isLoading) {
-                  return const SizedBox.shrink();
-                }
-                return IconButton(
-                  tooltip: l10n.insightHistoryClearAll,
-                  icon: const Icon(Icons.delete_sweep_outlined),
-                  onPressed: () => _confirmClear(context),
-                );
-              },
+      child: Theme(
+        data: screenTheme,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              l10n.insightHistoryTitle,
+              style: GoogleFonts.notoSerif(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onPrimary,
+              ),
             ),
-          ],
-        ),
-        body: Consumer<InsightHistoryProvider>(
-          builder: (context, provider, _) {
-            if (provider.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
+            actions: [
+              Consumer<InsightHistoryProvider>(
+                builder: (_, provider, __) {
+                  if (provider.entries.isEmpty && !provider.isLoading) {
+                    return const SizedBox.shrink();
+                  }
+                  return IconButton(
+                    tooltip: l10n.insightHistoryClearAll,
+                    icon: const Icon(Icons.delete_sweep_outlined),
+                    onPressed: () => _confirmClear(context),
+                  );
+                },
+              ),
+            ],
+          ), // <-- PARÊNTESE CORRIGIDO AQUI
+          body: Consumer<InsightHistoryProvider>(
+            builder: (context, provider, _) {
+              if (provider.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-            return Column(
-              children: [
-                // Barra de busca + chips de filtro
-                _buildFilterBar(context, l10n, colorScheme, provider),
+              return Column(
+                children: [
+                  // Barra de busca + chips de filtro
+                  _buildFilterBar(context, l10n, colorScheme, provider),
 
-                // Lista agrupada por mês
-                Expanded(child: _buildContent(context, l10n, theme, provider)),
-              ],
-            );
-          },
+                  // Lista agrupada por mês
+                  Expanded(
+                    child: _buildContent(
+                      context,
+                      l10n,
+                      theme,
+                      provider,
+                      isPremiumUser, // Passado explicitamente
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -135,7 +161,6 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
       child: Column(
         children: [
-          // Campo de busca
           TextField(
             controller: _searchController,
             decoration: InputDecoration(
@@ -161,10 +186,9 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          // SegmentedButton de filtro de tier
           SegmentedButton<HistoryTierFilter>(
             style: SegmentedButton.styleFrom(
-              textStyle: const TextStyle(fontSize: 12),
+              textStyle: GoogleFonts.plusJakartaSans(fontSize: 12),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               visualDensity: VisualDensity.compact,
             ),
@@ -208,6 +232,7 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
     AppLocalizations l10n,
     ThemeData theme,
     InsightHistoryProvider provider,
+    bool isPremiumUser,
   ) {
     final groups = provider.groups;
 
@@ -237,7 +262,6 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
       );
     }
 
-    final isPremiumUser = context.watch<PremiumProvider>().isPremium;
     final dateFormat = DateFormat.yMd(
       Localizations.localeOf(context).toString(),
     );
@@ -246,11 +270,9 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
       padding: const EdgeInsets.only(bottom: 24),
       itemCount: groups.fold<int>(0, (sum, g) => sum + 1 + g.entries.length),
       itemBuilder: (context, index) {
-        // Mapeia índice plano para grupo/entrada
         int cursor = 0;
         for (final group in groups) {
           if (index == cursor) {
-            // Cabeçalho do grupo
             return _buildGroupHeader(context, theme, group.label);
           }
           cursor++;
@@ -296,7 +318,6 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
     bool isPremiumUser,
     DateFormat dateFormat,
   ) {
-    // Reconstrói um Insight a partir da entrada do histórico
     final insight = Insight(
       type: entry.type,
       title: entry.title,
@@ -312,10 +333,7 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        InsightCard(
-          insight: insight,
-          // Sem callbacks de dismiss/CTA no histórico — somente leitura
-        ),
+        InsightCard(insight: insight),
         Padding(
           padding: const EdgeInsets.only(right: 16, bottom: 4),
           child: Align(

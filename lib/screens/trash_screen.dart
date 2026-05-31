@@ -1,5 +1,6 @@
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -406,96 +407,128 @@ class _TrashScreenState extends State<TrashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: _isSelectionMode
-            ? Text('${_selectedItems.length} selecionado(s)')
-            : const Text('Lixeira'),
-        actions: [
-          if (_isSelectionMode) ...[
-            IconButton(
-              icon: const Icon(Icons.restore),
-              tooltip: 'Restaurar selecionados',
-              onPressed: _restoreSelected,
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete_forever),
-              tooltip: 'Excluir permanentemente',
-              color: Theme.of(context).colorScheme.error,
-              onPressed: _permanentlyDeleteSelected,
-            ),
-            IconButton(
-              icon: const Icon(Icons.close),
-              tooltip: 'Cancelar seleção',
-              onPressed: () {
-                setState(() {
-                  _selectedItems.clear();
-                  _isSelectionMode = false;
-                });
-              },
-            ),
-          ] else ...[
-            IconButton(
-              icon: const Icon(Icons.delete_sweep),
-              tooltip: 'Esvaziar lixeira',
-              onPressed: _emptyTrash,
-            ),
-          ],
-        ],
+    final theme = Theme.of(context);
+    final screenTheme = theme.copyWith(
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(theme.textTheme),
+      primaryTextTheme: GoogleFonts.plusJakartaSansTextTheme(
+        theme.primaryTextTheme,
       ),
-      body: FutureBuilder<List<Historia>>(
-        future: _futureHistorias,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    );
 
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Erro ao carregar lixeira: ${snapshot.error}'),
-            );
-          }
-
-          final historias = snapshot.data ?? [];
-
-          if (historias.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.delete_outline,
-                    size: 80,
-                    color: Theme.of(context).colorScheme.outline,
+    return Theme(
+      data: screenTheme,
+      child: Scaffold(
+        appBar: AppBar(
+          title: _isSelectionMode
+              ? Text(
+                  '${_selectedItems.length} selecionado(s)',
+                  style: GoogleFonts.notoSerif(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onPrimary,
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Lixeira vazia',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                )
+              : Text(
+                  'Lixeira',
+                  style: GoogleFonts.notoSerif(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onPrimary,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'As histórias excluídas aparecerão aqui',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+                ),
+          actions: [
+            if (_isSelectionMode) ...[
+              IconButton(
+                icon: const Icon(Icons.restore),
+                tooltip: 'Restaurar selecionados',
+                onPressed: _restoreSelected,
               ),
-            );
-          }
+              IconButton(
+                icon: const Icon(Icons.delete_forever),
+                tooltip: 'Excluir permanentemente',
+                color: Theme.of(context).colorScheme.error,
+                onPressed: _permanentlyDeleteSelected,
+              ),
+              IconButton(
+                icon: const Icon(Icons.close),
+                tooltip: 'Cancelar seleção',
+                onPressed: () {
+                  setState(() {
+                    _selectedItems.clear();
+                    _isSelectionMode = false;
+                  });
+                },
+              ),
+            ] else ...[
+              IconButton(
+                icon: const Icon(Icons.delete_sweep),
+                tooltip: 'Esvaziar lixeira',
+                onPressed: _emptyTrash,
+              ),
+            ],
+          ],
+        ),
+        body: FutureBuilder<List<Historia>>(
+          future: _futureHistorias,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          return ListView.builder(
-            itemCount: historias.length,
-            itemBuilder: (context, index) {
-              return _buildHistoriaCard(historias[index]);
-            },
-          );
-        },
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  'Erro ao carregar lixeira: ${snapshot.error}',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              );
+            }
+
+            final historias = snapshot.data ?? [];
+
+            if (historias.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.delete_outline,
+                      size: 80,
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Lixeira vazia',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'As histórias excluídas aparecerão aqui',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return ListView.builder(
+              itemCount: historias.length,
+              itemBuilder: (context, index) {
+                return _buildHistoriaCard(historias[index]);
+              },
+            );
+          },
+        ),
       ),
     );
   }

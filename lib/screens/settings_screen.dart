@@ -1,6 +1,7 @@
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../db/database_helper.dart';
@@ -205,23 +206,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(title: Text(loc.settings)),
-      body: ListView(
-        children: [
-          const SizedBox(height: 16),
-          _buildThemeSection(context),
-          const Divider(),
-          _buildLanguageSection(context),
-          const Divider(),
-          _buildBiometricSection(context),
-          const Divider(),
-          _buildNotificationSection(context),
-          const Divider(),
-          _buildBackupSection(context),
-          const Divider(),
-          // Espaço para futuras configurações
-        ],
+    final theme = Theme.of(context);
+    final screenTheme = theme.copyWith(
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(theme.textTheme),
+      primaryTextTheme: GoogleFonts.plusJakartaSansTextTheme(
+        theme.primaryTextTheme,
+      ),
+    );
+    return Theme(
+      data: screenTheme,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            loc.settings,
+            style: GoogleFonts.notoSerif(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: theme.colorScheme.onPrimary,
+            ),
+          ),
+        ),
+        body: ListView(
+          children: [
+            const SizedBox(height: 16),
+            _buildThemeSection(context),
+            const Divider(),
+            _buildLanguageSection(context),
+            const Divider(),
+            _buildBiometricSection(context),
+            const Divider(),
+            _buildNotificationSection(context),
+            const Divider(),
+            _buildBackupSection(context),
+            const Divider(),
+            // Espaço para futuras configurações
+          ],
+        ),
       ),
     );
   }
@@ -258,7 +278,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ? loc.defaultLabel
         : _formatSchemeLabel(context, themeProvider.selectedSchemeKey!);
 
-    return '$schemeLabel • ${_getThemeModeText(context, themeProvider.themeMode)}';
+    return '$schemeLabel - ${_getThemeModeText(context, themeProvider.themeMode)}';
   }
 
   String _formatSchemeLabel(BuildContext context, String key) {

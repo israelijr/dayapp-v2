@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform, kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
@@ -40,204 +41,190 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(loc.manageBackups),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline, size: 28),
-            tooltip: loc.backupInfoDialogTitle,
-            onPressed: () => _openBackupInfoScreen(context),
-          ),
-          const SizedBox(width: 4),
-        ],
+    final theme = Theme.of(context);
+    final screenTheme = theme.copyWith(
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(theme.textTheme),
+      primaryTextTheme: GoogleFonts.plusJakartaSansTextTheme(
+        theme.primaryTextTheme,
       ),
-      body: kIsWeb
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.cloud_off,
-                      size: 64,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      loc.backupNotAvailableWeb,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.labelColor(context),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      loc.backupNotAvailableDetail,
-                      style: TextStyle(
-                        fontSize: 14,
+    );
+    return Theme(
+      data: screenTheme,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            loc.manageBackups,
+            style: GoogleFonts.notoSerif(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: theme.colorScheme.onPrimary,
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info_outline, size: 28),
+              tooltip: loc.backupInfoDialogTitle,
+              onPressed: () => _openBackupInfoScreen(context),
+            ),
+            const SizedBox(width: 4),
+          ],
+        ),
+        body: kIsWeb
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.cloud_off,
+                        size: 64,
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : Stack(
-              children: [
-                // Conteúdo principal
-                SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Backup em Arquivo ZIP
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.folder_zip,
-                                    color: AppColors.emoticonGreen,
-                                    size: 28,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          loc.backupComplete,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.labelColor(
-                                              context,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          loc.backupZipSubtitle,
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.onSurfaceVariant,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                '📦 ${loc.backupComplete}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.labelColor(context),
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                _backupCardExplanation(loc),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: AppColors.labelColor(context),
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              FilledButton.icon(
-                                onPressed: _isLoading
-                                    ? null
-                                    : _createAndShareBackup,
-                                icon: Icon(
-                                  _isLinuxDesktop
-                                      ? Icons.save_alt
-                                      : Icons.share,
-                                ),
-                                label: Text(
-                                  _isLinuxDesktop
-                                      ? loc.saveAndExport
-                                      : loc.createAndShareBackup,
-                                ),
-                                style: FilledButton.styleFrom(
-                                  minimumSize: const Size(double.infinity, 48),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              const Divider(),
-                              const SizedBox(height: 12),
-                              Text(
-                                '📥 ${loc.restoreSectionTitle}:',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.labelColor(context),
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                loc.restoreSectionDescription,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: AppColors.labelColor(context),
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              FilledButton.tonalIcon(
-                                onPressed: _isLoading ? null : _restoreFromFile,
-                                icon: const Icon(Icons.file_upload),
-                                label: Text(loc.restoreFromFile),
-                                style: FilledButton.styleFrom(
-                                  minimumSize: const Size(double.infinity, 48),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
                       const SizedBox(height: 16),
-
-                      // Mensagem de status (quando não está carregando)
-                      if (!_isLoading && _statusMessage.isNotEmpty)
+                      Text(
+                        loc.backupNotAvailableWeb,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.labelColor(context),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        loc.backupNotAvailableDetail,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : Stack(
+                children: [
+                  // Conteúdo principal
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Backup em Arquivo ZIP
                         Card(
-                          color: _statusIsError
-                              ? Theme.of(context).colorScheme.errorContainer
-                              : Theme.of(
-                                  context,
-                                ).colorScheme.secondaryContainer,
                           child: Padding(
                             padding: const EdgeInsets.all(16),
-                            child: Row(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  _statusIsSuccess
-                                      ? Icons.check_circle
-                                      : Icons.error,
-                                  color: _statusIsError
-                                      ? Theme.of(context).colorScheme.error
-                                      : AppColors.emoticonGreen,
-                                  size: 32,
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.folder_zip,
+                                      color: AppColors.emoticonGreen,
+                                      size: 28,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            loc.backupComplete,
+                                            style: GoogleFonts.notoSerif(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                              color: AppColors.labelColor(
+                                                context,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            loc.backupZipSubtitle,
+                                            style: GoogleFonts.plusJakartaSans(
+                                              fontSize: 13,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onSurfaceVariant,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Text(
-                                    _statusMessage,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
+                                const SizedBox(height: 16),
+                                Text(
+                                  '📦 ${loc.backupComplete}',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.labelColor(context),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  _backupCardExplanation(loc),
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 13,
+                                    color: AppColors.labelColor(context),
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                FilledButton.icon(
+                                  onPressed: _isLoading
+                                      ? null
+                                      : _createAndShareBackup,
+                                  icon: Icon(
+                                    _isLinuxDesktop
+                                        ? Icons.save_alt
+                                        : Icons.share,
+                                  ),
+                                  label: Text(
+                                    _isLinuxDesktop
+                                        ? loc.saveAndExport
+                                        : loc.createAndShareBackup,
+                                  ),
+                                  style: FilledButton.styleFrom(
+                                    minimumSize: const Size(
+                                      double.infinity,
+                                      48,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                const Divider(),
+                                const SizedBox(height: 12),
+                                Text(
+                                  '📥 ${loc.restoreSectionTitle}:',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.labelColor(context),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  loc.restoreSectionDescription,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 13,
+                                    color: AppColors.labelColor(context),
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                FilledButton.tonalIcon(
+                                  onPressed: _isLoading
+                                      ? null
+                                      : _restoreFromFile,
+                                  icon: const Icon(Icons.file_upload),
+                                  label: Text(loc.restoreFromFile),
+                                  style: FilledButton.styleFrom(
+                                    minimumSize: const Size(
+                                      double.infinity,
+                                      48,
                                     ),
                                   ),
                                 ),
@@ -245,74 +232,115 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
                             ),
                           ),
                         ),
-                    ],
-                  ),
-                ),
 
-                // Overlay de carregamento - cobre toda a tela
-                if (_isLoading)
-                  ColoredBox(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withValues(alpha: 0.54),
-                    child: Center(
-                      child: Card(
-                        margin: const EdgeInsets.all(32),
-                        child: Padding(
-                          padding: const EdgeInsets.all(32),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(
-                                width: 60,
-                                height: 60,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 5,
-                                ),
+                        const SizedBox(height: 16),
+
+                        // Mensagem de status (quando não está carregando)
+                        if (!_isLoading && _statusMessage.isNotEmpty)
+                          Card(
+                            color: _statusIsError
+                                ? Theme.of(context).colorScheme.errorContainer
+                                : Theme.of(
+                                    context,
+                                  ).colorScheme.secondaryContainer,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    _statusIsSuccess
+                                        ? Icons.check_circle
+                                        : Icons.error,
+                                    color: _statusIsError
+                                        ? Theme.of(context).colorScheme.error
+                                        : AppColors.emoticonGreen,
+                                    size: 32,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      _statusMessage,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 24),
-                              Text(
-                                _statusMessage.isEmpty
-                                    ? loc.processing
-                                    : _statusMessage,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+
+                  // Overlay de carregamento - cobre toda a tela
+                  if (_isLoading)
+                    ColoredBox(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.54),
+                      child: Center(
+                        child: Card(
+                          margin: const EdgeInsets.all(32),
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(
+                                  width: 60,
+                                  height: 60,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 5,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 16),
-                              SizedBox(
-                                width: 200,
-                                child: LinearProgressIndicator(
-                                  value: _progressValue,
-                                ),
-                              ),
-                              if (_progressValue != null) ...[
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 24),
                                 Text(
-                                  '${(_progressValue! * 100).toStringAsFixed(0)}%',
-                                  style: const TextStyle(fontSize: 12),
+                                  _statusMessage.isEmpty
+                                      ? loc.processing
+                                      : _statusMessage,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                SizedBox(
+                                  width: 200,
+                                  child: LinearProgressIndicator(
+                                    value: _progressValue,
+                                  ),
+                                ),
+                                if (_progressValue != null) ...[
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '${(_progressValue! * 100).toStringAsFixed(0)}%',
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                                const SizedBox(height: 12),
+                                Text(
+                                  loc.pleaseWait,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 13,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
                                 ),
                               ],
-                              const SizedBox(height: 12),
-                              Text(
-                                loc.pleaseWait,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 
@@ -478,7 +506,6 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           ],
         ),
       );
-
       if (confirmed2 != true) {
         debugPrint('RESTORE: Usuário cancelou confirmação, resetando flag');
         pinProvider.isPickingExternalMedia = false;

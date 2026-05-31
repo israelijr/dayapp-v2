@@ -1,6 +1,8 @@
 import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -210,31 +212,47 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.search),
-        actions: [
-          if (_hasSearched)
-            IconButton(
-              icon: const Icon(Icons.clear),
-              tooltip: l10n.clearSearchTooltip,
-              onPressed: _clearSearch,
-            ),
-        ],
+    final theme = Theme.of(context);
+    final screenTheme = theme.copyWith(
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(theme.textTheme),
+      primaryTextTheme: GoogleFonts.plusJakartaSansTextTheme(
+        theme.primaryTextTheme,
       ),
-      body: Column(
-        children: [
-          // Área de filtros
-          _buildSearchFilters(),
-          const Divider(height: 1),
-          // Área de resultados
-          Expanded(child: _buildResults()),
-        ],
+    );
+    return Theme(
+      data: screenTheme,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            l10n.search,
+            style: GoogleFonts.notoSerif(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: theme.colorScheme.onPrimary,
+            ),
+          ),
+          actions: [
+            if (_hasSearched)
+              IconButton(
+                icon: const Icon(Icons.clear),
+                tooltip: l10n.clearSearchTooltip,
+                onPressed: _clearSearch,
+              ),
+          ],
+        ),
+        body: Column(
+          children: [
+            // Área de filtros
+            _buildSearchFilters(),
+            const Divider(height: 1),
+            // Área de resultados
+            Expanded(child: _buildResults()),
+          ],
+        ),
       ),
     );
   }
 
-  /// Constrói a área de filtros de pesquisa
   Widget _buildSearchFilters() {
     final l10n = AppLocalizations.of(context)!;
     return Container(
