@@ -8,13 +8,13 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../db/database_helper.dart';
 import '../db/historia_foto_helper.dart';
 import '../models/grupo.dart';
 import '../models/historia.dart';
 import '../providers/auth_provider.dart';
-import '../providers/refresh_provider.dart';
+import '../providers/group_stories_provider.dart';
 import '../providers/scroll_position_provider.dart';
+import '../repositories/group_repository.dart';
 import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
 import 'create_historia_screen.dart';
@@ -261,133 +261,22 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
     }
   }
 
-  Future<List<Historia>> _fetchHistoriasByGrupo() async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final userId = auth.user?.id ?? '';
-    final db = await DatabaseHelper().database;
-    final result = await db.query(
-      'historia',
-      where:
-          'user_id = ? AND grupo = ? AND arquivado IS NULL AND excluido IS NULL',
-      whereArgs: [userId, widget.grupo.nome],
-      orderBy: 'data DESC',
-    );
-    return result.map((map) => Historia.fromMap(map)).toList();
-  }
-
-  Future<void> _deleteHistoria(Historia historia) async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(
-          AppLocalizations.of(context)?.deleteStoryTitle ?? 'Excluir história',
-        ),
-        content: Text(
-          AppLocalizations.of(context)?.deleteStoryConfirm ??
-              'Deseja mover esta história para a lixeira?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancelar'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(
-              AppLocalizations.of(context)?.deleteLabel ?? 'Excluir',
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    if (confirm == true) {
-      final db = await DatabaseHelper().database;
-      // Soft delete: marca como excluído ao invés de deletar
-      await db.update(
-        'historia',
-        {
-          'excluido': 'sim',
-          'data_exclusao': DateTime.now().toIso8601String(),
-          'data_update': DateTime.now().toIso8601String(),
-          'backed_up': 0,
-        },
-        where: 'id = ?',
-        whereArgs: [historia.id],
-      );
-      if (!mounted) return;
-      final refreshProvider = Provider.of<RefreshProvider>(
-        context,
-        listen: false,
-      );
-      refreshProvider.refresh();
-
-      _messengerKey.currentState?.showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)?.movedToTrash ??
-                'História movida para a lixeira',
-          ),
-        ),
-      );
-    }
-  }
-
   Future<void> _updateHistoria(
     Historia historia, {
     Map<String, dynamic>? updates,
   }) async {
-    final db = await DatabaseHelper().database;
-    final Map<String, dynamic> updateData = {
-      'data_update': DateTime.now().toIso8601String(),
-    };
-
-    if (updates != null) {
-      updateData.addAll(updates);
-    }
-
-    // Se a atualização não explicitar o estado de backup, marcar como não salvo
-    // para que a história seja incluída no próximo backup.
-    if (!updateData.containsKey('backed_up')) {
-      updateData['backed_up'] = 0;
-    }
-
-    await db.update(
-      'historia',
-      updateData,
-      where: 'id = ?',
-      whereArgs: [historia.id],
-    );
-    if (!mounted) return;
-    final refreshProvider = Provider.of<RefreshProvider>(
-      context,
-      listen: false,
-    );
-    refreshProvider.refresh();
+    final storiesProvider = context.read<GroupStoriesProvider>();
+    await storiesProvider.updateHistoria(historia, updates: updates);
   }
 
   Future<void> _archiveWithUndo(Historia historia) async {
     final previousTag = historia.tag;
     final previousGrupo = historia.grupo;
+    final storiesProvider = context.read<GroupStoriesProvider>();
 
-    // Atualiza o BD diretamente, sem disparar o refresh ainda,
-    // para que o Consumer<RefreshProvider> não reconstrua o body
-    // antes de o snackbar ser exibido.
-    final db = await DatabaseHelper().database;
-    await db.update(
-      'historia',
-      {
-        'arquivado': 'sim',
-        'grupo': null,
-        'data_update': DateTime.now().toIso8601String(),
-        'backed_up': 0,
-      },
-      where: 'id = ?',
-      whereArgs: [historia.id],
-    );
-
+    await storiesProvider.archiveHistoria(historia);
     if (!mounted) return;
+
     final localizations = AppLocalizations.of(context);
     final messenger = _messengerKey.currentState!;
     messenger.hideCurrentSnackBar();
@@ -411,16 +300,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
         ),
       ),
     );
-    // Backup: fecha o snackbar após 5 s sem depender do estado de montagem
     Future.delayed(const Duration(seconds: 5), controller.close);
-
-    // Dispara o refresh no próximo frame, após o snackbar ter sido adicionado
-    // à fila do ScaffoldMessenger, para evitar que a reconstrução do Consumer
-    // interfira no temporizador do snackbar.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      Provider.of<RefreshProvider>(context, listen: false).refresh();
-    });
   }
 
   Widget _buildCardView(Historia historia) {
@@ -444,19 +324,13 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
         children: [
           SlidableAction(
             onPressed: (slidableContext) async {
-              final refreshProvider = Provider.of<RefreshProvider>(
-                slidableContext,
-                listen: false,
-              );
               final ungroupedMsg = AppLocalizations.of(
                 slidableContext,
               )!.storyUngrouped;
-              await _updateHistoria(
+              await context.read<GroupStoriesProvider>().ungroupHistoria(
                 historia,
-                updates: {'tag': null, 'arquivado': null, 'grupo': null},
               );
               if (!mounted) return;
-              refreshProvider.refresh();
               _messengerKey.currentState?.showSnackBar(
                 SnackBar(content: Text(ungroupedMsg)),
               );
@@ -514,17 +388,9 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
           await _archiveWithUndo(historia);
           return true;
         } else if (direction == DismissDirection.endToStart) {
-          final refreshProvider = Provider.of<RefreshProvider>(
-            context,
-            listen: false,
-          );
           final ungroupedMsg = AppLocalizations.of(context)!.storyUngrouped;
-          await _updateHistoria(
-            historia,
-            updates: {'tag': null, 'arquivado': null, 'grupo': null},
-          );
+          await context.read<GroupStoriesProvider>().ungroupHistoria(historia);
           if (!mounted) return false;
-          refreshProvider.refresh();
           _messengerKey.currentState?.showSnackBar(
             SnackBar(content: Text(ungroupedMsg)),
           );
@@ -574,134 +440,138 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldMessenger(
-      key: _messengerKey,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
-          title: Row(
-            children: [
-              if (widget.grupo.emoticon != null &&
-                  widget.grupo.emoticon!.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
+    return ChangeNotifierProvider<GroupStoriesProvider>(
+      create: (context) => GroupStoriesProvider(
+        repository: GroupRepository(),
+        authProvider: context.read<AuthProvider>(),
+        grupoId: widget.grupo.id ?? 0,
+        groupName: widget.grupo.nome,
+      )..loadStories(),
+      child: ScaffoldMessenger(
+        key: _messengerKey,
+        child: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          appBar: AppBar(
+            title: Row(
+              children: [
+                if (widget.grupo.emoticon != null &&
+                    widget.grupo.emoticon!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Text(
+                      widget.grupo.emoticon!,
+                      style: const TextStyle(fontSize: 24),
+                    ),
+                  ),
+                Expanded(
                   child: Text(
-                    widget.grupo.emoticon!,
-                    style: const TextStyle(fontSize: 24),
+                    widget.grupo.nome,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              Expanded(
-                child: Text(
-                  widget.grupo.nome,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis,
+              ],
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(
+                  _isCardView
+                      ? Icons.grid_view_rounded
+                      : Icons.view_agenda_rounded,
                 ),
+                onPressed: () {
+                  setState(() {
+                    _isCardView = !_isCardView;
+                  });
+                },
+                tooltip: _isCardView
+                    ? (AppLocalizations.of(context)?.toggleToIcons ??
+                          'Alternar para modo ícones')
+                    : (AppLocalizations.of(context)?.toggleToCards ??
+                          'Alternar para modo blocos'),
+              ),
+              // delete group
+              IconButton(
+                icon: const Icon(Icons.delete_forever),
+                onPressed: () => _deleteGroup(),
+                tooltip: AppLocalizations.of(context)!.deleteGroupTitle,
               ),
             ],
           ),
-          actions: [
-            IconButton(
-              icon: Icon(
-                _isCardView
-                    ? Icons.grid_view_rounded
-                    : Icons.view_agenda_rounded,
+          body: Consumer<GroupStoriesProvider>(
+            builder: (context, provider, child) {
+              if (provider.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final historias = provider.historias;
+              if (historias.isEmpty) {
+                return Center(
+                  child: Text(
+                    AppLocalizations.of(
+                          context,
+                        )?.noStoriesInGroup(widget.grupo.nome) ??
+                        'Nenhuma história no grupo "${widget.grupo.nome}".',
+                    style: TextStyle(color: AppColors.labelColor(context)),
+                  ),
+                );
+              }
+
+              return AnimatedSwitcher(
+                duration: AppDurations.listSwitch,
+                child: ListView.builder(
+                  key: ValueKey<bool>(_isCardView),
+                  controller: _scrollController,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 12,
+                  ),
+                  itemCount: historias.length,
+                  itemBuilder: (context, index) {
+                    final historia = historias[index];
+                    return _isCardView
+                        ? _buildCardView(historia)
+                        : _buildIconView(historia);
+                  },
+                ),
+              );
+            },
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: PulseAnimation(
+              scaleTarget: 1.06,
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  final storiesProvider = context.read<GroupStoriesProvider>();
+                  Navigator.push(
+                    context,
+                    RouteTransitionHelper.slideUpRotateTransition(
+                      const CreateHistoriaScreen(),
+                    ),
+                  ).then((created) async {
+                    if (!mounted) return;
+                    if (created == true) {
+                      await storiesProvider.loadStories();
+                    }
+                  });
+                },
+                icon: const Icon(Icons.add),
+                label: Text(AppLocalizations.of(context)!.newStory),
               ),
-              onPressed: () {
-                setState(() {
-                  _isCardView = !_isCardView;
-                });
-              },
-              tooltip: _isCardView
-                  ? (AppLocalizations.of(context)?.toggleToIcons ??
-                        'Alternar para modo ícones')
-                  : (AppLocalizations.of(context)?.toggleToCards ??
-                        'Alternar para modo blocos'),
-            ),
-            // delete group
-            IconButton(
-              icon: const Icon(Icons.delete_forever),
-              onPressed: () => _deleteGroup(),
-              tooltip: AppLocalizations.of(context)!.deleteGroupTitle,
-            ),
-          ],
-        ),
-        body: Consumer<RefreshProvider>(
-          builder: (context, refreshProvider, child) {
-            return FutureBuilder<List<Historia>>(
-              key: ValueKey<int>(refreshProvider.refreshCounter),
-              future: _fetchHistoriasByGrupo(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                final historias = snapshot.data ?? [];
-                if (historias.isEmpty) {
-                  return Center(
-                    child: Text(
-                      AppLocalizations.of(
-                            context,
-                          )?.noStoriesInGroup(widget.grupo.nome) ??
-                          'Nenhuma história no grupo "${widget.grupo.nome}".',
-                      style: TextStyle(color: AppColors.labelColor(context)),
-                    ),
-                  );
-                }
-                return AnimatedSwitcher(
-                  duration: AppDurations.listSwitch,
-                  child: ListView.builder(
-                    key: ValueKey<bool>(_isCardView),
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 16,
-                      horizontal: 12,
-                    ),
-                    itemCount: historias.length,
-                    itemBuilder: (context, index) {
-                      final historia = historias[index];
-                      return _isCardView
-                          ? _buildCardView(historia)
-                          : _buildIconView(historia);
-                    },
-                  ),
-                );
-              },
-            );
-          },
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: PulseAnimation(
-            scaleTarget: 1.06,
-            child: FloatingActionButton.extended(
-              onPressed: () {
-                final refreshProvider = Provider.of<RefreshProvider>(
-                  context,
-                  listen: false,
-                );
-                Navigator.push(
-                  context,
-                  RouteTransitionHelper.slideUpRotateTransition(
-                    const CreateHistoriaScreen(),
-                  ),
-                ).then((created) {
-                  if (!mounted) return;
-                  refreshProvider.refresh();
-                });
-              },
-              icon: const Icon(Icons.add),
-              label: Text(AppLocalizations.of(context)!.newStory),
             ),
           ),
-        ),
-      ), // Scaffold
-    ); // ScaffoldMessenger
+        ), // Scaffold
+      ), // ScaffoldMessenger
+    ); // ChangeNotifierProvider
   }
 
   Future<void> _deleteGroup() async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final userId = auth.user?.id ?? '';
     final navigator = Navigator.of(context);
+    final storiesProvider = context.read<GroupStoriesProvider>();
+    final localizations = AppLocalizations.of(context)!;
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) {
@@ -727,39 +597,16 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
     );
 
     if (confirm == true) {
-      final db = await DatabaseHelper().database;
-      // Atualiza histórias do grupo para voltar para a Home
-      // Remove os flags de grupo e arquivado para que apareçam na Home
-      await db.update(
-        'historia',
-        {
-          'grupo': null,
-          'arquivado': null,
-          'data_update': DateTime.now().toIso8601String(),
-        },
-        where: 'user_id = ? AND grupo = ?',
-        whereArgs: [userId, widget.grupo.nome],
-      );
-
-      // Remove o grupo da tabela grupos se presente
       try {
-        await db.delete(
-          'grupos',
-          where: 'user_id = ? AND nome = ?',
-          whereArgs: [userId, widget.grupo.nome],
-        );
+        await storiesProvider.deleteGroup();
       } catch (e) {
-        // Falha na remoção do registro do grupo não deve interromper o fluxo,
-        // mas precisa ser visível para diagnóstico e suporte.
-        debugPrint('GroupStoriesScreen: erro ao remover grupo: $e');
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.errorDeletingStory(e.toString()),
-            ),
+            content: Text(localizations.errorDeletingStory(e.toString())),
           ),
         );
+        return;
       }
 
       if (!mounted) return;
@@ -801,6 +648,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
     }
 
     if (action == StoryPreviewAction.edit) {
+      final storiesProvider = context.read<GroupStoriesProvider>();
       final updated = await Navigator.of(context).push(
         RouteTransitionHelper.slideUpRotateTransition(
           EditHistoriaScreen(historia: historia),
@@ -808,13 +656,9 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       );
       if (!mounted) return;
       if (updated == true) {
-        Provider.of<RefreshProvider>(context, listen: false).refresh();
+        await storiesProvider.loadStories();
       }
       return;
-    }
-
-    if (action == StoryPreviewAction.delete) {
-      await _deleteHistoria(historia);
     }
   }
 
