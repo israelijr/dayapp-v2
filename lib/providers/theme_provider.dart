@@ -18,25 +18,20 @@ class ThemeProvider with ChangeNotifier {
   }
 
   Future<void> _loadThemeFromPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    final themeIndex = prefs.getInt(_themeKey);
+    final themeIndex = await _preferencesService.loadThemeModeIndex();
     if (themeIndex != null) {
       _themeMode = ThemeMode.values[themeIndex];
     } else {
-      // Se não há prefs, define como light e salva
       _themeMode = ThemeMode.light;
-      await prefs.setInt(_themeKey, _themeMode.index);
+      await _preferencesService.saveThemeModeIndex(_themeMode.index);
     }
-    // Carrega o esquema customizado, se houver
-    final storedSchemeKey = prefs.getString(_schemeKey);
+
+    final storedSchemeKey = await _preferencesService.loadSchemeKey();
     _selectedSchemeKey = CustomColorSchemes.normalizeFamilyKey(storedSchemeKey);
     if (storedSchemeKey != _selectedSchemeKey) {
-      if (_selectedSchemeKey == null) {
-        await prefs.remove(_schemeKey);
-      } else {
-        await prefs.setString(_schemeKey, _selectedSchemeKey!);
-      }
+      await _preferencesService.saveSchemeKey(_selectedSchemeKey);
     }
+
     _isLoaded = true;
     notifyListeners();
   }
@@ -45,8 +40,7 @@ class ThemeProvider with ChangeNotifier {
     _themeMode = mode;
     notifyListeners();
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_themeKey, mode.index);
+    await _preferencesService.saveThemeModeIndex(mode.index);
   }
 
   /// Define o esquema customizado pelo nome (chave do map em CustomColorSchemes)
@@ -54,12 +48,7 @@ class ThemeProvider with ChangeNotifier {
     _selectedSchemeKey = CustomColorSchemes.normalizeFamilyKey(key);
     notifyListeners();
 
-    final prefs = await SharedPreferences.getInstance();
-    if (_selectedSchemeKey == null) {
-      await prefs.remove(_schemeKey);
-    } else {
-      await prefs.setString(_schemeKey, _selectedSchemeKey!);
-    }
+    await _preferencesService.saveSchemeKey(_selectedSchemeKey);
   }
 
   Future<void> waitForLoad() async {
