@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../db/database_helper.dart';
 import '../db/historia_audio_helper.dart';
 import '../db/historia_foto_helper.dart';
 import '../db/historia_video_helper.dart';
@@ -18,6 +17,7 @@ import '../helpers/rich_text_helper.dart';
 import '../models/historia.dart';
 import '../models/tag.dart';
 import '../providers/auth_provider.dart';
+import '../repositories/historia_repository.dart';
 import '../services/emoji_service.dart';
 import '../theme/animation_durations.dart';
 import '../widgets/audio_recorder_widget.dart';
@@ -99,6 +99,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
   int _selectedEnergy = 2; // padrão: Normal
 
   // Lista de tags selecionadas (carregadas do banco em initState)
+  final HistoriaRepository _historiaRepository = HistoriaRepository();
   List<Tag> _selectedTags = [];
   List<Tag> _initialTags = [];
 
@@ -530,34 +531,53 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
   }
 
   Future<bool> _save({bool navigateAfterSave = true}) async {
-    final db = await DatabaseHelper().database;
-    await db.update(
-      'historia',
-      {
-        'titulo': _capitalizeText(titleController.text.trim()),
-        'descricao': RichTextHelper.controllerToJson(richTextController),
-        'tag':
-            null, // campo legado mantido para compatibilidade; usar historia_tags
-        'emoticon': selectedEmoticon,
-        'data': selectedDate.toIso8601String(),
-        'data_update': DateTime.now().toIso8601String(),
-        'arquivado': widget.historia.arquivado,
-        'backed_up': 0,
-        'humor': _selectedMood,
-        'energia': _selectedEnergy,
-      },
-      where: 'id = ?',
-      whereArgs: [widget.historia.id],
+    final updated = await _historiaRepository.saveEditedHistoria(
+      historia: widget.historia,
+      titulo: _capitalizeText(titleController.text.trim()),
+      descricao: RichTextHelper.controllerToJson(richTextController),
+      emoticon: selectedEmoticon,
+      data: selectedDate,
+      humor: _selectedMood,
+      energia: _selectedEnergy,
+      arquivado: widget.historia.arquivado,
+      tags: _selectedTags,
+      newFotos: fotos
+          .asMap()
+          .entries
+          .where(
+            (entry) => entry.key >= fotoIds.length || fotoIds[entry.key] == 0,
+          )
+          .map((entry) => entry.value)
+          .toList(growable: false),
+      newAudios: audios
+          .asMap()
+          .entries
+          .where(
+            (entry) => entry.key >= audioIds.length || audioIds[entry.key] == 0,
+          )
+          .map(
+            (entry) => {
+              'audio': entry.value['audio'],
+              'duration': entry.value['duration'],
+            },
+          )
+          .toList(growable: false),
+      newVideos: videos
+          .asMap()
+          .entries
+          .where(
+            (entry) => entry.key >= videoIds.length || videoIds[entry.key] == 0,
+          )
+          .map(
+            (entry) => {
+              'video': entry.value['video'],
+              'duration': entry.value['duration'],
+            },
+          )
+          .toList(growable: false),
     );
 
-    // Salva/atualiza as tags no sistema de relações
-    if (widget.historia.id != null) {
-      await TagHelper().setTagsForHistoria(
-        widget.historia.id!,
-        _selectedTags,
-        db,
-      );
-    }
+    if (!updated) return false;
 
     // Verifica se a data foi alterada
     if (selectedDate != _initialDate) {

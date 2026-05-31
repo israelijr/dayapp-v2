@@ -232,6 +232,77 @@ class HistoriaRepository {
     );
   }
 
+  Future<bool> saveEditedHistoria({
+    required Historia historia,
+    required String titulo,
+    required DateTime data,
+    required int humor,
+    required int energia,
+    String? descricao,
+    String? emoticon,
+    String? arquivado,
+    List<Tag>? tags,
+    List<Uint8List>? newFotos,
+    List<Map<String, dynamic>>? newAudios,
+    List<Map<String, dynamic>>? newVideos,
+  }) async {
+    if (historia.id == null) return false;
+
+    final db = await DatabaseHelper().database;
+    await db.update(
+      _table,
+      {
+        'titulo': titulo,
+        'descricao': descricao,
+        'tag': null,
+        'emoticon': emoticon,
+        'data': data.toIso8601String(),
+        'data_update': DateTime.now().toIso8601String(),
+        'arquivado': arquivado,
+        'backed_up': 0,
+        'humor': humor,
+        'energia': energia,
+      },
+      where: 'id = ?',
+      whereArgs: [historia.id],
+    );
+
+    if (tags != null) {
+      await TagHelper().setTagsForHistoria(historia.id!, tags, db);
+    }
+
+    if (newFotos != null && newFotos.isNotEmpty) {
+      for (final foto in newFotos) {
+        await HistoriaFotoHelper().insertFotoFromBytes(
+          historiaId: historia.id!,
+          fotoBytes: foto,
+        );
+      }
+    }
+
+    if (newAudios != null && newAudios.isNotEmpty) {
+      for (final audioData in newAudios) {
+        await HistoriaAudioHelper().insertAudioFromBytes(
+          historiaId: historia.id!,
+          audioBytes: audioData['audio'],
+          duracao: audioData['duration'],
+        );
+      }
+    }
+
+    if (newVideos != null && newVideos.isNotEmpty) {
+      for (final videoData in newVideos) {
+        await HistoriaVideoHelper().insertVideoFromBytes(
+          historiaId: historia.id!,
+          videoBytes: videoData['video'],
+          duracao: videoData['duration'],
+        );
+      }
+    }
+
+    return true;
+  }
+
   Future<int> createHistoria({
     required String userId,
     required String titulo,
