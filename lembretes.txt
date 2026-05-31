@@ -5,3 +5,5 @@ com imagens sobrepostas e desalinhadas
 mais de 5 fotos 
 deve ser estilo polaroid. fundo é a foto principal
 desfocada
+
+até 3 fotos

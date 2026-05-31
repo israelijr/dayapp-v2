@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../db/database_helper.dart';
-import '../db/grupo_helper.dart';
 import '../models/grupo.dart';
 import '../providers/auth_provider.dart';
+import '../providers/group_management_provider.dart';
+import '../repositories/group_repository.dart';
 import '../theme/m3_expressive_theme.dart';
 
 class ManageGroupsScreen extends StatefulWidget {
@@ -17,25 +17,9 @@ class ManageGroupsScreen extends StatefulWidget {
 }
 
 class _ManageGroupsScreenState extends State<ManageGroupsScreen> {
-  Future<List<Grupo>> _loadGrupos() async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final userId = auth.user?.id;
-    if (userId == null) return [];
-    return await GrupoHelper().getGruposByUser(userId);
-  }
-
   Future<void> _deleteGrupo(Grupo grupo) async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final userId = auth.user?.id;
-    if (userId == null) return;
-
-    // Verificar se há histórias vinculadas
-    final db = await DatabaseHelper().database;
-    final result = await db.rawQuery(
-      'SELECT COUNT(*) as count FROM historia WHERE user_id = ? AND tag = ?',
-      [userId, grupo.nome],
-    );
-    final historiasCount = result.isNotEmpty ? result.first['count'] as int : 0;
+    final provider = context.read<GroupManagementProvider>();
+    final historiasCount = await provider.countHistoriasInGroup(grupo.nome);
 
     if (!mounted) return;
 
@@ -69,85 +53,90 @@ class _ManageGroupsScreenState extends State<ManageGroupsScreen> {
     }
 
     if (confirmDelete) {
-      await GrupoHelper().deleteGrupoAndUpdateHistorias(
-        grupo.id!,
-        grupo.nome,
-        userId,
+      await provider.deleteGrupo(grupo);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.groupDeletedSuccess),
+        ),
       );
-      setState(() {});
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.groupDeletedSuccess),
-          ),
-        );
-      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.manageGroups)),
-      body: FutureBuilder<List<Grupo>>(
-        future: _loadGrupos(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final grupos = snapshot.data ?? [];
-          if (grupos.isEmpty) {
-            return Center(
-              child: Text(
-                AppLocalizations.of(context)!.noGroupsFound,
-                style: TextStyle(color: AppColors.labelColor(context)),
-              ),
-            );
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-            itemCount: grupos.length,
-            itemBuilder: (context, index) {
-              final grupo = grupos[index];
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                elevation: 3,
-                shadowColor: Theme.of(
-                  context,
-                ).colorScheme.onSurface.withValues(alpha: 0.08),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.outlineVariant.withValues(alpha: 0.18),
-                  ),
-                ),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 16,
-                  ),
-                  title: Text(
-                    grupo.nome,
-                    style: GoogleFonts.notoSerif(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      height: 1.4,
-                      color: Theme.of(context).textTheme.titleLarge?.color,
+    return ChangeNotifierProvider<GroupManagementProvider>(
+      create: (context) => GroupManagementProvider(
+        repository: GroupRepository(),
+        authProvider: context.read<AuthProvider>(),
+      )..loadGrupos(),
+      child: Consumer<GroupManagementProvider>(
+        builder: (context, provider, child) {
+          final grupos = provider.grupos;
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context)!.manageGroups),
+            ),
+            body: provider.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : grupos.isEmpty
+                ? Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.noGroupsFound,
+                      style: TextStyle(color: AppColors.labelColor(context)),
                     ),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).colorScheme.error,
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 12,
                     ),
-                    onPressed: () => _deleteGrupo(grupo),
+                    itemCount: grupos.length,
+                    itemBuilder: (context, index) {
+                      final grupo = grupos[index];
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
+                        elevation: 3,
+                        shadowColor: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.08),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color: Theme.of(context).colorScheme.outlineVariant
+                                .withValues(alpha: 0.18),
+                          ),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 16,
+                          ),
+                          title: Text(
+                            grupo.nome,
+                            style: GoogleFonts.notoSerif(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              height: 1.4,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.color,
+                            ),
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                            onPressed: () => _deleteGrupo(grupo),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ),
-              );
-            },
           );
         },
       ),

@@ -33,6 +33,10 @@ class GroupRepository {
     return _grupoHelper.getGruposByUser(userId);
   }
 
+  Future<int> countHistoriasInGroup(String userId, String groupName) async {
+    return _grupoHelper.countHistoriasInGrupo(userId, groupName);
+  }
+
   Future<int> insertGrupo(Grupo grupo) async {
     return _grupoHelper.insertGrupo(grupo);
   }

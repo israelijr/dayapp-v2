@@ -70,6 +70,14 @@ class GroupManagementProvider with ChangeNotifier {
     await loadGrupos();
   }
 
+  Future<int> countHistoriasInGroup(String groupName) async {
+    final userId = _authProvider.user?.id;
+    if (userId == null) {
+      throw StateError('Usuário não autenticado');
+    }
+    return _repository.countHistoriasInGroup(userId, groupName);
+  }
+
   Future<void> deleteGrupo(Grupo grupo) async {
     final userId = _authProvider.user?.id;
     if (userId == null) {
