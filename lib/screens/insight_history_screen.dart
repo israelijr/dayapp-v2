@@ -21,7 +21,6 @@ class InsightHistoryScreen extends StatefulWidget {
 
 class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
   late final InsightHistoryProvider _provider;
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -36,16 +35,6 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
         _provider.load(userId);
       }
     });
-
-    _searchController.addListener(() {
-      _provider.searchQuery = _searchController.text;
-    });
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 
   Future<void> _confirmClear(BuildContext context) async {
@@ -90,7 +79,6 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
         theme.primaryTextTheme,
       ),
     );
-    final colorScheme = theme.colorScheme;
 
     return ChangeNotifierProvider.value(
       value: _provider,
@@ -120,109 +108,23 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
                 },
               ),
             ],
-          ), // <-- PARÊNTESE CORRIGIDO AQUI
+          ),
           body: Consumer<InsightHistoryProvider>(
             builder: (context, provider, _) {
               if (provider.isLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return Column(
-                children: [
-                  // Barra de busca + chips de filtro
-                  _buildFilterBar(context, l10n, colorScheme, provider),
-
-                  // Lista agrupada por mês
-                  Expanded(
-                    child: _buildContent(
-                      context,
-                      l10n,
-                      theme,
-                      provider,
-                      isPremiumUser, // Passado explicitamente
-                    ),
-                  ),
-                ],
+              return _buildContent(
+                context,
+                l10n,
+                theme,
+                provider,
+                isPremiumUser, // Passado explicitamente
               );
             },
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildFilterBar(
-    BuildContext context,
-    AppLocalizations l10n,
-    ColorScheme colorScheme,
-    InsightHistoryProvider provider,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-      child: Column(
-        children: [
-          TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              hintText: l10n.insightHistorySearch,
-              prefixIcon: const Icon(Icons.search, size: 20),
-              suffixIcon: provider.searchQuery.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.close, size: 18),
-                      onPressed: () {
-                        _searchController.clear();
-                        _provider.searchQuery = '';
-                      },
-                    )
-                  : null,
-              isDense: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 10,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          SegmentedButton<HistoryTierFilter>(
-            style: SegmentedButton.styleFrom(
-              textStyle: GoogleFonts.plusJakartaSans(fontSize: 12),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              visualDensity: VisualDensity.compact,
-            ),
-            segments: [
-              ButtonSegment(
-                value: HistoryTierFilter.all,
-                label: Text(l10n.insightHistoryFilterAll),
-              ),
-              ButtonSegment(
-                value: HistoryTierFilter.freeOnly,
-                label: Text(l10n.insightHistoryFilterFree),
-              ),
-              ButtonSegment(
-                value: HistoryTierFilter.premiumOnly,
-                label: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(l10n.insightHistoryFilterPremium),
-                    const SizedBox(width: 4),
-                    Icon(
-                      Icons.workspace_premium,
-                      size: 13,
-                      color: colorScheme.primary,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-            selected: {provider.filter},
-            onSelectionChanged: (selected) {
-              provider.filter = selected.first;
-            },
-          ),
-        ],
       ),
     );
   }

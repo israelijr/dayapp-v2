@@ -1683,6 +1683,12 @@ abstract class AppLocalizations {
   /// **'Select Group'**
   String get selectGroup;
 
+  /// No description provided for @selectLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get selectLabel;
+
   /// No description provided for @existingGroups.
   ///
   /// In en, this message translates to:

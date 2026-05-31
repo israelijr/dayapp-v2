@@ -463,6 +463,7 @@
   "unarchive": "Unarchive",
   "group": "Group",
   "selectGroup": "Select Group",
+  "selectLabel": "Select",
   "existingGroups": "Existing Groups",
   "createNewGroup": "Create New Group",
   "groupNameLabel": "Group Name",

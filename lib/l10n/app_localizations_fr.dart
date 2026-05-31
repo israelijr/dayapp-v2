@@ -865,6 +865,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get selectGroup => 'Sélectionner un groupe';
 
   @override
+  String get selectLabel => 'Sélectionner';
+
+  @override
   String get existingGroups => 'Groupes existants';
 
   @override

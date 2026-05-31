@@ -350,6 +350,7 @@
     }
   },
   "selectGroup": "Selecionar Grupo",
+  "selectLabel": "Selecionar",
   "existingGroups": "Grupos Existentes",
   "createNewGroup": "Criar Novo Grupo",
   "groupNameLabel": "Nome do Grupo",

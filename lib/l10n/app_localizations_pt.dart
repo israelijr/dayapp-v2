@@ -855,6 +855,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get selectGroup => 'Selecionar Grupo';
 
   @override
+  String get selectLabel => 'Selecionar';
+
+  @override
   String get existingGroups => 'Grupos Existentes';
 
   @override
@@ -3451,6 +3454,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get selectGroup => 'Selecionar Grupo';
+
+  @override
+  String get selectLabel => 'Selecionar';
 
   @override
   String get existingGroups => 'Grupos Existentes';

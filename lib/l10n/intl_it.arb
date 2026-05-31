@@ -459,6 +459,7 @@
   "unarchive": "Ripristina archivio",
   "group": "Gruppo",
   "selectGroup": "Seleziona gruppo",
+  "selectLabel": "Seleziona",
   "existingGroups": "Gruppi esistenti",
   "createNewGroup": "Crea nuovo gruppo",
   "groupNameLabel": "Nome del gruppo",

@@ -115,11 +115,9 @@ class _TrashScreenState extends State<TrashScreen> {
         _isSelectionMode = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${_selectedItems.length} história(s) restaurada(s)'),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(loc.successStoryRestored)));
     }
   }
 
@@ -175,12 +173,11 @@ class _TrashScreenState extends State<TrashScreen> {
   }
 
   Future<void> _emptyTrash() async {
+    final loc = AppLocalizations.of(context)!;
     final historias = await _fetchDeletedHistorias();
     if (historias.isEmpty) {
-      // ignore: use_build_context_synchronously
-      final loc = AppLocalizations.of(context)!;
+      if (!mounted) return;
       ScaffoldMessenger.of(
-        // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text(loc.trashAlreadyEmpty)));
       return;
@@ -236,11 +233,7 @@ class _TrashScreenState extends State<TrashScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '${historias.length} história(s) excluída(s) permanentemente',
-          ),
-        ),
+        SnackBar(content: Text(loc.successStoryDeletedPermanently)),
       );
     }
   }
@@ -257,6 +250,14 @@ class _TrashScreenState extends State<TrashScreen> {
         _isSelectionMode = true;
       }
     });
+  }
+
+  Future<void> _handleDeleteAction() async {
+    if (_selectedItems.isEmpty) {
+      await _emptyTrash();
+    } else {
+      await _permanentlyDeleteSelected();
+    }
   }
 
   // Converte nomes de humor antigos para emojis Unicode
@@ -289,116 +290,139 @@ class _TrashScreenState extends State<TrashScreen> {
   }
 
   Widget _buildHistoriaCard(Historia historia) {
+    final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context)!;
     final isSelected = _selectedItems.contains(historia);
     final dateFormatter = DateFormat('dd/MM/yyyy');
     final timeFormatter = DateFormat('HH:mm');
 
     return Card(
-      elevation: isSelected ? 8 : 2,
-      color: isSelected
-          ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1 * 255)
-          : null,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: InkWell(
-        onTap: () {
-          _toggleSelection(historia);
-        },
-        onLongPress: () {
-          _toggleSelection(historia);
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+      elevation: 0,
+      clipBehavior: Clip.antiAlias,
+      color: const Color(0x00000000),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: isSelected
+              ? theme.colorScheme.surfaceContainerLow
+              : theme.colorScheme.surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.10),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.03),
+              blurRadius: 20,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Material(
+          color: const Color(0x00000000),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () => _toggleSelection(historia),
+            onLongPress: () => _toggleSelection(historia),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_isSelectionMode)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: Icon(
-                        isSelected ? Icons.check_circle : Icons.circle_outlined,
-                        color: isSelected
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withValues(alpha: 0.6),
-                      ),
-                    ),
-                  if (historia.emoticon != null)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Text(
-                        _convertLegacyEmoticon(historia.emoticon!),
-                        style: const TextStyle(fontSize: 28),
-                      ),
-                    ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          historia.titulo,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.labelColor(context),
+                  Row(
+                    children: [
+                      if (_isSelectionMode)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Icon(
+                            isSelected
+                                ? Icons.check_circle
+                                : Icons.circle_outlined,
+                            color: isSelected
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.6,
+                                  ),
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${dateFormatter.format(historia.data)} às ${timeFormatter.format(historia.data)}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurface.withValues(alpha: 0.6),
+                      if (historia.emoticon != null)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Text(
+                            _convertLegacyEmoticon(historia.emoticon!),
+                            style: const TextStyle(fontSize: 28),
                           ),
                         ),
-                      ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              historia.titulo,
+                              style: GoogleFonts.notoSerif(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.labelColor(context),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${dateFormatter.format(historia.data)} ${loc.timeAtConnector} ${timeFormatter.format(historia.data)}',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 12,
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.6,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (historia.assunto != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      historia.assunto!,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
+                  ],
+                  if (historia.descricao != null &&
+                      historia.descricao!.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 60,
+                      child: RichTextViewerWidget(
+                        jsonContent: historia.descricao,
+                      ),
+                    ),
+                  ],
+                  if (historia.dataExclusao != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      '${loc.deleted} ${dateFormatter.format(historia.dataExclusao!)}',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 11,
+                        color: AppColors.emoticonRed,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                  HistoriaFotosGrid(historiaId: historia.id ?? 0, height: 100),
+                  HistoriaMediaRow(
+                    historiaId: historia.id ?? 0,
+                    emoticon: historia.emoticon,
                   ),
                 ],
               ),
-              if (historia.assunto != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  historia.assunto!,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withValues(alpha: 0.7),
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ],
-              if (historia.descricao != null &&
-                  historia.descricao!.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                SizedBox(
-                  height: 60,
-                  child: RichTextViewerWidget(jsonContent: historia.descricao),
-                ),
-              ],
-              if (historia.dataExclusao != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  'Excluído em ${dateFormatter.format(historia.dataExclusao!)}',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: AppColors.emoticonRed,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ],
-              // Mostra fotos com visualizador completo e áudios/vídeos
-              HistoriaFotosGrid(historiaId: historia.id ?? 0, height: 100),
-              HistoriaMediaRow(
-                historiaId: historia.id ?? 0,
-                emoticon: historia.emoticon,
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -408,65 +432,35 @@ class _TrashScreenState extends State<TrashScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context)!;
     final screenTheme = theme.copyWith(
       textTheme: GoogleFonts.plusJakartaSansTextTheme(theme.textTheme),
       primaryTextTheme: GoogleFonts.plusJakartaSansTextTheme(
         theme.primaryTextTheme,
       ),
     );
-
     return Theme(
       data: screenTheme,
       child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
-          title: _isSelectionMode
-              ? Text(
-                  '${_selectedItems.length} selecionado(s)',
-                  style: GoogleFonts.notoSerif(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onPrimary,
-                  ),
-                )
-              : Text(
-                  'Lixeira',
-                  style: GoogleFonts.notoSerif(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onPrimary,
-                  ),
-                ),
-          actions: [
-            if (_isSelectionMode) ...[
-              IconButton(
-                icon: const Icon(Icons.restore),
-                tooltip: 'Restaurar selecionados',
-                onPressed: _restoreSelected,
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete_forever),
-                tooltip: 'Excluir permanentemente',
-                color: Theme.of(context).colorScheme.error,
-                onPressed: _permanentlyDeleteSelected,
-              ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                tooltip: 'Cancelar seleção',
-                onPressed: () {
-                  setState(() {
-                    _selectedItems.clear();
-                    _isSelectionMode = false;
-                  });
-                },
-              ),
-            ] else ...[
-              IconButton(
-                icon: const Icon(Icons.delete_sweep),
-                tooltip: 'Esvaziar lixeira',
-                onPressed: _emptyTrash,
-              ),
-            ],
-          ],
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/home',
+                (route) => false,
+              );
+            },
+          ),
+          title: Text(
+            loc.trash,
+            style: GoogleFonts.notoSerif(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
         body: FutureBuilder<List<Historia>>(
           future: _futureHistorias,
@@ -478,7 +472,7 @@ class _TrashScreenState extends State<TrashScreen> {
             if (snapshot.hasError) {
               return Center(
                 child: Text(
-                  'Erro ao carregar lixeira: ${snapshot.error}',
+                  loc.errorLoadingFile(snapshot.error ?? ''),
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -501,7 +495,7 @@ class _TrashScreenState extends State<TrashScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Lixeira vazia',
+                      loc.noStoriesYetTitle,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -510,7 +504,7 @@ class _TrashScreenState extends State<TrashScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'As histórias excluídas aparecerão aqui',
+                      loc.noStoriesHere,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 14,
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -528,6 +522,32 @@ class _TrashScreenState extends State<TrashScreen> {
               },
             );
           },
+        ),
+        bottomNavigationBar: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    onPressed: _selectedItems.isEmpty ? null : _restoreSelected,
+                    child: Text(loc.restoreLabel),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: theme.colorScheme.error,
+                    ),
+                    onPressed: _handleDeleteAction,
+                    child: Text(loc.deleteLabel),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
