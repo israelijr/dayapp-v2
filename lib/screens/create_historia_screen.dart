@@ -6,16 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../db/database_helper.dart';
-import '../db/historia_audio_helper.dart';
-import '../db/historia_foto_helper.dart';
-import '../db/historia_video_helper.dart';
-import '../db/tag_helper.dart';
 import '../helpers/notification_helper.dart';
 import '../helpers/rich_text_helper.dart';
 import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../providers/refresh_provider.dart';
+import '../repositories/historia_repository.dart';
 import '../services/emoji_service.dart';
 import '../services/incremental_backup_service.dart';
 import '../theme/animation_durations.dart';
@@ -103,7 +99,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
 
   // Lista de tags selecionadas
   List<Tag> _selectedTags = [];
-
+  final HistoriaRepository _historiaRepository = HistoriaRepository();
   // Controle de alterações não salvas
   bool _hasUnsavedChanges = false;
 
@@ -308,59 +304,25 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         listen: false,
       );
       final navigator = Navigator.of(context);
-      final db = await DatabaseHelper().database;
 
       // Converte o conteúdo do Rich Text para JSON
       final richTextJson = RichTextHelper.controllerToJson(richTextController);
       final plainText = richTextController.document.toPlainText().trim();
 
-      // Salva a história (garante arquivado=null e grupo=null para aparecer na Home)
-      final historiaId = await db.insert('historia', {
-        'user_id': auth.user?.id ?? '',
-        'titulo': _capitalizeText(titleController.text.trim()),
-        'descricao': plainText.isEmpty ? null : richTextJson,
-        'tag':
-            null, // campo legado mantido para compatibilidade; usar historia_tags
-        'grupo': null,
-        'arquivado': null,
-        'emoticon': selectedEmoticon,
-        'data': selectedDate.toIso8601String(),
-        'data_criacao': DateTime.now().toIso8601String(),
-        'data_update': DateTime.now().toIso8601String(),
-        'humor': _selectedMood,
-        'energia': _selectedEnergy,
-      });
-
-      // Salva as tags no novo sistema de relações
-      if (_selectedTags.isNotEmpty) {
-        await TagHelper().setTagsForHistoria(historiaId, _selectedTags, db);
-      }
-
-      // Salva as fotos (se houver)
-      for (final foto in fotos) {
-        await HistoriaFotoHelper().insertFotoFromBytes(
-          historiaId: historiaId,
-          fotoBytes: foto,
-        );
-      }
-
-      // Salva os áudios (se houver)
-      for (final audioData in audios) {
-        await HistoriaAudioHelper().insertAudioFromBytes(
-          historiaId: historiaId,
-          audioBytes: audioData['audio'],
-          duracao: audioData['duration'],
-        );
-      }
-
-      // Salva os vídeos (se houver)
-      for (final videoData in videos) {
-        await HistoriaVideoHelper().insertVideoFromBytes(
-          historiaId: historiaId,
-          videoBytes: videoData['video'],
-          duracao: videoData['duration'],
-        );
-      }
+      // Salva a história usando a camada de repositório
+      final historiaId = await _historiaRepository.createHistoria(
+        userId: auth.user?.id ?? '',
+        titulo: _capitalizeText(titleController.text.trim()),
+        descricao: plainText.isEmpty ? null : richTextJson,
+        emoticon: selectedEmoticon,
+        data: selectedDate,
+        humor: _selectedMood,
+        energia: _selectedEnergy,
+        tags: _selectedTags,
+        fotos: fotos,
+        audios: audios,
+        videos: videos,
+      );
 
       // Se a data permitir notificação (pelo menos 2 horas à frente), perguntar sobre notificação
       if (NotificationHelper().shouldScheduleNotification(selectedDate)) {

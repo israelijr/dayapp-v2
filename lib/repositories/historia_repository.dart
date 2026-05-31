@@ -1,6 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:sqflite/sqflite.dart';
 
 import '../db/database_helper.dart';
+import '../db/historia_audio_helper.dart';
+import '../db/historia_foto_helper.dart';
+import '../db/historia_video_helper.dart';
+import '../db/tag_helper.dart';
 import '../models/historia.dart';
 import '../models/tag.dart';
 
@@ -224,6 +230,75 @@ class HistoriaRepository {
       where: 'id = ?',
       whereArgs: [historia.id],
     );
+  }
+
+  Future<int> createHistoria({
+    required String userId,
+    required String titulo,
+    required DateTime data,
+    required int humor,
+    required int energia,
+    String? descricao,
+    String? emoticon,
+    String? grupo,
+    String? arquivado,
+    DateTime? dataCriacao,
+    List<Tag>? tags,
+    List<Uint8List>? fotos,
+    List<Map<String, dynamic>>? audios,
+    List<Map<String, dynamic>>? videos,
+  }) async {
+    final db = await DatabaseHelper().database;
+    final historiaId = await db.insert(_table, {
+      'user_id': userId,
+      'titulo': titulo,
+      'descricao': descricao,
+      'tag': null,
+      'grupo': grupo,
+      'arquivado': arquivado,
+      'emoticon': emoticon,
+      'data': data.toIso8601String(),
+      'data_criacao': (dataCriacao ?? DateTime.now()).toIso8601String(),
+      'data_update': DateTime.now().toIso8601String(),
+      'humor': humor,
+      'energia': energia,
+      'backed_up': 0,
+    });
+
+    if (tags != null && tags.isNotEmpty) {
+      await TagHelper().setTagsForHistoria(historiaId, tags, db);
+    }
+
+    if (fotos != null && fotos.isNotEmpty) {
+      for (final foto in fotos) {
+        await HistoriaFotoHelper().insertFotoFromBytes(
+          historiaId: historiaId,
+          fotoBytes: foto,
+        );
+      }
+    }
+
+    if (audios != null && audios.isNotEmpty) {
+      for (final audioData in audios) {
+        await HistoriaAudioHelper().insertAudioFromBytes(
+          historiaId: historiaId,
+          audioBytes: audioData['audio'],
+          duracao: audioData['duration'],
+        );
+      }
+    }
+
+    if (videos != null && videos.isNotEmpty) {
+      for (final videoData in videos) {
+        await HistoriaVideoHelper().insertVideoFromBytes(
+          historiaId: historiaId,
+          videoBytes: videoData['video'],
+          duracao: videoData['duration'],
+        );
+      }
+    }
+
+    return historiaId;
   }
 
   Future<List<Historia>> fetchArchivedStories({required String userId}) async {
