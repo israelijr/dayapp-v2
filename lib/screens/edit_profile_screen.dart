@@ -12,6 +12,7 @@ import '../providers/auth_provider.dart';
 import '../providers/pin_provider.dart';
 import '../services/file_utils.dart';
 import '../widgets/custom_text_field.dart';
+import '../widgets/profile_avatar_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -29,8 +30,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String? _errorMessage;
   bool _isLoading = false;
   String? _pickedImagePath;
-  AuthProvider? _authProvider; // Salvar referência
-
   // Helper para mostrar SnackBar
   void _showSnackBar(String message) {
     if (!mounted) return;
@@ -52,10 +51,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Acessar context aqui é seguro
-    if (_authProvider == null) {
-      _authProvider = context.read<AuthProvider>();
-      final user = _authProvider!.user!;
+    final user = context.read<AuthProvider>().user;
+    if (user != null && _nameController.text.isEmpty) {
       _nameController.text = user.nome;
       _emailController.text = user.email;
       _selectedDate = user.dtNascimento;
@@ -128,9 +125,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       nome: _nameController.text.trim(),
       email: _emailController.text.trim(),
       dtNascimento: birthDate,
-      fotoPerfil:
-          _pickedImagePath ??
-          authProvider.user!.fotoPerfil, // mantém nova foto (ou a atual)
+      fotoPerfil: _pickedImagePath ?? authProvider.user!.fotoPerfil,
     );
     if (!mounted) return;
 
@@ -401,10 +396,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (picked != null) {
         final File tmpFile = File(picked.path);
         final oldPath = _pickedImagePath;
-        // copy into app directory
         final savedPath = await FileUtils.copyProfileImageToApp(tmpFile);
 
-        // if oldPath points to a local file inside profile_images, delete it
         if (oldPath != null && oldPath.isNotEmpty && oldPath != savedPath) {
           await FileUtils.deleteFileIfExists(oldPath);
         }
@@ -415,13 +408,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         });
       }
     } catch (e) {
-      // Garante reset da flag em caso de erro
       pinProvider.isPickingExternalMedia = false;
 
-      // Mostrar erro apenas se o widget ainda está montado
       if (!mounted) return;
       _showSnackBar(AppLocalizations.of(context)!.errorSelectImage);
     }
+  }
+
+  String? _selectedImagePath(BuildContext context) {
+    if (_pickedImagePath != null) return _pickedImagePath;
+    final user = context.watch<AuthProvider>().user;
+    if (user?.fotoPerfil != null && !user!.fotoPerfil!.startsWith('http')) {
+      return user.fotoPerfil;
+    }
+    return null;
+  }
+
+  String? _selectedNetworkImageUrl(BuildContext context) {
+    if (_pickedImagePath != null) return null;
+    final user = context.watch<AuthProvider>().user;
+    if (user?.fotoPerfil != null && user!.fotoPerfil!.startsWith('http')) {
+      return user.fotoPerfil;
+    }
+    return null;
   }
 
   @override
@@ -464,76 +473,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Center(
                 child: Stack(
                   children: [
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest,
-                      backgroundImage: _pickedImagePath != null
-                          ? (_pickedImagePath!.startsWith('http')
-                                ? NetworkImage(_pickedImagePath!)
-                                      as ImageProvider
-                                : (File(_pickedImagePath!).existsSync()
-                                      ? FileImage(File(_pickedImagePath!))
-                                      : null))
-                          : (context.watch<AuthProvider>().user!.fotoPerfil !=
-                                    null
-                                ? (context
-                                          .watch<AuthProvider>()
-                                          .user!
-                                          .fotoPerfil!
-                                          .startsWith('http')
-                                      ? NetworkImage(
-                                              context
-                                                  .watch<AuthProvider>()
-                                                  .user!
-                                                  .fotoPerfil!,
-                                            )
-                                            as ImageProvider
-                                      : (File(
-                                              context
-                                                  .watch<AuthProvider>()
-                                                  .user!
-                                                  .fotoPerfil!,
-                                            ).existsSync()
-                                            ? FileImage(
-                                                File(
-                                                  context
-                                                      .watch<AuthProvider>()
-                                                      .user!
-                                                      .fotoPerfil!,
-                                                ),
-                                              )
-                                            : null))
-                                : null),
-                      child:
-                          (_pickedImagePath == null &&
-                              context.watch<AuthProvider>().user!.fotoPerfil ==
-                                  null)
-                          ? Icon(
-                              Icons.person,
-                              size: 60,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                            )
-                          : null,
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.camera_alt,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            size: 16,
-                          ),
-                          onPressed: _pickImage,
-                        ),
-                      ),
+                    ProfileAvatarPicker(
+                      localImagePath: _selectedImagePath(context),
+                      networkImageUrl: _selectedNetworkImageUrl(context),
+                      onPickImage: _pickImage,
                     ),
                   ],
                 ),

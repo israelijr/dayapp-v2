@@ -9,8 +9,8 @@ class FileUtils {
   static Future<String> copyProfileImageToApp(File sourceFile) async {
     final appDir = await getApplicationDocumentsDirectory();
     final imagesDir = Directory(p.join(appDir.path, 'profile_images'));
-    if (!imagesDir.existsSync()) {
-      imagesDir.createSync(recursive: true);
+    if (!await imagesDir.exists()) {
+      await imagesDir.create(recursive: true);
     }
     final ext = p.extension(sourceFile.path);
     final fileName = 'profile_${DateTime.now().millisecondsSinceEpoch}$ext';
