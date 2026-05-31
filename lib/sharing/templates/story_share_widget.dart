@@ -222,7 +222,8 @@ class StoryShareWidget extends StatelessWidget {
                           Text(
                             story.title,
                             softWrap: true,
-                            overflow: TextOverflow.visible,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.playfairDisplay(
                               fontSize: width * 0.052,
                               fontWeight: FontWeight.w500,
@@ -307,253 +308,6 @@ class StoryShareWidget extends StatelessWidget {
     );
   }
 
-  // ignore: unused_element
-  Widget _buildScrapbookLegacy(BuildContext context) {
-    final photos = story.images;
-    final hasPhotos = photos.isNotEmpty;
-    final displayImages = photos.take(3).toList();
-    final extraCount = photos.length > 3 ? photos.length - 3 : 0;
-    final colorScheme = Theme.of(context).colorScheme;
-    final dateLabel = DateFormat(
-      'dd MMM yyyy',
-      story.localeName,
-    ).format(story.date);
-
-    Widget buildPhotoTile(Uint8List? image) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          color: colorScheme.surface,
-          border: Border.all(
-            color: colorScheme.onSurface.withValues(alpha: 0.08),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: colorScheme.onSurface.withValues(alpha: 0.08),
-              blurRadius: 18,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
-          child: image != null
-              ? Image.memory(image, fit: BoxFit.cover)
-              : Container(color: colorScheme.surfaceContainerHighest),
-        ),
-      );
-    }
-
-    Widget buildTextContent({required bool expanded}) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            story.title,
-            softWrap: true,
-            overflow: TextOverflow.visible,
-            style: GoogleFonts.playfairDisplay(
-              fontSize: 30,
-              fontWeight: FontWeight.w500,
-              color: colorScheme.onSurface,
-              height: 1.05,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Expanded(
-            flex: expanded ? 3 : 1,
-            child: Text(
-              _normalizedDescription(story.description),
-              maxLines: expanded ? 6 : 3,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 15,
-                height: 1.6,
-                color: colorScheme.onSurface.withValues(alpha: 0.88),
-              ),
-            ),
-          ),
-          const SizedBox(height: 18),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  if (story.emoticon != null && story.emoticon!.isNotEmpty)
-                    Text(
-                      story.emoticon!,
-                      style: GoogleFonts.plusJakartaSans(fontSize: 18),
-                    ),
-                  if (story.emoticon != null && story.emoticon!.isNotEmpty)
-                    const SizedBox(width: 8),
-                  Text(
-                    _moodLabel(story.mood),
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12,
-                      color: colorScheme.onSurface.withValues(alpha: 0.76),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              Text(
-                dateLabel,
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 12,
-                  color: colorScheme.onSurface.withValues(alpha: 0.76),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
-    }
-
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 700),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(36),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface.withValues(alpha: 0.58),
-                    borderRadius: BorderRadius.circular(36),
-                    border: Border.all(
-                      color: colorScheme.onSurface.withValues(alpha: 0.08),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: colorScheme.onSurface.withValues(alpha: 0.12),
-                        blurRadius: 32,
-                        offset: const Offset(0, 16),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(18),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        if (hasPhotos) ...[
-                          Expanded(
-                            flex: 5,
-                            child: AspectRatio(
-                              aspectRatio: 1.05,
-                              child: LayoutBuilder(
-                                builder: (context, photoConstraints) {
-                                  final photoWidth = photoConstraints.maxWidth;
-                                  final photoHeight =
-                                      photoConstraints.maxHeight;
-                                  final largeWidth = photoWidth * 0.55;
-                                  final largeHeight = photoHeight * 0.62;
-                                  final smallWidth = photoWidth * 0.38;
-                                  final smallHeight = photoHeight * 0.44;
-
-                                  return Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Positioned(
-                                        left: 0,
-                                        top: photoHeight * 0.06,
-                                        child: Transform.rotate(
-                                          angle: -0.04,
-                                          child: SizedBox(
-                                            width: largeWidth,
-                                            height: largeHeight,
-                                            child: buildPhotoTile(
-                                              displayImages[0],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      if (displayImages.length > 1)
-                                        Positioned(
-                                          left: largeWidth - smallWidth * 0.08,
-                                          top: photoHeight * 0.12,
-                                          child: Transform.rotate(
-                                            angle: 0.02,
-                                            child: SizedBox(
-                                              width: smallWidth,
-                                              height: smallHeight,
-                                              child: buildPhotoTile(
-                                                displayImages[1],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      if (displayImages.length > 2)
-                                        Positioned(
-                                          left: largeWidth - smallWidth * 0.01,
-                                          top: photoHeight * 0.44,
-                                          child: Transform.rotate(
-                                            angle: -0.05,
-                                            child: SizedBox(
-                                              width: smallWidth,
-                                              height: smallHeight,
-                                              child: buildPhotoTile(
-                                                displayImages[2],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      if (extraCount > 0 &&
-                                          displayImages.length > 2)
-                                        Positioned(
-                                          left: largeWidth + smallWidth * 0.53,
-                                          top: photoHeight * 0.75,
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 14,
-                                              vertical: 10,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: colorScheme.onSurface
-                                                  .withValues(alpha: 0.64),
-                                              borderRadius:
-                                                  BorderRadius.circular(999),
-                                            ),
-                                            child: Text(
-                                              '+$extraCount',
-                                              style:
-                                                  GoogleFonts.plusJakartaSans(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: colorScheme.surface,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                        Expanded(
-                          flex: hasPhotos ? 4 : 9,
-                          child: buildTextContent(expanded: !hasPhotos),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildScrapbook(BuildContext context) {
     final photos = story.images;
     final l10n = AppLocalizations.of(context)!;
@@ -616,7 +370,8 @@ class StoryShareWidget extends StatelessWidget {
           Text(
             story.title,
             softWrap: true,
-            overflow: TextOverflow.visible,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: GoogleFonts.playfairDisplay(
               fontSize: 34,
               fontWeight: FontWeight.w500,
@@ -642,7 +397,7 @@ class StoryShareWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _moodLabel(story.mood),
+                _moodLabel(context, story.mood),
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 12,
                   color: colorScheme.onSurface.withValues(alpha: 0.72),
@@ -1043,7 +798,8 @@ class StoryShareWidget extends StatelessWidget {
                                   Text(
                                     story.title,
                                     softWrap: true,
-                                    overflow: TextOverflow.visible,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.playfairDisplay(
                                       fontSize: 28,
                                       fontWeight: FontWeight.w500,
@@ -1104,20 +860,21 @@ class StoryShareWidget extends StatelessWidget {
     );
   }
 
-  String _moodLabel(int value) {
+  String _moodLabel(BuildContext context, int value) {
+    final l10n = AppLocalizations.of(context)!;
     switch (value) {
       case 1:
-        return 'Muito difícil';
+        return l10n.moodVeryDifficult;
       case 2:
-        return 'Difícil';
+        return l10n.moodDifficult;
       case 3:
-        return 'Neutro';
+        return l10n.moodNeutral;
       case 4:
-        return 'Bom';
+        return l10n.moodGood;
       case 5:
-        return 'Muito bom';
+        return l10n.moodVeryGood;
       default:
-        return 'Neutro';
+        return l10n.moodNeutral;
     }
   }
 
@@ -1198,6 +955,8 @@ class StoryShareWidget extends StatelessWidget {
                 const SizedBox(height: 14),
                 Text(
                   story.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.playfairDisplay(
                     fontSize: 42,
                     fontWeight: FontWeight.w500,

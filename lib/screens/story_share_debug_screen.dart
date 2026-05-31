@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/sharing/story_data.dart';
 import 'package:dayapp/sharing/templates/story_share_widget.dart';
 import 'package:flutter/material.dart';
@@ -63,10 +64,11 @@ class _StoryShareDebugScreenState extends State<StoryShareDebugScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final storyData = _buildSampleStory();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Preview de Compartilhamento')),
+      appBar: AppBar(title: Text(l10n.preview)),
       body: Column(
         children: [
           Expanded(
@@ -98,7 +100,7 @@ class _StoryShareDebugScreenState extends State<StoryShareDebugScreen> {
               children: [
                 FilledButton.icon(
                   icon: const Icon(Icons.save),
-                  label: const Text('Salvar preview como PNG'),
+                  label: Text(l10n.save),
                   onPressed: _isSaving ? null : _savePreviewImage,
                 ),
                 const SizedBox(height: 12),
