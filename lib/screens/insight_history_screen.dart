@@ -91,23 +91,8 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
               style: GoogleFonts.notoSerif(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onPrimary,
               ),
             ),
-            actions: [
-              Consumer<InsightHistoryProvider>(
-                builder: (_, provider, __) {
-                  if (provider.entries.isEmpty && !provider.isLoading) {
-                    return const SizedBox.shrink();
-                  }
-                  return IconButton(
-                    tooltip: l10n.insightHistoryClearAll,
-                    icon: const Icon(Icons.delete_sweep_outlined),
-                    onPressed: () => _confirmClear(context),
-                  );
-                },
-              ),
-            ],
           ),
           body: Consumer<InsightHistoryProvider>(
             builder: (context, provider, _) {
@@ -123,6 +108,43 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
                 isPremiumUser, // Passado explicitamente
               );
             },
+          ),
+          bottomNavigationBar: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor:
+                            theme.colorScheme.surfaceContainerHighest,
+                        foregroundColor: theme.colorScheme.onSurface,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/home',
+                          (route) => false,
+                        );
+                      },
+                      child: Text(l10n.cancel),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: theme.colorScheme.error,
+                      ),
+                      onPressed: () => _confirmClear(context),
+                      child: Text(l10n.insightHistoryClearAll),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
