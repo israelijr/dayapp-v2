@@ -61,6 +61,41 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
+  Future<bool> verifyCredentials({
+    required String email,
+    required String password,
+  }) async {
+    final db = await DatabaseHelper().database;
+    final result = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    if (result.isEmpty) return false;
+
+    final storedPassword = result.first['senha'] as String;
+
+    final validPassword = _secureStorage.verifyPassword(
+      password,
+      storedPassword,
+    );
+    if (!validPassword) return false;
+
+    if (!storedPassword.contains('\$')) {
+      final salt = _secureStorage.generateSalt();
+      final hashedPassword = _secureStorage.hashPassword(password, salt);
+      await db.update(
+        'users',
+        {'senha': hashedPassword},
+        where: 'id = ?',
+        whereArgs: [result.first['id']],
+      );
+    }
+
+    return true;
+  }
+
   Future<bool> register({
     required String nome,
     required String email,

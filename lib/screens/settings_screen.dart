@@ -666,32 +666,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       return;
                     }
 
-                    // Verifica as credenciais usando hash
-                    final db = await DatabaseHelper().database;
-                    final result = await db.query(
-                      'users',
-                      where: 'email = ?',
-                      whereArgs: [email],
-                    );
+                    final authProvider = context.read<AuthProvider>();
+                    final validCredentials = await authProvider
+                        .verifyCredentials(email: email, password: password);
 
-                    if (result.isEmpty) {
-                      if (!mounted) return;
-                      messenger.showSnackBar(
-                        SnackBar(
-                          content: Text(loc.invalidCredentials),
-                          backgroundColor: errorColor,
-                        ),
-                      );
-                      return;
-                    }
-
-                    // Verifica a senha com o hash armazenado
-                    final storedPassword = result.first['senha'] as String;
-                    final secureStorage = SecureStorageService();
-                    if (!secureStorage.verifyPassword(
-                      password,
-                      storedPassword,
-                    )) {
+                    if (!validCredentials) {
                       if (!mounted) return;
                       messenger.showSnackBar(
                         SnackBar(
