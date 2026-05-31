@@ -323,6 +323,11 @@
     "description": "Etiqueta para la plantilla de compartir historias Scrapbook",
     "type": "text"
   },
+  "polaroidTemplateLabel": "Polaroid",
+  "@polaroidTemplateLabel": {
+    "description": "Etiqueta para la plantilla de compartir historias Polaroid",
+    "type": "text"
+  },
   "imageCopiedBase64": "Imagen copiada al portapapeles (base64)",
   "home": "Inicio",
   "groups": "Grupos",

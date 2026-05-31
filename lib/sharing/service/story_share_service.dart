@@ -97,21 +97,9 @@ class _ShareStoryShareableScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.asset('assets/image/fundo.png', fit: BoxFit.cover),
-        Center(
-          child: FractionallySizedBox(
-            widthFactor: 0.70,
-            heightFactor: 0.78,
-            child: Material(
-              color: Colors.transparent,
-              child: StoryShareWidget(story: story),
-            ),
-          ),
-        ),
-      ],
+    return Material(
+      color: Colors.transparent,
+      child: SizedBox.expand(child: StoryShareWidget(story: story)),
     );
   }
 }

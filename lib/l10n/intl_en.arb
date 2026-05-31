@@ -391,6 +391,11 @@
     "description": "Label for the Scrapbook story share template",
     "type": "text"
   },
+  "polaroidTemplateLabel": "Polaroid",
+  "@polaroidTemplateLabel": {
+    "description": "Label for the Polaroid story share template",
+    "type": "text"
+  },
   "home": "Home",
   "@home": {
     "description": "Label for home tab",

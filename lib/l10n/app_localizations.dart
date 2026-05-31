@@ -1479,6 +1479,12 @@ abstract class AppLocalizations {
   /// **'Scrapbook'**
   String get scrapbookTemplateLabel;
 
+  /// Label for the Polaroid story share template
+  ///
+  /// In en, this message translates to:
+  /// **'Polaroid'**
+  String get polaroidTemplateLabel;
+
   /// Label for home tab
   ///
   /// In en, this message translates to:

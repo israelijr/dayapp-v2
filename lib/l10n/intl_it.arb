@@ -387,6 +387,11 @@
     "description": "Etichetta per il template di condivisione storia Scrapbook",
     "type": "text"
   },
+  "polaroidTemplateLabel": "Polaroid",
+  "@polaroidTemplateLabel": {
+    "description": "Etichetta per il template di condivisione storia Polaroid",
+    "type": "text"
+  },
   "home": "Home",
   "@home": {
     "description": "Etichetta della scheda home",

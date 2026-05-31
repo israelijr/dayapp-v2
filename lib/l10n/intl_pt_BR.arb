@@ -334,6 +334,11 @@
     "description": "Rótulo para o template Scrapbook de compartilhamento de história",
     "type": "text"
   },
+  "polaroidTemplateLabel": "Polaroid",
+  "@polaroidTemplateLabel": {
+    "description": "Rótulo para o template Polaroid de compartilhamento de história",
+    "type": "text"
+  },
   "home": "Início",
   "groups": "Grupos",
   "myStories": "Minhas Histórias",

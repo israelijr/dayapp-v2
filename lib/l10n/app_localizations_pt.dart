@@ -750,6 +750,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get scrapbookTemplateLabel => 'Scrapbook';
 
   @override
+  String get polaroidTemplateLabel => 'Polaroid';
+
+  @override
   String get home => 'Início';
 
   @override
@@ -3343,6 +3346,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get scrapbookTemplateLabel => 'Scrapbook';
+
+  @override
+  String get polaroidTemplateLabel => 'Polaroid';
 
   @override
   String get home => 'Início';

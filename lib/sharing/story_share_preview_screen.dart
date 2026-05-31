@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/sharing/story_data.dart';
 import 'package:dayapp/sharing/templates/story_share_widget.dart';
@@ -15,38 +14,18 @@ class StorySharePreviewScreen extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset('assets/image/fundo.png', fit: BoxFit.cover),
-          ),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final isLandscape = constraints.maxWidth > constraints.maxHeight;
-              final targetAspectRatio = isLandscape ? 4 / 3 : 9 / 16;
-              final maxWidth =
-                  constraints.maxWidth * (isLandscape ? 0.96 : 0.92);
-              final maxHeight =
-                  constraints.maxHeight * (isLandscape ? 0.90 : 0.82);
-              final widthByHeight = maxHeight * targetAspectRatio;
-              final width = math.min(maxWidth, widthByHeight);
-              final height = width / targetAspectRatio;
-
-              return Center(
-                child: SizedBox(
-                  width: width,
-                  height: height,
-                  child: Material(
-                    color: Colors.transparent,
-                    elevation: 0,
-                    shadowColor: Colors.transparent,
-                    borderRadius: BorderRadius.circular(34),
-                    clipBehavior: Clip.antiAlias,
-                    child: StoryShareWidget(story: story),
-                  ),
-                ),
-              );
-            },
+            child: Material(
+              color: Colors.transparent,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(34),
+                clipBehavior: Clip.antiAlias,
+                child: StoryShareWidget(story: story),
+              ),
+            ),
           ),
           Positioned(
             left: 16,

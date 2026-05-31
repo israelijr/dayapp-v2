@@ -387,6 +387,11 @@
     "description": "Libellé pour le modèle de partage d'histoire Scrapbook",
     "type": "text"
   },
+  "polaroidTemplateLabel": "Polaroid",
+  "@polaroidTemplateLabel": {
+    "description": "Libellé pour le modèle de partage d'histoire Polaroid",
+    "type": "text"
+  },
   "home": "Accueil",
   "@home": {
     "description": "Étiquette de l'onglet accueil",

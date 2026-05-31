@@ -758,6 +758,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get scrapbookTemplateLabel => 'Scrapbook';
 
   @override
+  String get polaroidTemplateLabel => 'Polaroid';
+
+  @override
   String get home => 'Home';
 
   @override
