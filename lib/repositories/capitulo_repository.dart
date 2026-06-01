@@ -5,23 +5,41 @@ import '../models/capitulo.dart';
 import '../models/historia.dart';
 
 class CapituloRepository {
+  Future<void> _markEntradasAsPendingBackup(
+    DatabaseExecutor db,
+    Iterable<int> entradaIds,
+  ) async {
+    final ids = entradaIds.toSet().toList(growable: false);
+    if (ids.isEmpty) return;
+
+    final placeholders = List.filled(ids.length, '?').join(', ');
+    await db.rawUpdate(
+      'UPDATE historia SET backed_up = 0, data_update = ? WHERE id IN ($placeholders)',
+      [DateTime.now().toIso8601String(), ...ids],
+    );
+  }
+
   Future<int> insertCapituloWithEntradas(
     Capitulo capitulo,
     List<int> entradaIds,
   ) async {
     final db = await DatabaseHelper().database;
     return db.transaction((txn) async {
+      final uniqueEntradaIds = entradaIds.toSet().toList(growable: false);
+
       final capituloId = await txn.insert('capitulos', {
         ...capitulo.toMap(),
         'data_update': DateTime.now().toIso8601String(),
       });
 
-      for (final entradaId in entradaIds.toSet()) {
+      for (final entradaId in uniqueEntradaIds) {
         await txn.insert('capitulo_entradas', {
           'capitulo_id': capituloId,
           'entrada_id': entradaId,
         }, conflictAlgorithm: ConflictAlgorithm.ignore);
       }
+
+      await _markEntradasAsPendingBackup(txn, uniqueEntradaIds);
       return capituloId;
     });
   }
@@ -32,6 +50,18 @@ class CapituloRepository {
   ) async {
     final db = await DatabaseHelper().database;
     await db.transaction((txn) async {
+      final uniqueEntradaIds = entradaIds.toSet().toList(growable: false);
+
+      final previousEntradasRows = await txn.query(
+        'capitulo_entradas',
+        columns: ['entrada_id'],
+        where: 'capitulo_id = ?',
+        whereArgs: [capitulo.id],
+      );
+      final previousEntradaIds = previousEntradasRows
+          .map((row) => row['entrada_id'] as int)
+          .toSet();
+
       await txn.update(
         'capitulos',
         {...capitulo.toMap(), 'data_update': DateTime.now().toIso8601String()},
@@ -45,18 +75,36 @@ class CapituloRepository {
         whereArgs: [capitulo.id],
       );
 
-      for (final entradaId in entradaIds.toSet()) {
+      for (final entradaId in uniqueEntradaIds) {
         await txn.insert('capitulo_entradas', {
           'capitulo_id': capitulo.id,
           'entrada_id': entradaId,
         }, conflictAlgorithm: ConflictAlgorithm.ignore);
       }
+
+      await _markEntradasAsPendingBackup(txn, {
+        ...previousEntradaIds,
+        ...uniqueEntradaIds,
+      });
     });
   }
 
   Future<void> deleteCapitulo(int capituloId) async {
     final db = await DatabaseHelper().database;
-    await db.delete('capitulos', where: 'id = ?', whereArgs: [capituloId]);
+    await db.transaction((txn) async {
+      final entradasRows = await txn.query(
+        'capitulo_entradas',
+        columns: ['entrada_id'],
+        where: 'capitulo_id = ?',
+        whereArgs: [capituloId],
+      );
+      final entradaIds = entradasRows
+          .map((row) => row['entrada_id'] as int)
+          .toList(growable: false);
+
+      await txn.delete('capitulos', where: 'id = ?', whereArgs: [capituloId]);
+      await _markEntradasAsPendingBackup(txn, entradaIds);
+    });
   }
 
   Future<List<CapituloResumo>> fetchCapitulosResumoByUser(String userId) async {

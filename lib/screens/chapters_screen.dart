@@ -116,8 +116,10 @@ Widget _buildMetaChip({
         const SizedBox(width: 6),
         Text(
           label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          style: GoogleFonts.plusJakartaSans(
+            textStyle: Theme.of(context).textTheme.labelMedium,
             color: colorScheme.onSecondaryContainer,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
@@ -1947,24 +1949,8 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: _voltar,
-            icon: const Icon(Icons.arrow_back),
-          ),
+          automaticallyImplyLeading: false,
           title: Text(capitulo.titulo),
-          actions: [
-            IconButton(
-              tooltip: l10n.edit,
-              onPressed: _editarCapitulo,
-              icon: const Icon(Icons.edit_outlined),
-            ),
-            IconButton(
-              tooltip: l10n.deleteLabel,
-              onPressed: _excluirCapitulo,
-              color: colorScheme.error,
-              icon: const Icon(Icons.delete_outline),
-            ),
-          ],
         ),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -2024,16 +2010,23 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                               children: [
                                 Text(
                                   capitulo.titulo,
-                                  style: Theme.of(context).textTheme.titleLarge,
+                                  style: GoogleFonts.notoSerif(
+                                    textStyle: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   periodo,
-                                  style: Theme.of(context).textTheme.bodySmall
-                                      ?.copyWith(
-                                        color: colorScheme.onSurfaceVariant,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                  style: GoogleFonts.plusJakartaSans(
+                                    textStyle: Theme.of(
+                                      context,
+                                    ).textTheme.bodySmall,
+                                    color: colorScheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                                 const SizedBox(height: 12),
                                 Row(
@@ -2052,7 +2045,15 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                                 if (capitulo.descricao != null &&
                                     capitulo.descricao!.trim().isNotEmpty) ...[
                                   const SizedBox(height: 12),
-                                  Text(capitulo.descricao!.trim()),
+                                  Text(
+                                    capitulo.descricao!.trim(),
+                                    style: GoogleFonts.plusJakartaSans(
+                                      textStyle: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium,
+                                      color: colorScheme.onSurface,
+                                    ),
+                                  ),
                                 ],
                               ],
                             ),
@@ -2067,7 +2068,10 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
                       l10n.chapterEntriesCount(_entradas.length),
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: GoogleFonts.notoSerif(
+                        textStyle: Theme.of(context).textTheme.titleMedium,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -2076,7 +2080,10 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         l10n.noStoriesHere,
-                        style: TextStyle(color: colorScheme.onSurfaceVariant),
+                        style: GoogleFonts.plusJakartaSans(
+                          textStyle: Theme.of(context).textTheme.bodyMedium,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     )
                   else
@@ -2095,6 +2102,37 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                     ),
                 ],
               ),
+        bottomNavigationBar: SafeArea(
+          minimum: const EdgeInsets.fromLTRB(16, 4, 16, 14),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: _voltar,
+                  child: Text(l10n.close),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: FilledButton.tonal(
+                  onPressed: _editarCapitulo,
+                  child: Text(l10n.edit),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: colorScheme.error,
+                    foregroundColor: colorScheme.onError,
+                  ),
+                  onPressed: _excluirCapitulo,
+                  child: Text(l10n.deleteLabel),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -2183,8 +2221,10 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
                   'dd/MM/yyyy',
                   widget.localeName,
                 ).format(historia.data),
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                style: GoogleFonts.plusJakartaSans(
+                  textStyle: Theme.of(context).textTheme.labelSmall,
                   color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(height: 6),
@@ -2193,9 +2233,10 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
                 historia.titulo,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+                style: GoogleFonts.notoSerif(
+                  textStyle: Theme.of(context).textTheme.titleSmall,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               if (descricao.isNotEmpty) ...[
                 const SizedBox(height: 6),
@@ -2204,7 +2245,8 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
                     descricao,
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    style: GoogleFonts.plusJakartaSans(
+                      textStyle: Theme.of(context).textTheme.bodySmall,
                       color: colorScheme.onSurfaceVariant,
                     ),
                   ),
@@ -2231,10 +2273,11 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
                           ),
                           child: Text(
                             '#$tag',
-                            style: Theme.of(context).textTheme.labelSmall
-                                ?.copyWith(
-                                  color: colorScheme.onPrimaryContainer,
-                                ),
+                            style: GoogleFonts.plusJakartaSans(
+                              textStyle: Theme.of(context).textTheme.labelSmall,
+                              color: colorScheme.onPrimaryContainer,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       )
@@ -2255,7 +2298,8 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
                       const SizedBox(width: 2),
                       Text(
                         '$_fotos',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        style: GoogleFonts.plusJakartaSans(
+                          textStyle: Theme.of(context).textTheme.labelSmall,
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),
@@ -2270,7 +2314,8 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
                       const SizedBox(width: 2),
                       Text(
                         '$_audios',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        style: GoogleFonts.plusJakartaSans(
+                          textStyle: Theme.of(context).textTheme.labelSmall,
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),
@@ -2285,7 +2330,8 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
                       const SizedBox(width: 2),
                       Text(
                         '$_videos',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        style: GoogleFonts.plusJakartaSans(
+                          textStyle: Theme.of(context).textTheme.labelSmall,
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),
