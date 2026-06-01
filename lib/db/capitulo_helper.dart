@@ -16,11 +16,14 @@ class CapituloHelper {
         'data_update': DateTime.now().toIso8601String(),
       });
 
+      var order = 1;
       for (final entradaId in entradaIds.toSet()) {
         await txn.insert('capitulo_entradas', {
           'capitulo_id': capituloId,
           'entrada_id': entradaId,
+          'display_order': order,
         }, conflictAlgorithm: ConflictAlgorithm.ignore);
+        order += 1;
       }
       return capituloId;
     });
@@ -45,11 +48,14 @@ class CapituloHelper {
         whereArgs: [capitulo.id],
       );
 
+      var order = 1;
       for (final entradaId in entradaIds.toSet()) {
         await txn.insert('capitulo_entradas', {
           'capitulo_id': capitulo.id,
           'entrada_id': entradaId,
+          'display_order': order,
         }, conflictAlgorithm: ConflictAlgorithm.ignore);
+        order += 1;
       }
     });
   }
@@ -114,7 +120,11 @@ class CapituloHelper {
       JOIN historia h ON h.id = ce.entrada_id
       WHERE ce.capitulo_id = ?
         AND h.excluido IS NULL
-      ORDER BY h.data DESC
+      ORDER BY
+        CASE WHEN ce.display_order IS NULL THEN 1 ELSE 0 END ASC,
+        ce.display_order ASC,
+        h.data ASC,
+        h.id ASC
       ''',
       [capituloId],
     );
@@ -236,15 +246,77 @@ class CapituloHelper {
     return rows.map((row) => row['entrada_id'] as int).toSet();
   }
 
+  Future<void> updateEntradasOrder({
+    required int capituloId,
+    required List<int> orderedEntryIds,
+  }) async {
+    final db = await DatabaseHelper().database;
+
+    await db.transaction((txn) async {
+      final existingRows = await txn.query(
+        'capitulo_entradas',
+        columns: ['entrada_id'],
+        where: 'capitulo_id = ?',
+        whereArgs: [capituloId],
+      );
+
+      final existingIds = existingRows
+          .map((row) => row['entrada_id'] as int)
+          .toSet();
+      if (existingIds.isEmpty) {
+        return;
+      }
+
+      final uniqueOrderedIds = <int>[];
+      for (final entryId in orderedEntryIds) {
+        if (!existingIds.contains(entryId) ||
+            uniqueOrderedIds.contains(entryId)) {
+          continue;
+        }
+        uniqueOrderedIds.add(entryId);
+      }
+
+      final missingIds = existingIds.where(
+        (entryId) => !uniqueOrderedIds.contains(entryId),
+      );
+      uniqueOrderedIds.addAll(missingIds);
+
+      var order = 1;
+      for (final entryId in uniqueOrderedIds) {
+        await txn.update(
+          'capitulo_entradas',
+          {'display_order': order},
+          where: 'capitulo_id = ? AND entrada_id = ?',
+          whereArgs: [capituloId, entryId],
+        );
+        order += 1;
+      }
+    });
+  }
+
   Future<void> addEntradaToCapitulo({
     required int capituloId,
     required int entradaId,
   }) async {
     final db = await DatabaseHelper().database;
     await db.transaction((txn) async {
+      final nextOrderRows = await txn.rawQuery(
+        '''
+        SELECT COALESCE(MAX(display_order), 0) + 1 AS next_order
+        FROM capitulo_entradas
+        WHERE capitulo_id = ?
+        ''',
+        [capituloId],
+      );
+      final nextOrder = (nextOrderRows.first['next_order'] as int? ?? 1).clamp(
+        1,
+        1 << 30,
+      );
+
       await txn.insert('capitulo_entradas', {
         'capitulo_id': capituloId,
         'entrada_id': entradaId,
+        'display_order': nextOrder,
       }, conflictAlgorithm: ConflictAlgorithm.ignore);
 
       final rows = await txn.rawQuery(

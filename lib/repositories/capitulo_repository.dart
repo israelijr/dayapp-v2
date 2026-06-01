@@ -1,10 +1,20 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../domain/chapter_export_document.dart';
 import '../db/database_helper.dart';
 import '../models/capitulo.dart';
+import '../models/historia_foto_v2.dart';
 import '../models/historia.dart';
+import '../services/chapter_document_builder.dart';
 
 class CapituloRepository {
+  final ChapterDocumentBuilder _chapterDocumentBuilder;
+
+  CapituloRepository({
+    ChapterDocumentBuilder chapterDocumentBuilder =
+        const ChapterDocumentBuilder(),
+  }) : _chapterDocumentBuilder = chapterDocumentBuilder;
+
   Future<void> _markEntradasAsPendingBackup(
     DatabaseExecutor db,
     Iterable<int> entradaIds,
@@ -32,11 +42,14 @@ class CapituloRepository {
         'data_update': DateTime.now().toIso8601String(),
       });
 
+      var order = 1;
       for (final entradaId in uniqueEntradaIds) {
         await txn.insert('capitulo_entradas', {
           'capitulo_id': capituloId,
           'entrada_id': entradaId,
+          'display_order': order,
         }, conflictAlgorithm: ConflictAlgorithm.ignore);
+        order += 1;
       }
 
       await _markEntradasAsPendingBackup(txn, uniqueEntradaIds);
@@ -75,11 +88,14 @@ class CapituloRepository {
         whereArgs: [capitulo.id],
       );
 
+      var order = 1;
       for (final entradaId in uniqueEntradaIds) {
         await txn.insert('capitulo_entradas', {
           'capitulo_id': capitulo.id,
           'entrada_id': entradaId,
+          'display_order': order,
         }, conflictAlgorithm: ConflictAlgorithm.ignore);
+        order += 1;
       }
 
       await _markEntradasAsPendingBackup(txn, {
@@ -166,7 +182,11 @@ class CapituloRepository {
       JOIN historia h ON h.id = ce.entrada_id
       WHERE ce.capitulo_id = ?
         AND h.excluido IS NULL
-      ORDER BY h.data DESC
+      ORDER BY
+        CASE WHEN ce.display_order IS NULL THEN 1 ELSE 0 END ASC,
+        ce.display_order ASC,
+        h.data ASC,
+        h.id ASC
       ''',
       [capituloId],
     );
@@ -241,5 +261,142 @@ class CapituloRepository {
     );
 
     return rows.map((row) => row['entrada_id'] as int).toSet();
+  }
+
+  Future<void> updateChapterEntriesOrder({
+    required int capituloId,
+    required List<int> orderedEntryIds,
+  }) async {
+    final db = await DatabaseHelper().database;
+
+    await db.transaction((txn) async {
+      final existingRows = await txn.query(
+        'capitulo_entradas',
+        columns: ['entrada_id'],
+        where: 'capitulo_id = ?',
+        whereArgs: [capituloId],
+      );
+
+      final existingIds = existingRows
+          .map((row) => row['entrada_id'] as int)
+          .toSet();
+      if (existingIds.isEmpty) {
+        return;
+      }
+
+      final uniqueOrderedIds = <int>[];
+      for (final entryId in orderedEntryIds) {
+        if (!existingIds.contains(entryId) ||
+            uniqueOrderedIds.contains(entryId)) {
+          continue;
+        }
+        uniqueOrderedIds.add(entryId);
+      }
+
+      final missingIds = existingIds.where(
+        (entryId) => !uniqueOrderedIds.contains(entryId),
+      );
+      uniqueOrderedIds.addAll(missingIds);
+
+      var order = 1;
+      for (final entryId in uniqueOrderedIds) {
+        await txn.update(
+          'capitulo_entradas',
+          {'display_order': order},
+          where: 'capitulo_id = ? AND entrada_id = ?',
+          whereArgs: [capituloId, entryId],
+        );
+        order += 1;
+      }
+
+      await _markEntradasAsPendingBackup(txn, uniqueOrderedIds);
+    });
+  }
+
+  Future<ChapterExportDocument?> fetchChapterExportDocument(
+    int capituloId,
+  ) async {
+    final db = await DatabaseHelper().database;
+
+    final chapterRows = await db.query(
+      'capitulos',
+      where: 'id = ?',
+      whereArgs: [capituloId],
+      limit: 1,
+    );
+
+    if (chapterRows.isEmpty) {
+      return null;
+    }
+
+    final chapter = Capitulo.fromMap(chapterRows.first);
+    final stories = await getEntradasByCapitulo(capituloId);
+
+    final storyIds = stories
+        .map((story) => story.id)
+        .whereType<int>()
+        .toList(growable: false);
+
+    final photosByStoryId = await _fetchPhotosByStoryId(db, storyIds);
+    final displayOrderByStoryId = await _fetchDisplayOrderByStoryId(
+      db,
+      capituloId,
+    );
+
+    return _chapterDocumentBuilder.build(
+      chapter: chapter,
+      stories: stories,
+      photosByStoryId: photosByStoryId,
+      displayOrderByStoryId: displayOrderByStoryId,
+    );
+  }
+
+  Future<Map<int, int>> _fetchDisplayOrderByStoryId(
+    Database db,
+    int capituloId,
+  ) async {
+    final rows = await db.query(
+      'capitulo_entradas',
+      columns: ['entrada_id', 'display_order'],
+      where: 'capitulo_id = ? AND display_order IS NOT NULL',
+      whereArgs: [capituloId],
+    );
+
+    final map = <int, int>{};
+    for (final row in rows) {
+      final storyId = row['entrada_id'] as int?;
+      final displayOrder = row['display_order'] as int?;
+      if (storyId != null && displayOrder != null) {
+        map[storyId] = displayOrder;
+      }
+    }
+
+    return map;
+  }
+
+  Future<Map<int, List<HistoriaFoto>>> _fetchPhotosByStoryId(
+    Database db,
+    List<int> storyIds,
+  ) async {
+    if (storyIds.isEmpty) {
+      return const {};
+    }
+
+    final placeholders = List.filled(storyIds.length, '?').join(', ');
+    final rows = await db.query(
+      'historia_fotos',
+      where: 'historia_id IN ($placeholders)',
+      whereArgs: storyIds,
+      orderBy: 'id ASC',
+    );
+
+    final photosByStoryId = <int, List<HistoriaFoto>>{};
+    for (final row in rows) {
+      final photo = HistoriaFoto.fromMap(row);
+      photosByStoryId.putIfAbsent(photo.historiaId, () => <HistoriaFoto>[]);
+      photosByStoryId[photo.historiaId]!.add(photo);
+    }
+
+    return photosByStoryId;
   }
 }

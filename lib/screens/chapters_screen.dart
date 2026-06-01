@@ -20,6 +20,7 @@ import '../providers/auth_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../repositories/capitulo_repository.dart';
+import '../screens/chapter_reader_screen.dart';
 import '../repositories/historia_repository.dart';
 import '../services/capitulo_sugestao_service.dart';
 import '../widgets/compact_historia_card.dart';
@@ -1865,6 +1866,47 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
     Navigator.of(context).pop(_didChange);
   }
 
+  Future<void> _abrirModoLeitura() async {
+    final capituloId = _resumo.capitulo.id;
+    if (capituloId == null) return;
+
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ChapterReaderScreen(chapterId: capituloId),
+      ),
+    );
+  }
+
+  Future<void> _reordenarEntradas() async {
+    final capituloId = _resumo.capitulo.id;
+    if (capituloId == null || _entradas.length < 2) return;
+
+    final orderedEntryIds = await showModalBottomSheet<List<int>>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _ChapterEntryReorderSheet(
+        entries: _entradas,
+        localeName: AppLocalizations.of(context)!.localeName,
+      ),
+    );
+
+    if (orderedEntryIds == null || orderedEntryIds.isEmpty) {
+      return;
+    }
+
+    await widget.capituloRepository.updateChapterEntriesOrder(
+      capituloId: capituloId,
+      orderedEntryIds: orderedEntryIds,
+    );
+
+    if (!mounted) return;
+    _didChange = true;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context)!.chapterUpdated)),
+    );
+    await _loadChapterData();
+  }
+
   void _abrirHistoria(Historia historia) {
     showModalBottomSheet<void>(
       context: context,
@@ -1965,6 +2007,18 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(capitulo.titulo),
+          actions: [
+            IconButton(
+              tooltip: l10n.chapterSortLabel,
+              onPressed: _reordenarEntradas,
+              icon: const Icon(Icons.reorder_rounded),
+            ),
+            IconButton(
+              tooltip: l10n.chapterOpenLabel,
+              onPressed: _abrirModoLeitura,
+              icon: const Icon(Icons.auto_stories_outlined),
+            ),
+          ],
         ),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -2358,5 +2412,120 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
         ),
       ),
     );
+  }
+}
+
+class _ChapterEntryReorderSheet extends StatefulWidget {
+  final List<Historia> entries;
+  final String localeName;
+
+  const _ChapterEntryReorderSheet({
+    required this.entries,
+    required this.localeName,
+  });
+
+  @override
+  State<_ChapterEntryReorderSheet> createState() =>
+      _ChapterEntryReorderSheetState();
+}
+
+class _ChapterEntryReorderSheetState extends State<_ChapterEntryReorderSheet> {
+  late final List<Historia> _draftEntries;
+
+  @override
+  void initState() {
+    super.initState();
+    _draftEntries = List<Historia>.from(widget.entries);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return SafeArea(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.78,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.chapterSortLabel,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(l10n.close),
+                  ),
+                  FilledButton.tonal(
+                    onPressed: _save,
+                    child: Text(l10n.confirm),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            Expanded(
+              child: ReorderableListView.builder(
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 16),
+                itemCount: _draftEntries.length,
+                onReorder: _onReorder,
+                itemBuilder: (context, index) {
+                  final historia = _draftEntries[index];
+                  final id = historia.id ?? index;
+
+                  return Card(
+                    key: ValueKey(id),
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    child: ListTile(
+                      leading: CircleAvatar(child: Text('${index + 1}')),
+                      title: Text(
+                        historia.titulo,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(
+                        DateFormat(
+                          'dd/MM/yyyy',
+                          widget.localeName,
+                        ).format(historia.data),
+                      ),
+                      trailing: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle_rounded),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+
+      final item = _draftEntries.removeAt(oldIndex);
+      _draftEntries.insert(newIndex, item);
+    });
+  }
+
+  void _save() {
+    final orderedIds = _draftEntries
+        .map((entry) => entry.id)
+        .whereType<int>()
+        .toList(growable: false);
+
+    Navigator.of(context).pop(orderedIds);
   }
 }

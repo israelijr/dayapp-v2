@@ -17,8 +17,25 @@ class ManageGroupsScreen extends StatefulWidget {
 }
 
 class _ManageGroupsScreenState extends State<ManageGroupsScreen> {
+  late final GroupManagementProvider _groupManagementProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _groupManagementProvider = GroupManagementProvider(
+      repository: GroupRepository(),
+      authProvider: context.read<AuthProvider>(),
+    )..loadGrupos();
+  }
+
+  @override
+  void dispose() {
+    _groupManagementProvider.dispose();
+    super.dispose();
+  }
+
   Future<void> _deleteGrupo(Grupo grupo) async {
-    final provider = context.read<GroupManagementProvider>();
+    final provider = _groupManagementProvider;
     final historiasCount = await provider.countHistoriasInGroup(grupo.nome);
 
     if (!mounted) return;
@@ -66,10 +83,7 @@ class _ManageGroupsScreenState extends State<ManageGroupsScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GroupManagementProvider>(
-      create: (context) => GroupManagementProvider(
-        repository: GroupRepository(),
-        authProvider: context.read<AuthProvider>(),
-      )..loadGrupos(),
+      create: (_) => _groupManagementProvider,
       child: Consumer<GroupManagementProvider>(
         builder: (context, provider, child) {
           final grupos = provider.grupos;

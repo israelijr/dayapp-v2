@@ -182,10 +182,18 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
 
   // Controle de scroll para manter posição da lista
   final ScrollController _scrollController = ScrollController();
+  late final GroupStoriesProvider _storiesProvider;
 
   @override
   void initState() {
     super.initState();
+    _storiesProvider = GroupStoriesProvider(
+      repository: GroupRepository(),
+      authProvider: context.read<AuthProvider>(),
+      grupoId: widget.grupo.id ?? 0,
+      groupName: widget.grupo.nome,
+    )..loadStories();
+
     // Restaura posição do scroll ao abrir a tela
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _restoreScrollPosition();
@@ -197,6 +205,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
     // Salva posição do scroll ao sair da tela
     _saveScrollPosition();
     _scrollController.dispose();
+    _storiesProvider.dispose();
     super.dispose();
   }
 
@@ -265,16 +274,13 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
     Historia historia, {
     Map<String, dynamic>? updates,
   }) async {
-    final storiesProvider = context.read<GroupStoriesProvider>();
-    await storiesProvider.updateHistoria(historia, updates: updates);
+    await _storiesProvider.updateHistoria(historia, updates: updates);
   }
 
   Future<void> _archiveWithUndo(Historia historia) async {
     final previousTag = historia.tag;
     final previousGrupo = historia.grupo;
-    final storiesProvider = context.read<GroupStoriesProvider>();
-
-    await storiesProvider.archiveHistoria(historia);
+    await _storiesProvider.archiveHistoria(historia);
     if (!mounted) return;
 
     final localizations = AppLocalizations.of(context);
@@ -441,12 +447,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GroupStoriesProvider>(
-      create: (context) => GroupStoriesProvider(
-        repository: GroupRepository(),
-        authProvider: context.read<AuthProvider>(),
-        grupoId: widget.grupo.id ?? 0,
-        groupName: widget.grupo.nome,
-      )..loadStories(),
+      create: (_) => _storiesProvider,
       child: ScaffoldMessenger(
         key: _messengerKey,
         child: Scaffold(
@@ -545,7 +546,6 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
               scaleTarget: 1.06,
               child: FloatingActionButton.extended(
                 onPressed: () {
-                  final storiesProvider = context.read<GroupStoriesProvider>();
                   Navigator.push(
                     context,
                     RouteTransitionHelper.slideUpRotateTransition(
@@ -554,7 +554,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
                   ).then((created) async {
                     if (!mounted) return;
                     if (created == true) {
-                      await storiesProvider.loadStories();
+                      await _storiesProvider.loadStories();
                     }
                   });
                 },
@@ -570,7 +570,6 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
 
   Future<void> _deleteGroup() async {
     final navigator = Navigator.of(context);
-    final storiesProvider = context.read<GroupStoriesProvider>();
     final localizations = AppLocalizations.of(context)!;
     final confirm = await showDialog<bool>(
       context: context,
@@ -598,7 +597,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
 
     if (confirm == true) {
       try {
-        await storiesProvider.deleteGroup();
+        await _storiesProvider.deleteGroup();
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -648,7 +647,6 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
     }
 
     if (action == StoryPreviewAction.edit) {
-      final storiesProvider = context.read<GroupStoriesProvider>();
       final updated = await Navigator.of(context).push(
         RouteTransitionHelper.slideUpRotateTransition(
           EditHistoriaScreen(historia: historia),
@@ -656,9 +654,17 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       );
       if (!mounted) return;
       if (updated == true) {
-        await storiesProvider.loadStories();
+        await _storiesProvider.loadStories();
       }
       return;
+    }
+
+    if (action == StoryPreviewAction.delete) {
+      await _storiesProvider.deleteHistoria(historia);
+      if (!mounted) return;
+      _messengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.movedToTrash)),
+      );
     }
   }
 

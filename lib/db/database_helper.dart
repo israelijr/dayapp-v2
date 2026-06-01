@@ -28,7 +28,7 @@ class DatabaseHelper {
       final path = p.join(dbPath, 'dayapp.db');
       return await openDatabase(
         path,
-        version: 19,
+        version: 20,
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
       );
@@ -183,6 +183,7 @@ class DatabaseHelper {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           capitulo_id INTEGER NOT NULL,
           entrada_id INTEGER NOT NULL,
+          display_order INTEGER,
           UNIQUE(capitulo_id, entrada_id),
           FOREIGN KEY (capitulo_id) REFERENCES capitulos(id) ON DELETE CASCADE,
           FOREIGN KEY (entrada_id) REFERENCES historia(id) ON DELETE CASCADE
@@ -206,6 +207,9 @@ class DatabaseHelper {
       );
       await db.execute(
         'CREATE INDEX idx_capitulo_entradas_entrada ON capitulo_entradas(entrada_id);',
+      );
+      await db.execute(
+        'CREATE INDEX idx_capitulo_entradas_ordem ON capitulo_entradas(capitulo_id, display_order);',
       );
       await db.execute(
         'CREATE INDEX idx_capitulo_sugestoes_user ON capitulo_sugestoes_ignoradas(user_id);',
@@ -527,6 +531,7 @@ class DatabaseHelper {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             capitulo_id INTEGER NOT NULL,
             entrada_id INTEGER NOT NULL,
+            display_order INTEGER,
             UNIQUE(capitulo_id, entrada_id),
             FOREIGN KEY (capitulo_id) REFERENCES capitulos(id) ON DELETE CASCADE,
             FOREIGN KEY (entrada_id) REFERENCES historia(id) ON DELETE CASCADE
@@ -550,6 +555,9 @@ class DatabaseHelper {
         );
         await db.execute(
           'CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_entrada ON capitulo_entradas(entrada_id);',
+        );
+        await db.execute(
+          'CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_ordem ON capitulo_entradas(capitulo_id, display_order);',
         );
         await db.execute(
           'CREATE INDEX IF NOT EXISTS idx_capitulo_sugestoes_user ON capitulo_sugestoes_ignoradas(user_id);',
@@ -591,6 +599,65 @@ class DatabaseHelper {
         await db.execute('ALTER TABLE capitulos ADD COLUMN foto_path TEXT;');
       } catch (e) {
         debugPrint('Erro adicionando foto_path em capitulos (v19): $e');
+      }
+    }
+    if (oldVersion < 20) {
+      // Adiciona coluna de ordenação manual no vínculo capítulo-entrada.
+      try {
+        await db.execute(
+          'ALTER TABLE capitulo_entradas ADD COLUMN display_order INTEGER;',
+        );
+      } catch (e) {
+        debugPrint(
+          'Erro adicionando display_order em capitulo_entradas (v20): $e',
+        );
+      }
+
+      try {
+        await db.execute(
+          'CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_ordem ON capitulo_entradas(capitulo_id, display_order);',
+        );
+      } catch (e) {
+        debugPrint('Erro criando índice idx_capitulo_entradas_ordem (v20): $e');
+      }
+
+      try {
+        final capitulos = await db.rawQuery(
+          'SELECT DISTINCT capitulo_id FROM capitulo_entradas ORDER BY capitulo_id ASC',
+        );
+
+        for (final item in capitulos) {
+          final capituloId = item['capitulo_id'] as int?;
+          if (capituloId == null) continue;
+
+          final entradas = await db.rawQuery(
+            '''
+            SELECT ce.id
+            FROM capitulo_entradas ce
+            JOIN historia h ON h.id = ce.entrada_id
+            WHERE ce.capitulo_id = ?
+            ORDER BY h.data ASC, h.id ASC
+            ''',
+            [capituloId],
+          );
+
+          var order = 1;
+          for (final entrada in entradas) {
+            final entryId = entrada['id'] as int?;
+            if (entryId == null) continue;
+            await db.update(
+              'capitulo_entradas',
+              {'display_order': order},
+              where: 'id = ?',
+              whereArgs: [entryId],
+            );
+            order += 1;
+          }
+        }
+      } catch (e) {
+        debugPrint(
+          'Erro ao popular display_order em capitulo_entradas (v20): $e',
+        );
       }
     }
   }

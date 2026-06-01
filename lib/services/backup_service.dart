@@ -684,6 +684,67 @@ Versão: 2.0.0
               );
             }
 
+            // --- Compatibilidade v20: ordenação de entradas por capítulo ---
+            try {
+              final capituloEntradasInfo = await tmpDb.rawQuery(
+                'PRAGMA table_info(capitulo_entradas)',
+              );
+              final hasDisplayOrder = capituloEntradasInfo.any(
+                (c) => c['name'] == 'display_order',
+              );
+
+              if (!hasDisplayOrder) {
+                await tmpDb.execute(
+                  'ALTER TABLE capitulo_entradas ADD COLUMN display_order INTEGER;',
+                );
+              }
+
+              await tmpDb.execute(
+                'CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_ordem ON capitulo_entradas(capitulo_id, display_order);',
+              );
+
+              final capitulosRows = await tmpDb.rawQuery(
+                'SELECT DISTINCT capitulo_id FROM capitulo_entradas ORDER BY capitulo_id ASC',
+              );
+
+              for (final item in capitulosRows) {
+                final capituloId = item['capitulo_id'] as int?;
+                if (capituloId == null) continue;
+
+                final entradasRows = await tmpDb.rawQuery(
+                  '''
+                  SELECT ce.id
+                  FROM capitulo_entradas ce
+                  JOIN historia h ON h.id = ce.entrada_id
+                  WHERE ce.capitulo_id = ?
+                  ORDER BY
+                    CASE WHEN ce.display_order IS NULL THEN 1 ELSE 0 END ASC,
+                    ce.display_order ASC,
+                    h.data ASC,
+                    h.id ASC
+                  ''',
+                  [capituloId],
+                );
+
+                var order = 1;
+                for (final row in entradasRows) {
+                  final rowId = row['id'] as int?;
+                  if (rowId == null) continue;
+                  await tmpDb.update(
+                    'capitulo_entradas',
+                    {'display_order': order},
+                    where: 'id = ?',
+                    whereArgs: [rowId],
+                  );
+                  order += 1;
+                }
+              }
+            } catch (e) {
+              debugPrint(
+                'BackupService: erro ao ajustar display_order em capitulo_entradas durante restore: $e',
+              );
+            }
+
             // Verificar a versão gravada no backup para aplicar migrações
             // pendentes antes de o DatabaseHelper reabrir o banco.
             final List<Map<String, dynamic>> versionRows = await tmpDb.rawQuery(

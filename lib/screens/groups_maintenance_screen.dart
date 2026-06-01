@@ -21,8 +21,25 @@ class GroupsMaintenanceScreen extends StatefulWidget {
 }
 
 class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
+  late final GroupManagementProvider _groupManagementProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _groupManagementProvider = GroupManagementProvider(
+      repository: GroupRepository(),
+      authProvider: context.read<AuthProvider>(),
+    )..loadGrupos();
+  }
+
+  @override
+  void dispose() {
+    _groupManagementProvider.dispose();
+    super.dispose();
+  }
+
   Future<void> _showGroupDialog({Grupo? grupo}) async {
-    final provider = context.read<GroupManagementProvider>();
+    final provider = _groupManagementProvider;
     final isEditing = grupo != null;
     final nameController = TextEditingController(text: grupo?.nome);
     String? selectedEmoticon = grupo?.emoticon;
@@ -142,7 +159,7 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
   }
 
   Future<void> _deleteGrupo(Grupo grupo) async {
-    final provider = context.read<GroupManagementProvider>();
+    final provider = _groupManagementProvider;
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -175,10 +192,7 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GroupManagementProvider>(
-      create: (context) => GroupManagementProvider(
-        repository: GroupRepository(),
-        authProvider: context.read<AuthProvider>(),
-      )..loadGrupos(),
+      create: (_) => _groupManagementProvider,
       child: Consumer<GroupManagementProvider>(
         builder: (context, provider, child) {
           final grupos = provider.grupos;
