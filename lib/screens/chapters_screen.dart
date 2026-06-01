@@ -244,6 +244,13 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     );
     if (!mounted) return;
 
+    setState(() {
+      _chapterSearchQuery = '';
+      _searchController.clear();
+      _showSearch = false;
+      _chapterOriginFilter = ChapterOriginFilter.all;
+    });
+
     Provider.of<RefreshProvider>(context, listen: false).refresh();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(AppLocalizations.of(context)!.chapterCreated)),
@@ -328,6 +335,13 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     );
 
     if (!mounted) return;
+    setState(() {
+      _chapterSearchQuery = '';
+      _searchController.clear();
+      _showSearch = false;
+      _chapterOriginFilter = ChapterOriginFilter.all;
+    });
+
     Provider.of<RefreshProvider>(context, listen: false).refresh();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(AppLocalizations.of(context)!.chapterCreated)),
