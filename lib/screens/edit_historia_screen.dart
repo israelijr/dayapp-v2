@@ -592,48 +592,6 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
       }
     }
 
-    // Salva novas fotos. A verificação abaixo trata qualquer
-    // inconsistência de comprimentos entre `fotos` e `fotoIds` – mesmo que a
-    // lista de ids esteja menor ou ausente, presumimos que são novas.
-    for (int i = 0; i < fotos.length; i++) {
-      final id = i < fotoIds.length ? fotoIds[i] : 0;
-      if (id == 0) {
-        await HistoriaFotoHelper().insertFotoFromBytes(
-          historiaId: widget.historia.id ?? 0,
-          fotoBytes: fotos[i],
-        );
-      }
-    }
-
-    // Salva novos áudios – tornamos o loop robusto caso as listas estejam
-    // fora de sincronia.
-    for (int i = 0; i < audios.length; i++) {
-      final id = i < audioIds.length ? audioIds[i] : 0;
-      if (id == 0) {
-        await HistoriaAudioHelper().insertAudioFromBytes(
-          historiaId: widget.historia.id ?? 0,
-          audioBytes: audios[i]['audio'],
-          duracao: audios[i]['duration'],
-        );
-      }
-    }
-
-    // Salva novos vídeos com checagem de segurança semelhante.
-    for (int i = 0; i < videos.length; i++) {
-      final id = i < videoIds.length ? videoIds[i] : 0;
-      if (id == 0) {
-        try {
-          await HistoriaVideoHelper().insertVideoFromBytes(
-            historiaId: widget.historia.id ?? 0,
-            videoBytes: videos[i]['video'],
-            duracao: videos[i]['duration'],
-          );
-        } catch (e) {
-          // Error saving video
-        }
-      }
-    }
-
     if (!mounted) return false;
     if (navigateAfterSave) Navigator.pop(context, true);
     return true;

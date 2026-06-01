@@ -21,10 +21,12 @@ class HeroMemoryTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryPhoto = story.images.isNotEmpty ? story.images.first : null;
-    final secondaryPhotos = story.images.length > 1
-        ? story.images.skip(1).take(2).toList()
-        : <Uint8List>[];
+    final hasImages = story.images.isNotEmpty;
+    final displayPhotos = List<Uint8List?>.generate(
+      3,
+      (index) => hasImages ? story.images[index % story.images.length] : null,
+    );
+    final primaryPhoto = displayPhotos.first;
     final dateLabel = DateFormat(
       'dd MMM yyyy',
       story.localeName,
@@ -35,34 +37,31 @@ class HeroMemoryTemplate extends StatelessWidget {
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final height = constraints.maxHeight;
-        final horizontalPadding = width * 0.045;
-        final topPadding = height * 0.045;
-        final bottomPadding =
-            height * 0.08; // distância maior da base da janela
-        final innerGap = width * 0.035;
-        final smallWidth = width * 0.28;
-        final smallHeight = height * 0.23;
+        final horizontalPadding = width * 0.08;
+        final verticalPadding = height * 0.1;
+        final cardHeight = height * 0.56;
+        final thumbSize = width * 0.28;
 
-        Widget buildPhotoCard(Uint8List? bytes, double rotation) {
+        Widget buildThumbnailCard(Uint8List? bytes, double radius) {
           return Transform.rotate(
-            angle: rotation,
+            angle: radius,
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(28),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: colorScheme.surface.withValues(alpha: 0.18),
-                  width: 1.4,
+                  color: colorScheme.surface.withValues(alpha: 0.34),
+                  width: 1.2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: colorScheme.onSurface.withValues(alpha: 0.18),
-                    blurRadius: 22,
-                    offset: Offset(0, height * 0.014),
+                    color: colorScheme.onSurface.withValues(alpha: 0.24),
+                    blurRadius: 18,
+                    offset: Offset(0, height * 0.01),
                   ),
                 ],
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(28),
+                borderRadius: BorderRadius.circular(24),
                 child: bytes != null
                     ? Image.memory(bytes, fit: BoxFit.cover)
                     : Container(color: colorScheme.surfaceContainerHighest),
@@ -82,8 +81,8 @@ class HeroMemoryTemplate extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    colorScheme.onSurface.withValues(alpha: 0.22),
-                    colorScheme.onSurface.withValues(alpha: 0.06),
+                    colorScheme.onSurface.withValues(alpha: 0.12),
+                    colorScheme.onSurface.withValues(alpha: 0.44),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -92,205 +91,159 @@ class HeroMemoryTemplate extends StatelessWidget {
             ),
             Positioned.fill(
               child: BackdropFilter(
-                filter: ui.ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-                child: Container(color: Colors.transparent),
+                filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  color: colorScheme.surface.withValues(alpha: 0.06),
+                ),
               ),
             ),
-            // =============================
-            // Para aumentar a distância do card da base da tela:
-            // Aumente o valor de verticalPadding (definido acima como height * 0.045)
-            // Exemplo: height * 0.08 deixa o card mais longe da base.
-            // =============================
             Padding(
-              padding: EdgeInsets.fromLTRB(
-                horizontalPadding,
-                topPadding,
-                horizontalPadding,
-                bottomPadding, // <-- distância maior da base da janela
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
               ),
-              child: Column(
+              child: Stack(
                 children: [
-                  // =============================
-                  // Para deixar o card maior:
-                  // - Diminua o flex das fotos
-                  // - Aumente o flex do card de texto
-                  // =============================
-                  Expanded(
-                    flex: 4,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          flex: 6,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Transform.rotate(
-                              angle: -0.06,
-                              child: SizedBox(
-                                width: double.infinity,
-                                height: double.infinity,
-                                child: buildPhotoCard(primaryPhoto, 0),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: innerGap),
-                        SizedBox(
-                          width: width * 0.32,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Transform.translate(
-                                    offset: const Offset(-25, 0),
-                                    child: Transform.rotate(
-                                      angle: 0.06,
-                                      child: SizedBox(
-                                        width: smallWidth + 20,
-                                        height: smallHeight,
-                                        child: buildPhotoCard(
-                                          secondaryPhotos.isNotEmpty
-                                              ? secondaryPhotos[0]
-                                              : null,
-                                          0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: innerGap),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Transform.translate(
-                                    offset: const Offset(-20, 0),
-                                    child: Transform.rotate(
-                                      angle: -0.065,
-                                      child: SizedBox(
-                                        width: smallWidth + 150,
-                                        height: smallHeight + 80,
-                                        child: buildPhotoCard(
-                                          secondaryPhotos.length > 1
-                                              ? secondaryPhotos[1]
-                                              : null,
-                                          0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: innerGap),
-                  Expanded(
-                    flex: 6,
-                    child: Container(
+                  Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: width * 0.028,
-                        vertical:
-                            height *
-                            0.03, // <-- padding superior e inferior maior
-                      ),
-                      decoration: BoxDecoration(
-                        color: colorScheme.surface.withValues(alpha: 0.88),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: colorScheme.onSurface.withValues(alpha: 0.08),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: colorScheme.onSurface.withValues(
-                              alpha: 0.06,
+                      height: cardHeight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(34),
+                        child: BackdropFilter(
+                          filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(
+                              width * 0.06,
+                              height * 0.04,
+                              width * 0.06,
+                              height * 0.028,
                             ),
-                            blurRadius: 28,
-                            offset: Offset(0, height * 0.012),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Flexible(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  colorScheme.surface.withValues(alpha: 0.44),
+                                  colorScheme.surfaceContainerLowest.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(34),
+                              border: Border.all(
+                                color: colorScheme.surface.withValues(
+                                  alpha: 0.52,
+                                ),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: colorScheme.onSurface.withValues(
+                                    alpha: 0.26,
+                                  ),
+                                  blurRadius: 30,
+                                  offset: Offset(0, height * 0.014),
+                                ),
+                              ],
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   story.title,
                                   softWrap: true,
-                                  maxLines: 2,
+                                  maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.playfairDisplay(
-                                    fontSize: width * 0.052,
-                                    fontWeight: FontWeight.w500,
+                                  style: GoogleFonts.notoSerif(
+                                    fontSize: width * 0.082,
+                                    fontWeight: FontWeight.w700,
                                     color: colorScheme.onSurface,
-                                    height: 1.02,
+                                    height: 1.03,
                                   ),
                                 ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  normalizedDescription(story.description),
-                                  maxLines: 8,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13,
-                                    height: 1.5,
-                                    color: colorScheme.onSurface.withValues(
-                                      alpha: 0.88,
+                                SizedBox(height: height * 0.018),
+                                Expanded(
+                                  child: Text(
+                                    normalizedDescription(story.description),
+                                    maxLines: 10,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: width * 0.039,
+                                      height: 1.45,
+                                      color: colorScheme.onSurface.withValues(
+                                        alpha: 0.9,
+                                      ),
                                     ),
                                   ),
+                                ),
+                                SizedBox(height: height * 0.014),
+                                Row(
+                                  children: [
+                                    Text(
+                                      dateLabel,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: width * 0.036,
+                                        fontWeight: FontWeight.w600,
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                    if (story.emoticon != null &&
+                                        story.emoticon!.isNotEmpty) ...[
+                                      SizedBox(width: width * 0.024),
+                                      Text(
+                                        story.emoticon!,
+                                        style: TextStyle(
+                                          fontSize: width * 0.05,
+                                          height: 1,
+                                          color: colorScheme.onSurface
+                                              .withValues(alpha: 0.66),
+                                        ),
+                                      ),
+                                    ],
+                                    const Spacer(),
+                                    Text(
+                                      'DayApp',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: width * 0.033,
+                                        fontWeight: FontWeight.w700,
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                dateLabel,
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                              if (story.emoticon != null &&
-                                  story.emoticon!.isNotEmpty) ...[
-                                const SizedBox(width: 10),
-                                Text(
-                                  story.emoticon!,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    height: 1,
-                                    color: colorScheme.onSurface.withValues(
-                                      alpha: 0.54,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              'DayApp',
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: width * 0.02,
+                    child: SizedBox(
+                      width: thumbSize * 0.92,
+                      height: thumbSize * 0.92,
+                      child: buildThumbnailCard(displayPhotos[0], -0.1),
+                    ),
+                  ),
+                  Positioned(
+                    top: height * 0.03,
+                    left: width * 0.3,
+                    child: SizedBox(
+                      width: thumbSize * 0.82,
+                      height: thumbSize * 0.82,
+                      child: buildThumbnailCard(displayPhotos[1], 0.08),
+                    ),
+                  ),
+                  Positioned(
+                    top: height * 0.005,
+                    right: width * 0.02,
+                    child: SizedBox(
+                      width: thumbSize,
+                      height: thumbSize,
+                      child: buildThumbnailCard(displayPhotos[2], 0.13),
                     ),
                   ),
                 ],
