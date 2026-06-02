@@ -2008,5 +2008,17 @@
   "restoreContinue": "Continuer",
   "@restoreContinue": {
     "description": "Étiquette du bouton pour continuer avec la restauration"
+  },
+  "chapterExportPhotoSelectionTitle": "Choisir les photos pour l'export",
+  "@chapterExportPhotoSelectionTitle": {
+    "description": "Titre du dialogue pour choisir une photo par histoire avant l'export PDF"
+  },
+  "chapterExportPhotoSelectionSubtitle": "Vous pouvez sélectionner jusqu'à 1 photo par histoire. Vous pouvez aussi ne sélectionner aucune photo.",
+  "@chapterExportPhotoSelectionSubtitle": {
+    "description": "Instruction affichée dans le dialogue de sélection de photos avant l'export du chapitre"
+  },
+  "chapterExportNoPhotoOption": "Sans photo",
+  "@chapterExportNoPhotoOption": {
+    "description": "Option pour exporter une histoire sans photo"
   }
 }

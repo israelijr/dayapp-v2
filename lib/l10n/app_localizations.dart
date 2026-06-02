@@ -4693,6 +4693,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue'**
   String get restoreContinue;
+
+  /// Title of dialog where user selects one photo per story before PDF export
+  ///
+  /// In en, this message translates to:
+  /// **'Choose photos for export'**
+  String get chapterExportPhotoSelectionTitle;
+
+  /// Guidance shown in photo selection dialog before chapter export
+  ///
+  /// In en, this message translates to:
+  /// **'You can select up to 1 photo per story. Keeping none is also allowed.'**
+  String get chapterExportPhotoSelectionSubtitle;
+
+  /// Option label for exporting a story without any photo
+  ///
+  /// In en, this message translates to:
+  /// **'No photo'**
+  String get chapterExportNoPhotoOption;
 }
 
 class _AppLocalizationsDelegate

@@ -15,7 +15,6 @@ class ChapterPdfExportService {
   const ChapterPdfExportService();
 
   static Future<_PdfFonts>? _fontsFuture;
-  static const int _maxImageBytes = 15 * 1024 * 1024;
   static const int _maxBlocks = 400;
   static const Duration _defaultMaxExportDuration = Duration(seconds: 20);
 
@@ -26,7 +25,7 @@ class ChapterPdfExportService {
     Duration maxExportDuration = _defaultMaxExportDuration,
   }) async {
     final stopwatch = Stopwatch()..start();
-    await _validateExportLimits(document, localeName);
+    _validateExportLimits(document, localeName);
     _ensureWithinDeadline(stopwatch, maxExportDuration, localeName);
     final fonts = await _loadFonts();
     _ensureWithinDeadline(stopwatch, maxExportDuration, localeName);
@@ -107,87 +106,22 @@ class ChapterPdfExportService {
     );
   }
 
-  Future<void> _validateExportLimits(
+  void _validateExportLimits(
     ChapterExportDocument document,
     String localeName,
-  ) async {
+  ) {
     if (document.blocks.length > _maxBlocks) {
       throw ChapterPdfExportLimitException(
-        _buildLimitMessage(
-          localeName,
-          reason: 'blocks',
-          totalBytes: 0,
-          maxBytes: _maxImageBytes,
-          blockCount: document.blocks.length,
-          imageCount: 0,
-        ),
-      );
-    }
-
-    var totalImageBytes = 0;
-    var imageCount = 0;
-
-    Future<void> accumulateImageBytes(String? path) async {
-      if (path == null || path.trim().isEmpty) {
-        return;
-      }
-
-      final file = File(path);
-      if (!await file.exists()) {
-        return;
-      }
-
-      totalImageBytes += await file.length();
-      imageCount += 1;
-    }
-
-    await accumulateImageBytes(document.coverImagePath);
-    for (final block in document.blocks) {
-      if (block is ImageExportBlock) {
-        await accumulateImageBytes(block.imagePath);
-      }
-    }
-
-    if (totalImageBytes > _maxImageBytes) {
-      throw ChapterPdfExportLimitException(
-        _buildLimitMessage(
-          localeName,
-          reason: 'imageBytes',
-          totalBytes: totalImageBytes,
-          maxBytes: _maxImageBytes,
-          blockCount: document.blocks.length,
-          imageCount: imageCount,
-        ),
+        _buildLimitMessage(localeName, blockCount: document.blocks.length),
       );
     }
   }
 
-  String _buildLimitMessage(
-    String localeName, {
-    required String reason,
-    required int totalBytes,
-    required int maxBytes,
-    required int blockCount,
-    required int imageCount,
-  }) {
+  String _buildLimitMessage(String localeName, {required int blockCount}) {
     final isPortuguese = localeName.toLowerCase().startsWith('pt');
-    final totalMb = _formatMegabytes(totalBytes);
-    final maxMb = _formatMegabytes(maxBytes);
-
-    if (reason == 'blocks') {
-      return isPortuguese
-          ? 'Capítulo grande demais para exportar com segurança ($blockCount blocos > $_maxBlocks). Divida o conteúdo em partes menores.'
-          : 'Chapter is too large to export safely ($blockCount blocks > $_maxBlocks). Split the content into smaller parts.';
-    }
-
     return isPortuguese
-        ? 'Capítulo grande demais para exportar com segurança ($imageCount imagens, $totalMb MB de $maxMb MB em mídia). Remova algumas imagens ou reduza o capítulo.'
-        : 'Chapter is too large to export safely ($imageCount images, $totalMb MB of $maxMb MB in media). Remove some images or split the chapter.';
-  }
-
-  String _formatMegabytes(int bytes) {
-    final value = bytes / (1024 * 1024);
-    return value.toStringAsFixed(1);
+        ? 'Capítulo grande demais para exportar com segurança ($blockCount blocos > $_maxBlocks). Divida o conteúdo em partes menores.'
+        : 'Chapter is too large to export safely ($blockCount blocks > $_maxBlocks). Split the content into smaller parts.';
   }
 
   Future<_PdfFonts> _loadFonts() async {

@@ -112,7 +112,7 @@ void main() {
     expect(await pdfFile.length(), lessThan(await sourceFile.length()));
   });
 
-  test('rejects oversized chapters before exporting the pdf', () async {
+  test('does not block export when chapter has many large images', () async {
     final sourceImage = img.Image(width: 1200, height: 1200);
 
     for (var y = 0; y < sourceImage.height; y++) {
@@ -152,14 +152,15 @@ void main() {
 
     const service = ChapterPdfExportService();
 
-    expect(
-      () => service.export(
-        document: document,
-        localeName: 'pt_BR',
-        storyCountLabel: '4 histórias',
-      ),
-      throwsA(isA<ChapterPdfExportLimitException>()),
+    final pdfFile = await service.export(
+      document: document,
+      localeName: 'pt_BR',
+      storyCountLabel: '4 histórias',
+      maxExportDuration: const Duration(minutes: 2),
     );
+
+    expect(await pdfFile.exists(), isTrue);
+    expect(await pdfFile.length(), greaterThan(0));
   });
 
   test('aborts export when it exceeds the configured deadline', () async {

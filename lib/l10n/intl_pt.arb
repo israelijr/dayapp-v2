@@ -2476,5 +2476,17 @@
   "backupSavedToFolder": "A guardar backup na pasta configurada...",
   "@backupSavedToFolder": {
     "description": "Mensagem de progresso ao copiar o ZIP de backup para a pasta configurada"
+  },
+  "chapterExportPhotoSelectionTitle": "Escolher fotos para exportação",
+  "@chapterExportPhotoSelectionTitle": {
+    "description": "Título do diálogo para selecionar uma foto por história antes de exportar o PDF"
+  },
+  "chapterExportPhotoSelectionSubtitle": "Pode selecionar até 1 foto por história. Também pode deixar sem foto.",
+  "@chapterExportPhotoSelectionSubtitle": {
+    "description": "Instrução exibida no diálogo de seleção de fotos antes da exportação de capítulo"
+  },
+  "chapterExportNoPhotoOption": "Sem foto",
+  "@chapterExportNoPhotoOption": {
+    "description": "Rótulo da opção para exportar a história sem foto"
   }
 }

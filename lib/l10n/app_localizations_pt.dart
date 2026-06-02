@@ -2603,6 +2603,17 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get restoreContinue => 'Continuar';
+
+  @override
+  String get chapterExportPhotoSelectionTitle =>
+      'Escolher fotos para exportação';
+
+  @override
+  String get chapterExportPhotoSelectionSubtitle =>
+      'Pode selecionar até 1 foto por história. Também pode deixar sem foto.';
+
+  @override
+  String get chapterExportNoPhotoOption => 'Sem foto';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -5203,4 +5214,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get restoreContinue => 'Continuar';
+
+  @override
+  String get chapterExportPhotoSelectionTitle =>
+      'Escolher fotos para exportação';
+
+  @override
+  String get chapterExportPhotoSelectionSubtitle =>
+      'Você pode selecionar até 1 foto por história. Também pode deixar sem foto.';
+
+  @override
+  String get chapterExportNoPhotoOption => 'Sem foto';
 }

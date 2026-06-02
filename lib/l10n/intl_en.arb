@@ -2525,5 +2525,17 @@
   "restoreContinue": "Continue",
   "@restoreContinue": {
     "description": "Button label to continue with restore"
+  },
+  "chapterExportPhotoSelectionTitle": "Choose photos for export",
+  "@chapterExportPhotoSelectionTitle": {
+    "description": "Title of dialog where user selects one photo per story before PDF export"
+  },
+  "chapterExportPhotoSelectionSubtitle": "You can select up to 1 photo per story. Keeping none is also allowed.",
+  "@chapterExportPhotoSelectionSubtitle": {
+    "description": "Guidance shown in photo selection dialog before chapter export"
+  },
+  "chapterExportNoPhotoOption": "No photo",
+  "@chapterExportNoPhotoOption": {
+    "description": "Option label for exporting a story without any photo"
   }
 }

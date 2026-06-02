@@ -2008,5 +2008,17 @@
   "restoreContinue": "Continua",
   "@restoreContinue": {
     "description": "Etichetta del pulsante per continuare con il ripristino"
+  },
+  "chapterExportPhotoSelectionTitle": "Scegli le foto da esportare",
+  "@chapterExportPhotoSelectionTitle": {
+    "description": "Titolo della finestra per scegliere una foto per storia prima dell'esportazione PDF"
+  },
+  "chapterExportPhotoSelectionSubtitle": "Puoi selezionare fino a 1 foto per storia. Puoi anche non selezionare nessuna foto.",
+  "@chapterExportPhotoSelectionSubtitle": {
+    "description": "Testo guida nel dialogo di selezione foto prima dell'esportazione del capitolo"
+  },
+  "chapterExportNoPhotoOption": "Nessuna foto",
+  "@chapterExportNoPhotoOption": {
+    "description": "Opzione per esportare una storia senza foto"
   }
 }

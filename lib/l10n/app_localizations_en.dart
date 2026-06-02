@@ -2590,4 +2590,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get restoreContinue => 'Continue';
+
+  @override
+  String get chapterExportPhotoSelectionTitle => 'Choose photos for export';
+
+  @override
+  String get chapterExportPhotoSelectionSubtitle =>
+      'You can select up to 1 photo per story. Keeping none is also allowed.';
+
+  @override
+  String get chapterExportNoPhotoOption => 'No photo';
 }

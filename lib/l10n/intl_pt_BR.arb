@@ -2480,5 +2480,17 @@
   "@backupSetupContent": {
     "description": "Conteúdo do diálogo de configuração inicial da pasta de backup"
   },
-  "backupSavedToFolder": "Salvando backup na pasta configurada..."
+  "backupSavedToFolder": "Salvando backup na pasta configurada...",
+  "chapterExportPhotoSelectionTitle": "Escolher fotos para exportação",
+  "@chapterExportPhotoSelectionTitle": {
+    "description": "Título do diálogo para selecionar uma foto por história antes de exportar o PDF"
+  },
+  "chapterExportPhotoSelectionSubtitle": "Você pode selecionar até 1 foto por história. Também pode deixar sem foto.",
+  "@chapterExportPhotoSelectionSubtitle": {
+    "description": "Instrução exibida no diálogo de seleção de fotos antes da exportação de capítulo"
+  },
+  "chapterExportNoPhotoOption": "Sem foto",
+  "@chapterExportNoPhotoOption": {
+    "description": "Rótulo da opção para exportar a história sem foto"
+  }
 }
