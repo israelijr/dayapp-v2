@@ -6,11 +6,11 @@ void main() {
   test('keeps at most one selected image per story', () {
     final blocks = <ExportBlock>[
       const TitleExportBlock(text: 'Story A', storyId: 1),
-      ImageExportBlock(imagePath: '/tmp/a_1.jpg', storyId: 1),
-      ImageExportBlock(imagePath: '/tmp/a_2.jpg', storyId: 1),
+      const ImageExportBlock(imagePath: '/tmp/a_1.jpg', storyId: 1),
+      const ImageExportBlock(imagePath: '/tmp/a_2.jpg', storyId: 1),
       const TitleExportBlock(text: 'Story B', storyId: 2),
-      ImageExportBlock(imagePath: '/tmp/b_1.jpg', storyId: 2),
-      ImageExportBlock(imagePath: '/tmp/b_2.jpg', storyId: 2),
+      const ImageExportBlock(imagePath: '/tmp/b_1.jpg', storyId: 2),
+      const ImageExportBlock(imagePath: '/tmp/b_2.jpg', storyId: 2),
     ];
 
     final filtered = filterExportBlocksBySelectedImages(
@@ -27,10 +27,10 @@ void main() {
   test('allows selecting no image for a story', () {
     final blocks = <ExportBlock>[
       const TitleExportBlock(text: 'Story A', storyId: 1),
-      ImageExportBlock(imagePath: '/tmp/a_1.jpg', storyId: 1),
+      const ImageExportBlock(imagePath: '/tmp/a_1.jpg', storyId: 1),
       const ParagraphExportBlock(text: 'Body A', storyId: 1),
       const TitleExportBlock(text: 'Story B', storyId: 2),
-      ImageExportBlock(imagePath: '/tmp/b_1.jpg', storyId: 2),
+      const ImageExportBlock(imagePath: '/tmp/b_1.jpg', storyId: 2),
       const ParagraphExportBlock(text: 'Body B', storyId: 2),
     ];
 

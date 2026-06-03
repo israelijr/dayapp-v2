@@ -1,10 +1,10 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../domain/chapter_export_document.dart';
 import '../db/database_helper.dart';
+import '../domain/chapter_export_document.dart';
 import '../models/capitulo.dart';
-import '../models/historia_foto_v2.dart';
 import '../models/historia.dart';
+import '../models/historia_foto_v2.dart';
 import '../services/chapter_document_builder.dart';
 
 class CapituloRepository {

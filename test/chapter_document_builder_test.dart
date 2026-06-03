@@ -45,7 +45,7 @@ void main() {
       ],
     };
 
-    final builder = ChapterDocumentBuilder();
+    const builder = ChapterDocumentBuilder();
     final document = builder.build(
       chapter: chapter,
       stories: stories,
@@ -90,7 +90,7 @@ void main() {
       ),
     ];
 
-    final builder = ChapterDocumentBuilder();
+    const builder = ChapterDocumentBuilder();
     final document = builder.build(chapter: chapter, stories: stories);
 
     final paragraphs = document.blocks.whereType<ParagraphExportBlock>().toList(
