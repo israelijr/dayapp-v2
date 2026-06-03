@@ -17,16 +17,16 @@ import 'package:intl/intl.dart';
 class HeroMemoryTemplate extends StatelessWidget {
   final StoryData story;
 
+  // Construtor corrigido aqui:
   const HeroMemoryTemplate({required this.story, super.key});
 
   @override
   Widget build(BuildContext context) {
-    final hasImages = story.images.isNotEmpty;
-    final displayPhotos = List<Uint8List?>.generate(
-      3,
-      (index) => hasImages ? story.images[index % story.images.length] : null,
-    );
-    final primaryPhoto = displayPhotos.first;
+    final photos = story.images;
+    // Pega até 3 fotos sem duplicar nenhuma via módulo
+    final displayPhotos = photos.take(3).toList(growable: false);
+    final primaryPhoto = photos.isNotEmpty ? photos.first : null;
+
     final dateLabel = DateFormat(
       'dd MMM yyyy',
       story.localeName,
@@ -42,7 +42,7 @@ class HeroMemoryTemplate extends StatelessWidget {
         final cardHeight = height * 0.56;
         final thumbSize = width * 0.28;
 
-        Widget buildThumbnailCard(Uint8List? bytes, double radius) {
+        Widget buildThumbnailCard(Uint8List imageBytes, double radius) {
           return Transform.rotate(
             angle: radius,
             child: Container(
@@ -56,15 +56,13 @@ class HeroMemoryTemplate extends StatelessWidget {
                   BoxShadow(
                     color: colorScheme.onSurface.withValues(alpha: 0.24),
                     blurRadius: 18,
-                    offset: Offset(0, height * 0.01),
+                    offset: Offset(0, height * 0.014),
                   ),
                 ],
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
-                child: bytes != null
-                    ? Image.memory(bytes, fit: BoxFit.cover)
-                    : Container(color: colorScheme.surfaceContainerHighest),
+                child: Image.memory(imageBytes, fit: BoxFit.cover),
               ),
             ),
           );
@@ -219,33 +217,38 @@ class HeroMemoryTemplate extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 0,
-                    left: width * 0.02,
-                    child: SizedBox(
-                      width: thumbSize * 0.92,
-                      height: thumbSize * 0.92,
-                      child: buildThumbnailCard(displayPhotos[0], -0.1),
+
+                  // Renderiza condicionalmente as miniaturas baseado no número real de imagens
+                  if (displayPhotos.isNotEmpty)
+                    Positioned(
+                      top: 0,
+                      left: width * 0.02,
+                      child: SizedBox(
+                        width: thumbSize * 0.92,
+                        height: thumbSize * 0.92,
+                        child: buildThumbnailCard(displayPhotos[0], -0.1),
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    top: height * 0.03,
-                    left: width * 0.3,
-                    child: SizedBox(
-                      width: thumbSize * 0.82,
-                      height: thumbSize * 0.82,
-                      child: buildThumbnailCard(displayPhotos[1], 0.08),
+                  if (displayPhotos.length > 1)
+                    Positioned(
+                      top: height * 0.03,
+                      left: width * 0.3,
+                      child: SizedBox(
+                        width: thumbSize * 0.82,
+                        height: thumbSize * 0.82,
+                        child: buildThumbnailCard(displayPhotos[1], 0.08),
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    top: height * 0.005,
-                    right: width * 0.02,
-                    child: SizedBox(
-                      width: thumbSize,
-                      height: thumbSize,
-                      child: buildThumbnailCard(displayPhotos[2], 0.13),
+                  if (displayPhotos.length > 2)
+                    Positioned(
+                      top: height * 0.005,
+                      right: width * 0.02,
+                      child: SizedBox(
+                        width: thumbSize,
+                        height: thumbSize,
+                        child: buildThumbnailCard(displayPhotos[2], 0.13),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
