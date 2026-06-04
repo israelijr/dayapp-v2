@@ -1908,7 +1908,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpHomeItemDesc.
   ///
   /// In en, this message translates to:
-  /// **'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário.'**
+  /// **'View the last 5 or all stories on large or smaller cards or in the calendar'**
   String get helpHomeItemDesc;
 
   /// No description provided for @helpHomeDoubleTapDesc.

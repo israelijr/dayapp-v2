@@ -993,7 +993,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get helpHomeItemDesc =>
-      'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário.';
+      'Visualizza le ultime 5 o tutte le storie su cartoline grandi o piccole o nel calendario';
 
   @override
   String get helpHomeDoubleTapDesc =>

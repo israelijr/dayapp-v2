@@ -986,7 +986,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get helpHomeItemDesc =>
-      'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário.';
+      'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário';
 
   @override
   String get helpHomeDoubleTapDesc =>
@@ -2626,7 +2626,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get helpHomeItemDesc =>
-      'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário.';
+      'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário';
 
   @override
   String get helpAutomaticBackupTitle => 'Backup Automático';
