@@ -473,7 +473,7 @@
   "backupInfoDetails": "Il backup completo include:\n• Database (storie, testi, foto, audio)\n• File video\n\nViene creato un file ZIP che puoi salvare dove vuoi:\n• OneDrive\n• Google Drive\n• E-mail\n• Qualsiasi altra posizione",
   "backupComplete": "Backup completo",
   "backupZipSubtitle": "File ZIP con tutti i tuoi dati",
-  "backupZipExplanation": "Genera un file ZIP che puoi salvare su OneDrive, Google Drive, via e-mail o in qualsiasi altra posizione.",
+  "backupZipExplanation": "Genera un file ZIP che puoi salvare sul tuo dispositivo, OneDrive, Google Drive, posta elettronica o qualsiasi altra posizione cloud, ad eccezione delle app di messaggistica.",
   "backupLinuxExplanation": "Scegli una cartella e il backup ZIP verrà salvato direttamente al suo interno.",
   "@backupLinuxExplanation": {
     "description": "Spiegazione mostrata nella scheda di backup su Linux desktop"

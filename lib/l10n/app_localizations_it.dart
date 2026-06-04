@@ -907,7 +907,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get backupZipExplanation =>
-      'Genera un file ZIP che puoi salvare su OneDrive, Google Drive, via e-mail o in qualsiasi altra posizione.';
+      'Genera un file ZIP che puoi salvare sul tuo dispositivo, OneDrive, Google Drive, posta elettronica o qualsiasi altra posizione cloud, ad eccezione delle app di messaggistica.';
 
   @override
   String get backupLinuxExplanation =>
