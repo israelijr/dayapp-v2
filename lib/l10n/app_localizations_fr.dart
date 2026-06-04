@@ -996,7 +996,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get helpHomeItemDesc =>
-      'Affichez vos histoires sous forme de cartes, de liste ou sur le calendrier.';
+      'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário.';
 
   @override
   String get helpHomeDoubleTapDesc =>

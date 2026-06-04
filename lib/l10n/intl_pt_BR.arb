@@ -113,5 +113,6 @@
   "chapterExportPhotoSelectionSubtitle": "Você pode selecionar até 1 foto por história. Também pode deixar sem foto.",
   "@chapterExportPhotoSelectionSubtitle": {
     "description": "Instrução exibida no diálogo de seleção de fotos antes da exportação de capítulo"
-  }
+  },
+  "helpHomeItemDesc": "Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário."
 }

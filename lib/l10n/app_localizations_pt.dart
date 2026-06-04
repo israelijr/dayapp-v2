@@ -986,7 +986,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get helpHomeItemDesc =>
-      'Visualize suas histórias em cards, listas ou no calendário.';
+      'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário.';
 
   @override
   String get helpHomeDoubleTapDesc =>
@@ -2623,6 +2623,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get backupLinuxExplanation =>
       'Escolha uma pasta e o backup ZIP será salvo diretamente nela.';
+
+  @override
+  String get helpHomeItemDesc =>
+      'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário.';
 
   @override
   String get helpAutomaticBackupTitle => 'Backup Automático';

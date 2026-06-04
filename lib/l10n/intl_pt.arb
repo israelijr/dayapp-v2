@@ -424,7 +424,7 @@
   "helpAboutTitle": "Sobre o DayApp",
   "helpAboutDescription": "O DayApp é um aplicativo de diário pessoal que permite registrar suas histórias, memórias e pensamentos de forma organizada e segura.",
   "helpNavigationTitle": "Navegação Principal",
-  "helpHomeItemDesc": "Visualize suas histórias em cards, listas ou no calendário.",
+  "helpHomeItemDesc": "Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário.",
   "helpHomeDoubleTapDesc": "Dê um toque duplo em uma história para visualizar.",
   "helpHomeAttachmentsDesc": "Toque nos anexos para visualizar.",
   "helpHomeSwipeRightDesc": "Arraste o card para a direita para Arquivar a história. A história é movida para a aba Grupos / Arquivados.",

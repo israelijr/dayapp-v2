@@ -980,7 +980,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpHomeItemDesc =>
-      'View your stories as cards, list or on the calendar.';
+      'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário.';
 
   @override
   String get helpHomeDoubleTapDesc => 'Double tap a story to view it.';
