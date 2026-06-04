@@ -1091,7 +1091,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Configure automatic backup (Premium) in Settings. The backup will be created when you log out.';
 
   @override
-  String get helpManualBackupTitle => 'Backup Manual';
+  String get helpManualBackupTitle => 'Backup';
 
   @override
   String get helpManualBackupDesc =>
@@ -1175,7 +1175,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get helpOrganizationTipDesc =>
-      'Use grupos para categorizar suas histórias por temas, sentimentos ou períodos da vida.';
+      'Use Grupos para categorizar suas histórias por temas, e Capítulos para contar toda a história.';
 
   @override
   String get helpSearchTipTitle => 'Pesquisa';
@@ -2662,6 +2662,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get helpAutomaticBackupDesc =>
       'Configure backup automático (Premium) nas Configurações. O backup será criado quando fizer logout.';
+
+  @override
+  String get helpManualBackupTitle => 'Backup';
+
+  @override
+  String get helpOrganizationTipDesc =>
+      'Use Grupos para categorizar suas histórias por temas, e Capítulos para contar toda a história.';
 
   @override
   String get backupOnLogoutDescription => 'Backup será criado ao fazer logout';

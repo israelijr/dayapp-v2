@@ -121,5 +121,7 @@
   "helpGroupsNavDesc": "Organize suas histórias em Capítulos e Grupos temáticos. Crie Capítulos e conte sua história completa. Crie Grupos personalizados para categorizar suas memórias.",
   "aboutScreenFeatureSecureBackupDescription": "Projeta seus dados com backups regulares.",
   "aboutScreenFeatureSmartOrganizationDescription": "Categorize suas histórias em grupos temáticos personalizados e Capítulos que contam sobre você",
-  "backupZipExplanation": "Gera um arquivo ZIP que você pode salvar no seu dispositivo, OneDrive, Google Drive, email ou qualquer outro local na nuvem, exceto apps de mensagens."
+  "backupZipExplanation": "Gera um arquivo ZIP que você pode salvar no seu dispositivo, OneDrive, Google Drive, email ou qualquer outro local na nuvem, exceto apps de mensagens.",
+  "helpManualBackupTitle": "Backup",
+  "helpOrganizationTipDesc": "Use Grupos para categorizar suas histórias por temas, e Capítulos para contar toda a história."
 }

@@ -1102,7 +1102,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Configurez la sauvegarde automatique (Premium) dans Paramètres. La sauvegarde sera créée lors de la déconnexion.';
 
   @override
-  String get helpManualBackupTitle => 'Sauvegarde manuelle';
+  String get helpManualBackupTitle => 'Sauvegarde';
 
   @override
   String get helpManualBackupDesc =>
@@ -1186,7 +1186,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get helpOrganizationTipDesc =>
-      'Utilisez des groupes pour catégoriser vos histoires par thèmes, sentiments ou périodes de vie.';
+      'Utilisez des groupes pour classer vos histoires par thèmes et des chapitres pour raconter toute l\'histoire.';
 
   @override
   String get helpSearchTipTitle => 'Recherche';

@@ -1098,7 +1098,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Configure automatic backup (Premium) in Settings. The backup will be created when you log out.';
 
   @override
-  String get helpManualBackupTitle => 'Copia de seguridad manual';
+  String get helpManualBackupTitle => 'Respaldo';
 
   @override
   String get helpManualBackupDesc =>
@@ -1182,7 +1182,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get helpOrganizationTipDesc =>
-      'Usa grupos para categorizar tus historias por temas, sentimientos o periodos de vida.';
+      'Utilice Grupos para categorizar sus historias por temas y Capítulos para contar la historia completa.';
 
   @override
   String get helpSearchTipTitle => 'Búsqueda';

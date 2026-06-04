@@ -2082,7 +2082,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpManualBackupTitle.
   ///
   /// In en, this message translates to:
-  /// **'Manual Backup'**
+  /// **'Backup'**
   String get helpManualBackupTitle;
 
   /// No description provided for @helpManualBackupDesc.
@@ -2220,7 +2220,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpOrganizationTipDesc.
   ///
   /// In en, this message translates to:
-  /// **'Use groups to categorize your stories by themes, feelings or life periods.'**
+  /// **'Use Groups to categorize your stories by themes, and Chapters to tell the whole story.'**
   String get helpOrganizationTipDesc;
 
   /// No description provided for @helpSearchTipTitle.
