@@ -178,7 +178,7 @@ class _AboutScreenState extends State<AboutScreen> {
           const SizedBox(height: 24),
 
           // Privacidade e Segurança
-          _buildSection(
+          /* _buildSection(
             context,
             l10n.aboutScreenPrivacySecurityTitle,
             '',
@@ -201,8 +201,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 l10n.aboutScreenPrivacyPinSecurityDescription,
               ),
             ],
-          ),
-
+          ), */
           const SizedBox(height: 24),
 
           // Contato e Suporte

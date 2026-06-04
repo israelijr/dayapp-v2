@@ -200,7 +200,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: GoogleFonts.notoSerif(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onPrimary,
+              color:
+                  Theme.of(context).appBarTheme.foregroundColor ??
+                  Theme.of(context).colorScheme.primary,
+              // color: screenTheme.colorScheme.onPrimary,
             ),
           ),
         ),
@@ -1255,12 +1258,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.warning_amber_rounded,
-                  color: Theme.of(context).colorScheme.tertiary,
+              // Botão modificado para exibir o ícone de informação com texto sutil
+              TextButton.icon(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  foregroundColor: Theme.of(context).colorScheme.secondary,
                 ),
-                tooltip: loc.backgroundRestrictionsWarningTitle,
+                icon: const Icon(Icons.info_outline, size: 20),
+                label: Text(
+                  loc.information, // Usando a tradução já existente no seu arquivo
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 onPressed: () => _openBackgroundRestrictionsInfoScreen(context),
               ),
             ],
@@ -1298,29 +1314,114 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onTap: _showNotificationAdvanceDialog,
                     dense: true,
                   ),
-                if (notificationProvider.notificationEnabled)
+                /*                 if (notificationProvider.notificationEnabled)
                   ListTile(
                     leading: const Icon(Icons.info_outline),
                     title: Text(loc.information),
                     subtitle: Text(loc.entryNotificationsInfo),
                     dense: true,
-                  ),
-                if (notificationProvider.notificationEnabled && kDebugMode)
-                  ListTile(
-                    leading: const Icon(Icons.bug_report_outlined),
-                    title: Text(loc.notificationScheduleModeTitle),
-                    subtitle: Text(loc.notificationScheduleModeInexact),
-                    dense: true,
-                  ),
+                  ), */
+                // if (notificationProvider.notificationEnabled && kDebugMode)
+                //   ListTile(
+                //     leading: const Icon(Icons.bug_report_outlined),
+                //     title: Text(loc.notificationScheduleModeTitle),
+                //     subtitle: Text(loc.notificationScheduleModeInexact),
+                //     dense: true,
+                //   ),
               ],
             );
           },
         ),
-        // const Divider(),
-        // ... (comentado permanece igual)
       ],
     );
   }
+
+  // Widget _buildNotificationSection(BuildContext context) {
+  //   final loc = AppLocalizations.of(context)!;
+
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  //         child: Row(
+  //           children: [
+  //             Expanded(
+  //               child: Text(
+  //                 loc.notifications,
+  //                 style: TextStyle(
+  //                   fontSize: 18,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: AppColors.labelColor(context),
+  //                 ),
+  //               ),
+  //             ),
+  //             IconButton(
+  //               icon: Icon(
+  //                 Icons.warning_amber_rounded,
+  //                 color: Theme.of(context).colorScheme.tertiary,
+  //               ),
+  //               tooltip: loc.backgroundRestrictionsWarningTitle,
+  //               onPressed: () => _openBackgroundRestrictionsInfoScreen(context),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       Consumer<NotificationPreferencesProvider>(
+  //         builder: (context, notificationProvider, child) {
+  //           return Column(
+  //             children: [
+  //               ListTile(
+  //                 leading: const Icon(Icons.notifications),
+  //                 title: Text(loc.entryNotifications),
+  //                 subtitle: Text(
+  //                   notificationProvider.notificationEnabled
+  //                       ? loc.enabled
+  //                       : loc.disabled,
+  //                 ),
+  //                 trailing: Switch(
+  //                   value: notificationProvider.notificationEnabled,
+  //                   onChanged: (value) async {
+  //                     await notificationProvider.setNotificationEnabled(value);
+  //                   },
+  //                 ),
+  //               ),
+  //               if (notificationProvider.notificationEnabled)
+  //                 ListTile(
+  //                   leading: const Icon(Icons.access_time),
+  //                   title: Text(loc.defaultAdvanceTitle),
+  //                   subtitle: Text(
+  //                     NotificationPreferencesService.getAdvanceLabel(
+  //                       notificationProvider.notificationAdvance,
+  //                     ),
+  //                   ),
+  //                   trailing: const Icon(Icons.chevron_right),
+  //                   onTap: _showNotificationAdvanceDialog,
+  //                   dense: true,
+  //                 ),
+  //               if (notificationProvider.notificationEnabled)
+  //                 ListTile(
+  //                   leading: const Icon(Icons.info_outline),
+  //                   title: Text(loc.information),
+  //                   subtitle: Text(loc.entryNotificationsInfo),
+  //                   dense: true,
+  //                 ),
+  //               if (notificationProvider.notificationEnabled && kDebugMode)
+  //                 ListTile(
+  //                   leading: const Icon(Icons.bug_report_outlined),
+  //                   title: Text(loc.notificationScheduleModeTitle),
+  //                   subtitle: Text(loc.notificationScheduleModeInexact),
+  //                   dense: true,
+  //                 ),
+  //             ],
+  //           );
+  //         },
+  //       ),
+  //       // const Divider(),
+  //       // ... (comentado permanece igual)
+  //     ],
+  //   );
+  // }
 
   void _openBackgroundRestrictionsInfoScreen(BuildContext context) {
     Navigator.of(context).push(

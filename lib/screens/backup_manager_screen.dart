@@ -57,7 +57,10 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
             style: GoogleFonts.notoSerif(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onPrimary,
+              // color: screenTheme.colorScheme.onPrimary,
+              color:
+                  Theme.of(context).appBarTheme.foregroundColor ??
+                  Theme.of(context).colorScheme.primary,
             ),
           ),
           actions: [
@@ -87,7 +90,10 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.labelColor(context),
+                          // color: AppColors.labelColor(context),
+                          color:
+                              Theme.of(context).appBarTheme.foregroundColor ??
+                              Theme.of(context).colorScheme.primary,
                         ),
                         textAlign: TextAlign.center,
                       ),
