@@ -666,7 +666,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutScreenFeatureSmartOrganizationDescription.
   ///
   /// In en, this message translates to:
-  /// **'Categorize your stories into custom thematic groups'**
+  /// **'Categorize your stories into custom themed groups and Chapters that tell about you'**
   String get aboutScreenFeatureSmartOrganizationDescription;
 
   /// No description provided for @aboutScreenFeatureAdvancedSearchTitle.
@@ -690,7 +690,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutScreenFeatureSecureBackupDescription.
   ///
   /// In en, this message translates to:
-  /// **'Protect your data with automatic and manual backups'**
+  /// **'Back up your data regularly.'**
   String get aboutScreenFeatureSecureBackupDescription;
 
   /// No description provided for @aboutScreenFeatureTotalPrivacyTitle.
@@ -1926,13 +1926,13 @@ abstract class AppLocalizations {
   /// No description provided for @helpHomeSwipeRightDesc.
   ///
   /// In en, this message translates to:
-  /// **'Swipe the card right to Archive the story. The story is moved to the Groups / Archived tab.'**
+  /// **'Drag the card to the right to Archive the story. The story is moved to the Collections / Groups / Archived tab'**
   String get helpHomeSwipeRightDesc;
 
   /// No description provided for @helpHomeSwipeLeftDesc.
   ///
   /// In en, this message translates to:
-  /// **'Swipe the card left to associate it with a Group. The story is moved to the Groups / My Stories tab.'**
+  /// **'Drag the card to the left to associate it with a Group. The story is moved to the Collections / Groups / Archived tab'**
   String get helpHomeSwipeLeftDesc;
 
   /// No description provided for @helpHomeCalendarIconDesc.
@@ -1944,13 +1944,13 @@ abstract class AppLocalizations {
   /// No description provided for @helpHomeChapterIconDesc.
   ///
   /// In en, this message translates to:
-  /// **'Tap the Chapter icon to organize your stories into chapters or receive automatic suggestions (Premium) for chapter creation.'**
+  /// **'Organize your stories into Chapters and Thematic Groups. Create Chapters and tell your complete story. Create custom Groups to categorize your memories.'**
   String get helpHomeChapterIconDesc;
 
   /// No description provided for @helpGroupsNavDesc.
   ///
   /// In en, this message translates to:
-  /// **'Organize your stories into thematic groups. Create custom groups to categorize your memories. View your archived stories.'**
+  /// **'Organize your stories into Chapters and Thematic Groups. Create Chapters and tell your complete story. Create custom Groups to categorize your memories.'**
   String get helpGroupsNavDesc;
 
   /// No description provided for @helpSearchItemDesc.

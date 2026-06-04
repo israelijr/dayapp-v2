@@ -116,10 +116,10 @@ class _AboutScreenState extends State<AboutScreen> {
                 l10n.aboutScreenFeatureSecureBackupTitle,
                 l10n.aboutScreenFeatureSecureBackupDescription,
               ),
-              _buildFeatureItem(
+              /* _buildFeatureItem(
                 l10n.aboutScreenFeatureTotalPrivacyTitle,
                 l10n.aboutScreenFeatureTotalPrivacyDescription,
-              ),
+              ), */
               _buildFeatureItem(
                 l10n.aboutScreenFeatureAdaptiveInterfaceTitle,
                 l10n.aboutScreenFeatureAdaptiveInterfaceDescription,

@@ -310,7 +310,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSmartOrganizationDescription =>
-      'Catégorisez vos histoires dans des groupes thématiques personnalisés';
+      'Classez vos histoires en groupes thématiques personnalisés et en chapitres qui parlent de vous';
 
   @override
   String get aboutScreenFeatureAdvancedSearchTitle => 'Recherche avancée';
@@ -324,7 +324,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSecureBackupDescription =>
-      'Protégez vos données avec des sauvegardes automatiques et manuelles';
+      'Sauvegardez régulièrement vos données.';
 
   @override
   String get aboutScreenFeatureTotalPrivacyTitle => 'Confidentialité totale';
@@ -1008,11 +1008,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get helpHomeSwipeRightDesc =>
-      'Faites glisser la carte vers la droite pour archiver l\'histoire. L\'histoire est déplacée dans l\'onglet Groupes / Archivées.';
+      'Faites glisser la carte vers la droite pour archiver l\'histoire. L\'histoire est déplacée vers l\'onglet Collections / Groupes / Archivés';
 
   @override
   String get helpHomeSwipeLeftDesc =>
-      'Faites glisser la carte vers la gauche pour l\'associer à un groupe. L\'histoire est déplacée dans l\'onglet Groupes / Mes histoires.';
+      'Faites glisser la carte vers la gauche pour l\'associer à un groupe. L\'histoire est déplacée vers l\'onglet Collections / Groupes / Archivés';
 
   @override
   String get helpHomeCalendarIconDesc =>
@@ -1020,11 +1020,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get helpHomeChapterIconDesc =>
-      'Tapez sur l\'icône Chapitre pour organiser vos histoires en chapitres ou recevoir des suggestions automatiques (Premium) pour la création de chapitres.';
+      'Organisez vos histoires en chapitres et groupes thématiques. Créez des chapitres et racontez votre histoire complète. Créez des groupes personnalisés pour classer vos souvenirs.';
 
   @override
   String get helpGroupsNavDesc =>
-      'Organisez vos histoires en groupes thématiques. Créez des groupes personnalisés pour catégoriser vos souvenirs. Consultez vos histoires archivées.';
+      'Organisez vos histoires en chapitres et groupes thématiques. Créez des chapitres et racontez votre histoire complète. Créez des groupes personnalisés pour classer vos souvenirs.';
 
   @override
   String get helpSearchItemDesc =>

@@ -310,7 +310,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSmartOrganizationDescription =>
-      'Categorizza le tue storie in gruppi tematici personalizzati';
+      'Classifica le tue storie in gruppi tematici personalizzati e capitoli che raccontano di te';
 
   @override
   String get aboutScreenFeatureAdvancedSearchTitle => 'Ricerca avanzata';
@@ -324,7 +324,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSecureBackupDescription =>
-      'Proteggi i tuoi dati con backup automatici e manuali';
+      'Esegui regolarmente il backup dei tuoi dati.';
 
   @override
   String get aboutScreenFeatureTotalPrivacyTitle => 'Privacy totale';
@@ -1004,11 +1004,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get helpHomeSwipeRightDesc =>
-      'Scorri la scheda verso destra per archiviare la storia. La storia viene spostata nella scheda Gruppi / Archiviate.';
+      'Trascina la scheda a destra per archiviare la storia. La storia viene spostata nella scheda Raccolte/Gruppi/Archiviati';
 
   @override
   String get helpHomeSwipeLeftDesc =>
-      'Scorri la scheda verso sinistra per associarla a un gruppo. La storia viene spostata nella scheda Gruppi / Le mie storie.';
+      'Trascina la scheda verso sinistra per associarla ad un Gruppo. La storia viene spostata nella scheda Raccolte/Gruppi/Archiviati';
 
   @override
   String get helpHomeCalendarIconDesc =>
@@ -1016,11 +1016,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get helpHomeChapterIconDesc =>
-      'Tocca l\'icona Capitolo per organizzare le tue storie in capitoli o ricevere suggerimenti automatici (Premium) per la creazione di capitoli.';
+      'Organizza le tue storie in capitoli e gruppi tematici. Crea capitoli e racconta la tua storia completa. Crea gruppi personalizzati per classificare i tuoi ricordi.';
 
   @override
   String get helpGroupsNavDesc =>
-      'Organizza le tue storie in gruppi tematici. Crea gruppi personalizzati per categorizzare i tuoi ricordi. Visualizza le tue storie archiviate.';
+      'Organizza le tue storie in capitoli e gruppi tematici. Crea capitoli e racconta la tua storia completa. Crea gruppi personalizzati per classificare i tuoi ricordi.';
 
   @override
   String get helpSearchItemDesc =>

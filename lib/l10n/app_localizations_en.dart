@@ -307,7 +307,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSmartOrganizationDescription =>
-      'Categorize your stories into custom thematic groups';
+      'Categorize your stories into custom themed groups and Chapters that tell about you';
 
   @override
   String get aboutScreenFeatureAdvancedSearchTitle => 'Advanced Search';
@@ -321,7 +321,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSecureBackupDescription =>
-      'Protect your data with automatic and manual backups';
+      'Back up your data regularly.';
 
   @override
   String get aboutScreenFeatureTotalPrivacyTitle => 'Total Privacy';
@@ -990,11 +990,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpHomeSwipeRightDesc =>
-      'Swipe the card right to Archive the story. The story is moved to the Groups / Archived tab.';
+      'Drag the card to the right to Archive the story. The story is moved to the Collections / Groups / Archived tab';
 
   @override
   String get helpHomeSwipeLeftDesc =>
-      'Swipe the card left to associate it with a Group. The story is moved to the Groups / My Stories tab.';
+      'Drag the card to the left to associate it with a Group. The story is moved to the Collections / Groups / Archived tab';
 
   @override
   String get helpHomeCalendarIconDesc =>
@@ -1002,11 +1002,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpHomeChapterIconDesc =>
-      'Tap the Chapter icon to organize your stories into chapters or receive automatic suggestions (Premium) for chapter creation.';
+      'Organize your stories into Chapters and Thematic Groups. Create Chapters and tell your complete story. Create custom Groups to categorize your memories.';
 
   @override
   String get helpGroupsNavDesc =>
-      'Organize your stories into thematic groups. Create custom groups to categorize your memories. View your archived stories.';
+      'Organize your stories into Chapters and Thematic Groups. Create Chapters and tell your complete story. Create custom Groups to categorize your memories.';
 
   @override
   String get helpSearchItemDesc =>

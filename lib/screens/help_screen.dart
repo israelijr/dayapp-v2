@@ -45,12 +45,16 @@ class HelpScreen extends StatelessWidget {
                   icon: Icons.calendar_month_rounded,
                   text: loc.helpHomeCalendarIconDesc,
                 ),
-                (
+                /* (
                   icon: Icons.auto_stories_outlined,
                   text: loc.helpHomeChapterIconDesc,
-                ),
+                ), */
               ]),
-              _buildHelpItem(context, loc.groups, loc.helpGroupsNavDesc),
+              _buildHelpItem(
+                context,
+                loc.collectionsTitle,
+                loc.helpGroupsNavDesc,
+              ),
               _buildHelpItem(context, loc.search, loc.helpSearchItemDesc),
             ],
           ),

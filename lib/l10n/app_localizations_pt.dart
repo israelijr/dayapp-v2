@@ -308,7 +308,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSmartOrganizationDescription =>
-      'Categorize suas histórias em grupos temáticos personalizados';
+      'Categorize suas histórias em grupos temáticos personalizados e Capítulos que contam sobre você';
 
   @override
   String get aboutScreenFeatureAdvancedSearchTitle => 'Pesquisa Avançada';
@@ -322,7 +322,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSecureBackupDescription =>
-      'Proteja seus dados com backup automático e manual';
+      'Projeta seus dados com backups regulares.';
 
   @override
   String get aboutScreenFeatureTotalPrivacyTitle => 'Privacidade Total';
@@ -997,11 +997,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get helpHomeSwipeRightDesc =>
-      'Arraste o card para a direita para Arquivar a história. A história é movida para a aba Grupos / Arquivados.';
+      'Arraste o card para a direita para Arquivar a história. A história é movida para a aba Coleções / Grupos / Arquivados';
 
   @override
   String get helpHomeSwipeLeftDesc =>
-      'Arraste o card para a esquerda para associar a um Grupo. A história é movida para a aba Grupos / Minhas Histórias.';
+      'Arraste o card para a esquerda para associar a um Grupo. A história é movida para a aba Coleções / Grupos / Arquivados';
 
   @override
   String get helpHomeCalendarIconDesc =>
@@ -1009,11 +1009,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get helpHomeChapterIconDesc =>
-      'Toque no ícone Capítulo e organize suas histórias em capítulos ou receba sugestões automáticas (Premium) de criação de capítulos.';
+      'Organize suas histórias em Capítulos e Grupos temáticos. Crie Capítulos e conte sua história completa. Crie Grupos personalizados para categorizar suas memórias.';
 
   @override
   String get helpGroupsNavDesc =>
-      'Organize suas histórias em grupos temáticos. Crie grupos personalizados para categorizar suas memórias. Visualize suas histórias arquivadas.';
+      'Organize suas histórias em Capítulos e Grupos temáticos. Crie Capítulos e conte sua história completa. Crie Grupos personalizados para categorizar suas memórias.';
 
   @override
   String get helpSearchItemDesc =>
@@ -2621,12 +2621,36 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   AppLocalizationsPtBr() : super('pt_BR');
 
   @override
+  String get aboutScreenFeatureSmartOrganizationDescription =>
+      'Categorize suas histórias em grupos temáticos personalizados e Capítulos que contam sobre você';
+
+  @override
+  String get aboutScreenFeatureSecureBackupDescription =>
+      'Projeta seus dados com backups regulares.';
+
+  @override
   String get backupLinuxExplanation =>
       'Escolha uma pasta e o backup ZIP será salvo diretamente nela.';
 
   @override
   String get helpHomeItemDesc =>
       'Visualize as 5 últimas histórias ou todas em cartões grandes, reduzidos ou no calendário';
+
+  @override
+  String get helpHomeSwipeRightDesc =>
+      'Arraste o card para a direita para Arquivar a história. A história é movida para a aba Coleções / Grupos / Arquivados';
+
+  @override
+  String get helpHomeSwipeLeftDesc =>
+      'Arraste o card para a esquerda para associar a um Grupo. A história é movida para a aba Coleções / Grupos / Arquivados';
+
+  @override
+  String get helpHomeChapterIconDesc =>
+      'Organize suas histórias em Capítulos e Grupos temáticos. Crie Capítulos e conte sua história completa. Crie Grupos personalizados para categorizar suas memórias.';
+
+  @override
+  String get helpGroupsNavDesc =>
+      'Organize suas histórias em Capítulos e Grupos temáticos. Crie Capítulos e conte sua história completa. Crie Grupos personalizados para categorizar suas memórias.';
 
   @override
   String get helpAutomaticBackupTitle => 'Backup Automático';

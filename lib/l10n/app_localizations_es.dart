@@ -309,7 +309,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSmartOrganizationDescription =>
-      'Categoriza tus historias en grupos temáticos personalizados';
+      'Clasifique sus historias en grupos temáticos personalizados y capítulos que hablen sobre usted';
 
   @override
   String get aboutScreenFeatureAdvancedSearchTitle => 'Búsqueda avanzada';
@@ -323,7 +323,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aboutScreenFeatureSecureBackupDescription =>
-      'Protege tus datos con copia automática y manual';
+      'Haga una copia de seguridad de sus datos periódicamente.';
 
   @override
   String get aboutScreenFeatureTotalPrivacyTitle => 'Privacidad total';
@@ -1004,11 +1004,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get helpHomeSwipeRightDesc =>
-      'Desliza la tarjeta a la derecha para Archivar la historia. La historia se mueve a la pestaña Grupos / Archivados.';
+      'Arrastre la tarjeta hacia la derecha para Archivar la historia. La historia se mueve a la pestaña Colecciones/Grupos/Archivados.';
 
   @override
   String get helpHomeSwipeLeftDesc =>
-      'Desliza la tarjeta a la izquierda para asociarla a un Grupo. La historia se mueve a la pestaña Grupos / Mis Historias.';
+      'Arrastra la tarjeta hacia la izquierda para asociarla con un Grupo. La historia se mueve a la pestaña Colecciones/Grupos/Archivados.';
 
   @override
   String get helpHomeCalendarIconDesc =>
@@ -1016,11 +1016,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get helpHomeChapterIconDesc =>
-      'Toca el ícono de Capítulo para organizar tus historias en capítulos o recibir sugerencias automáticas (Premium) de creación de capítulos.';
+      'Organiza tus historias en Capítulos y Grupos Temáticos. Crea capítulos y cuenta tu historia completa. Crea grupos personalizados para categorizar tus recuerdos.';
 
   @override
   String get helpGroupsNavDesc =>
-      'Organiza tus historias en grupos temáticos. Crea grupos personalizados para categorizar tus recuerdos. Visualiza tus historias archivadas.';
+      'Organiza tus historias en Capítulos y Grupos Temáticos. Crea capítulos y cuenta tu historia completa. Crea grupos personalizados para categorizar tus recuerdos.';
 
   @override
   String get helpSearchItemDesc =>
