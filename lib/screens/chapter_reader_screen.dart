@@ -6,6 +6,7 @@ import 'package:dayapp/domain/export_block.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/providers/chapter_reader_provider.dart';
 import 'package:dayapp/providers/premium_provider.dart';
+import 'package:dayapp/screens/_selectable_photo_tile.dart';
 import 'package:dayapp/services/chapter_export_telemetry_service.dart';
 import 'package:dayapp/services/chapter_pdf_export_service.dart';
 import 'package:dayapp/widgets/chapter_reader/reader_block_renderer.dart';
@@ -14,7 +15,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:dayapp/screens/_selectable_photo_tile.dart';
 
 class ChapterReaderScreen extends StatelessWidget {
   final int chapterId;
@@ -152,7 +152,7 @@ class _ChapterReaderView extends StatelessWidget {
       if (e.toString().contains('export_cancelled_lifecycle')) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n.exportPdf + ' - cancelled')),
+            SnackBar(content: Text('${l10n.exportPdf} - cancelled')),
           );
         }
       } else {

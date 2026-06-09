@@ -9,12 +9,12 @@ class SelectablePhotoTile extends StatelessWidget {
   final void Function(String path, bool isSelected) onToggle;
 
   const SelectablePhotoTile({
-    Key? key,
     required this.imagePath,
     required this.selected,
     required this.label,
     required this.onToggle,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
