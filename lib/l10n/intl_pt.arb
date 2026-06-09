@@ -2481,7 +2481,7 @@
   "@chapterExportPhotoSelectionTitle": {
     "description": "Título do diálogo para selecionar uma foto por história antes de exportar o PDF"
   },
-  "chapterExportPhotoSelectionSubtitle": "Pode selecionar até 1 foto por história. Também pode deixar sem foto.",
+  "chapterExportPhotoSelectionSubtitle": "Selecione as fotos de cada história que você deseja exportar",
   "@chapterExportPhotoSelectionSubtitle": {
     "description": "Instrução exibida no diálogo de seleção de fotos antes da exportação de capítulo"
   },

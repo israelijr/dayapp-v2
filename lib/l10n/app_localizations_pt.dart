@@ -2610,7 +2610,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get chapterExportPhotoSelectionSubtitle =>
-      'Pode selecionar até 1 foto por história. Também pode deixar sem foto.';
+      'Selecione as fotos de cada história que você deseja exportar';
 
   @override
   String get chapterExportNoPhotoOption => 'Sem foto';
@@ -2774,5 +2774,5 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get chapterExportPhotoSelectionSubtitle =>
-      'Você pode selecionar até 1 foto por história. Também pode deixar sem foto.';
+      'Selecione as fotos de cada história que você deseja exportar';
 }
