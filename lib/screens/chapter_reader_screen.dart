@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:dayapp/screens/_selectable_photo_tile.dart';
 
 class ChapterReaderScreen extends StatelessWidget {
   final int chapterId;
@@ -65,7 +66,7 @@ class _ChapterReaderView extends StatelessWidget {
                         width: 18,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Icon(Icons.picture_as_pdf_outlined),
+                    : const Icon(Icons.share_outlined),
               ),
             ],
           ),
@@ -114,7 +115,11 @@ class _ChapterReaderView extends StatelessWidget {
 
     final exportStopwatch = _telemetry.startExport(document);
 
+    final observer = _ExportLifecycleObserver();
+    WidgetsBinding.instance.addObserver(observer);
+
     try {
+      if (observer.isCancelled) throw Exception('export_cancelled_lifecycle');
       final preparedDocument = await _prepareDocumentForExport(
         context,
         document,
@@ -124,16 +129,19 @@ class _ChapterReaderView extends StatelessWidget {
       }
 
       exportState.start();
+      if (observer.isCancelled) throw Exception('export_cancelled_lifecycle');
       const exportService = ChapterPdfExportService();
-      final pdfFile = await exportService.export(
+      final htmlFile = await exportService.exportHtml(
         document: preparedDocument,
         localeName: l10n.localeName,
         storyCountLabel: l10n.chapterEntriesCount(preparedDocument.storyCount),
       );
 
+      if (observer.isCancelled) throw Exception('export_cancelled_lifecycle');
+
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile(pdfFile.path)],
+          files: [XFile(htmlFile.path)],
           subject: preparedDocument.chapterTitle,
           text: l10n.exportPdf,
         ),
@@ -141,19 +149,28 @@ class _ChapterReaderView extends StatelessWidget {
 
       _telemetry.logSuccess(preparedDocument, exportStopwatch);
     } catch (e) {
-      _telemetry.logFailure(document, exportStopwatch, e);
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.exportPdfError(e)),
-          action: SnackBarAction(
-            label: l10n.tryAgain,
-            onPressed: () => _exportPdf(context),
+      if (e.toString().contains('export_cancelled_lifecycle')) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.exportPdf + ' - cancelled')),
+          );
+        }
+      } else {
+        _telemetry.logFailure(document, exportStopwatch, e);
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.exportPdfError(e)),
+            action: SnackBarAction(
+              label: l10n.tryAgain,
+              onPressed: () => _exportPdf(context),
+            ),
           ),
-        ),
-      );
+        );
+      }
     } finally {
       exportState.finish();
+      WidgetsBinding.instance.removeObserver(observer);
     }
   }
 
@@ -179,7 +196,7 @@ class _ChapterReaderView extends StatelessWidget {
 
     final filteredBlocks = filterExportBlocksBySelectedImages(
       blocks: document.blocks,
-      selectedImagePathByStoryId: selectedImagePathByStoryId,
+      selectedImagePathsByStoryId: selectedImagePathByStoryId,
     );
 
     return ChapterExportDocument(
@@ -231,16 +248,16 @@ class _ChapterReaderView extends StatelessWidget {
         .toList(growable: false);
   }
 
-  Future<Map<int, String?>?> _showPhotoSelectionDialog(
+  Future<Map<int, List<String>?>?> _showPhotoSelectionDialog(
     BuildContext context,
     AppLocalizations l10n,
     List<_StoryPhotoChoice> choices,
   ) {
-    return showDialog<Map<int, String?>>(
+    return showDialog<Map<int, List<String>?>>(
       context: context,
       builder: (dialogContext) {
-        final selectedImagePathByStoryId = <int, String?>{
-          for (final choice in choices) choice.storyId: null,
+        final selectedImagePathByStoryId = <int, List<String>?>{
+          for (final choice in choices) choice.storyId: <String>[],
         };
 
         return StatefulBuilder(
@@ -264,16 +281,17 @@ class _ChapterReaderView extends StatelessWidget {
                       separatorBuilder: (_, __) => const SizedBox(height: 16),
                       itemBuilder: (_, index) {
                         final choice = choices[index];
-                        final selectedPath =
+                        final selectedPaths =
                             selectedImagePathByStoryId[choice.storyId];
 
                         return _StoryPhotoSelectionCard(
                           choice: choice,
-                          selectedImagePath: selectedPath,
+                          selectedImagePaths: selectedPaths,
                           noPhotoLabel: l10n.chapterExportNoPhotoOption,
-                          onSelect: (path) {
+                          onSelect: (paths) {
                             setState(() {
-                              selectedImagePathByStoryId[choice.storyId] = path;
+                              selectedImagePathByStoryId[choice.storyId] =
+                                  paths;
                             });
                           },
                           photoLabelBuilder: (position) =>
@@ -471,6 +489,20 @@ class _ChapterExportState extends ChangeNotifier {
   }
 }
 
+class _ExportLifecycleObserver extends WidgetsBindingObserver {
+  bool _cancelled = false;
+
+  bool get isCancelled => _cancelled;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) {
+      _cancelled = true;
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+}
+
 class _StoryPhotoChoice {
   final int storyId;
   final String storyTitle;
@@ -485,14 +517,14 @@ class _StoryPhotoChoice {
 
 class _StoryPhotoSelectionCard extends StatelessWidget {
   final _StoryPhotoChoice choice;
-  final String? selectedImagePath;
+  final List<String>? selectedImagePaths;
   final String noPhotoLabel;
-  final ValueChanged<String?> onSelect;
+  final ValueChanged<List<String>?> onSelect;
   final String Function(int position) photoLabelBuilder;
 
   const _StoryPhotoSelectionCard({
     required this.choice,
-    required this.selectedImagePath,
+    required this.selectedImagePaths,
     required this.noPhotoLabel,
     required this.onSelect,
     required this.photoLabelBuilder,
@@ -519,41 +551,54 @@ class _StoryPhotoSelectionCard extends StatelessWidget {
           runSpacing: 8,
           children: [
             _PhotoOptionTile(
-              isSelected: selectedImagePath == null,
+              isSelected:
+                  selectedImagePaths == null || selectedImagePaths!.isEmpty,
               label: noPhotoLabel,
-              onTap: () => onSelect(null),
+              onTap: () => onSelect(<String>[]),
               child: Icon(
                 Icons.hide_image_outlined,
                 color: colorScheme.onSurfaceVariant,
               ),
             ),
-            for (var index = 0; index < choice.imageBlocks.length; index++)
-              _PhotoOptionTile(
-                isSelected:
-                    selectedImagePath == choice.imageBlocks[index].imagePath,
-                label: photoLabelBuilder(index),
-                onTap: () => onSelect(choice.imageBlocks[index].imagePath),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(
-                    File(choice.imageBlocks[index].imagePath),
-                    width: 72,
-                    height: 72,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => ColoredBox(
-                      color: colorScheme.surfaceContainerHighest,
-                      child: SizedBox(
-                        width: 72,
-                        height: 72,
-                        child: Icon(
-                          Icons.broken_image_outlined,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+            _PhotoOptionTile(
+              isSelected:
+                  selectedImagePaths != null &&
+                  selectedImagePaths!.length == 1 &&
+                  selectedImagePaths!.first == '__ALL_PHOTOS__',
+              label: AppLocalizations.of(context)!.chapterFilterAll,
+              onTap: () => onSelect(<String>['__ALL_PHOTOS__']),
+              child: Icon(
+                Icons.photo_library_outlined,
+                color: colorScheme.onSurfaceVariant,
               ),
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (var index = 0; index < choice.imageBlocks.length; index++)
+                  SelectablePhotoTile(
+                    imagePath: choice.imageBlocks[index].imagePath,
+                    selected:
+                        selectedImagePaths != null &&
+                        selectedImagePaths!.contains(
+                          choice.imageBlocks[index].imagePath,
+                        ),
+                    label: photoLabelBuilder(index),
+                    onToggle: (path, isSelected) {
+                      final current = List<String>.from(
+                        selectedImagePaths ?? <String>[],
+                      );
+                      if (isSelected) {
+                        if (!current.contains(path)) current.add(path);
+                      } else {
+                        current.remove(path);
+                      }
+                      onSelect(current);
+                    },
+                  ),
+              ],
+            ),
           ],
         ),
       ],

@@ -2,13 +2,12 @@ import 'export_block.dart';
 
 List<ExportBlock> filterExportBlocksBySelectedImages({
   required List<ExportBlock> blocks,
-  required Map<int, String?> selectedImagePathByStoryId,
+  required Map<int, List<String>?> selectedImagePathsByStoryId,
 }) {
-  if (selectedImagePathByStoryId.isEmpty) {
+  if (selectedImagePathsByStoryId.isEmpty) {
     return List<ExportBlock>.from(blocks, growable: false);
   }
 
-  final selectedImageAlreadyIncluded = <int>{};
   final filtered = <ExportBlock>[];
 
   for (final block in blocks) {
@@ -18,20 +17,26 @@ List<ExportBlock> filterExportBlocksBySelectedImages({
     }
 
     final storyId = block.storyId!;
-    if (!selectedImagePathByStoryId.containsKey(storyId)) {
+    if (!selectedImagePathsByStoryId.containsKey(storyId)) {
       filtered.add(block);
       continue;
     }
 
-    final selectedPath = selectedImagePathByStoryId[storyId];
-    if (selectedPath == null) {
+    final selectedPaths = selectedImagePathsByStoryId[storyId];
+    if (selectedPaths == null || selectedPaths.isEmpty) {
+      // none selected for this story -> skip image blocks
       continue;
     }
 
-    final wasAlreadyIncluded = selectedImageAlreadyIncluded.contains(storyId);
-    if (!wasAlreadyIncluded && block.imagePath == selectedPath) {
+    // Special token to include all photos for the story
+    const allToken = '__ALL_PHOTOS__';
+    if (selectedPaths.length == 1 && selectedPaths.first == allToken) {
       filtered.add(block);
-      selectedImageAlreadyIncluded.add(storyId);
+      continue;
+    }
+
+    if (selectedPaths.contains(block.imagePath)) {
+      filtered.add(block);
     }
   }
 

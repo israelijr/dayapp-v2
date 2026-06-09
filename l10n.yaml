@@ -9,3 +9,4 @@ preferred-supported-locales:
   - es
   - fr
   - it
+untranslated-messages-file: l10n_untranslated_report.txt

@@ -15,7 +15,10 @@ void main() {
 
     final filtered = filterExportBlocksBySelectedImages(
       blocks: blocks,
-      selectedImagePathByStoryId: {1: '/tmp/a_2.jpg', 2: '/tmp/b_1.jpg'},
+      selectedImagePathsByStoryId: {
+        1: ['/tmp/a_2.jpg'],
+        2: ['/tmp/b_1.jpg'],
+      },
     );
 
     final images = filtered.whereType<ImageExportBlock>().toList();
@@ -36,7 +39,10 @@ void main() {
 
     final filtered = filterExportBlocksBySelectedImages(
       blocks: blocks,
-      selectedImagePathByStoryId: {1: null, 2: '/tmp/b_1.jpg'},
+      selectedImagePathsByStoryId: {
+        1: null,
+        2: ['/tmp/b_1.jpg'],
+      },
     );
 
     final story1Images = filtered
