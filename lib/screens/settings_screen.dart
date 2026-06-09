@@ -1,5 +1,4 @@
 import 'package:dayapp/l10n/generated/app_localizations.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

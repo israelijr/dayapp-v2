@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -279,34 +280,69 @@ class ChapterPdfExportService {
       if (originalBytes.length < 350 * 1024) {
         return originalBytes;
       }
+      // Offload heavy image decode/resize/encode to a background Isolate
+      try {
+        final result = await compute<_ImageProcessingRequest, Uint8List?>(
+          _processImageInIsolate,
+          _ImageProcessingRequest(
+            bytes: originalBytes,
+            maxDimension: maxDimension,
+            quality: quality,
+          ),
+        );
 
-      final decoded = img.decodeImage(originalBytes);
-      if (decoded == null) {
+        // If isolate failed or returned null, fallback to original bytes
+        return result ?? originalBytes;
+      } catch (_) {
         return originalBytes;
       }
-
-      final needsResize =
-          decoded.width > maxDimension || decoded.height > maxDimension;
-      final targetWidth = needsResize ? maxDimension : decoded.width;
-      final targetHeight = needsResize ? maxDimension : decoded.height;
-
-      final resized = img.copyResize(
-        decoded,
-        width: decoded.width >= decoded.height ? targetWidth : null,
-        height: decoded.height > decoded.width ? targetHeight : null,
-        interpolation: img.Interpolation.average,
-      );
-
-      final encoded = img.encodeJpg(resized, quality: quality);
-      if (encoded.length >= originalBytes.length) {
-        return originalBytes;
-      }
-
-      return Uint8List.fromList(encoded);
     } catch (_) {
       return null;
     }
   }
+
+// Request object for compute() isolate
+class _ImageProcessingRequest {
+  final Uint8List bytes;
+  final int maxDimension;
+  final int quality;
+
+  _ImageProcessingRequest({
+    required this.bytes,
+    required this.maxDimension,
+    required this.quality,
+  });
+}
+
+// Top-level function invoked in an isolate via compute()
+Future<Uint8List?> _processImageInIsolate(_ImageProcessingRequest req) async {
+  try {
+    final decoded = img.decodeImage(req.bytes);
+    if (decoded == null) return req.bytes;
+
+    final needsResize =
+        decoded.width > req.maxDimension || decoded.height > req.maxDimension;
+
+    final targetWidth = needsResize ? req.maxDimension : decoded.width;
+    final targetHeight = needsResize ? req.maxDimension : decoded.height;
+
+    final resized = img.copyResize(
+      decoded,
+      width: decoded.width >= decoded.height ? targetWidth : null,
+      height: decoded.height > decoded.width ? targetHeight : null,
+      interpolation: img.Interpolation.average,
+    );
+
+    final encoded = img.encodeJpg(resized, quality: req.quality);
+    if (encoded.length >= req.bytes.length) {
+      return req.bytes;
+    }
+
+    return Uint8List.fromList(encoded);
+  } catch (_) {
+    return null;
+  }
+}
 
   String _slugify(String value) {
     final lower = value.toLowerCase().trim();
