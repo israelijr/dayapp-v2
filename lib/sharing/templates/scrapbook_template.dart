@@ -129,8 +129,12 @@ class ScrapbookTemplate extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final height = constraints.maxHeight;
+        final width = constraints.maxWidth > 0
+            ? constraints.maxWidth
+            : MediaQuery.of(context).size.width;
+        final height = constraints.maxHeight > 0
+            ? constraints.maxHeight
+            : MediaQuery.of(context).size.height * 0.6;
         final cardWidth = (width * 0.84).clamp(300.0, 720.0).toDouble();
         final desiredCardHeight = (height * 0.56)
             .clamp(360.0, 620.0)

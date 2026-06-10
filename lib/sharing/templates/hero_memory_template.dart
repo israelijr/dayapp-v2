@@ -35,8 +35,12 @@ class HeroMemoryTemplate extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final height = constraints.maxHeight;
+        final width = constraints.maxWidth > 0
+            ? constraints.maxWidth
+            : MediaQuery.of(context).size.width;
+        final height = constraints.maxHeight > 0
+            ? constraints.maxHeight
+            : MediaQuery.of(context).size.height * 0.6;
         final horizontalPadding = width * 0.08;
         final verticalPadding = height * 0.1;
         final cardHeight = height * 0.56;

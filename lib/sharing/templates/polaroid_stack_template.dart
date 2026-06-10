@@ -98,8 +98,12 @@ class PolaroidStackTemplate extends StatelessWidget {
                   Expanded(
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        final width = constraints.maxWidth;
-                        final height = constraints.maxHeight;
+                        final width = constraints.maxWidth > 0
+                            ? constraints.maxWidth
+                            : MediaQuery.of(context).size.width;
+                        final height = constraints.maxHeight > 0
+                            ? constraints.maxHeight
+                            : MediaQuery.of(context).size.height * 0.6;
 
                         final largeWidth = width * 0.65;
                         final largeHeight = height * 0.35;

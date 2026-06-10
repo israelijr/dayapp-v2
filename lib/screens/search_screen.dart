@@ -202,6 +202,9 @@ class _SearchScreenState extends State<SearchScreen> {
     return Theme(
       data: screenTheme,
       child: Scaffold(
+        // Impede que o teclado encolha o body, evitando que o Expanded
+        // de resultados receba height=0 e cause overflow/erros de render.
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(
             l10n.search,
@@ -222,9 +225,13 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         body: Column(
           children: [
-            // Área de filtros
-            _buildSearchFilters(),
+            // Área de filtros com rolagem para evitar overflow
+            Flexible(
+              child: SingleChildScrollView(child: _buildSearchFilters()),
+            ),
+
             const Divider(height: 1),
+
             // Área de resultados
             Expanded(child: _buildResults()),
           ],
@@ -236,7 +243,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildSearchFilters() {
     final l10n = AppLocalizations.of(context)!;
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -303,7 +310,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
 
           // Campo de pesquisa ou seleção de emoticon
           if (_currentSearchType == SearchType.emoticon)
@@ -486,7 +493,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   /// Constrói a área de resultados
-  Widget _buildResults() {
+  /* Widget _buildResults() {
     if (_isSearching) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -494,9 +501,13 @@ class _SearchScreenState extends State<SearchScreen> {
     if (!_hasSearched) {
       return LayoutBuilder(
         builder: (context, constraints) {
-          // Calcula o tamanho máximo da imagem baseado em parte da altura disponível
-          // Menor fator evita estouro quando também exibimos textos abaixo.
-          final maxSize = constraints.maxHeight * 0.5;
+          // Use um fallback seguro quando maxHeight for 0 (ex: widget aninhado em
+          // um pai que temporariamente fornece altura zero). Isso evita usar
+          // cálculos que resultem em tamanhos inválidos.
+          final effectiveHeight = constraints.maxHeight > 0
+              ? constraints.maxHeight
+              : MediaQuery.of(context).size.height * 0.6;
+          final maxSize = effectiveHeight * 0.5;
           final imageSize = maxSize.clamp(150.0, 400.0);
 
           return Center(
@@ -542,8 +553,11 @@ class _SearchScreenState extends State<SearchScreen> {
     if (_searchResults.isEmpty) {
       return LayoutBuilder(
         builder: (context, constraints) {
+          final effectiveHeight = constraints.maxHeight > 0
+              ? constraints.maxHeight
+              : MediaQuery.of(context).size.height * 0.6;
           // Calcula o tamanho máximo da imagem baseado no espaço disponível
-          final maxSize = constraints.maxHeight * 0.85;
+          final maxSize = effectiveHeight * 0.85;
           final imageSize = maxSize.clamp(150.0, 400.0);
 
           return Center(
@@ -586,6 +600,108 @@ class _SearchScreenState extends State<SearchScreen> {
           ],
         );
       },
+    );
+  } */
+
+  /// Constrói a área de resultados
+  Widget _buildResults() {
+    if (_isSearching) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (!_hasSearched) {
+      return _buildInitialSearchPlaceholder();
+    }
+
+    if (_searchResults.isEmpty) {
+      return _buildNoResultsPlaceholder();
+    }
+
+    // Agrupa resultados por data
+    final groupedResults = _groupByDate(_searchResults);
+    final sortedDates = groupedResults.keys.toList()
+      ..sort((a, b) {
+        final dateA = DateFormat('dd/MM/yyyy', 'pt_BR').parse(a);
+        final dateB = DateFormat('dd/MM/yyyy', 'pt_BR').parse(b);
+        return dateB.compareTo(dateA);
+      });
+
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      itemCount: sortedDates.length,
+      itemBuilder: (context, index) {
+        final dateKey = sortedDates[index];
+        final historias = groupedResults[dateKey]!;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildDateHeader(dateKey, historias.length),
+            ...historias.map((historia) => _buildHistoriaCard(historia)),
+            const SizedBox(height: 8),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildInitialSearchPlaceholder() {
+    final l10n = AppLocalizations.of(context)!;
+    final shortestSide = MediaQuery.sizeOf(context).shortestSide;
+    final imageSize = (shortestSide * 0.55).clamp(120.0, 300.0);
+
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: imageSize,
+              height: imageSize,
+              child: Image.asset(
+                'assets/image/pesquisa_historias.png',
+                fit: BoxFit.contain,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              l10n.searchStoriesTitle,
+              style: TextStyle(
+                fontSize: 18,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.searchStoriesSubtitle,
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoResultsPlaceholder() {
+    final shortestSide = MediaQuery.sizeOf(context).shortestSide;
+    final imageSize = (shortestSide * 0.55).clamp(120.0, 300.0);
+
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Image.asset(
+          'assets/image/nao_achou.png',
+          width: imageSize,
+          height: imageSize,
+          fit: BoxFit.contain,
+        ),
+      ),
     );
   }
 
