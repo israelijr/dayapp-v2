@@ -107,6 +107,12 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
   bool _isSyncing = false;
   bool _syncDone = false;
 
+  // Adicione este getter na classe _CreateHistoriaScreenState
+  bool get _isFormValid {
+    final plainText = richTextController.document.toPlainText().trim();
+    return titleController.text.trim().isNotEmpty && plainText.isNotEmpty;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -131,11 +137,15 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         _selectedMood != 3 ||
         _selectedEnergy != 2;
 
-    if (hasChanges != _hasUnsavedChanges) {
+    /*     if (hasChanges != _hasUnsavedChanges) {
       setState(() {
         _hasUnsavedChanges = hasChanges;
       });
-    }
+    } */
+
+    setState(() {
+      _hasUnsavedChanges = hasChanges;
+    });
   }
 
   @override
@@ -284,11 +294,23 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
   }
 
   Future<int?> _saveHistoria({bool navigateAfterSave = true}) async {
-    final l10n = AppLocalizations.of(context)!;
+    /* final l10n = AppLocalizations.of(context)!;
     if (titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.titleRequired)));
+      return null;
+    } */
+    final l10n = AppLocalizations.of(context)!;
+    final plainText = richTextController.document.toPlainText().trim();
+
+    // Validação estrita de título e descrição
+    if (titleController.text.trim().isEmpty || plainText.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.titleRequired),
+        ), // Recomenda-se criar uma string genérica como l10n.fieldsRequired se disponível
+      );
       return null;
     }
 
@@ -529,8 +551,15 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                 ),
                 child: Text(loc.discard),
               ),
-              TextButton(
+              /*               TextButton(
                 onPressed: () => Navigator.of(context).pop('save'),
+                child: Text(loc.save),
+              ), */
+              // Dentro do diálogo de _handleCancel e PopScope, altere o botão de salvar:
+              TextButton(
+                onPressed: !_isFormValid
+                    ? null // Desabilita a opção de salvar no diálogo se for inválido
+                    : () => Navigator.of(context).pop('save'),
                 child: Text(loc.save),
               ),
             ],
@@ -635,7 +664,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     // Title
                     CustomTextField(
                       controller: titleController,
-                      label: loc.storyTitleLabel,
+                      label: "* " + loc.storyTitleLabel,
                       hintText: loc.storyTitleHint,
                       style: GoogleFonts.notoSerif(
                         fontSize: 20,
@@ -656,7 +685,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            loc.descriptionLabel,
+                            "* " + loc.descriptionLabel,
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -697,10 +726,13 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                       minLines: 8,
                       maxLines: 15,
                       showToolbar: true,
-                      onChanged: () {
+                      /* onChanged: () {
                         setState(() {
                           _hasUnsavedChanges = true;
                         });
+                      }, */
+                      onChanged: () {
+                        _checkForChanges(); // Mudado de apenas colocar _hasUnsavedChanges = true
                       },
                     ),
                     const SizedBox(height: 16),
@@ -890,9 +922,18 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Expanded(
+                  /* Expanded(
                     child: FilledButton(
                       onPressed: _isLoading ? null : _saveHistoria,
+                      child: Text(loc.save),
+                    ),
+                  ), */
+                  Expanded(
+                    child: FilledButton(
+                      // Só permite o clique se NÃO estiver carregando E o formulário for válido
+                      onPressed: (_isLoading || !_isFormValid)
+                          ? null
+                          : _saveHistoria,
                       child: Text(loc.save),
                     ),
                   ),

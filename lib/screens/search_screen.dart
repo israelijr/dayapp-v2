@@ -202,10 +202,11 @@ class _SearchScreenState extends State<SearchScreen> {
     return Theme(
       data: screenTheme,
       child: Scaffold(
-        // Impede que o teclado encolha o body, evitando que o Expanded
-        // de resultados receba height=0 e cause overflow/erros de render.
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
+          // Removido o overshoot e garantido alinhamento limpo
+          elevation: 0,
+          scrolledUnderElevation: 0,
           title: Text(
             l10n.search,
             style: GoogleFonts.notoSerif(
@@ -214,41 +215,86 @@ class _SearchScreenState extends State<SearchScreen> {
               color: theme.colorScheme.onPrimary,
             ),
           ),
-          actions: [
-            if (_hasSearched)
-              IconButton(
-                icon: const Icon(Icons.clear),
-                tooltip: l10n.clearSearchTooltip,
-                onPressed: _clearSearch,
-              ),
-          ],
-        ),
-        body: Column(
-          children: [
-            // Área de filtros com rolagem para evitar overflow
-            Flexible(
-              child: SingleChildScrollView(child: _buildSearchFilters()),
+          bottom: PreferredSize(
+            // Ajustado para 56h para reduzir a altura excessiva da barra de chips
+            preferredSize: const Size.fromHeight(8),
+            child: Padding(
+              // Removido padding excessivo do fundo
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: _buildFilterChipsBar(),
             ),
+          ),
+        ),
+        body: SafeArea(
+          top: false,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final media = MediaQuery.of(context);
+              final availableHeight = constraints.maxHeight > 0
+                  ? constraints.maxHeight
+                  : (media.size.height -
+                        media.viewInsets.bottom -
+                        kToolbarHeight -
+                        media.padding.top);
 
-            const Divider(height: 1),
+              // Define os alvos teóricos
+              double minHeightTarget = 80.0;
+              final double maxHeightTarget = availableHeight * 0.7;
 
-            // Área de resultados
-            Expanded(child: _buildResults()),
-          ],
+              // Mecanismo de segurança: Se a tela for muito baixa (como no modo paisagem),
+              // garante que o mínimo se ajuste para não ultrapassar o máximo.
+              if (minHeightTarget > maxHeightTarget) {
+                minHeightTarget = maxHeightTarget;
+              }
+
+              final filterMaxHeight = (availableHeight * 0.45).clamp(
+                minHeightTarget,
+                maxHeightTarget,
+              );
+              return Column(
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: filterMaxHeight),
+                    child: SingleChildScrollView(
+                      // Força a remoção de paddings automáticos do ListView/ScrollView
+                      padding: EdgeInsets.zero,
+                      child: _buildSearchFilters(),
+                    ),
+                  ),
+                  const Divider(height: 1),
+                  Expanded(child: _buildResults()),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
   Widget _buildSearchFilters() {
-    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Chips para seleção do tipo de pesquisa
-          Wrap(
+          // Campo de pesquisa ou seleção de emoticon (chips foram movidos para AppBar.bottom)
+          if (_currentSearchType == SearchType.emoticon)
+            _buildEmoticonSelector()
+          else
+            _buildTextSearchField(),
+        ],
+      ),
+    );
+  }
+
+  /// Barra de chips movida para ficar encostada no AppBar (sem espaço entre)
+  Widget _buildFilterChipsBar() {
+    final l10n = AppLocalizations.of(context)!;
+    return Row(
+      children: [
+        Expanded(
+          child: Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
@@ -310,15 +356,8 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-
-          // Campo de pesquisa ou seleção de emoticon
-          if (_currentSearchType == SearchType.emoticon)
-            _buildEmoticonSelector()
-          else
-            _buildTextSearchField(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -377,37 +416,19 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  /// Seletor de emoticons
+  // Seletor de emoticons
   Widget _buildEmoticonSelector() {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                l10n.tapToSelectEmoji,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).textTheme.bodySmall?.color,
-                ),
-              ),
-            ),
-            if (_selectedEmoticon != null)
-              TextButton.icon(
-                onPressed: () {
-                  setState(() {
-                    _selectedEmoticon = null;
-                    _selectedEmojiTranslation = null;
-                    _searchResults = [];
-                    _hasSearched = false;
-                  });
-                },
-                icon: const Icon(Icons.clear, size: 18),
-                label: Text(l10n.clear),
-              ),
-          ],
+        // Exibe apenas o texto de instrução de forma limpa
+        Text(
+          l10n.tapToSelectEmoji,
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).textTheme.bodySmall?.color,
+          ),
         ),
         const SizedBox(height: 12),
 
@@ -492,118 +513,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  /// Constrói a área de resultados
-  /* Widget _buildResults() {
-    if (_isSearching) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (!_hasSearched) {
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          // Use um fallback seguro quando maxHeight for 0 (ex: widget aninhado em
-          // um pai que temporariamente fornece altura zero). Isso evita usar
-          // cálculos que resultem em tamanhos inválidos.
-          final effectiveHeight = constraints.maxHeight > 0
-              ? constraints.maxHeight
-              : MediaQuery.of(context).size.height * 0.6;
-          final maxSize = effectiveHeight * 0.5;
-          final imageSize = maxSize.clamp(150.0, 400.0);
-
-          return Center(
-            // Scroll se, mesmo assim, o conteúdo ultrapassar (ex: teclado em tela pequena)
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: imageSize,
-                    height: imageSize,
-                    child: Image.asset(
-                      'assets/image/pesquisa_historias.png',
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // mesmos tamanhos e cores usados em home_screen para mensagem vazia
-                  Text(
-                    AppLocalizations.of(context)!.searchStoriesTitle,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    AppLocalizations.of(context)!.searchStoriesSubtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    }
-
-    if (_searchResults.isEmpty) {
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          final effectiveHeight = constraints.maxHeight > 0
-              ? constraints.maxHeight
-              : MediaQuery.of(context).size.height * 0.6;
-          // Calcula o tamanho máximo da imagem baseado no espaço disponível
-          final maxSize = effectiveHeight * 0.85;
-          final imageSize = maxSize.clamp(150.0, 400.0);
-
-          return Center(
-            child: Image.asset(
-              'assets/image/nao_achou.png',
-              width: imageSize,
-              height: imageSize,
-              fit: BoxFit.contain,
-            ),
-          );
-        },
-      );
-    }
-
-    // Agrupa resultados por data
-    final groupedResults = _groupByDate(_searchResults);
-    final sortedDates = groupedResults.keys.toList()
-      ..sort((a, b) {
-        // Ordena por data decrescente
-        final dateA = DateFormat('dd/MM/yyyy', 'pt_BR').parse(a);
-        final dateB = DateFormat('dd/MM/yyyy', 'pt_BR').parse(b);
-        return dateB.compareTo(dateA);
-      });
-
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      itemCount: sortedDates.length,
-      itemBuilder: (context, index) {
-        final dateKey = sortedDates[index];
-        final historias = groupedResults[dateKey]!;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Cabeçalho da data
-            _buildDateHeader(dateKey, historias.length),
-            // Cards das histórias
-            ...historias.map((historia) => _buildHistoriaCard(historia)),
-            const SizedBox(height: 8),
-          ],
-        );
-      },
-    );
-  } */
-
-  /// Constrói a área de resultados
+  // Constrói a área de resultados
   Widget _buildResults() {
     if (_isSearching) {
       return const Center(child: CircularProgressIndicator());
@@ -617,7 +527,34 @@ class _SearchScreenState extends State<SearchScreen> {
       return _buildNoResultsPlaceholder();
     }
 
-    // Agrupa resultados por data
+    // Detecta se estamos em tablet para exibir grade.
+    final shortestSide = MediaQuery.sizeOf(context).shortestSide;
+    final isTablet = shortestSide >= 600;
+
+    if (isTablet) {
+      // Em tablets mostramos uma grade sem agrupamento por data.
+      final sorted = List<Historia>.from(_searchResults)
+        ..sort((a, b) => b.data.compareTo(a.data));
+
+      return GridView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: MediaQuery.sizeOf(context).width ~/ 360 == 0
+              ? 2
+              : (MediaQuery.sizeOf(context).width ~/ 360),
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 1.4,
+        ),
+        itemCount: sorted.length,
+        itemBuilder: (context, index) {
+          final historia = sorted[index];
+          return _buildHistoriaCard(historia);
+        },
+      );
+    }
+
+    // Em celulares exibimos lista agrupada por data
     final groupedResults = _groupByDate(_searchResults);
     final sortedDates = groupedResults.keys.toList()
       ..sort((a, b) {
