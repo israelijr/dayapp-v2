@@ -664,7 +664,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                     // Title
                     CustomTextField(
                       controller: titleController,
-                      label: "* " + loc.storyTitleLabel,
+                      label: '* ${loc.storyTitleLabel}',
                       hintText: loc.storyTitleHint,
                       style: GoogleFonts.notoSerif(
                         fontSize: 20,
@@ -685,7 +685,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            "* " + loc.descriptionLabel,
+                            '* ${loc.descriptionLabel}',
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
