@@ -16,15 +16,30 @@ class NotificationPreferencesProvider with ChangeNotifier {
   bool engagementNotificationsEnabled = true;
 
   bool _isLoaded = false;
+  bool _isLoading = false;
+  Object? _loadError;
+
   bool get isLoaded => _isLoaded;
+  bool get isLoading => _isLoading;
+  Object? get loadError => _loadError;
 
   Future<void> load() async {
-    notificationEnabled = await _preferencesService.isNotificationEnabled();
-    notificationAdvance = await _preferencesService
-        .getDefaultNotificationAdvance();
-    engagementNotificationsEnabled = await _engagementService.isEnabled();
-    _isLoaded = true;
+    _isLoading = true;
+    _loadError = null;
     notifyListeners();
+
+    try {
+      notificationEnabled = await _preferencesService.isNotificationEnabled();
+      notificationAdvance = await _preferencesService
+          .getDefaultNotificationAdvance();
+      engagementNotificationsEnabled = await _engagementService.isEnabled();
+      _isLoaded = true;
+    } catch (error) {
+      _loadError = error;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> setNotificationEnabled(bool enabled) async {
