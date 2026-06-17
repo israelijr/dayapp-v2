@@ -100,7 +100,7 @@ class _ChapterReaderView extends StatelessWidget {
     final provider = context.read<ChapterReaderProvider>();
     final document = provider.document;
 
-    if (!premium.isPremium) {
+    if (!premium.canShareChapter) {
       _telemetry.logBlockedPremium(document);
       await _showPremiumUpgradeDialog(context, l10n);
       return;
@@ -337,7 +337,7 @@ class _ChapterReaderView extends StatelessWidget {
           FilledButton(
             onPressed: () {
               Navigator.of(dialogContext).pop();
-              Navigator.of(context).pushNamed('/settings');
+              Navigator.of(context).pushNamed('/premium');
             },
             child: Text(l10n.insightPremiumCTA),
           ),

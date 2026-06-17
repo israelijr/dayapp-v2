@@ -18,6 +18,7 @@ import '../theme/custom_color_schemes.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/custom_text_field.dart';
 import 'background_restrictions_info_screen.dart';
+import 'premium_screen.dart';
 import 'setup_pin_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -79,6 +80,8 @@ class _SettingsView extends StatelessWidget {
         body: ListView(
           children: const [
             SizedBox(height: 16),
+            _PremiumSection(),
+            Divider(),
             _ThemeSection(),
             Divider(),
             _LanguageSection(),
@@ -116,6 +119,26 @@ String _englishLabel(AppLocalizations loc) => loc.english;
 String _spanishLabel(AppLocalizations loc) => loc.spanish;
 String _frenchLabel(AppLocalizations loc) => loc.french;
 String _italianLabel(AppLocalizations loc) => loc.italian;
+
+class _PremiumSection extends StatelessWidget {
+  const _PremiumSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final premium = context.watch<PremiumProvider>();
+
+    return ListTile(
+      leading: const Icon(Icons.workspace_premium, color: Colors.amber),
+      title: Text(loc.premiumVersion),
+      subtitle: Text(premium.isPremium ? loc.premiumPlan : loc.freePlan),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () {
+        Navigator.of(context).pushNamed('/premium');
+      },
+    );
+  }
+}
 
 class _LanguageSection extends StatelessWidget {
   const _LanguageSection();
@@ -298,8 +321,6 @@ class _ThemeSection extends StatelessWidget {
   }
 
   void _showThemeDialog(BuildContext context) {
-    final messenger = ScaffoldMessenger.of(context);
-
     showDialog<void>(
       context: context,
       builder: (dialogContext) {
@@ -370,9 +391,7 @@ class _ThemeSection extends StatelessWidget {
                           locked:
                               option.premium && !premium.canUsePremiumThemes,
                           onLockedTap: () {
-                            messenger.showSnackBar(
-                              SnackBar(content: Text(loc.premiumFeature)),
-                            );
+                            _showPremiumThemeDialog(context, loc);
                           },
                           onTap: () => _selectThemeOption(
                             context,
@@ -399,6 +418,29 @@ class _ThemeSection extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+  void _showPremiumThemeDialog(BuildContext context, AppLocalizations loc) {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(loc.premiumFeature),
+        content: Text(loc.premiumFeatureInfo),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(loc.close),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              Navigator.of(context).pushNamed('/premium');
+            },
+            child: Text(loc.insightPremiumCTA),
+          ),
+        ],
+      ),
     );
   }
 

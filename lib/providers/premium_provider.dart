@@ -53,6 +53,21 @@ class PremiumProvider with ChangeNotifier {
   /// Libera a experiência de capítulos e sugestões automáticas.
   bool get canUseChapters => _isPremium;
 
+  /// Libera o compartilhamento de histórias como imagem.
+  bool get canShareStory => _isPremium;
+
+  /// Libera o compartilhamento/exportação de capítulos (PDF/HTML).
+  bool get canShareChapter => _isPremium;
+
+  /// Libera a sugestão automática de capítulos.
+  bool get canUseAutoChapterSuggestion => _isPremium;
+
+  /// Libera o resumo mensal nos insights.
+  bool get canViewMonthlyInsight => _isPremium;
+
+  /// Libera o gráfico de humor de 7 dias nos insights.
+  bool get canView7DayMoodInsight => _isPremium;
+
   // Futuras features — adicione aqui conforme surgir necessidade:
   // bool get canUseCloudSync       => _isPremium;
   // bool get canUseAiAssistance    => _isPremium;

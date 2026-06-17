@@ -150,6 +150,31 @@ class PremiumDebugScreen extends StatelessWidget {
                 enabled: premium.canUsePremiumThemes,
                 plan: l10n.premiumPlan,
               ),
+              _FeatureRow(
+                label: l10n.share,
+                enabled: premium.canShareStory,
+                plan: l10n.premiumPlan,
+              ),
+              _FeatureRow(
+                label: l10n.exportPdf,
+                enabled: premium.canShareChapter,
+                plan: l10n.premiumPlan,
+              ),
+              _FeatureRow(
+                label: l10n.chapterSuggestions,
+                enabled: premium.canUseAutoChapterSuggestion,
+                plan: l10n.premiumPlan,
+              ),
+              _FeatureRow(
+                label: l10n.insightMonthlySummary,
+                enabled: premium.canViewMonthlyInsight,
+                plan: l10n.premiumPlan,
+              ),
+              _FeatureRow(
+                label: 'Mood 7 Days Chart',
+                enabled: premium.canView7DayMoodInsight,
+                plan: l10n.premiumPlan,
+              ),
               // Adicione novas features aqui conforme forem sendo criadas.
               // Exemplo futuro:
               // _FeatureRow(

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../providers/auth_provider.dart';
 import '../providers/pin_provider.dart';
+import '../providers/premium_provider.dart';
 import '../screens/edit_profile_screen.dart';
 import '../screens/groups_maintenance_screen.dart';
 import '../widgets/user_profile_avatar.dart';
@@ -19,6 +20,7 @@ class HomeDrawer extends StatelessWidget {
     final user = Provider.of<AuthProvider>(context).user;
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final pinProvider = Provider.of<PinProvider>(context, listen: false);
+    final premium = context.watch<PremiumProvider>();
 
     return Drawer(
       child: ListView(
@@ -45,6 +47,27 @@ class HomeDrawer extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
+                      if (premium.isPremium) ...[
+                        const SizedBox(height: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.amber.shade400,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Text(
+                            'PREMIUM',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 6),
                       Text(
                         user?.nome ?? '',
@@ -79,6 +102,15 @@ class HomeDrawer extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (_) => const EditProfileScreen()),
               );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.workspace_premium, color: Colors.amber),
+            title: Text(l10n.premiumVersion),
+            subtitle: Text(premium.isPremium ? l10n.premiumPlan : l10n.freePlan),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/premium');
             },
           ),
           ListTile(

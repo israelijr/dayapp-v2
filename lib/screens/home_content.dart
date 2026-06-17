@@ -881,7 +881,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                 onDismiss: () =>
                     insightProvider.dismissInsight(userId, insight.type),
                 onPremiumCTA: () =>
-                    Navigator.of(context).pushNamed('/settings'),
+                    Navigator.of(context).pushNamed('/premium'),
                 onSeeStories: (query) {
                   final searchType = insight.type == InsightType.positiveTag
                       ? SearchType.tag

@@ -2136,7 +2136,51 @@ class AppLocalizationsIt extends AppLocalizations {
   String get premiumPlan => 'Premium';
 
   @override
+  String get premiumVersion => 'Premium Version';
+
+  @override
+  String get premiumScreenTitle => 'DayApp Premium';
+
+  @override
+  String get premiumScreenSubtitle =>
+      'Unlock the full potential of your diary and preserve your memories with exclusive features.';
+
+  @override
+  String get premiumScreenRestore => 'Restore purchases';
+
+  @override
+  String get premiumScreenPurchaseButton => 'Get Lifetime Premium';
+
+  @override
+  String get premiumScreenFeaturesTitle => 'What you get with Premium:';
+
+  @override
+  String get premiumFeatureShareHistory => 'Share stories as custom images';
+
+  @override
+  String get premiumFeatureShareChapter => 'Export chapters to PDF and HTML';
+
+  @override
+  String get premiumFeatureAutoSuggestions =>
+      'Smart automatic chapter suggestions';
+
+  @override
+  String get premiumFeatureMonthlyInsights =>
+      'Detailed monthly insights and summaries';
+
+  @override
+  String get premiumFeatureWeeklyMood => '7-day mood evolution chart';
+
+  @override
+  String get premiumFeatureCustomThemes =>
+      'Access to all exclusive themes and colors';
+
+  @override
   String get premiumFeature => 'Funzionalità Premium';
+
+  @override
+  String get premiumFeatureInfo =>
+      'This feature is available in the Premium version.';
 
   @override
   String get freePlan => 'Gratuito';

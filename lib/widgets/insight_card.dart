@@ -50,7 +50,8 @@ class InsightCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isPremiumUser = context.watch<PremiumProvider>().isPremium;
+    final premium = context.watch<PremiumProvider>();
+    final isPremiumUser = premium.isPremium;
     final isLocked = insight.isPremium && !isPremiumUser;
 
     final title = _resolveTitle(l10n);
@@ -233,7 +234,7 @@ class InsightCard extends StatelessWidget {
             label: Text(l10n.insightPremiumCTA),
             onPressed:
                 onPremiumCTA ??
-                () => Navigator.of(context).pushNamed('/settings'),
+                () => Navigator.of(context).pushNamed('/premium'),
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               textStyle: theme.textTheme.labelMedium,

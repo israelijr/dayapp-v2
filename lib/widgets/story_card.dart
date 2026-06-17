@@ -3,12 +3,14 @@ import 'package:dayapp/db/tag_helper.dart';
 import 'package:dayapp/l10n/app_localizations.dart';
 import 'package:dayapp/models/historia.dart';
 import 'package:dayapp/models/tag.dart';
+import 'package:dayapp/providers/premium_provider.dart';
 import 'package:dayapp/sharing/service/story_share_service.dart';
 import 'package:dayapp/widgets/historia_media_widgets.dart';
 import 'package:dayapp/widgets/rich_text_viewer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 /// Ações possíveis retornadas pelo preview de história.
 enum StoryPreviewAction { close, edit, delete }
@@ -373,6 +375,31 @@ class StoryPreviewScreen extends StatelessWidget {
   }
 
   Future<void> _shareStory(BuildContext context) async {
+    final premium = context.read<PremiumProvider>();
+    if (!premium.canShareStory) {
+      final l10n = AppLocalizations.of(context)!;
+      await showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(l10n.premiumFeature),
+          content: Text(l10n.premiumFeatureInfo),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(l10n.close),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                Navigator.of(context).pushNamed('/premium');
+              },
+              child: Text(l10n.insightPremiumCTA),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
     await StoryShareService.shareHistoria(context, historia, localeName);
   }
 

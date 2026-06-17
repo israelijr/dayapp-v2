@@ -212,7 +212,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     final capitulos = await _capituloRepository.fetchCapitulosResumoByUser(
       userId,
     );
-    final sugestoes = premium.isPremium
+    final sugestoes = premium.canUseAutoChapterSuggestion
         ? await _sugestaoService.sugerirCapitulos(userId)
         : const <CapituloSugestao>[];
 
@@ -806,19 +806,25 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                 padding: const EdgeInsets.all(16),
                 children: [
                   if (!premium.isPremium)
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.workspace_premium,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(child: Text(l10n.chaptersPremiumRequired)),
-                          ],
+                    InkWell(
+                      onTap: () => Navigator.of(context).pushNamed('/premium'),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.workspace_premium,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(l10n.chaptersPremiumRequired),
+                              ),
+                              const Icon(Icons.chevron_right),
+                            ],
+                          ),
                         ),
                       ),
                     )

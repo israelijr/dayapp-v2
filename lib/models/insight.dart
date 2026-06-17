@@ -57,6 +57,7 @@ enum InsightType {
   bool get isPremium {
     switch (this) {
       case InsightType.monthlySummary:
+      case InsightType.energyChart:
         return true;
       default:
         return false;

@@ -208,6 +208,23 @@ class SecureStorageService {
     return key;
   }
 
+  // ==================== Métodos Genéricos ====================
+
+  /// Lê um valor associado à chave.
+  Future<String?> read(String key) async {
+    return await _storage.read(key: key);
+  }
+
+  /// Escreve um valor associado à chave.
+  Future<void> write(String key, String value) async {
+    await _storage.write(key: key, value: value);
+  }
+
+  /// Deleta o valor associado à chave.
+  Future<void> delete(String key) async {
+    await _storage.delete(key: key);
+  }
+
   // ==================== Migração ====================
 
   /// Migra dados do SharedPreferences para SecureStorage

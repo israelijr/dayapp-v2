@@ -2125,7 +2125,53 @@ class AppLocalizationsPt extends AppLocalizations {
   String get premiumPlan => 'Premium';
 
   @override
+  String get premiumVersion => 'Versão Premium';
+
+  @override
+  String get premiumScreenTitle => 'DayApp Premium';
+
+  @override
+  String get premiumScreenSubtitle =>
+      'Desbloqueie todo o potencial do seu diário e preserve suas memórias com recursos exclusivos.';
+
+  @override
+  String get premiumScreenRestore => 'Restaurar compras';
+
+  @override
+  String get premiumScreenPurchaseButton => 'Adquirir Premium Vitalício';
+
+  @override
+  String get premiumScreenFeaturesTitle => 'O que você ganha com o Premium:';
+
+  @override
+  String get premiumFeatureShareHistory =>
+      'Compartilhar histórias como imagem personalizada';
+
+  @override
+  String get premiumFeatureShareChapter => 'Exportar capítulos em PDF e HTML';
+
+  @override
+  String get premiumFeatureAutoSuggestions =>
+      'Sugestões automáticas de capítulos inteligentes';
+
+  @override
+  String get premiumFeatureMonthlyInsights =>
+      'Insights e resumos mensais detalhados';
+
+  @override
+  String get premiumFeatureWeeklyMood =>
+      'Gráfico de evolução de humor de 7 dias';
+
+  @override
+  String get premiumFeatureCustomThemes =>
+      'Acesso a todos os temas e cores exclusivas';
+
+  @override
   String get premiumFeature => 'Recurso da versão Premium';
+
+  @override
+  String get premiumFeatureInfo =>
+      'Este recurso está disponível na versão Premium.';
 
   @override
   String get freePlan => 'Grátis';

@@ -3872,11 +3872,89 @@ abstract class AppLocalizations {
   /// **'Premium'**
   String get premiumPlan;
 
+  /// Label for the premium version option in settings
+  ///
+  /// In en, this message translates to:
+  /// **'Premium Version'**
+  String get premiumVersion;
+
+  /// No description provided for @premiumScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DayApp Premium'**
+  String get premiumScreenTitle;
+
+  /// No description provided for @premiumScreenSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock the full potential of your diary and preserve your memories with exclusive features.'**
+  String get premiumScreenSubtitle;
+
+  /// No description provided for @premiumScreenRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get premiumScreenRestore;
+
+  /// No description provided for @premiumScreenPurchaseButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Lifetime Premium'**
+  String get premiumScreenPurchaseButton;
+
+  /// No description provided for @premiumScreenFeaturesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What you get with Premium:'**
+  String get premiumScreenFeaturesTitle;
+
+  /// No description provided for @premiumFeatureShareHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Share stories as custom images'**
+  String get premiumFeatureShareHistory;
+
+  /// No description provided for @premiumFeatureShareChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Export chapters to PDF and HTML'**
+  String get premiumFeatureShareChapter;
+
+  /// No description provided for @premiumFeatureAutoSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart automatic chapter suggestions'**
+  String get premiumFeatureAutoSuggestions;
+
+  /// No description provided for @premiumFeatureMonthlyInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed monthly insights and summaries'**
+  String get premiumFeatureMonthlyInsights;
+
+  /// No description provided for @premiumFeatureWeeklyMood.
+  ///
+  /// In en, this message translates to:
+  /// **'7-day mood evolution chart'**
+  String get premiumFeatureWeeklyMood;
+
+  /// No description provided for @premiumFeatureCustomThemes.
+  ///
+  /// In en, this message translates to:
+  /// **'Access to all exclusive themes and colors'**
+  String get premiumFeatureCustomThemes;
+
   /// Short snackbar message when user taps a locked Premium feature
   ///
   /// In en, this message translates to:
   /// **'Premium feature'**
   String get premiumFeature;
+
+  /// Detailed message explaining the feature is Premium
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is available in the Premium version.'**
+  String get premiumFeatureInfo;
 
   /// Label for Free plan
   ///

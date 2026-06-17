@@ -1824,9 +1824,28 @@
   "@premiumPlan": {
     "description": "Rótulo do plano Premium"
   },
+  "premiumVersion": "Versão Premium",
+  "@premiumVersion": {
+    "description": "Rótulo para a opção de versão premium nas configurações"
+  },
+  "premiumScreenTitle": "DayApp Premium",
+  "premiumScreenSubtitle": "Desbloqueie todo o potencial do seu diário e preserve suas memórias com recursos exclusivos.",
+  "premiumScreenRestore": "Restaurar compras",
+  "premiumScreenPurchaseButton": "Adquirir Premium Vitalício",
+  "premiumScreenFeaturesTitle": "O que você ganha com o Premium:",
+  "premiumFeatureShareHistory": "Compartilhar histórias como imagem personalizada",
+  "premiumFeatureShareChapter": "Exportar capítulos em PDF e HTML",
+  "premiumFeatureAutoSuggestions": "Sugestões automáticas de capítulos inteligentes",
+  "premiumFeatureMonthlyInsights": "Insights e resumos mensais detalhados",
+  "premiumFeatureWeeklyMood": "Gráfico de evolução de humor de 7 dias",
+  "premiumFeatureCustomThemes": "Acesso a todos os temas e cores exclusivas",
   "premiumFeature": "Recurso da versão Premium",
   "@premiumFeature": {
     "description": "Mensagem curta de snackbar quando o usuário toca em um recurso Premium bloqueado"
+  },
+  "premiumFeatureInfo": "Este recurso está disponível na versão Premium.",
+  "@premiumFeatureInfo": {
+    "description": "Mensagem detalhada informando que o recurso é Premium"
   },
   "freePlan": "Grátis",
   "@freePlan": {

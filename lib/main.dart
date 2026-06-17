@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
@@ -43,6 +44,7 @@ import 'screens/insight_history_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/password_recovery_screen.dart';
 import 'screens/pin_recovery_screen.dart';
+import 'screens/premium_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/splash_screen.dart';
@@ -51,6 +53,7 @@ import 'screens/trash_screen.dart';
 import 'services/engagement_service.dart';
 import 'services/inactivity_service.dart';
 import 'services/notification_service.dart';
+import 'services/purchase_service.dart';
 import 'theme/custom_color_schemes.dart';
 import 'theme/m3_expressive_theme.dart';
 import 'widgets/global_lock_overlay.dart';
@@ -60,6 +63,11 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
+
+  // Inicializa o serviço de compras e ouve atualizações da Play Store
+  PurchaseService().initialize();
+  // Verifica compras passadas em segundo plano para manter o status Premium atualizado
+  unawaited(PurchaseService().restorePurchases());
 
   // Inicializa a factory do banco de dados conforme a plataforma
   if (kIsWeb) {
@@ -163,6 +171,14 @@ class _AppLoaderState extends State<AppLoader> {
     final localeProvider = LocaleProvider();
     await localeProvider.load();
 
+    // Inicializar PremiumProvider e vincular ao PurchaseService para atualizações em tempo real
+    final premiumProvider = PremiumProvider();
+    await premiumProvider.load();
+    PurchaseService().initialize(onPurchaseSuccess: () {
+      premiumProvider.load();
+    });
+    unawaited(PurchaseService().restorePurchases());
+
     // Inicializar notificações primeiro para evitar corrida com agendamentos
     await NotificationService().init((String? payload) async {
       if (payload != null) {
@@ -218,6 +234,7 @@ class _AppLoaderState extends State<AppLoader> {
       refreshProvider: refreshProvider,
       pinProvider: pinProvider,
       localeProvider: localeProvider,
+      premiumProvider: premiumProvider,
     );
   }
 
@@ -336,6 +353,7 @@ class _AppLoaderState extends State<AppLoader> {
           refreshProvider: data.refreshProvider,
           pinProvider: data.pinProvider,
           localeProvider: data.localeProvider,
+          premiumProvider: data.premiumProvider,
         );
       },
     );
@@ -349,6 +367,7 @@ class AppInitData {
   final RefreshProvider refreshProvider;
   final PinProvider pinProvider;
   final LocaleProvider localeProvider;
+  final PremiumProvider premiumProvider;
 
   AppInitData({
     required this.authProvider,
@@ -356,6 +375,7 @@ class AppInitData {
     required this.refreshProvider,
     required this.pinProvider,
     required this.localeProvider,
+    required this.premiumProvider,
   });
 }
 
@@ -365,6 +385,7 @@ class MyApp extends StatefulWidget {
   final RefreshProvider refreshProvider;
   final PinProvider pinProvider;
   final LocaleProvider localeProvider;
+  final PremiumProvider premiumProvider;
 
   const MyApp({
     required this.authProvider,
@@ -372,6 +393,7 @@ class MyApp extends StatefulWidget {
     required this.refreshProvider,
     required this.pinProvider,
     required this.localeProvider,
+    required this.premiumProvider,
     super.key,
   });
 
@@ -529,7 +551,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (_) => NotificationPreferencesProvider()..load(),
         ),
         // Provider para controle de plano Free/Premium
-        ChangeNotifierProvider(create: (_) => PremiumProvider()..load()),
+        ChangeNotifierProvider.value(value: widget.premiumProvider),
         // Provider para manter o modo de layout da Home (card/list)
         ChangeNotifierProvider(create: (_) => HomeLayoutProvider()),
         // Provider para manter posição do scroll em listas
@@ -611,6 +633,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               '/backup-manager': (context) => const BackupManagerScreen(),
               '/trash': (context) => const TrashScreen(),
               '/search': (context) => const SearchScreen(),
+              '/premium': (context) => const PremiumScreen(),
               '/insight-history': (context) => const InsightHistoryScreen(),
               '/story-share-debug': (context) => const StoryShareDebugScreen(),
             },
