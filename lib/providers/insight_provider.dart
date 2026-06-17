@@ -27,7 +27,7 @@ enum InsightTierFilter {
 ///
 /// Gerencia:
 /// - carregamento e cache de insights
-/// - ciclo de vida: expiração automática (1 dia) e cooldown (15 dias) após dispensa
+/// - ciclo de vida: expiração automática (1 dia) e cooldown (7 dias) após dispensa
 /// - dispensa manual pelo usuário
 /// - modo desenvolvimento (devMode via kDebugMode):
 ///   - dispensa por dia: insights dispensados reaparecem no dia seguinte
@@ -50,7 +50,7 @@ class InsightProvider with ChangeNotifier {
   static const Duration _visibilityDuration = Duration(days: 1);
 
   /// Período de cooldown após dispensa para o insight reaparecer.
-  static const Duration _cooldownDuration = Duration(days: 15);
+  static const Duration _cooldownDuration = Duration(days: 7);
 
   /// Em modo debug (kDebugMode), aplica regras simplificadas de ciclo de vida.
   bool get devMode => kDebugMode;
@@ -125,7 +125,7 @@ class InsightProvider with ChangeNotifier {
   /// Dispensa manualmente um insight.
   ///
   /// - Em devMode: persiste a data (YYYY-MM-DD); o insight reaparece no dia seguinte.
-  /// - Em produção: cooldown de [_cooldownDuration] (15 dias).
+  /// - Em produção: cooldown de [_cooldownDuration] (7 dias).
   Future<void> dismissInsight(String userId, InsightType type) async {
     // Remove da lista local imediatamente para feedback instantâneo
     _lifecycleFiltered = _lifecycleFiltered

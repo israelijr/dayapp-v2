@@ -76,6 +76,8 @@ void main() async {
     initializeDateFormatting('pt_BR', null),
     initializeDateFormatting('en_US', null),
     initializeDateFormatting('es_ES', null),
+    initializeDateFormatting('fr_FR', null),
+    initializeDateFormatting('it_IT', null),
   ]);
 
   // Antes de rodar o app, tenta ler a preferência de idioma para poder usar

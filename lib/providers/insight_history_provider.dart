@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 import '../services/insight_history_service.dart';
 
@@ -144,25 +145,16 @@ class InsightHistoryProvider with ChangeNotifier {
     }).toList();
   }
 
-  static const _monthNames = [
-    '',
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro',
-  ];
-
   String _monthYearLabel(int month, int year) {
+    final date = DateTime(year, month);
     final currentYear = DateTime.now().year;
-    final name = _monthNames[month];
-    return currentYear == year ? name : '$name $year';
+
+    // Obtém o nome do mês localizado e garante a primeira letra maiúscula
+    String monthName = DateFormat.MMMM().format(date);
+    if (monthName.isNotEmpty) {
+      monthName = '${monthName[0].toUpperCase()}${monthName.substring(1)}';
+    }
+
+    return currentYear == year ? monthName : '$monthName $year';
   }
 }
