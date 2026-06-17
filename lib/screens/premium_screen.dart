@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../providers/premium_provider.dart';
 import '../services/purchase_service.dart';
-import '../theme/m3_expressive_theme.dart';
 
 class PremiumScreen extends StatelessWidget {
   const PremiumScreen({super.key});

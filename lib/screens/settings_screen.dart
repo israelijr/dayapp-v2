@@ -18,7 +18,6 @@ import '../theme/custom_color_schemes.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/custom_text_field.dart';
 import 'background_restrictions_info_screen.dart';
-import 'premium_screen.dart';
 import 'setup_pin_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
