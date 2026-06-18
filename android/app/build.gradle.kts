@@ -18,7 +18,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "br.com.iijrapp.dayapp"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -27,7 +27,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = "11"
     }
 
     // Suprime warnings de bridge methods em pacotes de terceiros (ex.: video_player_android)
@@ -69,11 +69,26 @@ android {
             ndk {
                 debugSymbolLevel = "none"
             }
+            packaging {
+                jniLibs {
+                    keepDebugSymbols.add("**/*.so")
+                }
+                resources {
+                    excludes += "/remoteconfigs/**"
+                }
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+    }
+}
+
+// Força o Gradle a ignorar a tarefa de strip que está falhando no Linux
+tasks.whenTaskAdded {
+    if (name.startsWith("strip") && name.contains("Release")) {
+        enabled = false
     }
 }
 

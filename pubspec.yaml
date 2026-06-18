@@ -31,27 +31,37 @@ dependencies:
   url_launcher: ^6.1.10
   share_plus: ^12.0.2
   sqflite_common_ffi: ^2.3.6
-  flutter_local_notifications: ^21.0.0
+  flutter_local_notifications: ^22.0.1
   timezone: ^0.11.0
   flutter_slidable: ^4.0.3
   file_selector: ^1.1.0
   audioplayers: ^6.1.0
-  record: ^6.2.0
+  record: ^7.1.0
   video_player: ^2.9.2
   file_picker: ^11.0.2
   table_calendar: ^3.1.2
   local_auth: ^3.0.1
   archive: ^4.0.9
   crypto: ^3.0.3
-  flutter_quill: ^11.5.0
+  flutter_quill:
+    git:
+      url: https://github.com/flutter-quill/flutter-quill.git
+      path: packages/flutter_quill
   vsc_quill_delta_to_html: ^1.0.2
+
+dependency_overrides:
+  flutter_quill:
+    git:
+      url: https://github.com/flutter-quill/flutter-quill.git
+      path: packages/flutter_quill
+  intl: ^0.20.2
   flutter_secure_storage: ^10.2.0
   sqflite_common_ffi_web: ^1.1.1
   package_info_plus: ^9.0.1
   mailer: ^7.1.0
   flutter_timezone: ^5.0.1
   animations: ^2.0.11
-  google_fonts: ^6.2.1
+  google_fonts: ^8.1.0
   pdf: ^3.11.3
   image: ^4.8.0
   in_app_purchase: ^3.2.0
@@ -59,7 +69,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.4
   path_provider_platform_interface: ^2.1.2
