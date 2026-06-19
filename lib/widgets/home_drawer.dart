@@ -107,7 +107,9 @@ class HomeDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.workspace_premium, color: Colors.amber),
             title: Text(l10n.premiumVersion),
-            subtitle: Text(premium.isPremium ? l10n.premiumPlan : l10n.freePlan),
+            subtitle: Text(
+              premium.isPremium ? l10n.premiumPlan : l10n.freePlan,
+            ),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, '/premium');
@@ -195,7 +197,7 @@ class HomeDrawer extends StatelessWidget {
             imageWidget = Image.network(
               fotoPerfil,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) {
+              errorBuilder: (_, _, _) {
                 return Image.asset(
                   'assets/image/icon.png',
                   fit: BoxFit.contain,
@@ -206,7 +208,7 @@ class HomeDrawer extends StatelessWidget {
             imageWidget = Image.file(
               File(fotoPerfil),
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) {
+              errorBuilder: (_, _, _) {
                 return Image.asset(
                   'assets/image/icon.png',
                   fit: BoxFit.contain,

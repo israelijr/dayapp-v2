@@ -43,7 +43,7 @@ class UserProfileAvatar extends StatelessWidget {
       return Image.network(
         fotoPerfil!,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) {
+        errorBuilder: (_, _, _) {
           return const Image(image: placeholder, fit: BoxFit.cover);
         },
       );
@@ -52,7 +52,7 @@ class UserProfileAvatar extends StatelessWidget {
     return Image.file(
       File(fotoPerfil!),
       fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) {
+      errorBuilder: (_, _, _) {
         return const Image(image: placeholder, fit: BoxFit.cover);
       },
     );

@@ -5,7 +5,7 @@ description: "Um aplicativo para registrar suas memórias."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # Define a versão da aplicação.
-version: 1.0.0+5
+version: 1.0.1+7
 
 environment:
   sdk: ^3.9.2
@@ -36,24 +36,17 @@ dependencies:
   flutter_slidable: ^4.0.3
   file_selector: ^1.1.0
   audioplayers: ^6.1.0
-  record: ^7.1.0
+  record: ^6.2.1
   video_player: ^2.9.2
   file_picker: ^11.0.2
   table_calendar: ^3.1.2
   local_auth: ^3.0.1
   archive: ^4.0.9
   crypto: ^3.0.3
-  flutter_quill:
-    git:
-      url: https://github.com/flutter-quill/flutter-quill.git
-      path: packages/flutter_quill
+  flutter_quill: ^11.0.0
   vsc_quill_delta_to_html: ^1.0.2
 
 dependency_overrides:
-  flutter_quill:
-    git:
-      url: https://github.com/flutter-quill/flutter-quill.git
-      path: packages/flutter_quill
   intl: ^0.20.2
   flutter_secure_storage: ^10.2.0
   sqflite_common_ffi_web: ^1.1.1

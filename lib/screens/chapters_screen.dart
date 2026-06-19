@@ -1113,7 +1113,7 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
                             child: Image.file(
                               File(_fotoPath!),
                               fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) {
+                              errorBuilder: (_, _, _) {
                                 WidgetsBinding.instance.addPostFrameCallback(
                                   (_) => setState(() => _fotoPath = null),
                                 );
@@ -1450,7 +1450,7 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
                             child: Image.file(
                               File(_fotoPath!),
                               fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) {
+                              errorBuilder: (_, _, _) {
                                 WidgetsBinding.instance.addPostFrameCallback(
                                   (_) => setState(() => _fotoPath = null),
                                 );

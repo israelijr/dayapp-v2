@@ -992,7 +992,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemCount: fotos.length,
-                          separatorBuilder: (_, __) => const SizedBox(width: 8),
+                          separatorBuilder: (_, _) => const SizedBox(width: 8),
                           itemBuilder: (context, i) {
                             return Stack(
                               children: [

@@ -66,13 +66,8 @@ android {
             // ProGuard/R8 configuração
             isMinifyEnabled = true
             isShrinkResources = true
-            ndk {
-                debugSymbolLevel = "none"
-            }
+            
             packaging {
-                jniLibs {
-                    keepDebugSymbols.add("**/*.so")
-                }
                 resources {
                     excludes += "/remoteconfigs/**"
                 }
@@ -85,12 +80,13 @@ android {
     }
 }
 
-// Força o Gradle a ignorar a tarefa de strip que está falhando no Linux
-tasks.whenTaskAdded {
-    if (name.startsWith("strip") && name.contains("Release")) {
-        enabled = false
-    }
-}
+// Removido o hack que desabilitava o strip. 
+// Se o strip falhar, verifique se o NDK está instalado corretamente no Android Studio.
+// tasks.whenTaskAdded {
+//     if (name.startsWith("strip") && name.contains("Release")) {
+//         enabled = false
+//     }
+// }
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")

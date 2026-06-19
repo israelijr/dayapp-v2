@@ -295,7 +295,7 @@ class InsightService {
         'total': total,
         'humor_medio': humorMedio,
         'energia_media': energiaMedia,
-        if (topTag != null) 'top_tag': topTag,
+        'top_tag': ?topTag,
       },
     );
   }

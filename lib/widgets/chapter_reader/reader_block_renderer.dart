@@ -80,7 +80,7 @@ class ReaderBlockRenderer extends StatelessWidget {
               Image.file(
                 File(imageBlock.imagePath),
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, _, _) => Container(
                   height: 180,
                   color: colorScheme.surfaceContainerHigh,
                   alignment: Alignment.center,

@@ -341,7 +341,10 @@ class ChapterPdfExportService {
         padding: const pw.EdgeInsets.only(top: 8, bottom: 4),
         child: pw.Text(
           block.text,
-          style: pw.TextStyle(fontSize: 17, fontWeight: pw.FontWeight.bold),
+          style: const pw.TextStyle(
+            fontSize: 17,
+            fontWeight: pw.FontWeight.bold,
+          ),
         ),
       );
     }
@@ -352,7 +355,7 @@ class ChapterPdfExportService {
         padding: const pw.EdgeInsets.only(top: 8, bottom: 2),
         child: pw.Text(
           label,
-          style: pw.TextStyle(
+          style: const pw.TextStyle(
             fontSize: 10,
             fontWeight: pw.FontWeight.bold,
             color: PdfColors.grey700,

@@ -44,7 +44,7 @@ class SelectablePhotoTile extends StatelessWidget {
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => ColoredBox(
+                errorBuilder: (_, _, _) => ColoredBox(
                   color: colorScheme.surfaceContainerHighest,
                   child: SizedBox(
                     width: 80,

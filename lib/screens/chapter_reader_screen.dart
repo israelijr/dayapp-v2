@@ -278,7 +278,7 @@ class _ChapterReaderView extends StatelessWidget {
                     child: ListView.separated(
                       shrinkWrap: true,
                       itemCount: choices.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      separatorBuilder: (_, _) => const SizedBox(height: 16),
                       itemBuilder: (_, index) {
                         final choice = choices[index];
                         final selectedPaths =
@@ -414,7 +414,7 @@ class _ChapterReaderView extends StatelessWidget {
                 height: 220,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, _, _) => Container(
                   height: 220,
                   color: colorScheme.surfaceContainerHighest,
                   alignment: Alignment.center,
