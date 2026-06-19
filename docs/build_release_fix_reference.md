@@ -56,7 +56,19 @@ Chamada de plugins nativos (como `FlutterSecureStorage` ou `InAppPurchase`) dent
 
 ---
 
-## 4. Checklist Obrigatório para Novo Build de Release
+## 4. Erro: Faturamento (Billing) não detectado no Play Console
+**Sintoma:** O Play Console não permite criar produtos in-app, alegando falta da biblioteca de faturamento.
+
+### Causa:
+O plugin `in_app_purchase` estava apenas em `dependency_overrides` ou a permissão de faturamento não foi explicitamente declarada/detectada.
+
+### Solução:
+- **pubspec.yaml:** Mover `in_app_purchase` para a seção principal de `dependencies`.
+- **AndroidManifest.xml:** Adicionar explicitamente a permissão `<uses-permission android:name="com.android.vending.BILLING" />`.
+
+---
+
+## 5. Checklist Obrigatório para Novo Build de Release
 
 Sempre que for gerar uma nova versão para o Play Store, siga estes passos na ordem:
 
