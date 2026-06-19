@@ -44,6 +44,10 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
+
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
+        }
     }
 
     if (keystorePropertiesFile.exists()) {
@@ -63,9 +67,9 @@ android {
                 signingConfigs.getByName("release")
             else
                 signingConfigs.getByName("debug")
-            // ProGuard/R8 configuração
-            isMinifyEnabled = true
-            isShrinkResources = true
+            // Desativado minify e shrink para resolver MissingPluginException na Play Store
+            isMinifyEnabled = false
+            isShrinkResources = false
             
             packaging {
                 resources {

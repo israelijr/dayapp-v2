@@ -2134,7 +2134,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumFeatureShareHistory => 'Share stories as custom images';
 
   @override
-  String get premiumFeatureShareChapter => 'Export chapters to PDF and HTML';
+  String get premiumFeatureShareChapter => 'Export chapters to HTML';
 
   @override
   String get premiumFeatureAutoSuggestions =>

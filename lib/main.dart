@@ -64,11 +64,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
 
-  // Inicializa o serviço de compras e ouve atualizações da Play Store
-  PurchaseService().initialize();
-  // Verifica compras passadas em segundo plano para manter o status Premium atualizado
-  unawaited(PurchaseService().restorePurchases());
-
   // Inicializa a factory do banco de dados conforme a plataforma
   if (kIsWeb) {
     // Web usa IndexedDB via sqflite_common_ffi_web
@@ -147,9 +142,18 @@ class _AppLoaderState extends State<AppLoader> {
 
   /// Inicializa todos os providers e serviços necessários
   Future<AppInitData> _initializeApp() async {
+    // Dá um pequeno tempo para a engine do Flutter registrar todos os plugins
+    // nativos antes de tentarmos acessar o FlutterSecureStorage.
+    // Isso resolve o MissingPluginException em alguns dispositivos na Play Store.
+    await Future.delayed(const Duration(milliseconds: 500));
+
     // Inicializar AuthProvider e tentar auto-login
     final authProvider = AuthProvider();
-    await authProvider.tryAutoLogin();
+    try {
+      await authProvider.tryAutoLogin();
+    } catch (e) {
+      debugPrint('Erro no auto-login: $e');
+    }
 
     // Limpa automaticamente histórias expiradas da lixeira (30 dias).
     await DatabaseHelper().deleteExpiredTrashStories(

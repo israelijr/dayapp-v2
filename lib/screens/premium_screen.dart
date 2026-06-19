@@ -143,7 +143,7 @@ class PremiumScreen extends StatelessWidget {
           text: loc.premiumFeatureShareHistory,
         ),
         _FeatureItem(
-          icon: Icons.picture_as_pdf_outlined,
+          icon: Icons.article_outlined,
           text: loc.premiumFeatureShareChapter,
         ),
         _FeatureItem(

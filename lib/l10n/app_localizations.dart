@@ -3917,7 +3917,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumFeatureShareChapter.
   ///
   /// In en, this message translates to:
-  /// **'Export chapters to PDF and HTML'**
+  /// **'Export chapters to HTML'**
   String get premiumFeatureShareChapter;
 
   /// No description provided for @premiumFeatureAutoSuggestions.

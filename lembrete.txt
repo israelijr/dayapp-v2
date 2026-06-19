@@ -1,0 +1,6 @@
+flutter clean
+rm -rf android/.gradle
+rm -rf build
+rm -rf .dart_tool
+flutter pub get
+flutter build appbundle --release

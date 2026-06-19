@@ -2148,7 +2148,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Compartilhar histórias como imagem personalizada';
 
   @override
-  String get premiumFeatureShareChapter => 'Exportar capítulos em PDF e HTML';
+  String get premiumFeatureShareChapter => 'Exportar capítulos em HTML';
 
   @override
   String get premiumFeatureAutoSuggestions =>

@@ -12,12 +12,31 @@
 # Preserve classes used by flutter_local_notifications for serialization
 -keep class com.dexterous.flutterlocalnotifications.** { *; }
 
+# Flutter Local Notifications
+-keep class com.dexterous.flutterlocalnotifications.** { *; }
+-keep public class com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver
+-keep public class com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver
+-dontwarn com.dexterous.flutterlocalnotifications.**
+
 # Flutter Secure Storage - Regras Absolutas
 -keep class com.it_nomads.** { *; }
 -keep interface com.it_nomads.** { *; }
 -keep class plugins.it_nomads.** { *; }
 -keep class **.FlutterSecureStoragePlugin { *; }
 -dontwarn com.it_nomads.**
+
+# Garantir que as classes de registro de plugins não sejam removidas (Crucial para Play Store)
+-keep class io.flutter.plugins.** { *; }
+-keep class io.flutter.app.** { *; }
+-keep class io.flutter.plugin.common.** { *; }
+-keep class io.flutter.embedding.engine.plugins.** { *; }
+-keep class * implements io.flutter.embedding.engine.plugins.FlutterPlugin
+-keep public class * extends io.flutter.plugin.common.MethodChannel.MethodCallHandler
+
+# Preservar recursos (Previne erros de permissão de notificação)
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
 
 # Manter métodos de serialização e canais
 -keepclassmembers class * {

@@ -43,7 +43,20 @@ O otimizador de código **R8 (ProGuard)** estava identificando o código nativo 
 
 ---
 
-## 3. Checklist Obrigatório para Novo Build de Release
+## 3. Erro: `MissingPluginException` na Inicialização (Race Condition)
+**Sintoma:** Mesmo com ProGuard configurado, o app falha na Play Store com `No implementation found for method read`.
+
+### Causa:
+Chamada de plugins nativos (como `FlutterSecureStorage` ou `InAppPurchase`) dentro do `void main()` antes da Engine do Android completar o registro dos plugins. Em produção (Play Store), o carregamento é mais lento que em Debug.
+
+### Solução:
+- **Remover** inicializações de plugins do `main()`.
+- **Mover** a lógica de inicialização para o `_initializeApp()` dentro do primeiro widget (Splash).
+- **Adicionar um delay** de segurança (ex: 500ms) para garantir que a Engine esteja pronta.
+
+---
+
+## 4. Checklist Obrigatório para Novo Build de Release
 
 Sempre que for gerar uma nova versão para o Play Store, siga estes passos na ordem:
 
