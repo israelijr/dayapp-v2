@@ -11,3 +11,25 @@
 
 # Preserve classes used by flutter_local_notifications for serialization
 -keep class com.dexterous.flutterlocalnotifications.** { *; }
+
+# Flutter Secure Storage - Regras Absolutas
+-keep class com.it_nomads.** { *; }
+-keep interface com.it_nomads.** { *; }
+-keep class plugins.it_nomads.** { *; }
+-keep class **.FlutterSecureStoragePlugin { *; }
+-dontwarn com.it_nomads.**
+
+# Manter métodos de serialização e canais
+-keepclassmembers class * {
+    @org.json.JSONObject *;
+}
+
+# Necessário para a biblioteca de criptografia que o plugin usa (Android 10+)
+-keep class androidx.security.crypto.** { *; }
+-dontwarn androidx.security.crypto.**
+
+# Garantir que o registro do plugin pelo Flutter não seja removido
+-keep class io.flutter.plugins.** { *; }
+-keep class io.flutter.app.** { *; }
+-keep class io.flutter.plugin.common.** { *; }
+-keep public class * extends io.flutter.plugin.common.MethodChannel.MethodCallHandler

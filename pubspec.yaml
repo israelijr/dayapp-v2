@@ -5,7 +5,7 @@ description: "Um aplicativo para registrar suas memórias."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # Define a versão da aplicação.
-version: 1.0.1+7
+version: 1.0.2+8
 
 environment:
   sdk: ^3.9.2
@@ -24,6 +24,7 @@ dependencies:
   provider: ^6.1.2
   intl: ^0.20.2
   shared_preferences: ^2.2.3
+  flutter_secure_storage: ^10.2.0
   path: ^1.8.3
   uuid: ^4.3.3
   image_picker: ^1.1.1
