@@ -67,9 +67,9 @@ android {
                 signingConfigs.getByName("release")
             else
                 signingConfigs.getByName("debug")
-            // Desativado minify e shrink para resolver MissingPluginException na Play Store
-            isMinifyEnabled = false
-            isShrinkResources = false
+            // Reativado ProGuard/R8 para segurança e redução de tamanho
+            isMinifyEnabled = true
+            isShrinkResources = true
             
             packaging {
                 resources {

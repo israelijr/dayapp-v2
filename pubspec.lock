@@ -750,7 +750,7 @@ packages:
     source: hosted
     version: "0.2.2"
   in_app_purchase:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       name: in_app_purchase
       sha256: "0e9510b80b0074e89ab0a8e0fc901439b779dc9ae575ab8d419253c6e1627716"
