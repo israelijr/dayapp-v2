@@ -183,11 +183,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 prefixIcon: const Icon(Icons.email_outlined),
               ),
               if (dialogError != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  dialogError!,
-                  style: TextStyle(
-                    color: Theme.of(dialogCtx).colorScheme.error,
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade100,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.red.shade300),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.error_outline, color: Colors.red.shade900, size: 18),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          dialogError!,
+                          style: TextStyle(
+                            color: Colors.red.shade900,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -202,7 +220,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               onPressed: () async {
                 final newEmail = newEmailController.text.trim();
                 final emailRegex = RegExp(
-                  r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,}$',
+                  r'^[\w\-\.\+]+@([\w\-]+\.)+[\w\-]{2,}$',
                 );
                 if (newEmail.isEmpty) {
                   setDialogState(() => dialogError = loc.emailRequired);
@@ -305,11 +323,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 if (dialogError != null) ...[
-                  const SizedBox(height: 8),
-                  Text(
-                    dialogError!,
-                    style: TextStyle(
-                      color: Theme.of(dialogCtx).colorScheme.error,
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade100,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.red.shade300),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.error_outline, color: Colors.red.shade900, size: 18),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            dialogError!,
+                            style: TextStyle(
+                              color: Colors.red.shade900,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -523,7 +559,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     return AppLocalizations.of(context)!.emailRequired;
                   }
                   final emailRegex = RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    r'^[\w\-\.\+]+@([\w\-]+\.)+[\w\-]{2,}$',
                   );
                   if (!emailRegex.hasMatch(value.trim())) {
                     return AppLocalizations.of(context)!.emailInvalid;
@@ -570,11 +606,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               if (_errorMessage != null) ...[
                 const SizedBox(height: 16),
-                Text(
-                  _errorMessage!,
-                  style: GoogleFonts.plusJakartaSans(
-                    color: Theme.of(context).colorScheme.error,
-                    fontWeight: FontWeight.w500,
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.red.shade300, width: 1.5),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.error_outline, color: Colors.red.shade900),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          _errorMessage!,
+                          style: TextStyle(
+                            color: Colors.red.shade900,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
