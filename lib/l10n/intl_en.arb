@@ -2441,7 +2441,7 @@
   "@pdfBackgroundGray": {
     "description": "Option: light gray background color in the PDF"
   },
-  "exportPdfPremiumRequired": "Exporting to PDF is a Premium feature. Upgrade your plan to access it.",
+  "exportPdfPremiumRequired": "Exporting Chapter is a Premium feature. Upgrade your plan to access it.",
   "@exportPdfPremiumRequired": {
     "description": "SnackBar shown when a Free user tries to export to PDF"
   },

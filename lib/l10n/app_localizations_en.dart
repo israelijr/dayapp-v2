@@ -2549,7 +2549,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportPdfPremiumRequired =>
-      'Exporting to PDF is a Premium feature. Upgrade your plan to access it.';
+      'Exporting Chapter is a Premium feature. Upgrade your plan to access it.';
 
   @override
   String get changeEmail => 'Change Email';

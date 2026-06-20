@@ -83,7 +83,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
     }
 
     // Validação básica de formato de e-mail
-    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(email)) {
+    if (!RegExp(r'^[\w\-\.\+]+@([\w\-]+\.)+[\w\-]{2,}$').hasMatch(email)) {
       setState(() => errorMessage = AppLocalizations.of(context)!.invalidEmail);
       return;
     }
@@ -361,25 +361,24 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.emoticonRed.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: AppColors.emoticonRed.withValues(alpha: 0.5),
-                      ),
+                      color: Colors.red.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.red.shade300, width: 1.5),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           Icons.error_outline,
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Colors.red.shade900,
                           size: 20,
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             errorMessage!,
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Colors.red.shade900,
+                              fontWeight: FontWeight.bold,
                               fontSize: 13,
                             ),
                           ),

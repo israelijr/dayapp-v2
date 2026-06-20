@@ -2340,7 +2340,7 @@
   "@pdfBackgroundGray": {
     "description": "Opção: fundo cinza claro no PDF"
   },
-  "exportPdfPremiumRequired": "Exportar em PDF é um recurso Premium. Faça upgrade do seu plano para aceder.",
+  "exportPdfPremiumRequired": "Exportar Capítulo é um recurso Premium. Faça upgrade do seu plano para aceder.",
   "@exportPdfPremiumRequired": {
     "description": "SnackBar exibido quando utilizador Free tenta exportar PDF"
   },

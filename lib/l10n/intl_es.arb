@@ -2236,7 +2236,7 @@
   "@pdfBackgroundGray": {
     "description": "Opción: fondo gris claro en el PDF"
   },
-  "exportPdfPremiumRequired": "Exportar a PDF es una función Premium. Actualiza tu plan para acceder.",
+  "exportPdfPremiumRequired": "Exportar Capítulo es una función Premium. Actualiza tu plan para acceder.",
   "@exportPdfPremiumRequired": {
     "description": "SnackBar mostrado cuando un usuario Free intenta exportar a PDF"
   },

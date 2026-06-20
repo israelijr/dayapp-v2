@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import '../main.dart';
@@ -61,39 +62,91 @@ class PurchaseService {
   Future<void> _listenToPurchaseUpdated(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
-    for (final purchaseDetails in purchaseDetailsList) {
-      if (purchaseDetails.status == PurchaseStatus.pending) {
-        debugPrint('PurchaseService: Compra pendente...');
-      } else if (purchaseDetails.status == PurchaseStatus.error) {
-        debugPrint('PurchaseService: Erro na compra: ${purchaseDetails.error}');
-        _showSnackBar('Erro na compra: ${purchaseDetails.error}');
-      } else if (purchaseDetails.status == PurchaseStatus.purchased ||
-          purchaseDetails.status == PurchaseStatus.restored) {
-        final bool valid = await _verifyPurchase(purchaseDetails);
-        if (valid) {
-          await _deliverProduct(purchaseDetails);
-        }
-      }
+    bool foundPremiumInList = false;
 
-      if (purchaseDetails.pendingCompletePurchase) {
-        await _inAppPurchase.completePurchase(purchaseDetails);
+    for (final purchaseDetails in purchaseDetailsList) {
+      try {
+        if (purchaseDetails.status == PurchaseStatus.pending) {
+          debugPrint('PurchaseService: Compra pendente...');
+          continue;
+        }
+
+        if (purchaseDetails.status == PurchaseStatus.error) {
+          debugPrint('PurchaseService: Erro na compra: ${purchaseDetails.error}');
+          if (!_isAlreadyOwnedError(purchaseDetails.error)) {
+            _showSnackBar('Erro na compra: ${purchaseDetails.error}');
+          }
+        } else if (purchaseDetails.status == PurchaseStatus.canceled) {
+          debugPrint('PurchaseService: Compra cancelada pelo usuário.');
+        } else if (purchaseDetails.status == PurchaseStatus.purchased ||
+            purchaseDetails.status == PurchaseStatus.restored) {
+          if (purchaseDetails.productID == premiumSku) {
+            foundPremiumInList = true;
+            // PASSO 1: Entrega o produto (libera no banco/storage local)
+            await _deliverProduct(purchaseDetails);
+          }
+        }
+
+        // PASSO 2: Conclui a transação na loja apenas se o processamento acima deu certo
+        if (purchaseDetails.pendingCompletePurchase) {
+          await _inAppPurchase.completePurchase(purchaseDetails);
+          debugPrint(
+            'PurchaseService: Transação concluída na loja para ${purchaseDetails.productID}',
+          );
+        }
+      } catch (e) {
+        debugPrint(
+          'PurchaseService: Erro crítico ao processar item ${purchaseDetails.productID}: $e',
+        );
+        // Se falhou aqui, não completamos a compra na loja, permitindo nova tentativa futura.
       }
+    }
+
+    // Sincronização de Estorno (Refund) / Revogação
+    if (Platform.isAndroid) {
+      await _syncRefundStatus(foundPremiumInList);
     }
   }
 
-  /// Verifica se a compra é válida.
-  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async {
-    return purchaseDetails.productID == premiumSku;
+  /// Verifica se o erro é apenas que o usuário já possui o item (comum em restores).
+  bool _isAlreadyOwnedError(IAPError? error) {
+    if (error == null) return false;
+    final msg = error.message.toLowerCase();
+    return msg.contains('already owned') || msg.contains('item_already_owned');
+  }
+
+  /// Verifica se o Premium deve ser revogado (estorno ou expiração).
+  Future<void> _syncRefundStatus(bool foundPremiumInList) async {
+    final source = await _premiumService.getPremiumSource();
+    // Só sincronizamos se o usuário for premium via Play Store localmente.
+    final isPlayStore = source != null && source.startsWith('play_store');
+
+    if (isPlayStore && !foundPremiumInList) {
+      debugPrint(
+        'PurchaseService: Premium não encontrado na lista ativa da loja. Sincronizando estorno...',
+      );
+      await _premiumService.deactivate();
+      onPurchaseSuccess?.call();
+    }
   }
 
   /// Entrega o benefício ao usuário e persiste localmente.
   Future<void> _deliverProduct(PurchaseDetails purchaseDetails) async {
+    final bool wasPremium = await _premiumService.isPremium();
+    final String? oldSource = await _premiumService.getPremiumSource();
+
     final source = purchaseDetails.status == PurchaseStatus.restored
         ? 'play_store_restored'
         : 'play_store';
+
     await _premiumService.activate(source: source);
     debugPrint('PurchaseService: Produto entregue com sucesso ($source)');
-    _showSnackBar('Premium ativado com sucesso!');
+
+    // Só mostra o snackbar se houve uma mudança real de estado (evita spam no startup)
+    if (!wasPremium || oldSource != source) {
+      _showSnackBar('Premium ativado com sucesso!');
+    }
+
     onPurchaseSuccess?.call();
   }
 

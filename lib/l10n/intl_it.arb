@@ -1905,7 +1905,7 @@
   "@pdfBackgroundGray": {
     "description": "Opzione: colore di sfondo grigio chiaro nel PDF"
   },
-  "exportPdfPremiumRequired": "L'esportazione in PDF è una funzionalità Premium. Aggiorna il tuo piano per accedervi.",
+  "exportPdfPremiumRequired": "L'esportazione di Capitolo è una funzionalità Premium. Aggiorna il tuo piano per accedervi.",
   "@exportPdfPremiumRequired": {
     "description": "SnackBar mostrato quando un utente gratuito cerca di esportare in PDF"
   },

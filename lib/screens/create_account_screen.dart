@@ -54,7 +54,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       });
       return;
     }
-    final emailRegex = RegExp(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,}$');
+    final emailRegex = RegExp(r'^[\w\-\.\+]+@([\w\-]+\.)+[\w\-]{2,}$');
     if (!emailRegex.hasMatch(emailController.text.trim())) {
       setState(() {
         errorMessage = AppLocalizations.of(context)!.emailInvalid;
@@ -161,10 +161,28 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               ),
               const SizedBox(height: 16),
               if (errorMessage != null)
-                Text(
-                  errorMessage!,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.red.shade300, width: 1.5),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.error_outline, color: Colors.red.shade900),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          errorMessage!,
+                          style: TextStyle(
+                            color: Colors.red.shade900,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               const SizedBox(height: 16),

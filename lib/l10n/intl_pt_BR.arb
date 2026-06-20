@@ -57,7 +57,7 @@
   "@themePremiumRequired": {
     "description": "Mensagem exibida ao selecionar tema premium sendo usuário Free"
   },
-  "exportPdfPremiumRequired": "Exportar em PDF é um recurso Premium. Faça upgrade do seu plano para acessar.",
+  "exportPdfPremiumRequired": "Exportar Capítulo é um recurso Premium. Faça upgrade do seu plano para acessar.",
   "@exportPdfPremiumRequired": {
     "description": "SnackBar exibido quando usuário Free tenta exportar PDF"
   },

@@ -2563,7 +2563,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get exportPdfPremiumRequired =>
-      'Exportar em PDF é um recurso Premium. Faça upgrade do seu plano para aceder.';
+      'Exportar Capítulo é um recurso Premium. Faça upgrade do seu plano para aceder.';
 
   @override
   String get changeEmail => 'Alterar E-mail';
@@ -2778,7 +2778,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get exportPdfPremiumRequired =>
-      'Exportar em PDF é um recurso Premium. Faça upgrade do seu plano para acessar.';
+      'Exportar Capítulo é um recurso Premium. Faça upgrade do seu plano para acessar.';
 
   @override
   String get changePassword => 'Alterar Senha';

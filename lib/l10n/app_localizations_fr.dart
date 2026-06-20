@@ -2586,7 +2586,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get exportPdfPremiumRequired =>
-      'L\'exportation en PDF est une fonctionnalité Premium. Mettez à niveau votre plan pour y accéder.';
+      'L\'exportation de Chapitre est une fonctionnalité Premium. Mettez à niveau votre plan pour y accéder.';
 
   @override
   String get changeEmail => 'Changer l\'e-mail';

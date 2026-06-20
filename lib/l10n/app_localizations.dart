@@ -4619,7 +4619,7 @@ abstract class AppLocalizations {
   /// SnackBar shown when a Free user tries to export to PDF
   ///
   /// In en, this message translates to:
-  /// **'Exporting to PDF is a Premium feature. Upgrade your plan to access it.'**
+  /// **'Exporting Chapter is a Premium feature. Upgrade your plan to access it.'**
   String get exportPdfPremiumRequired;
 
   /// Button/title to change the user email
