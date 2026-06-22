@@ -2,6 +2,7 @@ import '../db/capitulo_helper.dart';
 import '../helpers/rich_text_helper.dart';
 import '../models/capitulo_sugestao.dart';
 import '../models/historia.dart';
+import '../models/tag.dart';
 import 'word_insight_analyzer.dart';
 
 class CapituloSugestaoService {
@@ -24,6 +25,13 @@ class CapituloSugestaoService {
       userId,
     );
     if (entradasComTags.length < _minEntradasPorCapitulo) return const [];
+
+    final capitulosExistentes = await _capituloHelper.getCapitulosResumoByUser(
+      userId,
+    );
+    final titulosExistentesSlugs = capitulosExistentes
+        .map((c) => Tag.generateSlug(c.capitulo.titulo))
+        .toSet();
 
     final ignoradas = await _capituloHelper.getIgnoredSuggestionFingerprints(
       userId,
@@ -83,6 +91,12 @@ class CapituloSugestaoService {
       final topTags = _topByCount(tags, limit: 3);
       final topPalavras = _topByCount(palavras, limit: 4);
       final titulo = _sugerirTitulo(topTags, topPalavras, grupo);
+
+      final tituloSlug = Tag.generateSlug(titulo);
+      if (titulosExistentesSlugs.contains(tituloSlug)) {
+        continue;
+      }
+
       final score = _scoreDoGrupo(grupo, featureMap);
 
       sugestoes.add(

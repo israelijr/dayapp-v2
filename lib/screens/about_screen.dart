@@ -16,8 +16,8 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-  String _version = '1.0.0';
-  String _buildNumber = '1';
+  String _version = '1.0.17';
+  String _buildNumber = '23';
 
   // Contador para easter egg (7 toques na versão = abre PremiumDebugScreen)
   int _debugTapCount = 0;
@@ -33,8 +33,12 @@ class _AboutScreenState extends State<AboutScreen> {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       setState(() {
-        _version = packageInfo.version;
-        _buildNumber = packageInfo.buildNumber;
+        if (packageInfo.version.isNotEmpty) {
+          _version = packageInfo.version;
+        }
+        if (packageInfo.buildNumber.isNotEmpty) {
+          _buildNumber = packageInfo.buildNumber;
+        }
       });
     } catch (e) {
       // Mantém valores padrão em caso de erro
@@ -283,13 +287,14 @@ class _AboutScreenState extends State<AboutScreen> {
                   context,
                   listen: false,
                 );
+                final String query = [
+                  'subject=${Uri.encodeComponent(l10n.aboutScreenSupportEmailSubject)}',
+                  'body=${Uri.encodeComponent(l10n.aboutScreenSupportEmailBody(_version))}',
+                ].join('&');
                 final Uri emailUri = Uri(
                   scheme: 'mailto',
                   path: 'contato@iijrapp.com.br',
-                  queryParameters: {
-                    'subject': l10n.aboutScreenSupportEmailSubject,
-                    'body': l10n.aboutScreenSupportEmailBody(_version),
-                  },
+                  query: query,
                 );
                 if (await canLaunchUrl(emailUri)) {
                   pinProvider.isPickingExternalMedia = true;

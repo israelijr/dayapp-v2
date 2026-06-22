@@ -179,16 +179,6 @@ class _SearchScreenState extends State<SearchScreen> {
     return grouped;
   }
 
-  /// Limpa a pesquisa
-  void _clearSearch() {
-    setState(() {
-      _searchController.clear();
-      _selectedEmoticon = null;
-      _searchResults = [];
-      _hasSearched = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

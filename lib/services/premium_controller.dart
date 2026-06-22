@@ -29,7 +29,7 @@ class PremiumController extends ChangeNotifier {
     }, onDone: () {
       _subscription?.cancel();
     }, onError: (error) {
-      debugPrint("Erro InAppPurchase: $error");
+      debugPrint('Erro InAppPurchase: $error');
     });
 
     // 3. Restaurar compras existentes (para usuários que reinstalaram o app)
