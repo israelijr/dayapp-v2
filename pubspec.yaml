@@ -5,7 +5,7 @@ description: "Um aplicativo para registrar suas memórias."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # Define a versão da aplicação.
-version: 1.0.15+21
+version: 1.0.16+22
 
 environment:
   sdk: ^3.9.2
@@ -47,6 +47,11 @@ dependencies:
   flutter_quill: ^11.0.0
   vsc_quill_delta_to_html: ^1.0.2
   in_app_purchase: ^3.2.0
+  animations: ^2.0.11
+  google_fonts: ^8.1.0
+  image: ^4.8.0
+  mailer: ^7.1.0
+  flutter_timezone: ^5.0.1
 
 dependency_overrides:
   intl: ^0.20.2
@@ -57,7 +62,6 @@ dependency_overrides:
   flutter_timezone: ^5.0.1
   animations: ^2.0.11
   google_fonts: ^8.1.0
-  pdf: ^3.11.3
   image: ^4.8.0
   in_app_purchase: ^3.2.0
 

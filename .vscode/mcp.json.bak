@@ -1,0 +1,16 @@
+{
+	"servers": {
+		"context7": {
+			"command": "/home/israel/.nvm/versions/node/v24.15.0/bin/npx",
+			"args": [
+				"-y",
+				"@upstash/context7-mcp@latest"
+			],
+			"env": {
+				"PATH": "/home/israel/.nvm/versions/node/v24.15.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+			},
+			"type": "stdio"
+		}
+	},
+	"inputs": []
+}
