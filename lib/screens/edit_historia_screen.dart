@@ -116,6 +116,12 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
   late int _initialMood;
   late int _initialEnergy;
 
+  bool get _isFormValid {
+    if (!_initialized) return false;
+    final plainText = richTextController.document.toPlainText().trim();
+    return titleController.text.trim().isNotEmpty && plainText.isNotEmpty;
+  }
+
   String _capitalizeText(String text) {
     if (text.isEmpty) return text;
 
@@ -265,11 +271,9 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
         _selectedMood != _initialMood ||
         _selectedEnergy != _initialEnergy;
 
-    if (hasChanges != _hasUnsavedChanges) {
-      setState(() {
-        _hasUnsavedChanges = hasChanges;
-      });
-    }
+    setState(() {
+      _hasUnsavedChanges = hasChanges;
+    });
   }
 
   Future<void> _loadFotos() async {
@@ -623,7 +627,9 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
             child: Text(loc.discard),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop('save'),
+            onPressed: !_isFormValid
+                ? null
+                : () => Navigator.of(context).pop('save'),
             child: Text(loc.save),
           ),
         ],
@@ -743,7 +749,9 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                 child: Text(loc.discard),
               ),
               TextButton(
-                onPressed: () => Navigator.of(context).pop('save'),
+                onPressed: !_isFormValid
+                    ? null
+                    : () => Navigator.of(context).pop('save'),
                 child: Text(loc.save),
               ),
             ],
@@ -866,9 +874,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                       maxLines: 15,
                       showToolbar: true,
                       onChanged: () {
-                        setState(() {
-                          _hasUnsavedChanges = true;
-                        });
+                        _checkForChanges();
                       },
                     ),
                     const SizedBox(height: 16),
@@ -1106,7 +1112,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: FilledButton(
-                      onPressed: _save,
+                      onPressed: _isFormValid ? _save : null,
                       child: Text(loc.save),
                     ),
                   ),

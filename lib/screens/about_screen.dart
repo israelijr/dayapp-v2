@@ -289,7 +289,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 );
                 final String query = [
                   'subject=${Uri.encodeComponent(l10n.aboutScreenSupportEmailSubject)}',
-                  'body=${Uri.encodeComponent(l10n.aboutScreenSupportEmailBody(_version))}',
+                  'body=${Uri.encodeComponent(l10n.aboutScreenSupportEmailBody('$_version+$_buildNumber'))}',
                 ].join('&');
                 final Uri emailUri = Uri(
                   scheme: 'mailto',

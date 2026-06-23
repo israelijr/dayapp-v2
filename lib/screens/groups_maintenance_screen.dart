@@ -55,53 +55,55 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                   ? AppLocalizations.of(context)!.editGroup
                   : AppLocalizations.of(context)!.newGroup,
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    final Emoji? result = await showModalBottomSheet<Emoji>(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: const Color(0x00000000),
-                      builder: (context) => const EmojiSelectionModal(),
-                    );
-                    if (result != null) {
-                      setStateDialog(() {
-                        selectedEmoticon = result.char;
-                        selectedEmojiTranslation = result.translation;
-                      });
-                    }
-                  },
-                  child: Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      selectedEmoticon ?? '😀',
-                      style: const TextStyle(fontSize: 32),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      final Emoji? result = await showModalBottomSheet<Emoji>(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: const Color(0x00000000),
+                        builder: (context) => const EmojiSelectionModal(),
+                      );
+                      if (result != null) {
+                        setStateDialog(() {
+                          selectedEmoticon = result.char;
+                          selectedEmojiTranslation = result.translation;
+                        });
+                      }
+                    },
+                    child: Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
+                        shape: BoxShape.circle,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        selectedEmoticon ?? '😀',
+                        style: const TextStyle(fontSize: 32),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  selectedEmojiTranslation ??
-                      AppLocalizations.of(context)!.chooseIcon,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: nameController,
-                  label: AppLocalizations.of(context)!.groupNameLabel,
-                  textCapitalization: TextCapitalization.sentences,
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    selectedEmojiTranslation ??
+                        AppLocalizations.of(context)!.chooseIcon,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextField(
+                    controller: nameController,
+                    label: AppLocalizations.of(context)!.groupNameLabel,
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                ],
+              ),
             ),
             actions: [
               TextButton(

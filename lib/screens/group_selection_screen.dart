@@ -96,19 +96,21 @@ class _GroupSelectionScreenState extends State<GroupSelectionScreen> {
               return const Center(child: CircularProgressIndicator());
             }
             final grupos = snapshot.data ?? [];
-            return Column(
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.existingGroups,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.labelColor(context),
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.existingGroups,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.labelColor(context),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.builder(
+                  const SizedBox(height: 16),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: grupos.length,
                     itemBuilder: (context, index) {
                       final grupo = grupos[index];
@@ -133,69 +135,69 @@ class _GroupSelectionScreenState extends State<GroupSelectionScreen> {
                       );
                     },
                   ),
-                ),
-                const SizedBox(height: 16),
-                const Divider(),
-                const SizedBox(height: 16),
-                Text(
-                  AppLocalizations.of(context)!.createNewGroup,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.labelColor(context),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  const SizedBox(height: 16),
+                  Text(
+                    AppLocalizations.of(context)!.createNewGroup,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.labelColor(context),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: _pickEmoticon,
-                      child: Container(
-                        width: 56,
-                        height: 56,
-                        decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.surfaceContainerHighest,
-                          shape: BoxShape.circle,
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: _pickEmoticon,
+                        child: Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
+                            shape: BoxShape.circle,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            _selectedEmoticon ?? '😀',
+                            style: const TextStyle(fontSize: 28),
+                          ),
                         ),
-                        alignment: Alignment.center,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: CustomTextField(
+                          controller: _newGroupController,
+                          label: AppLocalizations.of(context)!.groupNameLabel,
+                          textCapitalization: TextCapitalization.sentences,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (_selectedEmojiTranslation != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
                         child: Text(
-                          _selectedEmoticon ?? '😀',
-                          style: const TextStyle(fontSize: 28),
+                          _selectedEmojiTranslation!,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: CustomTextField(
-                        controller: _newGroupController,
-                        label: AppLocalizations.of(context)!.groupNameLabel,
-                        textCapitalization: TextCapitalization.sentences,
-                      ),
-                    ),
-                  ],
-                ),
-                if (_selectedEmojiTranslation != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _selectedEmojiTranslation!,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: _createNewGroup,
+                      child: Text(AppLocalizations.of(context)!.createAndSelect),
                     ),
                   ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: _createNewGroup,
-                    child: Text(AppLocalizations.of(context)!.createAndSelect),
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),

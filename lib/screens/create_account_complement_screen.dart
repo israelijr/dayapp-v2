@@ -86,6 +86,30 @@ class _CreateAccountComplementScreenState
     if (birthDateController.text.isNotEmpty) {
       try {
         birthDate = DateFormat('dd/MM/yyyy').parse(birthDateController.text);
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+        
+        if (birthDate.isAfter(today)) {
+          setState(() {
+            errorMessage = 'A data de nascimento não pode ser no futuro.';
+            loading = false;
+          });
+          return;
+        }
+        
+        int age = today.year - birthDate.year;
+        if (today.month < birthDate.month ||
+            (today.month == birthDate.month && today.day < birthDate.day)) {
+          age--;
+        }
+        
+        if (age < 14) {
+          setState(() {
+            errorMessage = 'Você deve ter pelo menos 14 anos de idade.';
+            loading = false;
+          });
+          return;
+        }
       } catch (_) {
         setState(() {
           errorMessage = AppLocalizations.of(context)!.invalidBirthDate;

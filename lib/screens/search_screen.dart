@@ -206,11 +206,11 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
           bottom: PreferredSize(
-            // Ajustado para 56h para reduzir a altura excessiva da barra de chips
-            preferredSize: const Size.fromHeight(8),
+            // Ajustado para 56h para acomodar confortavelmente a barra de chips sem sobreposição
+            preferredSize: const Size.fromHeight(56),
             child: Padding(
-              // Removido padding excessivo do fundo
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              // Adicionado padding no fundo para melhor espaçamento visual
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
               child: _buildFilterChipsBar(),
             ),
           ),
@@ -278,76 +278,73 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  /// Barra de chips movida para ficar encostada no AppBar (sem espaço entre)
+  /// Barra de chips rolável horizontalmente para evitar quebras de linha e sobreposições em telas menores
   Widget _buildFilterChipsBar() {
     final l10n = AppLocalizations.of(context)!;
-    return Row(
-      children: [
-        Expanded(
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              ChoiceChip(
-                label: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.text_fields, size: 18),
-                    const SizedBox(width: 4),
-                    Text(l10n.filterText),
-                  ],
-                ),
-                selected: _currentSearchType == SearchType.text,
-                onSelected: (selected) {
-                  if (selected) {
-                    setState(() {
-                      _currentSearchType = SearchType.text;
-                      _selectedEmoticon = null;
-                    });
-                  }
-                },
-              ),
-              ChoiceChip(
-                label: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.label, size: 18),
-                    const SizedBox(width: 4),
-                    Text(l10n.filterTag),
-                  ],
-                ),
-                selected: _currentSearchType == SearchType.tag,
-                onSelected: (selected) {
-                  if (selected) {
-                    setState(() {
-                      _currentSearchType = SearchType.tag;
-                      _selectedEmoticon = null;
-                    });
-                  }
-                },
-              ),
-              ChoiceChip(
-                label: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.mood, size: 18),
-                    const SizedBox(width: 4),
-                    Text(l10n.filterEmoticon),
-                  ],
-                ),
-                selected: _currentSearchType == SearchType.emoticon,
-                onSelected: (selected) {
-                  if (selected) {
-                    setState(() {
-                      _currentSearchType = SearchType.emoticon;
-                    });
-                  }
-                },
-              ),
-            ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          ChoiceChip(
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.text_fields, size: 18),
+                const SizedBox(width: 4),
+                Text(l10n.filterText),
+              ],
+            ),
+            selected: _currentSearchType == SearchType.text,
+            onSelected: (selected) {
+              if (selected) {
+                setState(() {
+                  _currentSearchType = SearchType.text;
+                  _selectedEmoticon = null;
+                });
+              }
+            },
           ),
-        ),
-      ],
+          const SizedBox(width: 8),
+          ChoiceChip(
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.label, size: 18),
+                const SizedBox(width: 4),
+                Text(l10n.filterTag),
+              ],
+            ),
+            selected: _currentSearchType == SearchType.tag,
+            onSelected: (selected) {
+              if (selected) {
+                setState(() {
+                  _currentSearchType = SearchType.tag;
+                  _selectedEmoticon = null;
+                });
+              }
+            },
+          ),
+          const SizedBox(width: 8),
+          ChoiceChip(
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.mood, size: 18),
+                const SizedBox(width: 4),
+                Text(l10n.filterEmoticon),
+              ],
+            ),
+            selected: _currentSearchType == SearchType.emoticon,
+            onSelected: (selected) {
+              if (selected) {
+                setState(() {
+                  _currentSearchType = SearchType.emoticon;
+                });
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 

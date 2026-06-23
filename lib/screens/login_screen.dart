@@ -304,29 +304,43 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                GestureDetector(
-                  onTap: () {
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.5),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  onPressed: () {
                     Navigator.pushNamed(context, '/password_recovery');
                   },
                   child: Text(
                     AppLocalizations.of(context)!.forgotPassword,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      decoration: TextDecoration.underline,
-                    ),
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: () {
+                const SizedBox(height: 12),
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.5),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  onPressed: () {
                     Navigator.pushNamed(context, '/create_account');
                   },
                   child: Text(
                     AppLocalizations.of(context)!.noAccountCreateHere,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      decoration: TextDecoration.underline,
-                    ),
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -343,8 +357,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: () async {
+                    OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.5),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onPressed: () async {
                         final Uri emailUri = Uri(
                           scheme: 'mailto',
                           path: 'contato@iijrapp.com.br',
@@ -358,13 +382,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           await launchUrl(emailUri);
                         }
                       },
-                      child: Text(
+                      icon: const Icon(Icons.email, size: 16),
+                      label: const Text(
                         'contato@iijrapp.com.br',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          decoration: TextDecoration.underline,
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(fontSize: 14),
                       ),
                     ),
                     const SizedBox(height: 16),
