@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import '../main.dart';
@@ -9,12 +10,17 @@ import 'premium_service.dart';
 class PurchaseService {
   static final PurchaseService _instance = PurchaseService._internal();
   factory PurchaseService() => _instance;
-  PurchaseService._internal();
-
-  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  
+  late final InAppPurchase _inAppPurchase;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   final PremiumService _premiumService = PremiumService();
   bool _isInitialized = false;
+
+  PurchaseService._internal() {
+    if (!kIsWeb) {
+      _inAppPurchase = InAppPurchase.instance;
+    }
+  }
 
   /// SKU do produto Premium Vitalício definido no Google Play Console.
   static const String premiumSku = 'premium_lifetime';
@@ -24,6 +30,7 @@ class PurchaseService {
 
   /// Inicializa a conexão e começa a ouvir as compras.
   void initialize({VoidCallback? onPurchaseSuccess}) {
+    if (kIsWeb) return;
     if (_isInitialized) return;
     this.onPurchaseSuccess = onPurchaseSuccess;
     
@@ -152,6 +159,10 @@ class PurchaseService {
 
   /// Inicia o fluxo de compra nativo.
   Future<void> buyPremium() async {
+    if (kIsWeb) {
+      _showSnackBar('Compras não estão disponíveis na versão web.');
+      return;
+    }
     try {
       final bool available = await _inAppPurchase.isAvailable();
       if (!available) {
@@ -185,6 +196,7 @@ class PurchaseService {
 
   /// Força a restauração de compras passadas.
   Future<void> restorePurchases() async {
+    if (kIsWeb) return;
     try {
       await _inAppPurchase.restorePurchases();
       _showSnackBar('Verificando compras anteriores...');

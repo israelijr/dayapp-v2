@@ -85,7 +85,7 @@ class _CreateAccountComplementScreenState
     DateTime? birthDate;
     if (birthDateController.text.isNotEmpty) {
       try {
-        birthDate = DateFormat('dd/MM/yyyy').parse(birthDateController.text);
+        birthDate = DateFormat('dd/MM/yyyy').parseStrict(birthDateController.text);
         final now = DateTime.now();
         final today = DateTime(now.year, now.month, now.day);
         

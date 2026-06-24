@@ -928,22 +928,32 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
 
                 // Mensagem de lista vazia quando há insights mas não há histórias
                 if (storiesCount == 0) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.45,
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
                             'assets/image/home_vazia.png',
-                            width: 180,
-                            height: 180,
+                            width: 120,
+                            height: 120,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(
+                                Icons.auto_stories_outlined,
+                                size: 64,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withValues(alpha: 0.4),
+                              );
+                            },
                           ),
                           const SizedBox(height: 12),
                           Text(
                             AppLocalizations.of(context)!.noStoriesHere,
-                            style: GoogleFonts.notoSerif(
-                              fontSize: 20,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 18,
                               fontWeight: FontWeight.w600,
                               height: 1.4,
                               color: Theme.of(

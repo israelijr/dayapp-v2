@@ -572,36 +572,43 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildInitialSearchPlaceholder() {
     final l10n = AppLocalizations.of(context)!;
     final shortestSide = MediaQuery.sizeOf(context).shortestSide;
-    final imageSize = (shortestSide * 0.55).clamp(120.0, 300.0);
+    final imageSize = (shortestSide * 0.35).clamp(90.0, 140.0);
 
     return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
+            Image.asset(
+              'assets/image/pesquisa_historias.png',
               width: imageSize,
               height: imageSize,
-              child: Image.asset(
-                'assets/image/pesquisa_historias.png',
-                fit: BoxFit.contain,
-              ),
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.search,
+                  size: 64,
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
+                );
+              },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             Text(
               l10n.searchStoriesTitle,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
               l10n.searchStoriesSubtitle,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
               textAlign: TextAlign.center,
@@ -614,16 +621,23 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildNoResultsPlaceholder() {
     final shortestSide = MediaQuery.sizeOf(context).shortestSide;
-    final imageSize = (shortestSide * 0.55).clamp(120.0, 300.0);
+    final imageSize = (shortestSide * 0.35).clamp(90.0, 140.0);
 
     return Center(
-      child: SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.all(16),
         child: Image.asset(
           'assets/image/nao_achou.png',
           width: imageSize,
           height: imageSize,
           fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) {
+            return Icon(
+              Icons.search_off_outlined,
+              size: 64,
+              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
+            );
+          },
         ),
       ),
     );

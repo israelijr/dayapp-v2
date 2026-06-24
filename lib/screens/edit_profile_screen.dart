@@ -118,6 +118,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         });
         return;
       }
+
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      if (birthDate.isAfter(today)) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'A data de nascimento não pode ser no futuro.';
+        });
+        return;
+      }
+
+      int age = today.year - birthDate.year;
+      if (today.month < birthDate.month ||
+          (today.month == birthDate.month && today.day < birthDate.day)) {
+        age--;
+      }
+      if (age < 14) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Você deve ter pelo menos 14 anos de idade.';
+        });
+        return;
+      }
     }
 
     final authProvider = context.read<AuthProvider>();
@@ -598,9 +621,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   if (value == null || value.trim().isEmpty) {
                     return null;
                   }
-                  if (_parseBirthDate(value.trim()) == null) {
+                  final birthDate = _parseBirthDate(value.trim());
+                  if (birthDate == null) {
                     return AppLocalizations.of(context)!.invalidBirthDate;
                   }
+
+                  final now = DateTime.now();
+                  final today = DateTime(now.year, now.month, now.day);
+                  if (birthDate.isAfter(today)) {
+                    return 'A data de nascimento não pode ser no futuro.';
+                  }
+
+                  int age = today.year - birthDate.year;
+                  if (today.month < birthDate.month ||
+                      (today.month == birthDate.month && today.day < birthDate.day)) {
+                    age--;
+                  }
+                  if (age < 14) {
+                    return 'Você deve ter pelo menos 14 anos de idade.';
+                  }
+
                   return null;
                 },
               ),
