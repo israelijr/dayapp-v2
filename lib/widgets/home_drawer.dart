@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -205,16 +206,27 @@ class HomeDrawer extends StatelessWidget {
               },
             );
           } else {
-            imageWidget = Image.file(
-              File(fotoPerfil),
-              fit: BoxFit.contain,
-              errorBuilder: (_, _, _) {
-                return Image.asset(
-                  'assets/image/icon.png',
-                  fit: BoxFit.contain,
-                );
-              },
-            );
+            imageWidget = kIsWeb
+                ? Image.network(
+                    fotoPerfil,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, _, _) {
+                      return Image.asset(
+                        'assets/image/icon.png',
+                        fit: BoxFit.contain,
+                      );
+                    },
+                  )
+                : Image.file(
+                    File(fotoPerfil),
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, _, _) {
+                      return Image.asset(
+                        'assets/image/icon.png',
+                        fit: BoxFit.contain,
+                      );
+                    },
+                  );
           }
         } else {
           imageWidget = Image.asset(

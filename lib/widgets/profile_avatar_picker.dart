@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class ProfileAvatarPicker extends StatelessWidget {
@@ -22,12 +23,19 @@ class ProfileAvatarPicker extends StatelessWidget {
             child: SizedBox(
               width: 120,
               height: 120,
-              child: Image.file(
-                File(localImagePath!),
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                    _buildPlaceholder(colorScheme),
-              ),
+              child: kIsWeb
+                  ? Image.network(
+                      localImagePath!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          _buildPlaceholder(colorScheme),
+                    )
+                  : Image.file(
+                      File(localImagePath!),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          _buildPlaceholder(colorScheme),
+                    ),
             ),
           )
         : networkImageUrl != null

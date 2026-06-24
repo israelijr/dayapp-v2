@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class UserProfileAvatar extends StatelessWidget {
@@ -39,7 +40,7 @@ class UserProfileAvatar extends StatelessWidget {
       return const Image(image: placeholder, fit: BoxFit.cover);
     }
 
-    if (fotoPerfil!.startsWith('http')) {
+    if (fotoPerfil!.startsWith('http') || kIsWeb) {
       return Image.network(
         fotoPerfil!,
         fit: BoxFit.cover,

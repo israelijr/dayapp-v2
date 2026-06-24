@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dayapp/l10n/generated/app_localizations.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -85,10 +86,12 @@ class _CreateAccountComplementScreenState
     DateTime? birthDate;
     if (birthDateController.text.isNotEmpty) {
       try {
-        birthDate = DateFormat('dd/MM/yyyy').parseStrict(birthDateController.text);
+        birthDate = DateFormat(
+          'dd/MM/yyyy',
+        ).parseStrict(birthDateController.text);
         final now = DateTime.now();
         final today = DateTime(now.year, now.month, now.day);
-        
+
         if (birthDate.isAfter(today)) {
           setState(() {
             errorMessage = 'A data de nascimento não pode ser no futuro.';
@@ -96,13 +99,13 @@ class _CreateAccountComplementScreenState
           });
           return;
         }
-        
+
         int age = today.year - birthDate.year;
         if (today.month < birthDate.month ||
             (today.month == birthDate.month && today.day < birthDate.day)) {
           age--;
         }
-        
+
         if (age < 14) {
           setState(() {
             errorMessage = 'Você deve ter pelo menos 14 anos de idade.';
@@ -201,7 +204,11 @@ class _CreateAccountComplementScreenState
                       radius: 56,
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       backgroundImage: profileImagePath != null
-                          ? FileImage(File(profileImagePath!))
+                          ? (kIsWeb
+                                ? NetworkImage(profileImagePath!)
+                                      as ImageProvider
+                                : FileImage(File(profileImagePath!))
+                                      as ImageProvider)
                           : null,
                       child: profileImagePath == null
                           ? Icon(

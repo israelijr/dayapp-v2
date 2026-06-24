@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dayapp/l10n/generated/app_localizations.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -216,7 +217,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.error_outline, color: Colors.red.shade900, size: 18),
+                      Icon(
+                        Icons.error_outline,
+                        color: Colors.red.shade900,
+                        size: 18,
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -356,7 +361,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.error_outline, color: Colors.red.shade900, size: 18),
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.red.shade900,
+                          size: 18,
+                        ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -453,6 +462,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       pinProvider.isPickingExternalMedia = false;
 
       if (picked != null) {
+        if (kIsWeb) {
+          if (!mounted) return;
+          setState(() {
+            _pickedImagePath = picked.path;
+          });
+          return;
+        }
+
         final File tmpFile = File(picked.path);
         final oldPath = _pickedImagePath;
         final savedPath = await FileUtils.copyProfileImageToApp(tmpFile);
@@ -521,210 +538,216 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              Center(
-                child: Stack(
-                  children: [
-                    ProfileAvatarPicker(
-                      localImagePath: _selectedImagePath(context),
-                      networkImageUrl: _selectedNetworkImageUrl(context),
-                      onPickImage: _pickImage,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
-              TextFormField(
-                controller: _nameController,
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.fullName,
-                  labelStyle: GoogleFonts.plusJakartaSans(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return AppLocalizations.of(context)!.nameRequired;
-                  }
-                  if (value.trim().length < 2) {
-                    return AppLocalizations.of(context)!.nameMinLength;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.email,
-                  labelStyle: GoogleFonts.plusJakartaSans(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return AppLocalizations.of(context)!.emailRequired;
-                  }
-                  final emailRegex = RegExp(
-                    r'^[\w\-\.\+]+@([\w\-]+\.)+[\w\-]{2,}$',
-                  );
-                  if (!emailRegex.hasMatch(value.trim())) {
-                    return AppLocalizations.of(context)!.emailInvalid;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _birthDateController,
-                keyboardType: TextInputType.datetime,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(10),
-                  _BirthDateInputFormatter(),
-                ],
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.birthDate,
-                  labelStyle: GoogleFonts.plusJakartaSans(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                  hintText: AppLocalizations.of(context)!.birthDateFormat,
-                  hintStyle: GoogleFonts.plusJakartaSans(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.calendar_today),
-                    onPressed: () => _selectDate(context),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return null;
-                  }
-                  final birthDate = _parseBirthDate(value.trim());
-                  if (birthDate == null) {
-                    return AppLocalizations.of(context)!.invalidBirthDate;
-                  }
-
-                  final now = DateTime.now();
-                  final today = DateTime(now.year, now.month, now.day);
-                  if (birthDate.isAfter(today)) {
-                    return 'A data de nascimento não pode ser no futuro.';
-                  }
-
-                  int age = today.year - birthDate.year;
-                  if (today.month < birthDate.month ||
-                      (today.month == birthDate.month && today.day < birthDate.day)) {
-                    age--;
-                  }
-                  if (age < 14) {
-                    return 'Você deve ter pelo menos 14 anos de idade.';
-                  }
-
-                  return null;
-                },
-              ),
-              if (_errorMessage != null) ...[
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.red.shade300, width: 1.5),
-                  ),
-                  child: Row(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Center(
+                  child: Stack(
                     children: [
-                      Icon(Icons.error_outline, color: Colors.red.shade900),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          _errorMessage!,
-                          style: TextStyle(
-                            color: Colors.red.shade900,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
+                      ProfileAvatarPicker(
+                        localImagePath: _selectedImagePath(context),
+                        networkImageUrl: _selectedNetworkImageUrl(context),
+                        onPickImage: _pickImage,
                       ),
                     ],
                   ),
                 ),
-              ],
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: _isLoading ? null : _saveProfile,
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                const SizedBox(height: 32),
+                TextFormField(
+                  controller: _nameController,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(
-                          AppLocalizations.of(context)!.save,
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.fullName,
+                    labelStyle: GoogleFonts.plusJakartaSans(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return AppLocalizations.of(context)!.nameRequired;
+                    }
+                    if (value.trim().length < 2) {
+                      return AppLocalizations.of(context)!.nameMinLength;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.email,
+                    labelStyle: GoogleFonts.plusJakartaSans(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return AppLocalizations.of(context)!.emailRequired;
+                    }
+                    final emailRegex = RegExp(
+                      r'^[\w\-\.\+]+@([\w\-]+\.)+[\w\-]{2,}$',
+                    );
+                    if (!emailRegex.hasMatch(value.trim())) {
+                      return AppLocalizations.of(context)!.emailInvalid;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _birthDateController,
+                  keyboardType: TextInputType.datetime,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                    _BirthDateInputFormatter(),
+                  ],
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.birthDate,
+                    labelStyle: GoogleFonts.plusJakartaSans(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    hintText: AppLocalizations.of(context)!.birthDateFormat,
+                    hintStyle: GoogleFonts.plusJakartaSans(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.calendar_today),
+                      onPressed: () => _selectDate(context),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return null;
+                    }
+                    final birthDate = _parseBirthDate(value.trim());
+                    if (birthDate == null) {
+                      return AppLocalizations.of(context)!.invalidBirthDate;
+                    }
+
+                    final now = DateTime.now();
+                    final today = DateTime(now.year, now.month, now.day);
+                    if (birthDate.isAfter(today)) {
+                      return 'A data de nascimento não pode ser no futuro.';
+                    }
+
+                    int age = today.year - birthDate.year;
+                    if (today.month < birthDate.month ||
+                        (today.month == birthDate.month &&
+                            today.day < birthDate.day)) {
+                      age--;
+                    }
+                    if (age < 14) {
+                      return 'Você deve ter pelo menos 14 anos de idade.';
+                    }
+
+                    return null;
+                  },
+                ),
+                if (_errorMessage != null) ...[
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.red.shade300,
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.error_outline, color: Colors.red.shade900),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            _errorMessage!,
+                            style: TextStyle(
+                              color: Colors.red.shade900,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              const Divider(),
-              const SizedBox(height: 4),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.email_outlined),
-                  label: Text(
-                    AppLocalizations.of(context)!.changeEmail,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontWeight: FontWeight.w600,
+                      ],
                     ),
                   ),
-                  onPressed: _showChangeEmailDialog,
-                ),
-              ),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.lock_outline),
-                  label: Text(
-                    AppLocalizations.of(context)!.changePassword,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontWeight: FontWeight.w600,
+                ],
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: _isLoading ? null : _saveProfile,
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Text(
+                            AppLocalizations.of(context)!.save,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                   ),
-                  onPressed: _showChangePasswordDialog,
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                const Divider(),
+                const SizedBox(height: 4),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.email_outlined),
+                    label: Text(
+                      AppLocalizations.of(context)!.changeEmail,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    onPressed: _showChangeEmailDialog,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.lock_outline),
+                    label: Text(
+                      AppLocalizations.of(context)!.changePassword,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    onPressed: _showChangePasswordDialog,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

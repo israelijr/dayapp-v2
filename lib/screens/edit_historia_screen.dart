@@ -779,213 +779,133 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
           ),
           actions: const [],
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header: Date (expandida) e botão de calendário
-                    Row(
-                      children: [
-                        Text(
-                          dateFormat.format(selectedDate),
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.calendar_today, size: 20),
-                          onPressed: _pickDateTime,
-                          tooltip: loc.changeDateTooltip,
-                          padding: const EdgeInsets.all(4),
-                          constraints: const BoxConstraints(),
-                        ),
-                        const Spacer(flex: 1),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Title
-                    CustomTextField(
-                      controller: titleController,
-                      label: loc.storyTitleLabel,
-                      hintText: loc.storyTitleHint,
-                      style: GoogleFonts.notoSerif(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        height: 1.4,
-                      ),
-                      inputFormatters: [
-                        SentenceCapitalizationTextInputFormatter(),
-                      ],
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            loc.descriptionLabel,
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header: Date (expandida) e botão de calendário
+                      Row(
+                        children: [
+                          Text(
+                            dateFormat.format(selectedDate),
+                            style: theme.textTheme.labelLarge?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 34,
-                          height: 34,
-                          child: FloatingActionButton.small(
-                            heroTag: null,
-                            elevation: 1,
-                            backgroundColor:
-                                theme.colorScheme.surfaceContainerLow,
-                            foregroundColor: theme.colorScheme.onSurfaceVariant,
-                            tooltip: loc.expandTooltip,
-                            onPressed: _expandDescriptionEditor,
-                            child: const Icon(
-                              Icons.open_in_full_rounded,
-                              size: 16,
-                            ),
+                          IconButton(
+                            icon: const Icon(Icons.calendar_today, size: 20),
+                            onPressed: _pickDateTime,
+                            tooltip: loc.changeDateTooltip,
+                            padding: const EdgeInsets.all(4),
+                            constraints: const BoxConstraints(),
                           ),
+                          const Spacer(flex: 1),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Title
+                      CustomTextField(
+                        controller: titleController,
+                        label: loc.storyTitleLabel,
+                        hintText: loc.storyTitleHint,
+                        style: GoogleFonts.notoSerif(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          height: 1.4,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    RichTextEditorWidget(
-                      key: const Key('description_field'),
-                      controller: richTextController,
-                      hintText: loc.descriptionHint,
-                      textStyle: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        height: 1.5,
-                        color: theme.colorScheme.onSurface,
+                        inputFormatters: [
+                          SentenceCapitalizationTextInputFormatter(),
+                        ],
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
                       ),
-                      minLines: 8,
-                      maxLines: 15,
-                      showToolbar: true,
-                      onChanged: () {
-                        _checkForChanges();
-                      },
-                    ),
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                    // Tags
-                    Builder(
-                      builder: (context) {
-                        final auth = Provider.of<AuthProvider>(
-                          context,
-                          listen: false,
-                        );
-                        return TagInputWidget(
-                          userId: auth.user?.id ?? '',
-                          initialTags: _selectedTags,
-                          onTagsChanged: (tags) {
-                            setState(() {
-                              _selectedTags = tags;
-                              _checkForChanges();
-                            });
-                          },
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Humor (como você se sentiu)
-                    const SizedBox(height: 16),
-                    Text(
-                      loc.moodQuestion,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    MoodSelector(
-                      value: _selectedMood,
-                      onChanged: (v) => setState(() {
-                        _selectedMood = v;
-                        _checkForChanges();
-                      }),
-                    ),
-
-                    // Energia
-                    const SizedBox(height: 16),
-                    Text(
-                      loc.energyQuestion,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    EnergySelector(
-                      value: _selectedEnergy,
-                      onChanged: (v) => setState(() {
-                        _selectedEnergy = v;
-                        _checkForChanges();
-                      }),
-                    ),
-
-                    // Emoticon (agora abaixo do Archive Switch) - ocupa largura disponível
-                    if (selectedEmoticon != null) ...[
-                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 4.0),
-                              child: Chip(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 6,
-                                ),
-                                avatar: SizedBox(
-                                  width: 48,
-                                  height: 48,
-                                  child: Center(
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        _convertLegacyEmoticon(
-                                          selectedEmoticon!,
-                                        ),
-                                        style: const TextStyle(fontSize: 32),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                label: const SizedBox.shrink(),
-                                onDeleted: () {
-                                  setState(() {
-                                    selectedEmoticon = null;
-                                    selectedEmojiTranslation = null;
-                                    _checkForChanges();
-                                  });
-                                },
+                            child: Text(
+                              loc.descriptionLabel,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 34,
+                            height: 34,
+                            child: FloatingActionButton.small(
+                              heroTag: null,
+                              elevation: 1,
+                              backgroundColor:
+                                  theme.colorScheme.surfaceContainerLow,
+                              foregroundColor:
+                                  theme.colorScheme.onSurfaceVariant,
+                              tooltip: loc.expandTooltip,
+                              onPressed: _expandDescriptionEditor,
+                              child: const Icon(
+                                Icons.open_in_full_rounded,
+                                size: 16,
                               ),
                             ),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 8),
+                      RichTextEditorWidget(
+                        key: const Key('description_field'),
+                        controller: richTextController,
+                        hintText: loc.descriptionHint,
+                        textStyle: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          height: 1.5,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                        minLines: 8,
+                        maxLines: 15,
+                        showToolbar: true,
+                        onChanged: () {
+                          _checkForChanges();
+                        },
+                      ),
                       const SizedBox(height: 16),
-                    ],
 
-                    // Media Previews
-                    if (fotos.isNotEmpty) ...[
+                      // Tags
+                      Builder(
+                        builder: (context) {
+                          final auth = Provider.of<AuthProvider>(
+                            context,
+                            listen: false,
+                          );
+                          return TagInputWidget(
+                            userId: auth.user?.id ?? '',
+                            initialTags: _selectedTags,
+                            onTagsChanged: (tags) {
+                              setState(() {
+                                _selectedTags = tags;
+                                _checkForChanges();
+                              });
+                            },
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Humor (como você se sentiu)
+                      const SizedBox(height: 16),
                       Text(
-                        'Fotos',
+                        loc.moodQuestion,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -993,133 +913,221 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      SizedBox(
-                        height: 100,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: fotos.length,
-                          separatorBuilder: (_, _) => const SizedBox(width: 8),
-                          itemBuilder: (context, i) {
-                            return Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.memory(
-                                    fotos[i],
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
+                      MoodSelector(
+                        value: _selectedMood,
+                        onChanged: (v) => setState(() {
+                          _selectedMood = v;
+                          _checkForChanges();
+                        }),
+                      ),
+
+                      // Energia
+                      const SizedBox(height: 16),
+                      Text(
+                        loc.energyQuestion,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      EnergySelector(
+                        value: _selectedEnergy,
+                        onChanged: (v) => setState(() {
+                          _selectedEnergy = v;
+                          _checkForChanges();
+                        }),
+                      ),
+
+                      // Emoticon (agora abaixo do Archive Switch) - ocupa largura disponível
+                      if (selectedEmoticon != null) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: Chip(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 6,
                                   ),
-                                ),
-                                Positioned(
-                                  top: 2,
-                                  right: 2,
-                                  child: IconButton.filled(
-                                    onPressed: () async => await removeFoto(i),
-                                    icon: const Icon(Icons.close, size: 14),
-                                    style: IconButton.styleFrom(
-                                      minimumSize: const Size(24, 24),
-                                      padding: EdgeInsets.zero,
+                                  avatar: SizedBox(
+                                    width: 48,
+                                    height: 48,
+                                    child: Center(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          _convertLegacyEmoticon(
+                                            selectedEmoticon!,
+                                          ),
+                                          style: const TextStyle(fontSize: 32),
+                                        ),
+                                      ),
                                     ),
                                   ),
+                                  label: const SizedBox.shrink(),
+                                  onDeleted: () {
+                                    setState(() {
+                                      selectedEmoticon = null;
+                                      selectedEmojiTranslation = null;
+                                      _checkForChanges();
+                                    });
+                                  },
                                 ),
-                              ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Media Previews
+                      if (fotos.isNotEmpty) ...[
+                        Text(
+                          'Fotos',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          height: 100,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: fotos.length,
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(width: 8),
+                            itemBuilder: (context, i) {
+                              return Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.memory(
+                                      fotos[i],
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 2,
+                                    right: 2,
+                                    child: IconButton.filled(
+                                      onPressed: () async =>
+                                          await removeFoto(i),
+                                      icon: const Icon(Icons.close, size: 14),
+                                      style: IconButton.styleFrom(
+                                        minimumSize: const Size(24, 24),
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      if (audios.isNotEmpty) ...[
+                        Text(
+                          'Áudios',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: audios.asMap().entries.map((entry) {
+                            return CompactAudioIcon(
+                              audioData: entry.value['audio'],
+                              duration: entry.value['duration'],
+                              onDelete: () => _removeAudio(entry.key),
                             );
-                          },
+                          }).toList(),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
+                        const SizedBox(height: 16),
+                      ],
 
-                    if (audios.isNotEmpty) ...[
-                      Text(
-                        'Áudios',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface,
+                      if (videos.isNotEmpty) ...[
+                        Text(
+                          'Vídeos',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onSurface,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: audios.asMap().entries.map((entry) {
-                          return CompactAudioIcon(
-                            audioData: entry.value['audio'],
-                            duration: entry.value['duration'],
-                            onDelete: () => _removeAudio(entry.key),
-                          );
-                        }).toList(),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-
-                    if (videos.isNotEmpty) ...[
-                      Text(
-                        'Vídeos',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface,
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: videos.asMap().entries.map((entry) {
+                            return CompactVideoIcon(
+                              videoData: entry.value['video'],
+                              videoPath: entry.value['videoPath'],
+                              thumbnail: entry.value['thumbnail'],
+                              duration: entry.value['duration'],
+                              onDelete: () => _removeVideo(entry.key),
+                            );
+                          }).toList(),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: videos.asMap().entries.map((entry) {
-                          return CompactVideoIcon(
-                            videoData: entry.value['video'],
-                            videoPath: entry.value['videoPath'],
-                            thumbnail: entry.value['thumbnail'],
-                            duration: entry.value['duration'],
-                            onDelete: () => _removeVideo(entry.key),
-                          );
-                        }).toList(),
-                      ),
+                        const SizedBox(height: 16),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            ),
-
-            // Main Toolbar (photos, videos, audio, emoji)
-            EntryToolbar(
-              onPickPhoto: _pickImage,
-              onPickVideo: _pickVideo,
-              onRecordAudio: _recordAudio,
-              onSelectEmoji: _selectEmoji,
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
-                border: Border.all(
-                  color: theme.colorScheme.outlineVariant,
-                  width: 1,
+                // Main Toolbar (photos, videos, audio, emoji)
+                EntryToolbar(
+                  onPickPhoto: _pickImage,
+                  onPickVideo: _pickVideo,
+                  onRecordAudio: _recordAudio,
+                  onSelectEmoji: _selectEmoji,
                 ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: _handleCancel,
-                      child: Text(loc.cancel),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    border: Border.all(
+                      color: theme.colorScheme.outlineVariant,
+                      width: 1,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: _isFormValid ? _save : null,
-                      child: Text(loc.save),
-                    ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: _handleCancel,
+                          child: Text(loc.cancel),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: _isFormValid ? _save : null,
+                          child: Text(loc.save),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
