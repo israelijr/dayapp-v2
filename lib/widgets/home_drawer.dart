@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -89,7 +86,6 @@ class HomeDrawer extends StatelessWidget {
                 UserProfileAvatar(
                   fotoPerfil: user?.fotoPerfil,
                   radius: 24,
-                  onTap: () => _showProfileDialog(context, user?.fotoPerfil),
                 ),
               ],
             ),
@@ -185,88 +181,6 @@ class HomeDrawer extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showProfileDialog(BuildContext context, String? fotoPerfil) {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        Widget imageWidget;
-        if (fotoPerfil != null && fotoPerfil.isNotEmpty) {
-          if (fotoPerfil.startsWith('http')) {
-            imageWidget = Image.network(
-              fotoPerfil,
-              fit: BoxFit.contain,
-              errorBuilder: (_, _, _) {
-                return Image.asset(
-                  'assets/image/icon.png',
-                  fit: BoxFit.contain,
-                );
-              },
-            );
-          } else {
-            imageWidget = kIsWeb
-                ? Image.network(
-                    fotoPerfil,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, _, _) {
-                      return Image.asset(
-                        'assets/image/icon.png',
-                        fit: BoxFit.contain,
-                      );
-                    },
-                  )
-                : Image.file(
-                    File(fotoPerfil),
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, _, _) {
-                      return Image.asset(
-                        'assets/image/icon.png',
-                        fit: BoxFit.contain,
-                      );
-                    },
-                  );
-          }
-        } else {
-          imageWidget = Image.asset(
-            'assets/image/icon.png',
-            fit: BoxFit.contain,
-          );
-        }
-
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Stack(
-            children: [
-              Center(
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.9,
-                    maxHeight: MediaQuery.of(context).size.height * 0.9,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: imageWidget,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 10,
-                right: 10,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    size: 30,
-                  ),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

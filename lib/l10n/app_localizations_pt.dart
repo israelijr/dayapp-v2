@@ -2660,6 +2660,143 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get chapterExportNoPhotoOption => 'Sem foto';
+
+  @override
+  String get resendCode => 'Reenviar código';
+
+  @override
+  String codeExpiresMinutes(int count) {
+    return 'Código expira em $count minutos';
+  }
+
+  @override
+  String get codeLabel => 'Código';
+
+  @override
+  String get informRegisteredEmail => 'Informe seu e-mail cadastrado';
+
+  @override
+  String get newPasswordMinLengthLabel => 'Nova senha (mínimo 6 caracteres)';
+
+  @override
+  String get confirmNewPasswordLabel => 'Confirmar nova senha';
+
+  @override
+  String get informYourEmailTitle => 'Informe seu e-mail';
+
+  @override
+  String get enterCodeTitle => 'Digite o código';
+
+  @override
+  String get newPasswordTitle => 'Nova senha';
+
+  @override
+  String get emailStepSubtitle =>
+      'Enviaremos um código de recuperação para o e-mail cadastrado na sua conta.';
+
+  @override
+  String get codeStepSubtitle =>
+      'Insira o código de 6 dígitos que foi enviado para o seu e-mail.';
+
+  @override
+  String get passwordStepSubtitle =>
+      'Defina uma nova senha segura para sua conta.';
+
+  @override
+  String get sendCodeButtonLabel => 'Enviar código';
+
+  @override
+  String get verifyCodeButtonLabel => 'Verificar código';
+
+  @override
+  String get resetPasswordButtonLabel => 'Redefinir senha';
+
+  @override
+  String get birthDateCannotBeFuture =>
+      'A data de nascimento não pode ser no futuro.';
+
+  @override
+  String get birthDateMinAge => 'Você deve ter pelo menos 14 anos de idade.';
+
+  @override
+  String get successAudioAdded => 'Áudio adicionado com sucesso!';
+
+  @override
+  String get photoDeleted => 'Foto excluída';
+
+  @override
+  String get videoSavedSuccess => 'Vídeo salvo com sucesso';
+
+  @override
+  String get videoPlaybackNotAvailableWindows =>
+      'Reprodução de vídeo não disponível no Windows';
+
+  @override
+  String get supportEmailSubjectLogin => 'Suporte DayApp - Login';
+
+  @override
+  String get supportEmailBodyLogin =>
+      'Olá, preciso de ajuda com o login no DayApp...';
+
+  @override
+  String successAudiosAdded(int count) {
+    return '$count áudios adicionados com sucesso!';
+  }
+
+  @override
+  String sizeLabel(String size) {
+    return 'Tamanho: $size MB';
+  }
+
+  @override
+  String durationLabel(String duration) {
+    return 'Duração: $duration';
+  }
+
+  @override
+  String get editDoubleTapHint => 'Editar - 2 toques';
+
+  @override
+  String deleteGroupWarningText(String groupName) {
+    return 'Deseja excluir o grupo \"$groupName\"? As histórias deste grupo não serão excluídas, apenas removidas del grupo.';
+  }
+
+  @override
+  String createdOn(String date) {
+    return 'Criado em $date';
+  }
+
+  @override
+  String get editorPlaceholder => 'Digite aqui...';
+
+  @override
+  String get aboutFlutterDesc =>
+      'Framework para desenvolvimento multiplataforma';
+
+  @override
+  String get aboutDartDesc => 'Linguagem de programação moderna e eficiente';
+
+  @override
+  String get aboutSqliteDesc => 'Banco de dados local robusto e confiável';
+
+  @override
+  String get aboutProviderDesc => 'Gerenciamento de estado reativo';
+
+  @override
+  String get aboutMaterial3Title => 'Material Design 3';
+
+  @override
+  String get aboutMaterial3Desc => 'Design system moderno e acessível';
+
+  @override
+  String get aboutScreenTechnologiesTitle => 'Tecnologias';
+
+  @override
+  String get insightMood7Days => 'Humor — 7 Dias';
+
+  @override
+  String get insightMoodVariationThisWeek =>
+      'Sua variação de humor essa semana';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

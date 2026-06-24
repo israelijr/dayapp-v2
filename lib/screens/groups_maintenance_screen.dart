@@ -167,7 +167,7 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context)!.deleteGroupTitle),
         content: Text(
-          'Deseja excluir o grupo "${grupo.nome}"? As histórias deste grupo não serão excluídas, apenas removidas do grupo.',
+          AppLocalizations.of(context)!.deleteGroupWarningText(grupo.nome),
         ),
         actions: [
           TextButton(
@@ -333,7 +333,7 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                             ),
                           ),
                           subtitle: Text(
-                            'Criado em ${grupo.dataCriacao?.toLocal().toString().split(' ')[0] ?? ''}',
+                            AppLocalizations.of(context)!.createdOn(grupo.dataCriacao?.toLocal().toString().split(' ')[0] ?? ''),
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                                   color: Theme.of(

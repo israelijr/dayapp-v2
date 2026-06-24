@@ -1,3 +1,4 @@
 Always respond in Portuguese.
 Don't agree with me on everything. Analyze the project and propose better solutions.
 Sempre que a versão do app no 'pubspec.yaml' mudar, lembre-se de atualizar também a versão e o build correspondentes nos valores padrão da tela Sobre ('lib/screens/about_screen.dart').
+Sempre realize a localização (i18n) de todos os textos de interface (UI) e mensagens do usuário. Evite usar strings literais (hardcoded) nas telas e widgets; mapeie-as sempre nos arquivos de tradução ARB (em 'lib/l10n/') e utilize 'AppLocalizations' para acessá-las.

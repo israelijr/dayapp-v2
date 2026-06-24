@@ -2556,5 +2556,87 @@
   "chapterExportNoPhotoOption": "No photo",
   "@chapterExportNoPhotoOption": {
     "description": "Option label for exporting a story without any photo"
-  }
+  },
+  "resendCode": "Resend code",
+  "codeExpiresMinutes": "Code expires in {count} minutes",
+  "@codeExpiresMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backToStart": "Back to start",
+  "codeLabel": "Code",
+  "informRegisteredEmail": "Enter your registered email",
+  "newPasswordMinLengthLabel": "New password (minimum 6 characters)",
+  "confirmNewPasswordLabel": "Confirm new password",
+  "informYourEmailTitle": "Enter your email",
+  "enterCodeTitle": "Enter code",
+  "newPasswordTitle": "New password",
+  "emailStepSubtitle": "We will send a recovery code to the email registered in your account.",
+  "codeStepSubtitle": "Enter the 6-digit code that was sent to your email.",
+  "passwordStepSubtitle": "Set a secure new password for your account.",
+  "sendCodeButtonLabel": "Send code",
+  "verifyCodeButtonLabel": "Verify code",
+  "resetPasswordButtonLabel": "Reset password",
+  "birthDateCannotBeFuture": "Birth date cannot be in the future.",
+  "birthDateMinAge": "You must be at least 14 years old.",
+  "successAudioAdded": "Audio added successfully!",
+  "photoDeleted": "Photo deleted",
+  "videoSavedSuccess": "Video saved successfully",
+  "videoPlaybackNotAvailableWindows": "Video playback not available on Windows",
+  "supportEmailSubjectLogin": "DayApp Support - Login",
+  "supportEmailBodyLogin": "Hello, I need help with logging into DayApp...",
+  "successAudiosAdded": "{count} audios added successfully!",
+  "@successAudiosAdded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sizeLabel": "Size: {size} MB",
+  "@sizeLabel": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "durationLabel": "Duration: {duration}",
+  "@durationLabel": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "editDoubleTapHint": "Edit - 2 taps",
+  "deleteGroupWarningText": "Do you want to delete the group \"{groupName}\"? Stories in this group will not be deleted, only removed from the group.",
+  "@deleteGroupWarningText": {
+    "placeholders": {
+      "groupName": {
+        "type": "String"
+      }
+    }
+  },
+  "createdOn": "Created on {date}",
+  "@createdOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "editorPlaceholder": "Type here...",
+  "aboutFlutterDesc": "Framework for multiplatform development",
+  "aboutDartDesc": "Modern and efficient programming language",
+  "aboutSqliteDesc": "Robust and reliable local database",
+  "aboutProviderDesc": "Reactive state management",
+  "aboutMaterial3Title": "Material Design 3",
+  "aboutMaterial3Desc": "Modern and accessible design system",
+  "aboutScreenTechnologiesTitle": "Technologies",
+  "insightMood7Days": "Mood — Last 7 Days",
+  "insightMoodVariationThisWeek": "Your mood variation this week"
 }

@@ -1,3 +1,4 @@
+import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import '../helpers/rich_text_helper.dart';
@@ -61,19 +62,50 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
     super.initState();
     // Adiciona listener para detectar mudanças
     widget.controller.addListener(_onTextChanged);
+    // Adiciona listener de foco para rolar a tela quando o teclado abrir
+    _focusNode.addListener(_onFocusChanged);
   }
 
   @override
   void dispose() {
     widget.controller.removeListener(_onTextChanged);
+    _focusNode.removeListener(_onFocusChanged);
     _focusNode.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
+  void _onFocusChanged() {
+    if (_focusNode.hasFocus && mounted) {
+      // Pequeno atraso para dar tempo ao teclado abrir e redimensionar a tela
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (_focusNode.context != null && mounted) {
+          Scrollable.ensureVisible(
+            _focusNode.context!,
+            duration: const Duration(milliseconds: 200),
+            alignment: 0.8, // 80% do topo da tela (mantém o campo acima do teclado)
+          );
+        }
+      });
+    }
+  }
+
   void _onTextChanged() {
     if (widget.onChanged != null) {
       widget.onChanged!();
+    }
+
+    // Se o usuário está digitando ativamente, garante que o cursor/campo permaneça visível
+    if (_focusNode.hasFocus && mounted) {
+      Future.delayed(const Duration(milliseconds: 50), () {
+        if (_focusNode.context != null && mounted) {
+          Scrollable.ensureVisible(
+            _focusNode.context!,
+            duration: const Duration(milliseconds: 150),
+            alignment: 0.8,
+          );
+        }
+      });
     }
   }
 
@@ -131,7 +163,7 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
         focusNode: _focusNode,
         scrollController: _scrollController,
         config: QuillEditorConfig(
-          placeholder: widget.hintText ?? 'Digite aqui...',
+          placeholder: widget.hintText ?? AppLocalizations.of(context)!.editorPlaceholder,
           padding: const EdgeInsets.all(12),
           customStyles: customStyles,
         ),

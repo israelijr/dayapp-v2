@@ -2644,4 +2644,138 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chapterExportNoPhotoOption => 'No photo';
+
+  @override
+  String get resendCode => 'Resend code';
+
+  @override
+  String codeExpiresMinutes(int count) {
+    return 'Code expires in $count minutes';
+  }
+
+  @override
+  String get codeLabel => 'Code';
+
+  @override
+  String get informRegisteredEmail => 'Enter your registered email';
+
+  @override
+  String get newPasswordMinLengthLabel => 'New password (minimum 6 characters)';
+
+  @override
+  String get confirmNewPasswordLabel => 'Confirm new password';
+
+  @override
+  String get informYourEmailTitle => 'Enter your email';
+
+  @override
+  String get enterCodeTitle => 'Enter code';
+
+  @override
+  String get newPasswordTitle => 'New password';
+
+  @override
+  String get emailStepSubtitle =>
+      'We will send a recovery code to the email registered in your account.';
+
+  @override
+  String get codeStepSubtitle =>
+      'Enter the 6-digit code that was sent to your email.';
+
+  @override
+  String get passwordStepSubtitle =>
+      'Set a secure new password for your account.';
+
+  @override
+  String get sendCodeButtonLabel => 'Send code';
+
+  @override
+  String get verifyCodeButtonLabel => 'Verify code';
+
+  @override
+  String get resetPasswordButtonLabel => 'Reset password';
+
+  @override
+  String get birthDateCannotBeFuture => 'Birth date cannot be in the future.';
+
+  @override
+  String get birthDateMinAge => 'You must be at least 14 years old.';
+
+  @override
+  String get successAudioAdded => 'Audio added successfully!';
+
+  @override
+  String get photoDeleted => 'Photo deleted';
+
+  @override
+  String get videoSavedSuccess => 'Video saved successfully';
+
+  @override
+  String get videoPlaybackNotAvailableWindows =>
+      'Video playback not available on Windows';
+
+  @override
+  String get supportEmailSubjectLogin => 'DayApp Support - Login';
+
+  @override
+  String get supportEmailBodyLogin =>
+      'Hello, I need help with logging into DayApp...';
+
+  @override
+  String successAudiosAdded(int count) {
+    return '$count audios added successfully!';
+  }
+
+  @override
+  String sizeLabel(String size) {
+    return 'Size: $size MB';
+  }
+
+  @override
+  String durationLabel(String duration) {
+    return 'Duration: $duration';
+  }
+
+  @override
+  String get editDoubleTapHint => 'Edit - 2 taps';
+
+  @override
+  String deleteGroupWarningText(String groupName) {
+    return 'Do you want to delete the group \"$groupName\"? Stories in this group will not be deleted, only removed from the group.';
+  }
+
+  @override
+  String createdOn(String date) {
+    return 'Created on $date';
+  }
+
+  @override
+  String get editorPlaceholder => 'Type here...';
+
+  @override
+  String get aboutFlutterDesc => 'Framework for multiplatform development';
+
+  @override
+  String get aboutDartDesc => 'Modern and efficient programming language';
+
+  @override
+  String get aboutSqliteDesc => 'Robust and reliable local database';
+
+  @override
+  String get aboutProviderDesc => 'Reactive state management';
+
+  @override
+  String get aboutMaterial3Title => 'Material Design 3';
+
+  @override
+  String get aboutMaterial3Desc => 'Modern and accessible design system';
+
+  @override
+  String get aboutScreenTechnologiesTitle => 'Technologies';
+
+  @override
+  String get insightMood7Days => 'Mood — Last 7 Days';
+
+  @override
+  String get insightMoodVariationThisWeek => 'Your mood variation this week';
 }

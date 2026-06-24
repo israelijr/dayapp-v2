@@ -125,7 +125,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (birthDate.isAfter(today)) {
         setState(() {
           _isLoading = false;
-          _errorMessage = 'A data de nascimento não pode ser no futuro.';
+          _errorMessage = AppLocalizations.of(context)!.birthDateCannotBeFuture;
         });
         return;
       }
@@ -138,7 +138,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (age < 14) {
         setState(() {
           _isLoading = false;
-          _errorMessage = 'Você deve ter pelo menos 14 anos de idade.';
+          _errorMessage = AppLocalizations.of(context)!.birthDateMinAge;
         });
         return;
       }
@@ -647,7 +647,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     final now = DateTime.now();
                     final today = DateTime(now.year, now.month, now.day);
                     if (birthDate.isAfter(today)) {
-                      return 'A data de nascimento não pode ser no futuro.';
+                      return AppLocalizations.of(context)!.birthDateCannotBeFuture;
                     }
 
                     int age = today.year - birthDate.year;
@@ -657,7 +657,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       age--;
                     }
                     if (age < 14) {
-                      return 'Você deve ter pelo menos 14 anos de idade.';
+                      return AppLocalizations.of(context)!.birthDateMinAge;
                     }
 
                     return null;

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
 import '../services/password_recovery_service.dart';
-import '../services/pin_recovery_service.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/custom_text_field.dart';
 
@@ -29,7 +28,6 @@ class PasswordRecoveryScreen extends StatefulWidget {
 
 class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   final PasswordRecoveryService _recoveryService = PasswordRecoveryService();
-  final PinRecoveryService _pinRecoveryService = PinRecoveryService();
 
   final emailController = TextEditingController();
   final codeController = TextEditingController();
@@ -49,17 +47,6 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   @override
   void initState() {
     super.initState();
-    _loadRecoveryEmail();
-  }
-
-  /// Carrega o email de recuperação cadastrado (se existir)
-  Future<void> _loadRecoveryEmail() async {
-    final email = await _pinRecoveryService.getUserEmail();
-    if (email != null && email.isNotEmpty && mounted) {
-      setState(() {
-        emailController.text = email;
-      });
-    }
   }
 
   @override
@@ -428,7 +415,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                   TextButton(
                     onPressed: loading ? null : _resendCode,
                     child: Text(
-                      'Reenviar código',
+                      AppLocalizations.of(context)!.resendCode,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onPrimary,
                         decoration: TextDecoration.underline,
@@ -442,7 +429,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                         return Padding(
                           padding: const EdgeInsets.only(top: 4),
                           child: Text(
-                            'Código expira em ${snapshot.data} minutos',
+                            AppLocalizations.of(context)!.codeExpiresMinutes(snapshot.data!),
                             style: TextStyle(
                               color: Theme.of(
                                 context,
@@ -473,7 +460,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                             });
                           },
                     child: Text(
-                      'Voltar ao início',
+                      AppLocalizations.of(context)!.backToStart,
                       style: TextStyle(
                         color: Theme.of(
                           context,
@@ -496,11 +483,11 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildStepDot(0, 'E-mail'),
+        _buildStepDot(0, AppLocalizations.of(context)!.email),
         _buildStepLine(0),
-        _buildStepDot(1, 'Código'),
+        _buildStepDot(1, AppLocalizations.of(context)!.codeLabel),
         _buildStepLine(1),
-        _buildStepDot(2, 'Senha'),
+        _buildStepDot(2, AppLocalizations.of(context)!.password),
       ],
     );
   }
@@ -596,7 +583,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   /// Etapa 0: Campo de e-mail
   Widget _buildEmailStep() {
     return CustomTextField(
-      label: 'Informe seu e-mail cadastrado',
+      label: AppLocalizations.of(context)!.informRegisteredEmail,
       controller: emailController,
       keyboardType: TextInputType.emailAddress,
     );
@@ -606,19 +593,9 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   Widget _buildCodeStep() {
     return Column(
       children: [
-        Text(
-          'E-mail: ${emailController.text.trim()}',
-          style: TextStyle(
-            color: Theme.of(
-              context,
-            ).colorScheme.onSurface.withValues(alpha: 0.7),
-            fontSize: 13,
-          ),
-        ),
-        const SizedBox(height: 8),
         CustomTextField(
           controller: codeController,
-          label: 'Código de recuperação (6 dígitos)',
+          label: AppLocalizations.of(context)!.recoveryCodeLabel,
           prefixIcon: const Icon(Icons.lock_outline),
           keyboardType: TextInputType.number,
           maxLength: 6,
@@ -639,7 +616,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
     return Column(
       children: [
         CustomTextField(
-          label: 'Nova senha (mínimo 6 caracteres)',
+          label: AppLocalizations.of(context)!.newPasswordMinLengthLabel,
           controller: newPasswordController,
           obscureText: obscureNewPassword,
           suffixIcon: IconButton(
@@ -651,7 +628,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
           ),
         ),
         CustomTextField(
-          label: 'Confirmar nova senha',
+          label: AppLocalizations.of(context)!.confirmNewPasswordLabel,
           controller: confirmPasswordController,
           obscureText: obscureConfirmPassword,
           suffixIcon: IconButton(
@@ -671,11 +648,11 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   String _getStepTitle() {
     switch (currentStep) {
       case 0:
-        return 'Informe seu e-mail';
+        return AppLocalizations.of(context)!.informYourEmailTitle;
       case 1:
-        return 'Digite o código';
+        return AppLocalizations.of(context)!.enterCodeTitle;
       case 2:
-        return 'Nova senha';
+        return AppLocalizations.of(context)!.newPasswordTitle;
       default:
         return '';
     }
@@ -685,11 +662,11 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   String _getStepSubtitle() {
     switch (currentStep) {
       case 0:
-        return 'Enviaremos um código de recuperação para o e-mail cadastrado na sua conta.';
+        return AppLocalizations.of(context)!.emailStepSubtitle;
       case 1:
-        return 'Insira o código de 6 dígitos que foi enviado para o seu e-mail.';
+        return AppLocalizations.of(context)!.codeStepSubtitle;
       case 2:
-        return 'Defina uma nova senha segura para sua conta.';
+        return AppLocalizations.of(context)!.passwordStepSubtitle;
       default:
         return '';
     }
@@ -699,11 +676,11 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   String _getStepButtonLabel() {
     switch (currentStep) {
       case 0:
-        return 'Enviar código';
+        return AppLocalizations.of(context)!.sendCodeButtonLabel;
       case 1:
-        return 'Verificar código';
+        return AppLocalizations.of(context)!.verifyCodeButtonLabel;
       case 2:
-        return 'Redefinir senha';
+        return AppLocalizations.of(context)!.resetPasswordButtonLabel;
       default:
         return '';
     }

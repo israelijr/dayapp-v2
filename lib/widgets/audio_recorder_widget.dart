@@ -441,8 +441,8 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
         SnackBar(
           content: Text(
             audioDataList.length == 1
-                ? 'Áudio adicionado com sucesso!'
-                : '${audioDataList.length} áudios adicionados com sucesso!',
+                ? AppLocalizations.of(context)!.successAudioAdded
+                : AppLocalizations.of(context)!.successAudiosAdded(audioDataList.length),
           ),
         ),
       );

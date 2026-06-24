@@ -4789,6 +4789,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No photo'**
   String get chapterExportNoPhotoOption;
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get resendCode;
+
+  /// No description provided for @codeExpiresMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Code expires in {count} minutes'**
+  String codeExpiresMinutes(int count);
+
+  /// No description provided for @codeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get codeLabel;
+
+  /// No description provided for @informRegisteredEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your registered email'**
+  String get informRegisteredEmail;
+
+  /// No description provided for @newPasswordMinLengthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New password (minimum 6 characters)'**
+  String get newPasswordMinLengthLabel;
+
+  /// No description provided for @confirmNewPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new password'**
+  String get confirmNewPasswordLabel;
+
+  /// No description provided for @informYourEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get informYourEmailTitle;
+
+  /// No description provided for @enterCodeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter code'**
+  String get enterCodeTitle;
+
+  /// No description provided for @newPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get newPasswordTitle;
+
+  /// No description provided for @emailStepSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We will send a recovery code to the email registered in your account.'**
+  String get emailStepSubtitle;
+
+  /// No description provided for @codeStepSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code that was sent to your email.'**
+  String get codeStepSubtitle;
+
+  /// No description provided for @passwordStepSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a secure new password for your account.'**
+  String get passwordStepSubtitle;
+
+  /// No description provided for @sendCodeButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Send code'**
+  String get sendCodeButtonLabel;
+
+  /// No description provided for @verifyCodeButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify code'**
+  String get verifyCodeButtonLabel;
+
+  /// No description provided for @resetPasswordButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get resetPasswordButtonLabel;
+
+  /// No description provided for @birthDateCannotBeFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth date cannot be in the future.'**
+  String get birthDateCannotBeFuture;
+
+  /// No description provided for @birthDateMinAge.
+  ///
+  /// In en, this message translates to:
+  /// **'You must be at least 14 years old.'**
+  String get birthDateMinAge;
+
+  /// No description provided for @successAudioAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio added successfully!'**
+  String get successAudioAdded;
+
+  /// No description provided for @photoDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo deleted'**
+  String get photoDeleted;
+
+  /// No description provided for @videoSavedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Video saved successfully'**
+  String get videoSavedSuccess;
+
+  /// No description provided for @videoPlaybackNotAvailableWindows.
+  ///
+  /// In en, this message translates to:
+  /// **'Video playback not available on Windows'**
+  String get videoPlaybackNotAvailableWindows;
+
+  /// No description provided for @supportEmailSubjectLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'DayApp Support - Login'**
+  String get supportEmailSubjectLogin;
+
+  /// No description provided for @supportEmailBodyLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, I need help with logging into DayApp...'**
+  String get supportEmailBodyLogin;
+
+  /// No description provided for @successAudiosAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} audios added successfully!'**
+  String successAudiosAdded(int count);
+
+  /// No description provided for @sizeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Size: {size} MB'**
+  String sizeLabel(String size);
+
+  /// No description provided for @durationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration: {duration}'**
+  String durationLabel(String duration);
+
+  /// No description provided for @editDoubleTapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit - 2 taps'**
+  String get editDoubleTapHint;
+
+  /// No description provided for @deleteGroupWarningText.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to delete the group \"{groupName}\"? Stories in this group will not be deleted, only removed from the group.'**
+  String deleteGroupWarningText(String groupName);
+
+  /// No description provided for @createdOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Created on {date}'**
+  String createdOn(String date);
+
+  /// No description provided for @editorPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Type here...'**
+  String get editorPlaceholder;
+
+  /// No description provided for @aboutFlutterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Framework for multiplatform development'**
+  String get aboutFlutterDesc;
+
+  /// No description provided for @aboutDartDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Modern and efficient programming language'**
+  String get aboutDartDesc;
+
+  /// No description provided for @aboutSqliteDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Robust and reliable local database'**
+  String get aboutSqliteDesc;
+
+  /// No description provided for @aboutProviderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reactive state management'**
+  String get aboutProviderDesc;
+
+  /// No description provided for @aboutMaterial3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Material Design 3'**
+  String get aboutMaterial3Title;
+
+  /// No description provided for @aboutMaterial3Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Modern and accessible design system'**
+  String get aboutMaterial3Desc;
+
+  /// No description provided for @aboutScreenTechnologiesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Technologies'**
+  String get aboutScreenTechnologiesTitle;
+
+  /// No description provided for @insightMood7Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood — Last 7 Days'**
+  String get insightMood7Days;
+
+  /// No description provided for @insightMoodVariationThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Your mood variation this week'**
+  String get insightMoodVariationThisWeek;
 }
 
 class _AppLocalizationsDelegate

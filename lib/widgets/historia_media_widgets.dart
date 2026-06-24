@@ -500,9 +500,9 @@ class HistoriaFotosGrid extends StatelessWidget {
                                     messengerRef.hideCurrentSnackBar();
                                     messengerRef.showSnackBar(
                                       SnackBar(
-                                        content: const Text('Foto excluída'),
+                                        content: Text(loc.photoDeleted),
                                         action: SnackBarAction(
-                                          label: 'Desfazer',
+                                          label: loc.undo,
                                           onPressed: () async {
                                             await HistoriaFotoHelper()
                                                 .insertFotoFromBytes(

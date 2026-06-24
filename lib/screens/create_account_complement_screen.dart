@@ -94,7 +94,7 @@ class _CreateAccountComplementScreenState
 
         if (birthDate.isAfter(today)) {
           setState(() {
-            errorMessage = 'A data de nascimento não pode ser no futuro.';
+            errorMessage = l10n.birthDateCannotBeFuture;
             loading = false;
           });
           return;
@@ -108,7 +108,7 @@ class _CreateAccountComplementScreenState
 
         if (age < 14) {
           setState(() {
-            errorMessage = 'Você deve ter pelo menos 14 anos de idade.';
+            errorMessage = l10n.birthDateMinAge;
             loading = false;
           });
           return;

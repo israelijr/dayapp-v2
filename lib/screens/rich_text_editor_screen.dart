@@ -380,7 +380,7 @@ class _RichTextEditorBodyState extends State<_RichTextEditorBody> {
       showToolbar: true,
       minLines: 10,
       maxLines: null,
-      hintText: 'Digite aqui...',
+      hintText: AppLocalizations.of(context)!.editorPlaceholder,
       expand: true, // Expande para ocupar todo o espaço disponível na tela
     );
   }

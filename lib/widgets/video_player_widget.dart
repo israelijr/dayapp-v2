@@ -284,7 +284,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Vídeo salvo com sucesso',
+            AppLocalizations.of(context)!.videoSavedSuccess,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurface,
               fontSize: 16,
@@ -296,7 +296,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             future: _getVideoSize(),
             builder: (context, snapshot) {
               return Text(
-                'Tamanho: ${snapshot.data ?? "..."} MB',
+                AppLocalizations.of(context)!.sizeLabel(snapshot.data ?? '...'),
                 style: TextStyle(
                   color: Theme.of(
                     context,
@@ -309,7 +309,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           if (widget.duration != null) ...[
             const SizedBox(height: 4),
             Text(
-              'Duração: ${_formatDuration(Duration(seconds: widget.duration!))}',
+              AppLocalizations.of(context)!.durationLabel(_formatDuration(Duration(seconds: widget.duration!))),
               style: TextStyle(
                 color: Theme.of(
                   context,
@@ -329,7 +329,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              'Reprodução de vídeo não disponível no Windows',
+              AppLocalizations.of(context)!.videoPlaybackNotAvailableWindows,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,

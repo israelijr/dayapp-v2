@@ -491,39 +491,11 @@ class InsightCard extends StatelessWidget {
   }
 
   String _resolveMoodChartTitle(AppLocalizations l10n) {
-    switch (l10n.localeName) {
-      case 'pt':
-      case 'pt_BR':
-        return 'Humor — 7 Dias';
-      case 'en':
-        return 'Mood — Last 7 Days';
-      case 'es':
-        return 'Humor — 7 Días';
-      case 'fr':
-        return 'Humeur — 7 derniers jours';
-      case 'it':
-        return 'Umore — Ultimi 7 giorni';
-      default:
-        return 'Mood — Last 7 Days';
-    }
+    return l10n.insightMood7Days;
   }
 
   String _resolveMoodChartSubtitle(AppLocalizations l10n) {
-    switch (l10n.localeName) {
-      case 'pt':
-      case 'pt_BR':
-        return 'Sua variação de humor essa semana';
-      case 'en':
-        return 'Your mood variation this week';
-      case 'es':
-        return 'Tu variación de humor esta semana';
-      case 'fr':
-        return 'Votre variation d\'humeur cette semaine';
-      case 'it':
-        return 'La tua variazione di umore questa settimana';
-      default:
-        return 'Your mood variation this week';
-    }
+    return l10n.insightMoodVariationThisWeek;
   }
 
   String _resolveBestWeekday(AppLocalizations l10n) {

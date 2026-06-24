@@ -2020,5 +2020,87 @@
   "chapterExportNoPhotoOption": "Sans photo",
   "@chapterExportNoPhotoOption": {
     "description": "Option pour exporter une histoire sans photo"
-  }
+  },
+  "resendCode": "Renvoyer le code",
+  "codeExpiresMinutes": "Le code expire dans {count} minutes",
+  "@codeExpiresMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backToStart": "Retour au début",
+  "codeLabel": "Code",
+  "informRegisteredEmail": "Entrez votre e-mail enregistré",
+  "newPasswordMinLengthLabel": "Nouveau mot de passe (minimum 6 caractères)",
+  "confirmNewPasswordLabel": "Confirmer le nouveau mot de passe",
+  "informYourEmailTitle": "Entrez votre e-mail",
+  "enterCodeTitle": "Entrez le code",
+  "newPasswordTitle": "Nouveau mot de passe",
+  "emailStepSubtitle": "Nous enverrons un code de récupération à l'adresse e-mail enregistrée sur votre compte.",
+  "codeStepSubtitle": "Entrez le code à 6 chiffres qui a été envoyé à votre e-mail.",
+  "passwordStepSubtitle": "Définissez un nouveau mot de passe sécurisé pour votre compte.",
+  "sendCodeButtonLabel": "Envoyer le code",
+  "verifyCodeButtonLabel": "Vérifier le code",
+  "resetPasswordButtonLabel": "Réinitialiser le mot de passe",
+  "birthDateCannotBeFuture": "La date de naissance ne peut pas être dans le futur.",
+  "birthDateMinAge": "Vous devez avoir au moins 14 ans.",
+  "successAudioAdded": "Audio ajouté avec succès !",
+  "photoDeleted": "Photo supprimée",
+  "videoSavedSuccess": "Vidéo enregistrée avec succès",
+  "videoPlaybackNotAvailableWindows": "Lecture vidéo non disponible sur Windows",
+  "supportEmailSubjectLogin": "Support DayApp - Connexion",
+  "supportEmailBodyLogin": "Bonjour, j'ai besoin d'aide pour me connecter à DayApp...",
+  "successAudiosAdded": "{count} audios ajoutés avec succès !",
+  "@successAudiosAdded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sizeLabel": "Taille : {size} Mo",
+  "@sizeLabel": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "durationLabel": "Durée : {duration}",
+  "@durationLabel": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "editDoubleTapHint": "Modifier - 2 clics",
+  "deleteGroupWarningText": "Voulez-vous supprimer le groupe \"{groupName}\" ? Les histoires de ce groupe ne seront pas supprimées, seulement retirées du groupe.",
+  "@deleteGroupWarningText": {
+    "placeholders": {
+      "groupName": {
+        "type": "String"
+      }
+    }
+  },
+  "createdOn": "Créé le {date}",
+  "@createdOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "editorPlaceholder": "Écrivez ici...",
+  "aboutFlutterDesc": "Framework pour le développement multiplateforme",
+  "aboutDartDesc": "Langage de programmation moderne et efficace",
+  "aboutSqliteDesc": "Base de données locale robuste et fiable",
+  "aboutProviderDesc": "Gestion de l'état réactif",
+  "aboutMaterial3Title": "Material Design 3",
+  "aboutMaterial3Desc": "Design system moderne et accessible",
+  "aboutScreenTechnologiesTitle": "Technologies",
+  "insightMood7Days": "Humeur — 7 derniers jours",
+  "insightMoodVariationThisWeek": "Votre variation d'humeur cette semaine"
 }

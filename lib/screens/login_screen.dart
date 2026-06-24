@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
       navigator.pushReplacementNamed('/home');
     } else {
       setState(() {
-        errorMessage = 'E-mail ou senha inválidos.';
+        errorMessage = AppLocalizations.of(context)!.invalidCredentials;
       });
     }
   }
@@ -373,9 +373,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           scheme: 'mailto',
                           path: 'contato@iijrapp.com.br',
                           queryParameters: {
-                            'subject': 'Suporte DayApp - Login',
+                            'subject': AppLocalizations.of(context)!.supportEmailSubjectLogin,
                             'body':
-                                'Olá, preciso de ajuda com o login no DayApp...',
+                                AppLocalizations.of(context)!.supportEmailBodyLogin,
                           },
                         );
                         if (await canLaunchUrl(emailUri)) {

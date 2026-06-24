@@ -290,9 +290,9 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       SnackBar(
         duration: const Duration(seconds: 4),
         behavior: SnackBarBehavior.floating,
-        content: Text(localizations?.storyArchived ?? 'História arquivada'),
+        content: Text(localizations!.storyArchived),
         action: SnackBarAction(
-          label: localizations?.undo ?? 'Desfazer',
+          label: localizations.undo,
           onPressed: () async {
             await _updateHistoria(
               historia,
@@ -486,10 +486,8 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
                   });
                 },
                 tooltip: _isCardView
-                    ? (AppLocalizations.of(context)?.toggleToIcons ??
-                          'Alternar para modo ícones')
-                    : (AppLocalizations.of(context)?.toggleToCards ??
-                          'Alternar para modo blocos'),
+                    ? AppLocalizations.of(context)!.toggleToIcons
+                    : AppLocalizations.of(context)!.toggleToCards,
               ),
               // delete group
               IconButton(
@@ -509,10 +507,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
               if (historias.isEmpty) {
                 return Center(
                   child: Text(
-                    AppLocalizations.of(
-                          context,
-                        )?.noStoriesInGroup(widget.grupo.nome) ??
-                        'Nenhuma história no grupo "${widget.grupo.nome}".',
+                    AppLocalizations.of(context)!.noStoriesInGroup(widget.grupo.nome),
                     style: TextStyle(color: AppColors.labelColor(context)),
                   ),
                 );

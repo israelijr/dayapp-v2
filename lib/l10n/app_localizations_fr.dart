@@ -2684,4 +2684,142 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get chapterExportNoPhotoOption => 'Sans photo';
+
+  @override
+  String get resendCode => 'Renvoyer le code';
+
+  @override
+  String codeExpiresMinutes(int count) {
+    return 'Le code expire dans $count minutes';
+  }
+
+  @override
+  String get codeLabel => 'Code';
+
+  @override
+  String get informRegisteredEmail => 'Entrez votre e-mail enregistré';
+
+  @override
+  String get newPasswordMinLengthLabel =>
+      'Nouveau mot de passe (minimum 6 caractères)';
+
+  @override
+  String get confirmNewPasswordLabel => 'Confirmer le nouveau mot de passe';
+
+  @override
+  String get informYourEmailTitle => 'Entrez votre e-mail';
+
+  @override
+  String get enterCodeTitle => 'Entrez le code';
+
+  @override
+  String get newPasswordTitle => 'Nouveau mot de passe';
+
+  @override
+  String get emailStepSubtitle =>
+      'Nous enverrons un code de récupération à l\'adresse e-mail enregistrée sur votre compte.';
+
+  @override
+  String get codeStepSubtitle =>
+      'Entrez le code à 6 chiffres qui a été envoyé à votre e-mail.';
+
+  @override
+  String get passwordStepSubtitle =>
+      'Définissez un nouveau mot de passe sécurisé pour votre compte.';
+
+  @override
+  String get sendCodeButtonLabel => 'Envoyer le code';
+
+  @override
+  String get verifyCodeButtonLabel => 'Vérifier le code';
+
+  @override
+  String get resetPasswordButtonLabel => 'Réinitialiser le mot de passe';
+
+  @override
+  String get birthDateCannotBeFuture =>
+      'La date de naissance ne peut pas être dans le futur.';
+
+  @override
+  String get birthDateMinAge => 'Vous devez avoir au moins 14 ans.';
+
+  @override
+  String get successAudioAdded => 'Audio ajouté avec succès !';
+
+  @override
+  String get photoDeleted => 'Photo supprimée';
+
+  @override
+  String get videoSavedSuccess => 'Vidéo enregistrée avec succès';
+
+  @override
+  String get videoPlaybackNotAvailableWindows =>
+      'Lecture vidéo non disponible sur Windows';
+
+  @override
+  String get supportEmailSubjectLogin => 'Support DayApp - Connexion';
+
+  @override
+  String get supportEmailBodyLogin =>
+      'Bonjour, j\'ai besoin d\'aide pour me connecter à DayApp...';
+
+  @override
+  String successAudiosAdded(int count) {
+    return '$count audios ajoutés avec succès !';
+  }
+
+  @override
+  String sizeLabel(String size) {
+    return 'Taille : $size Mo';
+  }
+
+  @override
+  String durationLabel(String duration) {
+    return 'Durée : $duration';
+  }
+
+  @override
+  String get editDoubleTapHint => 'Modifier - 2 clics';
+
+  @override
+  String deleteGroupWarningText(String groupName) {
+    return 'Voulez-vous supprimer le groupe \"$groupName\" ? Les histoires de ce groupe ne seront pas supprimées, seulement retirées du groupe.';
+  }
+
+  @override
+  String createdOn(String date) {
+    return 'Créé le $date';
+  }
+
+  @override
+  String get editorPlaceholder => 'Écrivez ici...';
+
+  @override
+  String get aboutFlutterDesc =>
+      'Framework pour le développement multiplateforme';
+
+  @override
+  String get aboutDartDesc => 'Langage de programmation moderne et efficace';
+
+  @override
+  String get aboutSqliteDesc => 'Base de données locale robuste et fiable';
+
+  @override
+  String get aboutProviderDesc => 'Gestion de l\'état réactif';
+
+  @override
+  String get aboutMaterial3Title => 'Material Design 3';
+
+  @override
+  String get aboutMaterial3Desc => 'Design system moderne et accessible';
+
+  @override
+  String get aboutScreenTechnologiesTitle => 'Technologies';
+
+  @override
+  String get insightMood7Days => 'Humeur — 7 derniers jours';
+
+  @override
+  String get insightMoodVariationThisWeek =>
+      'Votre variation d\'humeur cette semaine';
 }

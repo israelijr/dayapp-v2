@@ -122,21 +122,20 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          AppLocalizations.of(context)?.deleteStoryTitle ?? 'Excluir história',
+          AppLocalizations.of(context)!.deleteStoryTitle,
         ),
         content: Text(
-          AppLocalizations.of(context)?.deleteStoryConfirm ??
-              'Deseja mover esta história para a lixeira?',
+          AppLocalizations.of(context)!.deleteStoryConfirm,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancelar'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
-              AppLocalizations.of(context)?.deleteLabel ?? 'Excluir',
+              AppLocalizations.of(context)!.deleteLabel,
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
@@ -156,8 +155,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            AppLocalizations.of(context)?.movedToTrash ??
-                'História movida para a lixeira',
+            AppLocalizations.of(context)!.movedToTrash,
           ),
         ),
       );
@@ -189,7 +187,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
             backgroundColor: AppColors.emoticonGreen,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             icon: Icons.restore,
-            label: AppLocalizations.of(context)?.unarchive ?? 'Desarquivar',
+            label: AppLocalizations.of(context)!.unarchive,
           ),
         ],
       ),
@@ -212,7 +210,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
             backgroundColor: Theme.of(context).colorScheme.primary,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             icon: Icons.group,
-            label: AppLocalizations.of(context)?.group ?? 'Grupo',
+            label: AppLocalizations.of(context)!.group,
           ),
         ],
       ),
@@ -254,14 +252,13 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
                 PopupMenuItem(
                   value: 'edit',
                   child: Text(
-                    AppLocalizations.of(context)?.editTip ??
-                        'Editar - 2 toques',
+                    AppLocalizations.of(context)!.editDoubleTapHint,
                   ),
                 ),
                 PopupMenuItem(
                   value: 'delete',
                   child: Text(
-                    AppLocalizations.of(context)?.deleteLabel ?? 'Excluir',
+                    AppLocalizations.of(context)!.deleteLabel,
                   ),
                 ),
               ],
@@ -334,7 +331,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
         padding: const EdgeInsets.only(left: 20),
         color: AppColors.emoticonGreen,
         child: Text(
-          AppLocalizations.of(context)?.unarchive ?? 'Desarquivar',
+          AppLocalizations.of(context)!.unarchive,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
             fontSize: 18,
@@ -347,7 +344,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
         padding: const EdgeInsets.only(right: 20),
         color: Theme.of(context).colorScheme.primary,
         child: Text(
-          AppLocalizations.of(context)?.group ?? 'Grupo',
+          AppLocalizations.of(context)!.group,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
             fontSize: 18,
@@ -460,12 +457,12 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: 'edit',
-                child: Text(AppLocalizations.of(context)?.edit ?? 'Editar'),
+                child: Text(AppLocalizations.of(context)!.edit),
               ),
               PopupMenuItem(
                 value: 'delete',
                 child: Text(
-                  AppLocalizations.of(context)?.deleteLabel ?? 'Excluir',
+                  AppLocalizations.of(context)!.deleteLabel,
                 ),
               ),
             ],
@@ -485,7 +482,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(
-                        AppLocalizations.of(context)?.close ?? 'Fechar',
+                        AppLocalizations.of(context)!.close,
                       ),
                     ),
                   ],
@@ -504,7 +501,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context)?.archivedTitle ?? 'Arquivados',
+          AppLocalizations.of(context)!.archivedTitle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: GoogleFonts.notoSerif(
@@ -524,10 +521,8 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
               });
             },
             tooltip: _isCardView
-                ? (AppLocalizations.of(context)?.toggleToIcons ??
-                      'Alternar para modo ícones')
-                : (AppLocalizations.of(context)?.toggleToCards ??
-                      'Alternar para modo blocos'),
+                ? AppLocalizations.of(context)!.toggleToIcons
+                : AppLocalizations.of(context)!.toggleToCards,
           ),
         ],
       ),
@@ -544,8 +539,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
               if (historias.isEmpty) {
                 return Center(
                   child: Text(
-                    AppLocalizations.of(context)?.noArchivedStories ??
-                        'Nenhuma história arquivada.',
+                    AppLocalizations.of(context)!.noArchivedStories,
                     style: TextStyle(color: AppColors.labelColor(context)),
                   ),
                 );
@@ -593,7 +587,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
           },
           icon: const Icon(Icons.add),
           label: Text(
-            AppLocalizations.of(context)?.newStory ?? 'Nova História',
+            AppLocalizations.of(context)!.newStory,
           ),
         ),
       ),
