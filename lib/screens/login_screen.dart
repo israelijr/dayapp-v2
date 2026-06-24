@@ -369,14 +369,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       onPressed: () async {
+                        final String query = [
+                          'subject=${Uri.encodeComponent(AppLocalizations.of(context)!.supportEmailSubjectLogin)}',
+                          'body=${Uri.encodeComponent(AppLocalizations.of(context)!.supportEmailBodyLogin)}',
+                        ].join('&');
                         final Uri emailUri = Uri(
                           scheme: 'mailto',
                           path: 'contato@iijrapp.com.br',
-                          queryParameters: {
-                            'subject': AppLocalizations.of(context)!.supportEmailSubjectLogin,
-                            'body':
-                                AppLocalizations.of(context)!.supportEmailBodyLogin,
-                          },
+                          query: query,
                         );
                         if (await canLaunchUrl(emailUri)) {
                           await launchUrl(emailUri);

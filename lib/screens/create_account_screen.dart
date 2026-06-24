@@ -231,14 +231,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   const SizedBox(height: 8),
                   GestureDetector(
                     onTap: () async {
+                      final String query = [
+                        'subject=${Uri.encodeComponent('Suporte DayApp - Criação de Conta')}',
+                        'body=${Uri.encodeComponent('Olá, preciso de ajuda com a criação de conta no DayApp...')}',
+                      ].join('&');
                       final Uri emailUri = Uri(
                         scheme: 'mailto',
                         path: 'contato@iijrapp.com.br',
-                        queryParameters: {
-                          'subject': 'Suporte DayApp - Criação de Conta',
-                          'body':
-                              'Olá, preciso de ajuda com a criação de conta no DayApp...',
-                        },
+                        query: query,
                       );
                       if (await canLaunchUrl(emailUri)) {
                         await launchUrl(emailUri);
