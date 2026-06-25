@@ -1579,11 +1579,11 @@
   "@chapterRemovePhoto": {
     "description": "Bouton pour supprimer la photo du chapitre"
   },
-  "chapterSelectEntries": "Sélectionner des histoires liées (titre + date)",
+  "chapterSelectEntries": "Sélectionner au moins 1 histoire liée",
   "@chapterSelectEntries": {
     "description": "Étiquette pour sélectionner des histoires pour composer un chapitre"
   },
-  "chapterMinimumEntries": "Minimum : 3 histoires par chapitre.",
+  "chapterMinimumEntries": "Minimum : 1 histoire par chapitre.",
   "@chapterMinimumEntries": {
     "description": "Message de validation pour le minimum d'histoires dans un chapitre"
   },
@@ -1933,9 +1933,9 @@
   "@emailChangedSuccess": {
     "description": "Message de succès après le changement d'e-mail"
   },
-  "newPasswordMinLength": "Le nouveau mot de passe doit comporter au moins 4 caractères.",
+  "newPasswordMinLength": "Le nouveau mot de passe doit comporter au moins 6 caractères.",
   "@newPasswordMinLength": {
-    "description": "Erreur de validation quand le nouveau mot de passe est trop court (min 4 caractères)"
+    "description": "Erreur de validation quand le nouveau mot de passe est trop court (min 6 caractères)"
   },
   "fillAllFields": "Veuillez remplir tous les champs.",
   "@fillAllFields": {
@@ -2102,5 +2102,26 @@
   "aboutMaterial3Desc": "Design system moderne et accessible",
   "aboutScreenTechnologiesTitle": "Technologies",
   "insightMood7Days": "Humeur — 7 derniers jours",
-  "insightMoodVariationThisWeek": "Votre variation d'humeur cette semaine"
+  "insightMoodVariationThisWeek": "Votre variation d'humeur cette semaine",
+  "chapterExportPartLabel": "Partie {index} sur {total}",
+  "@chapterExportPartLabel": {
+    "description": "Label for chapter export split parts",
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "chapterExportSplitExplanation": "Pour garantir de meilleures performances et une meilleure compatibilité lors de l'envoi, ce chapitre a été divisé en {parts} fichiers.",
+  "@chapterExportSplitExplanation": {
+    "description": "Information shown when export is split",
+    "placeholders": {
+      "parts": {
+        "type": "int"
+      }
+    }
+  }
 }

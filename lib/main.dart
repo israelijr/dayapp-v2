@@ -497,34 +497,42 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       case AppLifecycleState.paused:
       case AppLifecycleState.inactive:
       case AppLifecycleState.hidden:
-        // App foi para background ou perdeu foco
-        _pausedTime = DateTime.now();
+        // App foi para background ou perdeu foco.
+        // Usamos ??= para registrar apenas o primeiro evento de perda de foco
+        // e evitar sobrescrever o tempo original com transições subsequentes
+        // ou transições que ocorrem no retorno para o primeiro plano.
+        _pausedTime ??= DateTime.now();
         break;
       case AppLifecycleState.resumed:
         // Registra uso do app para notificações de engajamento
         EngagementService().registerAppUsage();
 
         // App voltou para foreground
-        if (widget.pinProvider.isLockEnabled && _pausedTime != null) {
-          // Se estiver autenticando com biometria, não bloqueia
-          if (widget.pinProvider.isAuthenticatingWithBiometrics) {
-            debugPrint(
-              'LIFECYCLE: Ignorando - isAuthenticatingWithBiometrics=true',
-            );
-            _pausedTime = null;
-            widget.pinProvider.isAuthenticatingWithBiometrics = false;
-            return;
-          }
+        if (_pausedTime != null) {
+          if (widget.pinProvider.isLockEnabled) {
+            // Se estiver autenticando com biometria, não bloqueia
+            if (widget.pinProvider.isAuthenticatingWithBiometrics) {
+              debugPrint(
+                'LIFECYCLE: Ignorando - isAuthenticatingWithBiometrics=true',
+              );
+              widget.pinProvider.isAuthenticatingWithBiometrics = false;
+              _pausedTime = null;
+              return;
+            }
 
-          // Se estiver selecionando mídia externa (galeria, câmera, file picker, backup, etc.), não bloqueia
-          if (widget.pinProvider.isPickingExternalMedia) {
-            debugPrint('LIFECYCLE: Ignorando - isPickingExternalMedia=true');
-            _pausedTime = null;
-            return;
-          }
+            // Se estiver selecionando mídia externa (galeria, câmera, file picker, backup, etc.), não bloqueia
+            if (widget.pinProvider.isPickingExternalMedia) {
+              debugPrint('LIFECYCLE: Ignorando - isPickingExternalMedia=true');
+              _pausedTime = null;
+              return;
+            }
 
-          debugPrint('LIFECYCLE: Chamando _checkBackgroundLock');
-          _checkBackgroundLock();
+            debugPrint('LIFECYCLE: Chamando _checkBackgroundLock');
+            _checkBackgroundLock();
+          } else {
+            // Se o bloqueio não estiver ativo, limpa o timer antigo para evitar lixo
+            _pausedTime = null;
+          }
         }
         break;
       case AppLifecycleState.detached:

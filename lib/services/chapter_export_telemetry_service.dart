@@ -39,4 +39,37 @@ class ChapterExportTelemetryService {
       'durationMs=${stopwatch.elapsedMilliseconds} error=$error',
     );
   }
+
+  void logSplitTriggered({required int qtdPartes, required int qtdBlocosTotal}) {
+    debugPrint(
+      'ChapterExportTelemetry: chapterExportSplitTriggered qtdPartes=$qtdPartes '
+      'qtdBlocosTotal=$qtdBlocosTotal',
+    );
+  }
+
+  void logPartStart({required int parteAtual, required int qtdPartes}) {
+    debugPrint(
+      'ChapterExportTelemetry: chapterExportPartStart parteAtual=$parteAtual '
+      'qtdPartes=$qtdPartes',
+    );
+  }
+
+  void logPartSuccess({
+    required int parteAtual,
+    required int durationMs,
+    required int fileSizeBytes,
+  }) {
+    debugPrint(
+      'ChapterExportTelemetry: chapterExportPartSuccess parteAtual=$parteAtual '
+      'durationMs=$durationMs fileSizeBytes=$fileSizeBytes',
+    );
+  }
+
+  void logPartFail({required int parteAtual, required Object reason}) {
+    debugPrint(
+      'ChapterExportTelemetry: chapterExportPartFail parteAtual=$parteAtual '
+      'reason=$reason',
+    );
+  }
 }
+

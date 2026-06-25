@@ -4199,13 +4199,13 @@ abstract class AppLocalizations {
   /// Label for selecting stories to compose a chapter
   ///
   /// In en, this message translates to:
-  /// **'Select related stories (title + date)'**
+  /// **'Select at least 1 related story'**
   String get chapterSelectEntries;
 
   /// Validation message for minimum stories in a chapter
   ///
   /// In en, this message translates to:
-  /// **'Minimum: 3 stories per chapter.'**
+  /// **'Minimum: 1 story per chapter.'**
   String get chapterMinimumEntries;
 
   /// Period label for chapter
@@ -4658,10 +4658,10 @@ abstract class AppLocalizations {
   /// **'Email changed successfully.'**
   String get emailChangedSuccess;
 
-  /// Validation error when new password is too short (min 4 chars)
+  /// Validation error when new password is too short (min 6 chars)
   ///
   /// In en, this message translates to:
-  /// **'New password must be at least 4 characters.'**
+  /// **'New password must be at least 6 characters.'**
   String get newPasswordMinLength;
 
   /// Error shown when one or more required fields are empty
@@ -5023,6 +5023,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your mood variation this week'**
   String get insightMoodVariationThisWeek;
+
+  /// Label for chapter export split parts
+  ///
+  /// In en, this message translates to:
+  /// **'Part {index} of {total}'**
+  String chapterExportPartLabel(int index, int total);
+
+  /// Information shown when export is split
+  ///
+  /// In en, this message translates to:
+  /// **'To ensure better performance and compatibility when sharing, this chapter was split into {parts} files.'**
+  String chapterExportSplitExplanation(int parts);
 }
 
 class _AppLocalizationsDelegate

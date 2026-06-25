@@ -2301,10 +2301,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chapterRemovePhoto => 'Remove photo';
 
   @override
-  String get chapterSelectEntries => 'Select related stories (title + date)';
+  String get chapterSelectEntries => 'Select at least 1 related story';
 
   @override
-  String get chapterMinimumEntries => 'Minimum: 3 stories per chapter.';
+  String get chapterMinimumEntries => 'Minimum: 1 story per chapter.';
 
   @override
   String chapterPeriod(String start, String end) {
@@ -2571,7 +2571,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get newPasswordMinLength =>
-      'New password must be at least 4 characters.';
+      'New password must be at least 6 characters.';
 
   @override
   String get fillAllFields => 'Please fill in all fields.';
@@ -2778,4 +2778,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get insightMoodVariationThisWeek => 'Your mood variation this week';
+
+  @override
+  String chapterExportPartLabel(int index, int total) {
+    return 'Part $index of $total';
+  }
+
+  @override
+  String chapterExportSplitExplanation(int parts) {
+    return 'To ensure better performance and compatibility when sharing, this chapter was split into $parts files.';
+  }
 }

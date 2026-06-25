@@ -71,4 +71,112 @@ void main() {
     expect(content, contains('<h1>Relatorio de viagem</h1>'));
     expect(content, contains('<p>Resumo da viagem</p>'));
   });
+
+  group('ChapterExportDocument split tests', () {
+    test('does not split if blocks are under maxBlocksPerPart', () {
+      final document = ChapterExportDocument(
+        userId: 'user-1',
+        chapterTitle: 'My Chapter',
+        startDate: DateTime(2026, 6, 1),
+        endDate: DateTime(2026, 6, 3),
+        storyCount: 2,
+        blocks: [
+          const TitleExportBlock(text: 'Story 1', storyId: 1),
+          const ParagraphExportBlock(text: 'Text 1', storyId: 1),
+          const TitleExportBlock(text: 'Story 2', storyId: 2),
+          const ParagraphExportBlock(text: 'Text 2', storyId: 2),
+        ],
+      );
+
+      final parts = document.split(5);
+      expect(parts.length, 1);
+      expect(parts[0].blocks.length, 4);
+    });
+
+    test('splits blocks respecting story integrity', () {
+      final document = ChapterExportDocument(
+        userId: 'user-1',
+        chapterTitle: 'My Chapter',
+        startDate: DateTime(2026, 6, 1),
+        endDate: DateTime(2026, 6, 3),
+        storyCount: 3,
+        blocks: [
+          const TitleExportBlock(text: 'Story 1', storyId: 1), // 1
+          const ParagraphExportBlock(text: 'Text 1', storyId: 1), // 2
+          const TitleExportBlock(text: 'Story 2', storyId: 2), // 3
+          const ParagraphExportBlock(text: 'Text 2', storyId: 2), // 4
+          const TitleExportBlock(text: 'Story 3', storyId: 3), // 5
+          const ParagraphExportBlock(text: 'Text 3', storyId: 3), // 6
+        ],
+      );
+
+      // maxBlocksPerPart = 3
+      // Story 1 has 2 blocks, Story 2 has 2 blocks, Story 3 has 2 blocks.
+      // Part 1: gets Story 1 (2 blocks). Adding Story 2 would make 4 blocks (> 3). So closed.
+      // Part 2: gets Story 2 (2 blocks). Adding Story 3 would make 4 blocks (> 3). So closed.
+      // Part 3: gets Story 3 (2 blocks).
+      final parts = document.split(3);
+      expect(parts.length, 3);
+      expect(parts[0].blocks.length, 2);
+      expect(parts[0].blocks[0].storyId, 1);
+
+      expect(parts[1].blocks.length, 2);
+      expect(parts[1].blocks[0].storyId, 2);
+
+      expect(parts[2].blocks.length, 2);
+      expect(parts[2].blocks[0].storyId, 3);
+    });
+
+    test('permits controlled exception for single story exceeding limit', () {
+      final document = ChapterExportDocument(
+        userId: 'user-1',
+        chapterTitle: 'My Chapter',
+        startDate: DateTime(2026, 6, 1),
+        endDate: DateTime(2026, 6, 3),
+        storyCount: 1,
+        blocks: [
+          const TitleExportBlock(text: 'Story 1', storyId: 1),
+          const ParagraphExportBlock(text: 'Text 1', storyId: 1),
+          const ParagraphExportBlock(text: 'Text 2', storyId: 1),
+          const ParagraphExportBlock(text: 'Text 3', storyId: 1),
+        ],
+      );
+
+      // maxBlocksPerPart = 2, but Story 1 has 4 blocks.
+      // Since it's a single story, it should not fail, but generate a single part with 4 blocks.
+      final parts = document.split(2);
+      expect(parts.length, 1);
+      expect(parts[0].blocks.length, 4);
+    });
+  });
+
+  test('exports html with custom partSuffix and partTitle', () async {
+    final document = ChapterExportDocument(
+      chapterId: 42,
+      userId: 'user-1',
+      chapterTitle: 'Relatorio de viagem',
+      startDate: DateTime(2026, 6, 1),
+      endDate: DateTime(2026, 6, 3),
+      storyCount: 1,
+      blocks: [
+        const TitleExportBlock(text: 'Relatorio de viagem'),
+        const ParagraphExportBlock(text: 'Resumo da viagem', storyId: 1),
+      ],
+    );
+
+    const service = ChapterPdfExportService();
+    final file = await service.exportHtml(
+      document: document,
+      localeName: 'pt_BR',
+      storyCountLabel: '1 história',
+      partSuffix: '_parte-1-de-2',
+      partTitle: 'Relatorio de viagem (Parte 1 de 2)',
+    );
+
+    expect(await file.exists(), isTrue);
+    expect(file.path, endsWith('_parte-1-de-2.html'));
+
+    final content = await file.readAsString();
+    expect(content, contains('<h1>Relatorio de viagem (Parte 1 de 2)</h1>'));
+  });
 }

@@ -1910,11 +1910,11 @@
   "@chapterRemovePhoto": {
     "description": "Botón para eliminar foto del capítulo"
   },
-  "chapterSelectEntries": "Selecciona historias relacionadas (título + fecha)",
+  "chapterSelectEntries": "Selecciona al menos 1 historia relacionada",
   "@chapterSelectEntries": {
     "description": "Etiqueta para seleccionar historias del capítulo"
   },
-  "chapterMinimumEntries": "Mínimo: 3 historias por capítulo.",
+  "chapterMinimumEntries": "Mínimo: 1 historia por capítulo.",
   "@chapterMinimumEntries": {
     "description": "Mensaje de validación del mínimo de historias"
   },
@@ -2264,9 +2264,9 @@
   "@emailChangedSuccess": {
     "description": "Mensaje de éxito tras cambiar el correo"
   },
-  "newPasswordMinLength": "La nueva contraseña debe tener al menos 4 caracteres.",
+  "newPasswordMinLength": "La nueva contraseña debe tener al menos 6 caracteres.",
   "@newPasswordMinLength": {
-    "description": "Error de validación cuando la nueva contraseña es muy corta (mín. 4)"
+    "description": "Error de validación cuando la nueva contraseña es muy corta (mín. 6)"
   },
   "fillAllFields": "Por favor, rellene todos los campos.",
   "@fillAllFields": {
@@ -2485,5 +2485,26 @@
   "aboutMaterial3Desc": "Design system moderno y accesible",
   "aboutScreenTechnologiesTitle": "Tecnologías",
   "insightMood7Days": "Humor — 7 Días",
-  "insightMoodVariationThisWeek": "Tu variación de humor esta semana"
+  "insightMoodVariationThisWeek": "Tu variación de humor esta semana",
+  "chapterExportPartLabel": "Parte {index} de {total}",
+  "@chapterExportPartLabel": {
+    "description": "Label for chapter export split parts",
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "chapterExportSplitExplanation": "Para garantizar un mejor rendimiento y compatibilidad al enviar, este capítulo se dividió en {parts} archivos.",
+  "@chapterExportSplitExplanation": {
+    "description": "Information shown when export is split",
+    "placeholders": {
+      "parts": {
+        "type": "int"
+      }
+    }
+  }
 }

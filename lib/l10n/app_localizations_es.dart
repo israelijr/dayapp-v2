@@ -2332,10 +2332,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get chapterSelectEntries =>
-      'Selecciona historias relacionadas (título + fecha)';
+      'Selecciona al menos 1 historia relacionada';
 
   @override
-  String get chapterMinimumEntries => 'Mínimo: 3 historias por capítulo.';
+  String get chapterMinimumEntries => 'Mínimo: 1 historia por capítulo.';
 
   @override
   String chapterPeriod(String start, String end) {
@@ -2598,7 +2598,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get newPasswordMinLength =>
-      'La nueva contraseña debe tener al menos 4 caracteres.';
+      'La nueva contraseña debe tener al menos 6 caracteres.';
 
   @override
   String get fillAllFields => 'Por favor, rellene todos los campos.';
@@ -2811,4 +2811,14 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get insightMoodVariationThisWeek =>
       'Tu variación de humor esta semana';
+
+  @override
+  String chapterExportPartLabel(int index, int total) {
+    return 'Parte $index de $total';
+  }
+
+  @override
+  String chapterExportSplitExplanation(int parts) {
+    return 'Para garantizar un mejor rendimiento y compatibilidad al enviar, este capítulo se dividió en $parts archivos.';
+  }
 }

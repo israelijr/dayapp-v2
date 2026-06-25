@@ -14,15 +14,21 @@ import '../domain/export_block.dart';
 class ChapterPdfExportService {
   const ChapterPdfExportService();
 
-  static const int _maxBlocks = 400;
+  // Parâmetro ajustável para o limite absoluto de segurança de blocos por parte de arquivo
+  static const int _maxBlocks = 5000;
 
   /// Exporta o capítulo como um arquivo HTML básico (Título, período, blocos).
+  /// Permite opcionalmente adicionar sufixo ao nome do arquivo e título customizado.
   Future<File> exportHtml({
     required ChapterExportDocument document,
     required String localeName,
     required String storyCountLabel,
+    String? partSuffix,
+    String? partTitle,
   }) async {
     _validateExportLimits(document, localeName);
+
+    final displayTitle = partTitle ?? document.chapterTitle;
 
     final buffer = StringBuffer();
     buffer.writeln('<!doctype html>');
@@ -32,7 +38,7 @@ class ChapterPdfExportService {
     buffer.writeln(
       '<meta name="viewport" content="width=device-width,initial-scale=1">',
     );
-    buffer.writeln('<title>${_escapeHtml(document.chapterTitle)}</title>');
+    buffer.writeln('<title>${_escapeHtml(displayTitle)}</title>');
     buffer.writeln('<style>');
     buffer.writeln(
       'body{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; padding:20px; color:#222}',
@@ -51,7 +57,7 @@ class ChapterPdfExportService {
     buffer.writeln('</head>');
     buffer.writeln('<body>');
 
-    buffer.writeln('<h1>${_escapeHtml(document.chapterTitle)}</h1>');
+    buffer.writeln('<h1>${_escapeHtml(displayTitle)}</h1>');
     buffer.writeln(
       '<div class="meta">${_escapeHtml(_buildPeriodLabel(document, localeName))} • ${_escapeHtml(storyCountLabel)}</div>',
     );
@@ -97,7 +103,8 @@ class ChapterPdfExportService {
     buffer.writeln('</body></html>');
 
     final tempDir = await getTemporaryDirectory();
-    final fileName = '${_slugify(document.chapterTitle)}.html';
+    final baseName = _slugify(document.chapterTitle);
+    final fileName = partSuffix != null ? '$baseName$partSuffix.html' : '$baseName.html';
     final path = p.join(tempDir.path, fileName);
     final file = File(path);
     await file.writeAsString(buffer.toString(), flush: true);

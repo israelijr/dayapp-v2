@@ -34,12 +34,16 @@ Future<void> openCreateChapterScreen(BuildContext context) async {
   if (userId == null) return;
 
   final capituloRepository = CapituloRepository();
+  final entradasJaVinculadas = await capituloRepository.getEntradasJaVinculadas(userId);
   final entradasComTags = await capituloRepository.listEntradasElegiveisComTags(
     userId,
   );
   if (!context.mounted) return;
 
-  final entradas = entradasComTags.map((e) => e.historia).toList();
+  final entradas = entradasComTags
+      .map((e) => e.historia)
+      .where((h) => h.id != null && !entradasJaVinculadas.contains(h.id))
+      .toList();
   final tagNomesPorId = {
     for (final e in entradasComTags)
       if (e.historia.id != null) e.historia.id!: e.tagNomes,
@@ -64,7 +68,7 @@ Future<void> openCreateChapterScreen(BuildContext context) async {
           .toList()
         ..sort((a, b) => a.data.compareTo(b.data));
 
-  if (selectedEntries.length < 3) {
+  if (selectedEntries.isEmpty) {
     if (!context.mounted) return;
     ScaffoldMessenger.of(
       context,
@@ -186,11 +190,21 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
 
   bool _showSearch = false;
   final TextEditingController _searchController = TextEditingController();
+  int _lastRefreshCounter = -1;
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final refreshCounter = Provider.of<RefreshProvider>(context).refreshCounter;
+    if (_lastRefreshCounter != refreshCounter) {
+      _lastRefreshCounter = refreshCounter;
+      _loadData();
+    }
   }
 
   @override
@@ -279,11 +293,15 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     final userId = auth.user?.id;
     if (userId == null) return;
 
+    final entradasJaVinculadas = await _capituloRepository.getEntradasJaVinculadas(userId);
     final entradasComTags = await _capituloRepository
         .listEntradasElegiveisComTags(userId);
     if (!mounted) return;
 
-    final entradas = entradasComTags.map((e) => e.historia).toList();
+    final entradas = entradasComTags
+        .map((e) => e.historia)
+        .where((h) => h.id != null && !entradasJaVinculadas.contains(h.id))
+        .toList();
     final tagNomesPorId = {
       for (final e in entradasComTags)
         if (e.historia.id != null) e.historia.id!: e.tagNomes,
@@ -310,7 +328,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
             .toList()
           ..sort((a, b) => a.data.compareTo(b.data));
 
-    if (selectedEntries.length < 3) {
+    if (selectedEntries.isEmpty) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -1015,7 +1033,7 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
       ).showSnackBar(SnackBar(content: Text(l10n.chapterTitleRequired)));
       return;
     }
-    if (selected.length < 3) {
+    if (selected.isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.chapterMinimumEntries)));
@@ -1202,7 +1220,7 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: FilledButton(
-                    onPressed: selected.length >= 3 ? () => _save(l10n) : null,
+                    onPressed: selected.isNotEmpty ? () => _save(l10n) : null,
                     child: Text(l10n.save),
                   ),
                 ),
@@ -1352,7 +1370,7 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
       ).showSnackBar(SnackBar(content: Text(l10n.chapterTitleRequired)));
       return;
     }
-    if (selectedIds.length < 3) {
+    if (selectedIds.isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.chapterMinimumEntries)));
@@ -1538,7 +1556,7 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: FilledButton(
-                    onPressed: selectedIds.length >= 3
+                    onPressed: selectedIds.isNotEmpty
                         ? () => _save(l10n)
                         : null,
                     child: Text(l10n.save),
@@ -1756,19 +1774,26 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
     final userId = _resumo.capitulo.userId;
     if (userId.isEmpty) return;
 
+    final entradasJaVinculadas = await widget.capituloRepository.getEntradasJaVinculadas(userId);
     final entradasComTags = await widget.capituloRepository
         .listEntradasElegiveisComTags(userId);
     if (!mounted) return;
 
-    final todasEntradas = entradasComTags.map((e) => e.historia).toList();
-    final tagNomesPorId = {
-      for (final e in entradasComTags)
-        if (e.historia.id != null) e.historia.id!: e.tagNomes,
-    };
-
     final draftEntradaIds = <int>{
       for (final e in _entradas)
         if (e.id != null) e.id!,
+    };
+
+    final entradasDeOutrosCapitulos = entradasJaVinculadas.difference(draftEntradaIds);
+
+    final todasEntradas = entradasComTags
+        .map((e) => e.historia)
+        .where((h) => h.id != null && !entradasDeOutrosCapitulos.contains(h.id))
+        .toList();
+
+    final tagNomesPorId = {
+      for (final e in entradasComTags)
+        if (e.historia.id != null) e.historia.id!: e.tagNomes,
     };
 
     final resultado = await Navigator.of(context).push<_EditCapituloResult?>(
@@ -1794,7 +1819,7 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
             .toList()
           ..sort((a, b) => a.data.compareTo(b.data));
 
-    if (selectedEntries.length < 3) {
+    if (selectedEntries.isEmpty) {
       if (!mounted) return;
       _showChapterValidationMessage(
         context,
@@ -1821,6 +1846,7 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
 
     if (!mounted) return;
     _didChange = true;
+    Provider.of<RefreshProvider>(context, listen: false).refresh();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(AppLocalizations.of(context)!.chapterUpdated)),
     );
@@ -1862,6 +1888,7 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
 
     if (!mounted) return;
     _didChange = true;
+    Provider.of<RefreshProvider>(context, listen: false).refresh();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(AppLocalizations.of(context)!.chapterDeleted)),
     );
@@ -1907,6 +1934,7 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
 
     if (!mounted) return;
     _didChange = true;
+    Provider.of<RefreshProvider>(context, listen: false).refresh();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(AppLocalizations.of(context)!.chapterUpdated)),
     );

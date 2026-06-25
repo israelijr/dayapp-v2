@@ -132,6 +132,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 controller: passwordController,
                 label: AppLocalizations.of(context)!.password,
                 obscureText: obscurePassword,
+                helperText: AppLocalizations.of(context)!.passwordMinLength,
+                helperStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.8),
+                ),
                 suffixIcon: IconButton(
                   icon: Icon(
                     obscurePassword ? Icons.visibility : Icons.visibility_off,

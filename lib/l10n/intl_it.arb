@@ -1579,11 +1579,11 @@
   "@chapterRemovePhoto": {
     "description": "Pulsante per rimuovere la foto del capitolo"
   },
-  "chapterSelectEntries": "Seleziona storie correlate (titolo + data)",
+  "chapterSelectEntries": "Seleziona almeno 1 storia correlata",
   "@chapterSelectEntries": {
     "description": "Etichetta per la selezione delle storie per comporre un capitolo"
   },
-  "chapterMinimumEntries": "Minimo: 3 storie per capitolo.",
+  "chapterMinimumEntries": "Minimo: 1 storia per capitolo.",
   "@chapterMinimumEntries": {
     "description": "Messaggio di validazione per il numero minimo di storie in un capitolo"
   },
@@ -1933,9 +1933,9 @@
   "@emailChangedSuccess": {
     "description": "Messaggio di successo dopo il cambio e-mail"
   },
-  "newPasswordMinLength": "La nuova password deve essere di almeno 4 caratteri.",
+  "newPasswordMinLength": "La nuova password deve essere di almeno 6 caratteri.",
   "@newPasswordMinLength": {
-    "description": "Errore di validazione quando la nuova password è troppo corta (min 4 caratteri)"
+    "description": "Errore di validazione quando la nuova password è troppo corta (min 6 caratteri)"
   },
   "fillAllFields": "Compila tutti i campi.",
   "@fillAllFields": {
@@ -2102,5 +2102,26 @@
   "aboutMaterial3Desc": "Design system moderno e accessibile",
   "aboutScreenTechnologiesTitle": "Tecnologie",
   "insightMood7Days": "Umore — Ultimi 7 giorni",
-  "insightMoodVariationThisWeek": "La tua variazione di umore questa settimana"
+  "insightMoodVariationThisWeek": "La tua variazione di umore questa settimana",
+  "chapterExportPartLabel": "Parte {index} di {total}",
+  "@chapterExportPartLabel": {
+    "description": "Label for chapter export split parts",
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "chapterExportSplitExplanation": "Per garantire prestazioni e compatibilità migliori durante l'invio, questo capitolo è stato suddiviso in {parts} file.",
+  "@chapterExportSplitExplanation": {
+    "description": "Information shown when export is split",
+    "placeholders": {
+      "parts": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -326,8 +326,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 CustomTextField(
                   controller: newPasswordController,
-                  label: loc.newPinLabel,
+                  label: loc.newPasswordTitle,
                   obscureText: obscureNew,
+                  helperText: loc.newPasswordMinLength,
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -399,7 +400,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   setDialogState(() => dialogError = loc.fillAllFields);
                   return;
                 }
-                if (newPass.length < 4) {
+                if (newPass.length < 6) {
                   setDialogState(() => dialogError = loc.newPasswordMinLength);
                   return;
                 }

@@ -128,20 +128,92 @@ class _ChapterReaderView extends StatelessWidget {
         return;
       }
 
+      // Parâmetro ajustável para definir o limite de blocos por parte de arquivo
+      const int maxBlocksPerPart = 200;
+      // Parâmetro ajustável para o timeout por parte
+      const Duration partTimeout = Duration(minutes: 2);
+
+      final parts = preparedDocument.split(maxBlocksPerPart);
+      final totalParts = parts.length;
+      final htmlFiles = <File>[];
+
+      if (totalParts > 1) {
+        _telemetry.logSplitTriggered(
+          qtdPartes: totalParts,
+          qtdBlocosTotal: preparedDocument.blocks.length,
+        );
+      }
+
       exportState.start();
-      if (observer.isCancelled) throw Exception('export_cancelled_lifecycle');
       const exportService = ChapterPdfExportService();
-      final htmlFile = await exportService.exportHtml(
-        document: preparedDocument,
-        localeName: l10n.localeName,
-        storyCountLabel: l10n.chapterEntriesCount(preparedDocument.storyCount),
-      );
+
+      for (var i = 0; i < totalParts; i++) {
+        if (observer.isCancelled) throw Exception('export_cancelled_lifecycle');
+
+        final partDoc = parts[i];
+        final partIndex = i + 1;
+
+        if (totalParts > 1) {
+          _telemetry.logPartStart(
+            parteAtual: partIndex,
+            qtdPartes: totalParts,
+          );
+        }
+
+        final partStopwatch = Stopwatch()..start();
+
+        try {
+          final String? partSuffix =
+              totalParts > 1 ? '_parte-$partIndex-de-$totalParts' : null;
+          final String? partTitle = totalParts > 1
+              ? '${partDoc.chapterTitle} (${l10n.chapterExportPartLabel(partIndex, totalParts)})'
+              : null;
+
+          final file = await exportService
+              .exportHtml(
+                document: partDoc,
+                localeName: l10n.localeName,
+                storyCountLabel: l10n.chapterEntriesCount(partDoc.storyCount),
+                partSuffix: partSuffix,
+                partTitle: partTitle,
+              )
+              .timeout(partTimeout);
+
+          partStopwatch.stop();
+          if (totalParts > 1) {
+            _telemetry.logPartSuccess(
+              parteAtual: partIndex,
+              durationMs: partStopwatch.elapsedMilliseconds,
+              fileSizeBytes: await file.length(),
+            );
+          }
+          htmlFiles.add(file);
+        } catch (e) {
+          if (totalParts > 1) {
+            _telemetry.logPartFail(
+              parteAtual: partIndex,
+              reason: e,
+            );
+          }
+          rethrow;
+        }
+      }
 
       if (observer.isCancelled) throw Exception('export_cancelled_lifecycle');
+
+      // Se foi dividido em partes, avisa o usuário
+      if (htmlFiles.length > 1 && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.chapterExportSplitExplanation(htmlFiles.length)),
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
 
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile(htmlFile.path)],
+          files: htmlFiles.map((file) => XFile(file.path)).toList(),
           subject: preparedDocument.chapterTitle,
           text: l10n.exportPdf,
         ),

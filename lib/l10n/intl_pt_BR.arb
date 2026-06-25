@@ -77,9 +77,9 @@
   "@passwordChangedSuccess": {
     "description": "Mensagem de sucesso após alterar senha"
   },
-  "newPasswordMinLength": "A nova senha deve ter pelo menos 4 caracteres.",
+  "newPasswordMinLength": "A nova senha deve ter pelo menos 6 caracteres.",
   "@newPasswordMinLength": {
-    "description": "Erro de validação quando a nova senha é curta demais (mín. 4)"
+    "description": "Erro de validação quando a nova senha é curta demais (mín. 6)"
   },
   "backupInfoDialogContent": "📦  O que está incluído no backup\n• Todas as suas histórias (textos, fotos, áudios, vídeos)\n• Banco de dados do app\n• Fotos de capítulos\n\n📂  Como guardar o seu backup\nApós a criação, use o menu de compartilhamento para salvar o arquivo onde quiser — OneDrive, Google Drive, e-mail ou qualquer outro serviço.",
   "@backupInfoDialogContent": {
@@ -123,5 +123,26 @@
   "aboutScreenFeatureSmartOrganizationDescription": "Categorize suas histórias em grupos temáticos personalizados e Capítulos que contam sobre você",
   "backupZipExplanation": "Gera um arquivo ZIP que você pode salvar no seu dispositivo, OneDrive, Google Drive, email ou qualquer outro local na nuvem, exceto apps de mensagens.",
   "helpManualBackupTitle": "Backup",
-  "helpOrganizationTipDesc": "Use Grupos para categorizar suas histórias por temas, e Capítulos para contar toda a história."
+  "helpOrganizationTipDesc": "Use Grupos para categorizar suas histórias por temas, e Capítulos para contar toda a história.",
+  "chapterExportPartLabel": "Parte {index} de {total}",
+  "@chapterExportPartLabel": {
+    "description": "Label for chapter export split parts",
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "chapterExportSplitExplanation": "Para garantir um melhor desempenho e compatibilidade no envio, este capítulo foi dividido em {parts} arquivos.",
+  "@chapterExportSplitExplanation": {
+    "description": "Information shown when export is split",
+    "placeholders": {
+      "parts": {
+        "type": "int"
+      }
+    }
+  }
 }

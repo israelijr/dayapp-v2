@@ -13,6 +13,7 @@ import '../models/capitulo_sugestao.dart';
 import '../models/grupo.dart';
 import '../providers/auth_provider.dart';
 import '../providers/premium_provider.dart';
+import '../providers/refresh_provider.dart';
 import '../services/capitulo_sugestao_service.dart';
 import 'archived_stories_screen.dart';
 import 'chapters_screen.dart';
@@ -38,6 +39,7 @@ class _GroupsScreenState extends State<GroupsScreen>
   List<CapituloResumo> _capitulos = [];
   List<CapituloSugestao> _sugestoes = const [];
   bool _isLoading = true;
+  int _lastRefreshCounter = -1;
 
   @override
   void initState() {
@@ -48,6 +50,16 @@ class _GroupsScreenState extends State<GroupsScreen>
       widget.onTabChanged?.call(_tabController.index);
     });
     _loadCollections();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final refreshCounter = Provider.of<RefreshProvider>(context).refreshCounter;
+    if (_lastRefreshCounter != refreshCounter) {
+      _lastRefreshCounter = refreshCounter;
+      _loadCollections();
+    }
   }
 
   @override

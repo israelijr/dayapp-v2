@@ -2327,11 +2327,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get chapterRemovePhoto => 'Rimuovi foto';
 
   @override
-  String get chapterSelectEntries =>
-      'Seleziona storie correlate (titolo + data)';
+  String get chapterSelectEntries => 'Seleziona almeno 1 storia correlata';
 
   @override
-  String get chapterMinimumEntries => 'Minimo: 3 storie per capitolo.';
+  String get chapterMinimumEntries => 'Minimo: 1 storia per capitolo.';
 
   @override
   String chapterPeriod(String start, String end) {
@@ -2595,7 +2594,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get newPasswordMinLength =>
-      'La nuova password deve essere di almeno 4 caratteri.';
+      'La nuova password deve essere di almeno 6 caratteri.';
 
   @override
   String get fillAllFields => 'Compila tutti i campi.';
@@ -2806,4 +2805,14 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get insightMoodVariationThisWeek =>
       'La tua variazione di umore questa settimana';
+
+  @override
+  String chapterExportPartLabel(int index, int total) {
+    return 'Parte $index di $total';
+  }
+
+  @override
+  String chapterExportSplitExplanation(int parts) {
+    return 'Per garantire prestazioni e compatibilità migliori durante l\'invio, questo capitolo è stato suddiviso in $parts file.';
+  }
 }

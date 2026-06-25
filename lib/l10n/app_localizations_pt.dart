@@ -2319,10 +2319,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get chapterSelectEntries =>
-      'Selecione a menos 3 histórias relacionadas';
+      'Selecione pelo menos 1 história relacionada';
 
   @override
-  String get chapterMinimumEntries => 'Mínimo: 3 histórias por capítulo.';
+  String get chapterMinimumEntries => 'Mínimo: 1 história por capítulo.';
 
   @override
   String chapterPeriod(String start, String end) {
@@ -2585,7 +2585,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get newPasswordMinLength =>
-      'A nova palavra-passe deve ter pelo menos 4 caracteres.';
+      'A nova palavra-passe deve ter pelo menos 6 caracteres.';
 
   @override
   String get fillAllFields => 'Por favor, preencha todos os campos.';
@@ -2797,6 +2797,16 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get insightMoodVariationThisWeek =>
       'Sua variação de humor essa semana';
+
+  @override
+  String chapterExportPartLabel(int index, int total) {
+    return 'Parte $index de $total';
+  }
+
+  @override
+  String chapterExportSplitExplanation(int parts) {
+    return 'Para garantir um melhor desempenho e compatibilidade no envio, este capítulo foi dividido em $parts arquivos.';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -2931,7 +2941,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get newPasswordMinLength =>
-      'A nova senha deve ter pelo menos 4 caracteres.';
+      'A nova senha deve ter pelo menos 6 caracteres.';
 
   @override
   String get backupInfoDialogContent =>
@@ -2958,4 +2968,14 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get chapterExportPhotoSelectionSubtitle =>
       'Selecione as fotos de cada história que você deseja exportar';
+
+  @override
+  String chapterExportPartLabel(int index, int total) {
+    return 'Parte $index de $total';
+  }
+
+  @override
+  String chapterExportSplitExplanation(int parts) {
+    return 'Para garantir um melhor desempenho e compatibilidade no envio, este capítulo foi dividido em $parts arquivos.';
+  }
 }

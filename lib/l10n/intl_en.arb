@@ -2115,11 +2115,11 @@
   "@chapterRemovePhoto": {
     "description": "Button to remove chapter photo"
   },
-  "chapterSelectEntries": "Select related stories (title + date)",
+  "chapterSelectEntries": "Select at least 1 related story",
   "@chapterSelectEntries": {
     "description": "Label for selecting stories to compose a chapter"
   },
-  "chapterMinimumEntries": "Minimum: 3 stories per chapter.",
+  "chapterMinimumEntries": "Minimum: 1 story per chapter.",
   "@chapterMinimumEntries": {
     "description": "Validation message for minimum stories in a chapter"
   },
@@ -2469,9 +2469,9 @@
   "@emailChangedSuccess": {
     "description": "Success message after email change"
   },
-  "newPasswordMinLength": "New password must be at least 4 characters.",
+  "newPasswordMinLength": "New password must be at least 6 characters.",
   "@newPasswordMinLength": {
-    "description": "Validation error when new password is too short (min 4 chars)"
+    "description": "Validation error when new password is too short (min 6 chars)"
   },
   "fillAllFields": "Please fill in all fields.",
   "@fillAllFields": {
@@ -2638,5 +2638,26 @@
   "aboutMaterial3Desc": "Modern and accessible design system",
   "aboutScreenTechnologiesTitle": "Technologies",
   "insightMood7Days": "Mood — Last 7 Days",
-  "insightMoodVariationThisWeek": "Your mood variation this week"
+  "insightMoodVariationThisWeek": "Your mood variation this week",
+  "chapterExportPartLabel": "Part {index} of {total}",
+  "@chapterExportPartLabel": {
+    "description": "Label for chapter export split parts",
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "chapterExportSplitExplanation": "To ensure better performance and compatibility when sharing, this chapter was split into {parts} files.",
+  "@chapterExportSplitExplanation": {
+    "description": "Information shown when export is split",
+    "placeholders": {
+      "parts": {
+        "type": "int"
+      }
+    }
+  }
 }

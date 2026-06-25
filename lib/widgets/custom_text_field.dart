@@ -24,6 +24,8 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final TextInputAction? textInputAction;
   final String? suffixText;
+  final String? helperText;
+  final TextStyle? helperStyle;
 
   const CustomTextField({
     required this.label,
@@ -47,6 +49,8 @@ class CustomTextField extends StatelessWidget {
     this.onSubmitted,
     this.textInputAction,
     this.suffixText,
+    this.helperText,
+    this.helperStyle,
   });
 
   @override
@@ -79,6 +83,8 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: label,
           hintText: hintText,
+          helperText: helperText,
+          helperStyle: helperStyle,
           prefixIcon: prefixIcon,
           suffixText: suffixText,
           suffixIcon: suffixIcon,

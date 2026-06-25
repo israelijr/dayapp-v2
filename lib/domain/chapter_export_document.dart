@@ -73,4 +73,71 @@ class ChapterExportDocument {
           .toList(growable: false),
     );
   }
+
+  /// Particiona o documento em múltiplas partes respeitando o limite maxBlocksPerPart.
+  /// Evita quebrar blocos que pertencem à mesma história.
+  List<ChapterExportDocument> split(int maxBlocksPerPart) {
+    if (blocks.isEmpty) return [this];
+    if (blocks.length <= maxBlocksPerPart) {
+      return [this];
+    }
+
+    final storyGroups = <List<ExportBlock>>[];
+    List<ExportBlock> currentGroup = [];
+
+    for (final block in blocks) {
+      if (block.storyId == null) {
+        if (currentGroup.isNotEmpty) {
+          storyGroups.add(currentGroup);
+          currentGroup = [];
+        }
+        storyGroups.add([block]);
+      } else {
+        if (currentGroup.isNotEmpty &&
+            currentGroup.first.storyId != block.storyId) {
+          storyGroups.add(currentGroup);
+          currentGroup = [block];
+        } else {
+          currentGroup.add(block);
+        }
+      }
+    }
+    if (currentGroup.isNotEmpty) {
+      storyGroups.add(currentGroup);
+    }
+
+    final parts = <List<ExportBlock>>[];
+    List<ExportBlock> currentPart = [];
+
+    for (final group in storyGroups) {
+      if (currentPart.isEmpty) {
+        currentPart.addAll(group);
+      } else if (currentPart.length + group.length > maxBlocksPerPart) {
+        parts.add(currentPart);
+        currentPart = List<ExportBlock>.from(group);
+      } else {
+        currentPart.addAll(group);
+      }
+    }
+    if (currentPart.isNotEmpty) {
+      parts.add(currentPart);
+    }
+
+    return parts.map((partBlocks) {
+      final uniqueStoryIds =
+          partBlocks.map((b) => b.storyId).where((id) => id != null).toSet();
+      return ChapterExportDocument(
+        chapterId: chapterId,
+        userId: userId,
+        chapterTitle: chapterTitle,
+        chapterDescription: chapterDescription,
+        startDate: startDate,
+        endDate: endDate,
+        coverImagePath: coverImagePath,
+        storyCount: uniqueStoryIds.length,
+        blocks: partBlocks,
+      );
+    }).toList();
+  }
 }
+
