@@ -16,8 +16,8 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-  String _version = '1.0.19';
-  String _buildNumber = '26';
+  String _version = '1.0.21';
+  String _buildNumber = '28';
 
   // Contador para easter egg (7 toques na versão = abre PremiumDebugScreen)
   int _debugTapCount = 0;
@@ -150,26 +150,11 @@ class _AboutScreenState extends State<AboutScreen> {
             '',
             Icons.code,
             children: [
-              _buildTechItem(
-                'Flutter',
-                l10n.aboutFlutterDesc,
-              ),
-              _buildTechItem(
-                'Dart',
-                l10n.aboutDartDesc,
-              ),
-              _buildTechItem(
-                'SQLite',
-                l10n.aboutSqliteDesc,
-              ),
-              _buildTechItem(
-                'Provider',
-                l10n.aboutProviderDesc,
-              ),
-              _buildTechItem(
-                l10n.aboutMaterial3Title,
-                l10n.aboutMaterial3Desc,
-              ),
+              _buildTechItem('Flutter', l10n.aboutFlutterDesc),
+              _buildTechItem('Dart', l10n.aboutDartDesc),
+              _buildTechItem('SQLite', l10n.aboutSqliteDesc),
+              _buildTechItem('Provider', l10n.aboutProviderDesc),
+              _buildTechItem(l10n.aboutMaterial3Title, l10n.aboutMaterial3Desc),
             ],
           ),
           const SizedBox(height: 24),
