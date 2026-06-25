@@ -197,47 +197,50 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       builder: (dialogCtx) => StatefulBuilder(
         builder: (dialogCtx, setDialogState) => AlertDialog(
           title: Text(loc.changeEmail),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CustomTextField(
-                controller: newEmailController,
-                label: loc.email,
-                keyboardType: TextInputType.emailAddress,
-                prefixIcon: const Icon(Icons.email_outlined),
-              ),
-              if (dialogError != null) ...[
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade100,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.red.shade300),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        color: Colors.red.shade900,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          dialogError!,
-                          style: TextStyle(
-                            color: Colors.red.shade900,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+          content: SizedBox(
+            width: 320,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomTextField(
+                  controller: newEmailController,
+                  label: loc.email,
+                  keyboardType: TextInputType.emailAddress,
+                  prefixIcon: const Icon(Icons.email_outlined),
+                ),
+                if (dialogError != null) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade100,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.red.shade300),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.red.shade900,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            dialogError!,
+                            style: TextStyle(
+                              color: Colors.red.shade900,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ],
-            ],
+            ),
           ),
           actions: [
             TextButton(
@@ -307,82 +310,85 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       builder: (dialogCtx) => StatefulBuilder(
         builder: (dialogCtx, setDialogState) => AlertDialog(
           title: Text(loc.changePassword),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextField(
-                  controller: currentPasswordController,
-                  label: loc.currentPassword,
-                  obscureText: obscureCurrent,
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      obscureCurrent ? Icons.visibility_off : Icons.visibility,
+          content: SizedBox(
+            width: 320,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomTextField(
+                    controller: currentPasswordController,
+                    label: loc.currentPassword,
+                    obscureText: obscureCurrent,
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        obscureCurrent ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () =>
+                          setDialogState(() => obscureCurrent = !obscureCurrent),
                     ),
-                    onPressed: () =>
-                        setDialogState(() => obscureCurrent = !obscureCurrent),
                   ),
-                ),
-                CustomTextField(
-                  controller: newPasswordController,
-                  label: loc.newPasswordTitle,
-                  obscureText: obscureNew,
-                  helperText: loc.newPasswordMinLength,
-                  prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      obscureNew ? Icons.visibility_off : Icons.visibility,
+                  CustomTextField(
+                    controller: newPasswordController,
+                    label: loc.newPasswordTitle,
+                    obscureText: obscureNew,
+                    helperText: loc.newPasswordMinLength,
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        obscureNew ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () =>
+                          setDialogState(() => obscureNew = !obscureNew),
                     ),
-                    onPressed: () =>
-                        setDialogState(() => obscureNew = !obscureNew),
                   ),
-                ),
-                CustomTextField(
-                  controller: confirmPasswordController,
-                  label: loc.confirmPassword,
-                  obscureText: obscureConfirm,
-                  prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      obscureConfirm ? Icons.visibility_off : Icons.visibility,
+                  CustomTextField(
+                    controller: confirmPasswordController,
+                    label: loc.confirmPassword,
+                    obscureText: obscureConfirm,
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        obscureConfirm ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () =>
+                          setDialogState(() => obscureConfirm = !obscureConfirm),
                     ),
-                    onPressed: () =>
-                        setDialogState(() => obscureConfirm = !obscureConfirm),
                   ),
-                ),
-                if (dialogError != null) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade100,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.red.shade300),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          color: Colors.red.shade900,
-                          size: 18,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            dialogError!,
-                            style: TextStyle(
-                              color: Colors.red.shade900,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
+                  if (dialogError != null) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade100,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.red.shade300),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.red.shade900,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              dialogError!,
+                              style: TextStyle(
+                                color: Colors.red.shade900,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
           actions: [

@@ -22,6 +22,7 @@ class PremiumScreen extends StatelessWidget {
           SliverAppBar(
             expandedHeight: 240,
             pinned: true,
+            backgroundColor: colorScheme.primary,
             iconTheme: IconThemeData(
               color: colorScheme.onPrimary,
             ),

@@ -46,6 +46,14 @@ class _PinInputScreenState extends State<PinInputScreen>
 
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenHeight < 700;
+
+    final double buttonSize = isSmallScreen ? 68 : 80;
+    final double keyboardSpacing = isSmallScreen ? 10 : 16;
+    final double generalSpacing = isSmallScreen ? 12 : 24;
+    final double sectionSpacing = isSmallScreen ? 16 : 32;
+
     return Scaffold(
       resizeToAvoidBottomInset:
           false, // Impede que a tela redimensione quando o teclado aparecer
@@ -73,25 +81,20 @@ class _PinInputScreenState extends State<PinInputScreen>
                 ),
                 child: IntrinsicHeight(
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: EdgeInsets.all(isSmallScreen ? 16.0 : 24.0),
                     child: Column(
                       children: [
                         const Spacer(flex: 1),
 
-                        // Logo e título
-                        Icon(
-                          Icons.security,
-                          size: 64,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        const SizedBox(height: 16),
-
                         Text(
                           'Digite seu PIN',
                           style: Theme.of(context).textTheme.headlineMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: isSmallScreen ? 24 : null,
+                              ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: isSmallScreen ? 4 : 8),
 
                         Text(
                           'Para acessar o DayApp',
@@ -100,10 +103,11 @@ class _PinInputScreenState extends State<PinInputScreen>
                                 color: Theme.of(
                                   context,
                                 ).colorScheme.onSurface.withValues(alpha: 0.7),
+                                fontSize: isSmallScreen ? 14 : null,
                               ),
                         ),
 
-                        const SizedBox(height: 32),
+                        SizedBox(height: sectionSpacing),
 
                         // Círculos do PIN com botão de revelar
                         Row(
@@ -190,7 +194,7 @@ class _PinInputScreenState extends State<PinInputScreen>
                         ),
 
                         if (_errorMessage != null) ...[
-                          const SizedBox(height: 24),
+                          SizedBox(height: generalSpacing),
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
@@ -214,12 +218,12 @@ class _PinInputScreenState extends State<PinInputScreen>
                           ),
                         ],
 
-                        const SizedBox(height: 32),
+                        SizedBox(height: sectionSpacing),
 
                         // Teclado numérico
-                        _buildNumericKeypad(),
+                        _buildNumericKeypad(buttonSize, keyboardSpacing),
 
-                        const SizedBox(height: 24),
+                        SizedBox(height: generalSpacing),
 
                         // Botão "Esqueceu PIN"
                         GestureDetector(
@@ -249,62 +253,62 @@ class _PinInputScreenState extends State<PinInputScreen>
     );
   }
 
-  Widget _buildNumericKeypad() {
+  Widget _buildNumericKeypad(double buttonSize, double keyboardSpacing) {
     return Column(
       children: [
         // Primeira linha (1, 2, 3)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildKeypadButton('1'),
-            _buildKeypadButton('2'),
-            _buildKeypadButton('3'),
+            _buildKeypadButton('1', buttonSize),
+            _buildKeypadButton('2', buttonSize),
+            _buildKeypadButton('3', buttonSize),
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: keyboardSpacing),
 
         // Segunda linha (4, 5, 6)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildKeypadButton('4'),
-            _buildKeypadButton('5'),
-            _buildKeypadButton('6'),
+            _buildKeypadButton('4', buttonSize),
+            _buildKeypadButton('5', buttonSize),
+            _buildKeypadButton('6', buttonSize),
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: keyboardSpacing),
 
         // Terceira linha (7, 8, 9)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildKeypadButton('7'),
-            _buildKeypadButton('8'),
-            _buildKeypadButton('9'),
+            _buildKeypadButton('7', buttonSize),
+            _buildKeypadButton('8', buttonSize),
+            _buildKeypadButton('9', buttonSize),
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: keyboardSpacing),
 
-        // Quarta linha (vazio, 0, apagar)
+        // Quarta linha (OK, 0, apagar)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const SizedBox(width: 80), // Espaço vazio
-            _buildKeypadButton('0'),
-            _buildBackspaceButton(),
+            _buildOkButton(buttonSize),
+            _buildKeypadButton('0', buttonSize),
+            _buildBackspaceButton(buttonSize),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildKeypadButton(String digit) {
+  Widget _buildKeypadButton(String digit, double size) {
     return InkWell(
       onTap: _isLoading ? null : () => _onDigitPressed(digit),
-      borderRadius: BorderRadius.circular(40),
+      borderRadius: BorderRadius.circular(size / 2),
       child: Container(
-        width: 80,
-        height: 80,
+        width: size,
+        height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Theme.of(context).colorScheme.surface,
@@ -328,20 +332,23 @@ class _PinInputScreenState extends State<PinInputScreen>
             digit,
             style: Theme.of(
               context,
-            ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w500),
+            ).textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w500,
+              fontSize: size * 0.425,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildBackspaceButton() {
+  Widget _buildBackspaceButton(double size) {
     return InkWell(
       onTap: _isLoading ? null : _onBackspacePressed,
-      borderRadius: BorderRadius.circular(40),
+      borderRadius: BorderRadius.circular(size / 2),
       child: Container(
-        width: 80,
-        height: 80,
+        width: size,
+        height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Theme.of(context).colorScheme.surface,
@@ -363,8 +370,57 @@ class _PinInputScreenState extends State<PinInputScreen>
         child: Center(
           child: Icon(
             Icons.backspace_outlined,
-            size: 24,
+            size: size * 0.3,
             color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOkButton(double size) {
+    final bool isEnabled = _currentIndex >= 4;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return InkWell(
+      onTap: (_isLoading || !isEnabled) ? null : _tryAuthenticate,
+      borderRadius: BorderRadius.circular(size / 2),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: isEnabled ? 1.0 : 0.5,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isEnabled
+                ? Theme.of(context).colorScheme.primary
+                : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+            border: Border.all(
+              color: isEnabled
+                  ? Theme.of(context).colorScheme.primary
+                  : (isDark ? Colors.grey.shade700 : Colors.grey.shade300),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(
+                  context,
+                ).colorScheme.shadow.withValues(alpha: 0.1),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              'OK',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: size * 0.25,
+                color: isEnabled
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : (isDark ? Colors.grey.shade500 : Colors.grey.shade600),
+              ),
+            ),
           ),
         ),
       ),
@@ -380,11 +436,6 @@ class _PinInputScreenState extends State<PinInputScreen>
       });
 
       HapticFeedback.lightImpact();
-
-      // Se atingiu o mínimo de dígitos (4), tenta autenticar
-      if (_currentIndex >= 4) {
-        _tryAuthenticate();
-      }
     }
   }
 

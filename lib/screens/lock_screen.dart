@@ -245,6 +245,12 @@ class _LockScreenState extends State<LockScreen> {
     final bool onlyBiometric =
         _isBiometricAvailable && !pinProvider.isPinEnabled;
 
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenHeight < 700;
+
+    final double keyboardButtonSize = isSmallScreen ? 60 : 70;
+    final double keypadPadding = isSmallScreen ? 4 : 8;
+
     return PopScope(
       canPop: false, // Impede voltar
       child: Scaffold(
@@ -254,24 +260,28 @@ class _LockScreenState extends State<LockScreen> {
             children: [
               Center(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
+                  padding: EdgeInsets.all(isSmallScreen ? 16 : 24),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Ícone de cadeado ou biometria
-                      Icon(
-                        onlyBiometric ? Icons.fingerprint : Icons.lock_outline,
-                        size: 80,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(height: 24),
+                      // Ícone de biometria (somente biometria se onlyBiometric, sem cadeado)
+                      if (onlyBiometric) ...[
+                        Icon(
+                          Icons.fingerprint,
+                          size: isSmallScreen ? 64 : 80,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        SizedBox(height: isSmallScreen ? 12 : 24),
+                      ],
 
                       // Título
                       Text(
                         loc.unlockTitle,
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontSize: isSmallScreen ? 20 : null,
+                        ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: isSmallScreen ? 4 : 8),
 
                       Text(
                         _showPasswordMode
@@ -281,9 +291,10 @@ class _LockScreenState extends State<LockScreen> {
                             : loc.enterPinToContinue,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: isSmallScreen ? 13 : null,
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      SizedBox(height: isSmallScreen ? 20 : 40),
 
                       // Modo de desbloqueio por SENHA
                       if (_showPasswordMode) ...[
@@ -312,7 +323,7 @@ class _LockScreenState extends State<LockScreen> {
                           _buildPinIndicators(),
 
                           if (_showError) ...[
-                            const SizedBox(height: 16),
+                            SizedBox(height: isSmallScreen ? 8 : 16),
                             Text(
                               loc.pinIncorrect,
                               style: TextStyle(
@@ -322,12 +333,12 @@ class _LockScreenState extends State<LockScreen> {
                             ),
                           ],
 
-                          const SizedBox(height: 40),
+                          SizedBox(height: isSmallScreen ? 20 : 40),
 
                           // Teclado numérico
-                          _buildNumericKeypad(),
+                          _buildNumericKeypad(keyboardButtonSize, keypadPadding),
 
-                          const SizedBox(height: 24),
+                          SizedBox(height: isSmallScreen ? 12 : 24),
                         ],
 
                         // Botão de biometria
@@ -343,13 +354,13 @@ class _LockScreenState extends State<LockScreen> {
                                   : loc.useBiometrics,
                             ),
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                 horizontal: 32,
-                                vertical: 12,
+                                vertical: isSmallScreen ? 8 : 12,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: isSmallScreen ? 8 : 16),
                         ],
 
                         // Botão para usar senha da conta
@@ -367,7 +378,7 @@ class _LockScreenState extends State<LockScreen> {
                           label: Text(loc.useAccountPassword),
                         ),
 
-                        const SizedBox(height: 8),
+                        SizedBox(height: isSmallScreen ? 4 : 8),
 
                         // Link para recuperação - apenas se PIN estiver habilitado
                         if (pinProvider.isPinEnabled)
@@ -563,45 +574,50 @@ class _LockScreenState extends State<LockScreen> {
     );
   }
 
-  Widget _buildNumericKeypad() {
+  Widget _buildNumericKeypad(double buttonSize, double padding) {
     return SizedBox(
-      width: 300,
+      width: (buttonSize + padding * 2) * 3 + 20,
       child: Column(
         children: [
-          _buildKeypadRow(['1', '2', '3']),
-          _buildKeypadRow(['4', '5', '6']),
-          _buildKeypadRow(['7', '8', '9']),
-          _buildKeypadRow(['✓', '0', '⌫']),
+          _buildKeypadRow(['1', '2', '3'], buttonSize, padding),
+          _buildKeypadRow(['4', '5', '6'], buttonSize, padding),
+          _buildKeypadRow(['7', '8', '9'], buttonSize, padding),
+          _buildKeypadRow(['⌫', '0', 'OK'], buttonSize, padding),
         ],
       ),
     );
   }
 
-  Widget _buildKeypadRow(List<String> numbers) {
+  Widget _buildKeypadRow(List<String> numbers, double buttonSize, double padding) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: numbers.map((number) {
         if (number.isEmpty) {
-          return const SizedBox(width: 80, height: 80);
+          return SizedBox(width: buttonSize + padding * 2, height: buttonSize + padding * 2);
         }
 
-        return _buildKeypadButton(number);
+        return _buildKeypadButton(number, buttonSize, padding);
       }).toList(),
     );
   }
 
-  Widget _buildKeypadButton(String value) {
+  Widget _buildKeypadButton(String value, double buttonSize, double padding) {
+    final isOk = value == 'OK';
+    final isBackspace = value == '⌫';
+    final isEnabled = !isOk || _enteredPin.length >= 4;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: EdgeInsets.all(padding),
       child: Material(
         color: const Color(0x00000000),
         child: InkWell(
           onTap: _isLoading
               ? null
               : () {
-                  if (value == '⌫') {
+                  if (isBackspace) {
                     _onBackspacePressed();
-                  } else if (value == '✓') {
+                  } else if (isOk) {
                     if (_enteredPin.length >= 4) {
                       _verifyPin();
                     }
@@ -609,32 +625,58 @@ class _LockScreenState extends State<LockScreen> {
                     _onNumberPressed(value);
                   }
                 },
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(buttonSize / 2),
           child: Container(
-            width: 70,
-            height: 70,
+            width: buttonSize,
+            height: buttonSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.3),
-                width: 1,
-              ),
+              color: isOk
+                  ? (isEnabled
+                      ? Theme.of(context).colorScheme.primary
+                      : (isDark ? Colors.grey.shade800 : Colors.grey.shade200))
+                  : null,
             ),
             child: Center(
-              child: Text(
-                value,
-                style: TextStyle(
-                  fontSize: value == '⌫' ? 24 : 28,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
+              child: _buildKeypadButtonContent(value, isEnabled, buttonSize),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildKeypadButtonContent(String value, bool isEnabled, double buttonSize) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
+    final isDark = theme.brightness == Brightness.dark;
+
+    if (value == '⌫') {
+      return Icon(
+        Icons.backspace_outlined,
+        size: buttonSize * 0.4,
+        color: primaryColor,
+      );
+    } else if (value == 'OK') {
+      return Text(
+        'OK',
+        style: TextStyle(
+          fontSize: buttonSize * 0.28,
+          fontWeight: FontWeight.bold,
+          color: isEnabled
+              ? Theme.of(context).colorScheme.onPrimary
+              : (isDark ? Colors.grey.shade500 : Colors.grey.shade600),
+        ),
+      );
+    } else {
+      return Text(
+        value,
+        style: TextStyle(
+          fontSize: buttonSize * 0.45,
+          fontWeight: FontWeight.w400,
+          color: primaryColor,
+        ),
+      );
+    }
   }
 }

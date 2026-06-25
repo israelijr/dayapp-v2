@@ -85,6 +85,7 @@ class CustomTextField extends StatelessWidget {
           hintText: hintText,
           helperText: helperText,
           helperStyle: helperStyle,
+          helperMaxLines: 3,
           prefixIcon: prefixIcon,
           suffixText: suffixText,
           suffixIcon: suffixIcon,
