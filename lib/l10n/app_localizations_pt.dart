@@ -1940,6 +1940,38 @@ class AppLocalizationsPt extends AppLocalizations {
       'Sua evolução de energia essa semana';
 
   @override
+  String get insightChapterEngagementTitle => 'Capítulo Memorável';
+
+  @override
+  String insightChapterEngagementDesc(String chapter_title, int count) {
+    return 'Seu capítulo \"$chapter_title\" é o mais completo até agora, com $count histórias registradas.';
+  }
+
+  @override
+  String get insightChapterHappiestTitle => 'Capítulo Feliz';
+
+  @override
+  String insightChapterHappiestDesc(
+    String chapter_title,
+    String moodEmoji,
+    String moodAvg,
+  ) {
+    return 'O capítulo \"$chapter_title\" foi uma fase muito positiva, com humor médio de $moodEmoji ($moodAvg).';
+  }
+
+  @override
+  String get insightWritingLengthTitle => 'Reflexões Profundas';
+
+  @override
+  String get insightWritingLengthTip =>
+      'Suas reflexões recentes estão bem diretas. Experimente detalhar um pouco mais como você se sentiu hoje.';
+
+  @override
+  String insightWritingLengthCongrats(int count) {
+    return 'Parabéns pela escrita detalhada recentemente ($count palavras)! Aprofundar suas memórias ajuda a clarear a mente.';
+  }
+
+  @override
   String get insightPremiumRequired =>
       'Recurso Premium. Faça upgrade para desbloquear este insight.';
 

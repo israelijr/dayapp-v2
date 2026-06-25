@@ -3560,6 +3560,52 @@ abstract class AppLocalizations {
   /// **'Your energy trend this week'**
   String get insightEnergyChartSubtitle;
 
+  /// Title of the insight for chapter with most stories
+  ///
+  /// In en, this message translates to:
+  /// **'Memorable Chapter'**
+  String get insightChapterEngagementTitle;
+
+  /// Description of the insight for chapter with most stories
+  ///
+  /// In en, this message translates to:
+  /// **'Your chapter \"{chapter_title}\" is the most complete so far, with {count} stories recorded.'**
+  String insightChapterEngagementDesc(String chapter_title, int count);
+
+  /// Title of the insight for chapter with highest average mood
+  ///
+  /// In en, this message translates to:
+  /// **'Happy Chapter'**
+  String get insightChapterHappiestTitle;
+
+  /// Description of the happiest chapter insight
+  ///
+  /// In en, this message translates to:
+  /// **'The chapter \"{chapter_title}\" was a very positive phase, with average mood {moodEmoji} ({moodAvg}).'**
+  String insightChapterHappiestDesc(
+    String chapter_title,
+    String moodEmoji,
+    String moodAvg,
+  );
+
+  /// Title of the insight encouraging detailed writing
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Reflections'**
+  String get insightWritingLengthTitle;
+
+  /// Description encouraging longer entries
+  ///
+  /// In en, this message translates to:
+  /// **'Your recent reflections are quite brief. Try writing in more detail about how you felt today.'**
+  String get insightWritingLengthTip;
+
+  /// Description congratulating the user for a long entry
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations on writing in detail recently ({count} words)! Deepening your memories helps clear the mind.'**
+  String insightWritingLengthCongrats(int count);
+
   /// Message shown on locked Premium insights
   ///
   /// In en, this message translates to:

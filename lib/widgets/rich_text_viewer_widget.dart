@@ -36,8 +36,8 @@ class RichTextViewerWidget extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    // Cria o controller a partir do JSON
-    final controller = RichTextHelper.jsonToController(jsonContent);
+    // Cria o controller a partir do JSON ou Texto Simples
+    final controller = RichTextHelper.smartController(jsonContent);
 
     return QuillEditor(
       controller: controller,

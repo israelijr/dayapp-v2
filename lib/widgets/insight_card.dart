@@ -63,9 +63,8 @@ class InsightCard extends StatelessWidget {
         searchQuery != null &&
         searchQuery.isNotEmpty;
 
-    final cardColor = insight.type == InsightType.energyChart
-        ? colorScheme.surface.withValues(alpha: 0.88)
-        : colorScheme.secondaryContainer;
+    final cardColor = colorScheme.surface.withValues(alpha: 0.88);
+    final periodLabel = _resolvePeriodLabel(l10n);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -84,83 +83,113 @@ class InsightCard extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (insight.type != InsightType.energyChart) ...[
-                    // Cabeçalho: ícone + título + badge premium + botão dispensar
-                    Row(
-                      children: [
-                        Text(
-                          insight.icon,
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  title,
-                                  style: GoogleFonts.playfairDisplay(
-                                    textStyle: theme.textTheme.titleSmall
-                                        ?.copyWith(
-                                          color:
-                                              colorScheme.onSecondaryContainer,
-                                          fontWeight: FontWeight.w600,
-                                          height: 1.1,
-                                        ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    title,
+                                    style: GoogleFonts.playfairDisplay(
+                                      textStyle: theme.textTheme.titleMedium?.copyWith(
+                                        color: colorScheme.onSecondaryContainer,
+                                        fontWeight: FontWeight.w600,
+                                        height: 1.05,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                if (insight.isPremium) ...[
+                                  const SizedBox(width: 6),
+                                  Icon(
+                                    Icons.workspace_premium,
+                                    size: 16,
+                                    color: colorScheme.primary,
+                                  ),
+                                ],
+                              ],
+                            ),
+                            if (periodLabel != null) ...[
+                              const SizedBox(height: 6),
+                              Text(
+                                periodLabel,
+                                style: GoogleFonts.plusJakartaSans(
+                                  textStyle: theme.textTheme.bodySmall?.copyWith(
+                                    color: colorScheme.onSecondaryContainer.withValues(
+                                      alpha: 0.74,
+                                    ),
+                                    height: 1.45,
                                   ),
                                 ),
                               ),
-                              if (insight.isPremium) ...[
-                                const SizedBox(width: 6),
-                                Icon(
-                                  Icons.workspace_premium,
-                                  size: 14,
-                                  color: colorScheme.primary,
-                                ),
-                              ],
                             ],
-                          ),
-                        ),
-                        if (onDismiss != null)
-                          IconButton(
-                            tooltip: l10n.insightDismiss,
-                            icon: const Icon(Icons.close, size: 18),
-                            onPressed: onDismiss,
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(
-                              minWidth: 28,
-                              minHeight: 28,
-                            ),
-                            color: colorScheme.onSecondaryContainer.withValues(
-                              alpha: 0.6,
-                            ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                  ],
-
-                  // Corpo: conteúdo bloqueado ou conteúdo normal
-                  if (isLocked)
-                    _buildPremiumLock(context, l10n, theme, colorScheme)
-                  else if (insight.type == InsightType.energyChart)
-                    _buildMoodChartCard(l10n, theme, colorScheme, onDismiss)
-                  else ...[
-                    Text(
-                      description,
-                      style: GoogleFonts.plusJakartaSans(
-                        textStyle: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSecondaryContainer,
-                          height: 1.4,
+                            if (!isLocked && insight.type != InsightType.energyChart) ...[
+                              const SizedBox(height: 6),
+                              Text(
+                                description,
+                                style: GoogleFonts.plusJakartaSans(
+                                  textStyle: theme.textTheme.bodySmall?.copyWith(
+                                    color: colorScheme.onSecondaryContainer.withValues(
+                                      alpha: 0.74,
+                                    ),
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
                       ),
-                    ),
-                    // Botão "Ver histórias"
+                      const SizedBox(width: 12),
+                      Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: colorScheme.primary.withValues(alpha: 0.18),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          _resolveIcon(isLocked),
+                          size: 24,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                      if (onDismiss != null) ...[
+                        const SizedBox(width: 8),
+                        IconButton(
+                          tooltip: l10n.insightDismiss,
+                          icon: const Icon(Icons.close, size: 18),
+                          onPressed: onDismiss,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(
+                            minWidth: 28,
+                            minHeight: 28,
+                          ),
+                          color: colorScheme.onSecondaryContainer.withValues(
+                            alpha: 0.6,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  if (isLocked) ...[
+                    const SizedBox(height: 12),
+                    _buildPremiumLock(context, l10n, theme, colorScheme),
+                  ] else ...[
+                    if (insight.type == InsightType.energyChart) ...[
+                      const SizedBox(height: 18),
+                      _buildMoodChart(l10n, theme, colorScheme),
+                    ],
                     if (showButton) ...[
                       const SizedBox(height: 4),
                       Align(
@@ -241,99 +270,6 @@ class InsightCard extends StatelessWidget {
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildMoodChartCard(
-    AppLocalizations l10n,
-    ThemeData theme,
-    ColorScheme colorScheme,
-    VoidCallback? onDismiss,
-  ) {
-    final today = DateTime.now();
-    final start = today.subtract(const Duration(days: 6));
-    final periodLabel = l10n.chapterPeriod(
-      DateFormat('dd/MM').format(start),
-      DateFormat('dd/MM').format(today),
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _resolveTitle(l10n),
-                    style: GoogleFonts.playfairDisplay(
-                      textStyle: theme.textTheme.titleMedium?.copyWith(
-                        color: colorScheme.onSecondaryContainer,
-                        fontWeight: FontWeight.w600,
-                        height: 1.05,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    periodLabel,
-                    style: GoogleFonts.plusJakartaSans(
-                      textStyle: theme.textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSecondaryContainer.withValues(
-                          alpha: 0.74,
-                        ),
-                        height: 1.45,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    _resolveDescription(l10n),
-                    style: GoogleFonts.plusJakartaSans(
-                      textStyle: theme.textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSecondaryContainer.withValues(
-                          alpha: 0.74,
-                        ),
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            Container(
-              width: 42,
-              height: 42,
-              decoration: BoxDecoration(
-                color: colorScheme.primary.withValues(alpha: 0.18),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.auto_graph,
-                size: 24,
-                color: colorScheme.primary,
-              ),
-            ),
-            if (onDismiss != null) ...[
-              const SizedBox(width: 8),
-              IconButton(
-                tooltip: l10n.insightDismiss,
-                icon: const Icon(Icons.close, size: 18),
-                onPressed: onDismiss,
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
-                color: colorScheme.onSecondaryContainer.withValues(alpha: 0.6),
-              ),
-            ],
-          ],
-        ),
-        const SizedBox(height: 18),
-        _buildMoodChart(l10n, theme, colorScheme),
       ],
     );
   }
@@ -464,6 +400,12 @@ class InsightCard extends StatelessWidget {
         return l10n.insightWritingTimeTitle;
       case InsightType.energyChart:
         return _resolveMoodChartTitle(l10n);
+      case InsightType.writingLength:
+        return l10n.insightWritingLengthTitle;
+      case InsightType.chapterEngagement:
+        return l10n.insightChapterEngagementTitle;
+      case InsightType.chapterHappiest:
+        return l10n.insightChapterHappiestTitle;
     }
   }
 
@@ -487,6 +429,12 @@ class InsightCard extends StatelessWidget {
         return _resolveWritingTime(l10n);
       case InsightType.energyChart:
         return _resolveMoodChartSubtitle(l10n);
+      case InsightType.writingLength:
+        return _resolveWritingLength(l10n);
+      case InsightType.chapterEngagement:
+        return _resolveChapterEngagement(l10n);
+      case InsightType.chapterHappiest:
+        return _resolveChapterHappiest(l10n);
     }
   }
 
@@ -548,6 +496,69 @@ class InsightCard extends StatelessWidget {
         return l10n.insightWritingTimeAfternoon;
       default:
         return l10n.insightWritingTimeNight;
+    }
+  }
+
+  String _resolveWritingLength(AppLocalizations l10n) {
+    final style = insight.metadata?['style'] as String? ?? 'tip';
+    if (style == 'congrats') {
+      final count = insight.metadata?['count'] as int? ?? 0;
+      return l10n.insightWritingLengthCongrats(count);
+    }
+    return l10n.insightWritingLengthTip;
+  }
+
+  String _resolveChapterEngagement(AppLocalizations l10n) {
+    final title = insight.metadata?['chapter_title'] as String? ?? '';
+    final count = insight.metadata?['count'] as int? ?? 0;
+    return l10n.insightChapterEngagementDesc(title, count);
+  }
+
+  String _resolveChapterHappiest(AppLocalizations l10n) {
+    final title = insight.metadata?['chapter_title'] as String? ?? '';
+    final avgMood = (insight.metadata?['avg_mood'] as num?)?.toDouble() ?? 0.0;
+    final moodStr = moodEmoji(avgMood.round().clamp(1, 5));
+    final avgMoodStr = avgMood.toStringAsFixed(1);
+    return l10n.insightChapterHappiestDesc(title, moodStr, avgMoodStr);
+  }
+
+  String? _resolvePeriodLabel(AppLocalizations l10n) {
+    if (insight.type == InsightType.energyChart) {
+      final today = DateTime.now();
+      final start = today.subtract(const Duration(days: 6));
+      return l10n.chapterPeriod(
+        DateFormat('dd/MM').format(start),
+        DateFormat('dd/MM').format(today),
+      );
+    }
+    return null;
+  }
+
+  IconData _resolveIcon(bool isLocked) {
+    if (isLocked) {
+      return Icons.lock_outline;
+    }
+    switch (insight.type) {
+      case InsightType.bestWeekday:
+        return Icons.explore_outlined;
+      case InsightType.positiveTag:
+        return Icons.local_offer_outlined;
+      case InsightType.trend:
+        return Icons.trending_up;
+      case InsightType.monthlySummary:
+        return Icons.analytics_outlined;
+      case InsightType.storyBalance:
+        return Icons.scale_outlined;
+      case InsightType.writingTime:
+        return Icons.schedule_outlined;
+      case InsightType.energyChart:
+        return Icons.auto_graph_outlined;
+      case InsightType.writingLength:
+        return Icons.edit_note_outlined;
+      case InsightType.chapterEngagement:
+        return Icons.menu_book_outlined;
+      case InsightType.chapterHappiest:
+        return Icons.favorite_border;
     }
   }
 

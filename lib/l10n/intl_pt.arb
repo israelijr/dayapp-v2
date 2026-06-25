@@ -1545,6 +1545,58 @@
   "@insightEnergyChartSubtitle": {
     "description": "Subtítulo do card de gráfico de energia"
   },
+  "insightChapterEngagementTitle": "Capítulo Memorável",
+  "@insightChapterEngagementTitle": {
+    "description": "Título do insight de capítulo com mais histórias"
+  },
+  "insightChapterEngagementDesc": "Seu capítulo \"{chapter_title}\" é o mais completo até agora, com {count} histórias registradas.",
+  "@insightChapterEngagementDesc": {
+    "description": "Descrição do insight de capítulo com mais histórias",
+    "placeholders": {
+      "chapter_title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "insightChapterHappiestTitle": "Capítulo Feliz",
+  "@insightChapterHappiestTitle": {
+    "description": "Título do insight de capítulo com maior humor médio"
+  },
+  "insightChapterHappiestDesc": "O capítulo \"{chapter_title}\" foi uma fase muito positiva, com humor médio de {moodEmoji} ({moodAvg}).",
+  "@insightChapterHappiestDesc": {
+    "description": "Descrição do insight de capítulo mais feliz",
+    "placeholders": {
+      "chapter_title": {
+        "type": "String"
+      },
+      "moodEmoji": {
+        "type": "String"
+      },
+      "moodAvg": {
+        "type": "String"
+      }
+    }
+  },
+  "insightWritingLengthTitle": "Reflexões Profundas",
+  "@insightWritingLengthTitle": {
+    "description": "Título do insight de escrita detalhada"
+  },
+  "insightWritingLengthTip": "Suas reflexões recentes estão bem diretas. Experimente detalhar um pouco mais como você se sentiu hoje.",
+  "@insightWritingLengthTip": {
+    "description": "Mensagem incentivando textos maiores"
+  },
+  "insightWritingLengthCongrats": "Parabéns pela escrita detalhada recentemente ({count} palavras)! Aprofundar suas memórias ajuda a clarear a mente.",
+  "@insightWritingLengthCongrats": {
+    "description": "Mensagem parabenizando por texto longo",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "insightPremiumRequired": "Recurso Premium. Faça upgrade para desbloquear este insight.",
   "@insightPremiumRequired": {
     "description": "Mensagem exibida em insights Premium bloqueados"

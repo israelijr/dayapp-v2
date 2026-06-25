@@ -71,6 +71,9 @@ class InsightService {
     final storyBalanceFuture = calculateStoryBalance(userId);
     final writingTimeFuture = calculateWritingTime(userId);
     final moodChartFuture = calculateMoodChart(userId);
+    final chapterEngagementFuture = calculateChapterEngagement(userId);
+    final chapterHappiestFuture = calculateChapterHappiest(userId);
+    final writingLengthFuture = calculateWritingLength(userId);
 
     final trendInsight = await trendFuture;
     final positiveTagInsight = await positiveTagFuture;
@@ -79,12 +82,18 @@ class InsightService {
     final storyBalanceInsight = await storyBalanceFuture;
     final writingTimeInsight = await writingTimeFuture;
     final moodChartInsight = await moodChartFuture;
+    final chapterEngagementInsight = await chapterEngagementFuture;
+    final chapterHappiestInsight = await chapterHappiestFuture;
+    final writingLengthInsight = await writingLengthFuture;
 
-    // Prioridade: tendência > equilíbrio > horário > tag > dia > resumo > energia
+    // Prioridade: tendência > equilíbrio > horário > escrita detalhada > capítulos > tag > dia > resumo > energia
     final ordered = <Insight>[];
     if (trendInsight != null) ordered.add(trendInsight);
     if (storyBalanceInsight != null) ordered.add(storyBalanceInsight);
     if (writingTimeInsight != null) ordered.add(writingTimeInsight);
+    if (writingLengthInsight != null) ordered.add(writingLengthInsight);
+    if (chapterEngagementInsight != null) ordered.add(chapterEngagementInsight);
+    if (chapterHappiestInsight != null) ordered.add(chapterHappiestInsight);
     if (positiveTagInsight != null) ordered.add(positiveTagInsight);
     if (bestWeekdayInsight != null) ordered.add(bestWeekdayInsight);
     if (monthlySummaryInsight != null) ordered.add(monthlySummaryInsight);
@@ -468,5 +477,158 @@ class InsightService {
         'avg_mood': avgMood,
       },
     );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Cálculo: Capítulo Mais Ativo (PREMIUM)
+  // ---------------------------------------------------------------------------
+
+  /// Encontra o capítulo com o maior número de histórias registradas.
+  Future<Insight?> calculateChapterEngagement(String userId) async {
+    final db = await _db.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT c.titulo, COUNT(ce.entrada_id) AS total_entradas
+      FROM capitulos c
+      JOIN capitulo_entradas ce ON ce.capitulo_id = c.id
+      JOIN historia h ON h.id = ce.entrada_id AND h.excluido IS NULL
+      WHERE c.user_id = ?
+      GROUP BY c.id
+      HAVING total_entradas >= 3
+      ORDER BY total_entradas DESC
+      LIMIT 1
+      ''',
+      [userId],
+    );
+
+    if (rows.isEmpty) return null;
+
+    final row = rows.first;
+    final titulo = row['titulo'] as String?;
+    final total = row['total_entradas'] as int? ?? 0;
+    if (titulo == null || titulo.isEmpty) return null;
+
+    return Insight(
+      type: InsightType.chapterEngagement,
+      icon: '📖',
+      title: 'insightChapterEngagementTitle',
+      description: 'insightChapterEngagementDesc',
+      metadata: {
+        'chapter_title': titulo,
+        'count': total,
+      },
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Cálculo: Capítulo Mais Feliz (PREMIUM)
+  // ---------------------------------------------------------------------------
+
+  /// Encontra o capítulo com a maior média de humor.
+  Future<Insight?> calculateChapterHappiest(String userId) async {
+    final db = await _db.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT c.titulo, AVG(h.humor) AS media_humor, COUNT(ce.entrada_id) AS total_entradas
+      FROM capitulos c
+      JOIN capitulo_entradas ce ON ce.capitulo_id = c.id
+      JOIN historia h ON h.id = ce.entrada_id AND h.excluido IS NULL
+      WHERE c.user_id = ?
+      GROUP BY c.id
+      HAVING total_entradas >= 3
+      ORDER BY media_humor DESC
+      LIMIT 1
+      ''',
+      [userId],
+    );
+
+    if (rows.isEmpty) return null;
+
+    final row = rows.first;
+    final titulo = row['titulo'] as String?;
+    final mediaHumor = (row['media_humor'] as num?)?.toDouble() ?? 0.0;
+    if (titulo == null || titulo.isEmpty) return null;
+
+    return Insight(
+      type: InsightType.chapterHappiest,
+      icon: '💖',
+      title: 'insightChapterHappiestTitle',
+      description: 'insightChapterHappiestDesc',
+      metadata: {
+        'chapter_title': titulo,
+        'avg_mood': mediaHumor,
+      },
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Cálculo: Estimulador de Escrita Longa (FREE)
+  // ---------------------------------------------------------------------------
+
+  /// Incentiva o usuário a detalhar suas reflexões se a média semanal for baixa,
+  /// ou o parabeniza se tiver escrito um diário substancial recentemente.
+  Future<Insight?> calculateWritingLength(String userId) async {
+    final db = await _db.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT descricao, data
+      FROM historia
+      WHERE user_id = ?
+        AND excluido IS NULL
+        AND data >= date('now', '-6 day')
+      ORDER BY data DESC
+      ''',
+      [userId],
+    );
+
+    if (rows.isEmpty) return null;
+
+    final wordsList = rows.map((r) {
+      final text = r['descricao'] as String? ?? '';
+      return text.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
+    }).toList();
+
+    // 1. Verifica se escreveu uma história longa nos últimos 3 dias (ex: > 150 palavras)
+    final now = DateTime.now();
+    for (var i = 0; i < rows.length; i++) {
+      final row = rows[i];
+      final dateStr = row['data'] as String? ?? '';
+      final date = DateTime.tryParse(dateStr);
+      if (date != null && now.difference(date).inDays <= 3) {
+        final words = wordsList[i];
+        if (words > 150) {
+          return Insight(
+            type: InsightType.writingLength,
+            icon: '✍️',
+            title: 'insightWritingLengthTitle',
+            description: 'insightWritingLengthCongrats',
+            metadata: {
+              'style': 'congrats',
+              'count': words,
+            },
+          );
+        }
+      }
+    }
+
+    // 2. Se tiver pelo menos 3 histórias na semana e média de palavras < 40, sugere escrever mais
+    if (wordsList.length >= 3) {
+      final totalWords = wordsList.reduce((a, b) => a + b);
+      final avgWords = totalWords / wordsList.length;
+      if (avgWords < 40) {
+        return Insight(
+          type: InsightType.writingLength,
+          icon: '✍️',
+          title: 'insightWritingLengthTitle',
+          description: 'insightWritingLengthTip',
+          metadata: {
+            'style': 'tip',
+            'avg_words': avgWords.round(),
+          },
+        );
+      }
+    }
+
+    return null;
   }
 }

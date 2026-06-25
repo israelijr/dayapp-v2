@@ -58,6 +58,10 @@ class RichTextHelper {
       return '';
     }
 
+    if (!isValidQuillJson(jsonString)) {
+      return jsonString;
+    }
+
     try {
       final controller = jsonToController(jsonString);
       return controller.document.toPlainText();

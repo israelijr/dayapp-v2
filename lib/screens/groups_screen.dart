@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../db/capitulo_helper.dart';
 import '../db/grupo_helper.dart';
+import '../helpers/rich_text_helper.dart';
 import '../l10n/app_localizations.dart';
 import '../models/capitulo.dart';
 import '../models/capitulo_sugestao.dart';
@@ -142,6 +143,11 @@ class _GroupsScreenState extends State<GroupsScreen>
     final hasChapterPhoto =
         capitulo.fotoPath != null && File(capitulo.fotoPath!).existsSync();
 
+    final rawDesc = capitulo.descricao?.trim();
+    final descricao = rawDesc != null
+        ? RichTextHelper.jsonToPlainText(rawDesc).trim()
+        : null;
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       clipBehavior: Clip.antiAlias,
@@ -213,11 +219,10 @@ class _GroupsScreenState extends State<GroupsScreen>
                       ),
                     ),
                   ],
-                  if (capitulo.descricao != null &&
-                      capitulo.descricao!.isNotEmpty) ...[
+                  if (descricao != null && descricao.isNotEmpty) ...[
                     const SizedBox(height: 12),
                     Text(
-                      capitulo.descricao!,
+                      descricao,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.plusJakartaSans(

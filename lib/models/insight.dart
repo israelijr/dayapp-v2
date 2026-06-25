@@ -8,7 +8,10 @@ enum InsightType {
   monthlySummary, // PREMIUM
   storyBalance, // FREE: proporção positivas vs difíceis (últimos 10 dias)
   writingTime, // FREE: período do dia mais frequente de escrita (esta semana)
-  energyChart; // gráfico de humor dos últimos 7 dias
+  energyChart, // gráfico de humor dos últimos 7 dias
+  writingLength, // FREE: incentivo de escrita de textos maiores/longos
+  chapterEngagement, // PREMIUM: engajamento do capítulo
+  chapterHappiest; // PREMIUM: capítulo mais feliz
 
   /// Converte para string armazenável (cache, banco).
   String get value {
@@ -27,6 +30,12 @@ enum InsightType {
         return 'writing_time';
       case InsightType.energyChart:
         return 'energy_chart';
+      case InsightType.writingLength:
+        return 'writing_length';
+      case InsightType.chapterEngagement:
+        return 'chapter_engagement';
+      case InsightType.chapterHappiest:
+        return 'chapter_happiest';
     }
   }
 
@@ -47,6 +56,12 @@ enum InsightType {
         return InsightType.writingTime;
       case 'energy_chart':
         return InsightType.energyChart;
+      case 'writing_length':
+        return InsightType.writingLength;
+      case 'chapter_engagement':
+        return InsightType.chapterEngagement;
+      case 'chapter_happiest':
+        return InsightType.chapterHappiest;
       default:
         // Tipo desconhecido (cache antigo) — trata como tendência por segurança
         return InsightType.trend;
@@ -58,6 +73,8 @@ enum InsightType {
     switch (this) {
       case InsightType.monthlySummary:
       case InsightType.energyChart:
+      case InsightType.chapterEngagement:
+      case InsightType.chapterHappiest:
         return true;
       default:
         return false;

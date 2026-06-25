@@ -1627,6 +1627,58 @@
   "@insightEnergyChartSubtitle": {
     "description": "Subtitle of the energy chart insight card"
   },
+  "insightChapterEngagementTitle": "Memorable Chapter",
+  "@insightChapterEngagementTitle": {
+    "description": "Title of the insight for chapter with most stories"
+  },
+  "insightChapterEngagementDesc": "Your chapter \"{chapter_title}\" is the most complete so far, with {count} stories recorded.",
+  "@insightChapterEngagementDesc": {
+    "description": "Description of the insight for chapter with most stories",
+    "placeholders": {
+      "chapter_title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "insightChapterHappiestTitle": "Happy Chapter",
+  "@insightChapterHappiestTitle": {
+    "description": "Title of the insight for chapter with highest average mood"
+  },
+  "insightChapterHappiestDesc": "The chapter \"{chapter_title}\" was a very positive phase, with average mood {moodEmoji} ({moodAvg}).",
+  "@insightChapterHappiestDesc": {
+    "description": "Description of the happiest chapter insight",
+    "placeholders": {
+      "chapter_title": {
+        "type": "String"
+      },
+      "moodEmoji": {
+        "type": "String"
+      },
+      "moodAvg": {
+        "type": "String"
+      }
+    }
+  },
+  "insightWritingLengthTitle": "Deep Reflections",
+  "@insightWritingLengthTitle": {
+    "description": "Title of the insight encouraging detailed writing"
+  },
+  "insightWritingLengthTip": "Your recent reflections are quite brief. Try writing in more detail about how you felt today.",
+  "@insightWritingLengthTip": {
+    "description": "Description encouraging longer entries"
+  },
+  "insightWritingLengthCongrats": "Congratulations on writing in detail recently ({count} words)! Deepening your memories helps clear the mind.",
+  "@insightWritingLengthCongrats": {
+    "description": "Description congratulating the user for a long entry",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "insightPremiumRequired": "This is a Premium feature. Upgrade to unlock this insight.",
   "@insightPremiumRequired": {
     "description": "Message shown on locked Premium insights"
