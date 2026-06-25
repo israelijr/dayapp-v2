@@ -19,19 +19,17 @@ import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../repositories/historia_repository.dart';
 import '../services/emoji_service.dart';
-import '../theme/animation_durations.dart';
 import '../widgets/audio_recorder_widget.dart';
 import '../widgets/compact_audio_icon.dart';
 import '../widgets/compact_video_icon.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/emoji_selection_modal.dart';
 import '../widgets/entry_toolbar.dart';
+import '../widgets/expandable_rich_text_editor.dart';
 import '../widgets/image_picker_widget.dart';
 import '../widgets/mood_energy_selectors.dart';
-import '../widgets/rich_text_editor_widget.dart';
 import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
-import 'rich_text_editor_screen.dart';
 
 class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
   @override
@@ -645,51 +643,6 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
     }
   }
 
-  void _expandDescriptionEditor() async {
-    final navigator = Navigator.of(context);
-    final richTextJson = RichTextHelper.controllerToJson(richTextController);
-    final result = await navigator.push<String>(
-      PageRouteBuilder<String>(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            RichTextEditorScreen(initialText: richTextJson),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          // Slide from bottom
-          final slideTween = Tween(
-            begin: const Offset(0, 1),
-            end: Offset.zero,
-          ).chain(CurveTween(curve: Curves.easeInOutCubic));
-          // Fade in
-          final fadeTween = Tween(
-            begin: 0.0,
-            end: 1.0,
-          ).chain(CurveTween(curve: Curves.easeInOutCubic));
-
-          return SlideTransition(
-            position: animation.drive(slideTween),
-            child: FadeTransition(
-              opacity: animation.drive(fadeTween),
-              child: child,
-            ),
-          );
-        },
-        transitionDuration: AppDurations.routeTransition,
-      ),
-    );
-    if (result != null) {
-      if (!mounted) return;
-      setState(() {
-        // Reconstrói o controller com o JSON retornado
-        final newController = RichTextHelper.smartController(result);
-        // Substitui todo o documento
-        richTextController.replaceText(
-          0,
-          richTextController.document.length - 1,
-          newController.document.toDelta(),
-          null,
-        );
-      });
-    }
-  }
 
   Future<void> _selectEmoji() async {
     final Emoji? result = await showModalBottomSheet<Emoji>(
@@ -814,6 +767,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                         controller: titleController,
                         label: loc.storyTitleLabel,
                         hintText: loc.storyTitleHint,
+                        maxLength: 60,
                         style: GoogleFonts.notoSerif(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
@@ -829,52 +783,11 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              loc.descriptionLabel,
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 34,
-                            height: 34,
-                            child: FloatingActionButton.small(
-                              heroTag: null,
-                              elevation: 1,
-                              backgroundColor:
-                                  theme.colorScheme.surfaceContainerLow,
-                              foregroundColor:
-                                  theme.colorScheme.onSurfaceVariant,
-                              tooltip: loc.expandTooltip,
-                              onPressed: _expandDescriptionEditor,
-                              child: const Icon(
-                                Icons.open_in_full_rounded,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      RichTextEditorWidget(
-                        key: const Key('description_field'),
+                      ExpandableRichTextEditor(
                         controller: richTextController,
+                        label: loc.descriptionLabel,
                         hintText: loc.descriptionHint,
-                        textStyle: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          height: 1.5,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                        minLines: 8,
-                        maxLines: 15,
-                        showToolbar: true,
+                        expandTooltip: loc.expandTooltip,
                         onChanged: () {
                           _checkForChanges();
                         },

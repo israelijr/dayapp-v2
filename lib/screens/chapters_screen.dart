@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:animations/animations.dart';
 import 'package:dayapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +26,8 @@ import '../repositories/historia_repository.dart';
 import '../screens/chapter_reader_screen.dart';
 import '../services/capitulo_sugestao_service.dart';
 import '../widgets/compact_historia_card.dart';
+import '../widgets/custom_text_field.dart';
+import '../widgets/expandable_rich_text_editor.dart';
 import '../widgets/historia_media_widgets.dart';
 import '../widgets/rich_text_viewer_widget.dart';
 
@@ -570,7 +574,10 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final capitulo = resumo.capitulo;
-    final descricao = capitulo.descricao?.trim();
+    final rawDesc = capitulo.descricao?.trim();
+    final descricao = (rawDesc != null && RichTextHelper.isValidQuillJson(rawDesc))
+        ? RichTextHelper.jsonToPlainText(rawDesc).trim()
+        : rawDesc;
     final periodo = l10n.chapterPeriod(
       DateFormat('dd/MM/yy', l10n.localeName).format(capitulo.dataInicio),
       DateFormat('dd/MM/yy', l10n.localeName).format(capitulo.dataFim),
@@ -919,6 +926,42 @@ class _CreateCapituloResult {
   });
 }
 
+class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (oldValue.text == newValue.text) {
+      return newValue;
+    }
+
+    String capitalizeText(String text) {
+      if (text.isEmpty) return text;
+
+      String result = text;
+      if (result.isNotEmpty) {
+        result = result[0].toUpperCase() + result.substring(1);
+      }
+
+      result = result.replaceAllMapped(
+        RegExp(r'([.!?]\s+)([a-z])'),
+        (match) => match.group(1)! + match.group(2)!.toUpperCase(),
+      );
+
+      result = result.replaceAllMapped(
+        RegExp(r'(\n)([a-z])'),
+        (match) => match.group(1)! + match.group(2)!.toUpperCase(),
+      );
+
+      return result;
+    }
+
+    final capitalized = capitalizeText(newValue.text);
+    return newValue.copyWith(text: capitalized, selection: newValue.selection);
+  }
+}
+
 // Tela de criação de capítulo (substitui o AlertDialog para evitar
 // rebuild de TextField causado por viewInsets no Android)
 class _CreateCapituloPage extends StatefulWidget {
@@ -936,26 +979,40 @@ class _CreateCapituloPage extends StatefulWidget {
 
 class _CreateCapituloPageState extends State<_CreateCapituloPage> {
   late final TextEditingController titleController;
-  late final TextEditingController descriptionController;
+  late final QuillController richTextController;
   final Set<int> selected = <int>{};
   String? _fotoPath;
 
-  bool get _hasDraftToConfirmExit =>
-      titleController.text.trim().isNotEmpty &&
-      descriptionController.text.trim().isNotEmpty;
+  bool get _hasDraftToConfirmExit {
+    final plainText = richTextController.document.toPlainText().trim();
+    return titleController.text.trim().isNotEmpty && plainText.isNotEmpty;
+  }
 
   @override
   void initState() {
     super.initState();
     titleController = TextEditingController();
-    descriptionController = TextEditingController();
+    richTextController = QuillController.basic();
   }
 
   @override
   void dispose() {
     titleController.dispose();
-    descriptionController.dispose();
+    richTextController.dispose();
     super.dispose();
+  }
+
+  String _getPeriodo(AppLocalizations l10n) {
+    if (selected.isEmpty) return '';
+    final selectedEntries = widget.entradas
+        .where((entry) => entry.id != null && selected.contains(entry.id))
+        .toList()
+      ..sort((a, b) => a.data.compareTo(b.data));
+    if (selectedEntries.isEmpty) return '';
+    return l10n.chapterPeriod(
+      DateFormat('dd/MM/yy', l10n.localeName).format(selectedEntries.first.data),
+      DateFormat('dd/MM/yy', l10n.localeName).format(selectedEntries.last.data),
+    );
   }
 
   Future<void> _pickPhoto(ImageSource source) async {
@@ -1039,12 +1096,13 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
       ).showSnackBar(SnackBar(content: Text(l10n.chapterMinimumEntries)));
       return;
     }
+    final richTextJson = RichTextHelper.controllerToJson(richTextController);
+    final plainText = richTextController.document.toPlainText().trim();
+
     Navigator.of(context).pop(
       _CreateCapituloResult(
         titulo: titleController.text.trim(),
-        descricao: descriptionController.text.trim().isEmpty
-            ? null
-            : descriptionController.text.trim(),
+        descricao: plainText.isEmpty ? null : richTextJson,
         entradaIds: {...selected},
         fotoPath: _fotoPath,
       ),
@@ -1095,6 +1153,11 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final labelColor = isDark ? theme.colorScheme.onSurface : theme.colorScheme.onSurfaceVariant;
+
+    final periodoStr = _getPeriodo(l10n);
 
     return PopScope(
       canPop: false,
@@ -1108,120 +1171,192 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => _confirmDiscardChanges(l10n),
           ),
-          title: Text(l10n.chapterCreateTitle),
+          title: Text(
+            l10n.chapterCreateTitle,
+            style: GoogleFonts.notoSerif(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: labelColor,
+              height: 1.3,
+            ),
+          ),
         ),
         body: SafeArea(
-          top: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (_fotoPath != null) ...[
-                  SizedBox(
-                    width: 92,
-                    height: 72,
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: SizedBox(
-                            width: 92,
-                            height: 72,
-                            child: Image.file(
-                              File(_fotoPath!),
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) {
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) => setState(() => _fotoPath = null),
-                                );
-                                return const SizedBox.shrink();
-                              },
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Datas
+                      if (periodoStr.isNotEmpty) ...[
+                        Row(
+                          children: [
+                            Icon(Icons.calendar_today, size: 16, color: labelColor),
+                            const SizedBox(width: 8),
+                            Text(
+                              periodoStr,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: labelColor,
+                              ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Título
+                      CustomTextField(
+                        controller: titleController,
+                        label: '* ${l10n.chapterTitle}',
+                        hintText: l10n.chapterTitleHint,
+                        maxLength: 60,
+                        style: GoogleFonts.notoSerif(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          height: 1.4,
+                        ),
+                        inputFormatters: [
+                          SentenceCapitalizationTextInputFormatter(),
+                        ],
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Descrição ExpandableRichTextEditor
+                      ExpandableRichTextEditor(
+                        controller: richTextController,
+                        label: l10n.chapterDescription,
+                        hintText: l10n.chapterDescriptionHint,
+                        expandTooltip: l10n.expandTooltip,
+                        onChanged: () {
+                          // Chamado a cada digitação para controle de alterações se necessário
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Foto selecionada (preview no estilo de fotos de histórias)
+                      if (_fotoPath != null) ...[
+                        Text(
+                          l10n.chapterPhoto,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: labelColor,
                           ),
                         ),
-                        Positioned(
-                          top: 2,
-                          right: 2,
-                          child: IconButton.filled(
-                            onPressed: () => setState(() => _fotoPath = null),
-                            icon: const Icon(Icons.close, size: 14),
-                            tooltip: l10n.chapterRemovePhoto,
-                            style: IconButton.styleFrom(
-                              minimumSize: const Size(24, 24),
-                              padding: EdgeInsets.zero,
-                            ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          height: 100,
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.file(
+                                  File(_fotoPath!),
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 2,
+                                right: 2,
+                                child: IconButton.filled(
+                                  onPressed: () => setState(() => _fotoPath = null),
+                                  icon: const Icon(Icons.close, size: 14),
+                                  style: IconButton.styleFrom(
+                                    minimumSize: const Size(24, 24),
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Checklist de Entradas
+                      Text(
+                        l10n.chapterSelectEntries,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: labelColor,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _EntradasChecklist(
+                        entradas: widget.entradas,
+                        tagNomesPorId: widget.tagNomesPorId,
+                        selected: selected,
+                        onSelectionChanged: (_) => setState(() {}),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
+                ),
+
+                // Toolbar de foto inferior
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainer,
+                    border: Border(
+                      top: BorderSide(color: theme.colorScheme.outlineVariant, width: 1),
+                    ),
+                  ),
+                  child: SafeArea(
+                    top: false,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton.filledTonal(
+                          onPressed: () => _showPhotoOptions(context, l10n),
+                          icon: const Icon(Icons.camera_alt_outlined),
+                          tooltip: l10n.chapterPhotoActionLabel,
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-                ],
-                Text(
-                  l10n.chapterTitle,
-                  style: Theme.of(context).textTheme.labelMedium,
                 ),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: titleController,
-                  textCapitalization: TextCapitalization.sentences,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: l10n.chapterTitleHint,
-                    border: const OutlineInputBorder(),
+
+                // Botões inferiores Cancelar/Salvar
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  l10n.chapterDescription,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: descriptionController,
-                  textCapitalization: TextCapitalization.sentences,
-                  minLines: 2,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: l10n.chapterDescriptionHint,
-                    border: const OutlineInputBorder(),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    border: Border.all(
+                      color: theme.colorScheme.outlineVariant,
+                      width: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.chapterSelectEntries,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                const SizedBox(height: 8),
-                _EntradasChecklist(
-                  entradas: widget.entradas,
-                  tagNomesPorId: widget.tagNomesPorId,
-                  selected: selected,
-                  onSelectionChanged: (_) => setState(() {}),
-                ),
-                const SizedBox(height: 12),
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => _showPhotoOptions(context, l10n),
-                    child: Text(l10n.chapterPhotoActionLabel),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: selected.isNotEmpty ? () => _save(l10n) : null,
-                    child: Text(l10n.save),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _confirmDiscardChanges(l10n),
+                          child: Text(l10n.cancel),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: selected.isNotEmpty ? () => _save(l10n) : null,
+                          child: Text(l10n.save),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -1254,7 +1389,7 @@ class _EditCapituloPage extends StatefulWidget {
 
 class _EditCapituloPageState extends State<_EditCapituloPage> {
   late TextEditingController titleController;
-  late TextEditingController descController;
+  late QuillController richTextController;
   late final Set<int> selectedIds;
   late final String _initialTitle;
   late final String _initialDescription;
@@ -1266,8 +1401,9 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
     final hasSelectionChanged =
         selectedIds.length != _initialSelectedIds.length ||
         !selectedIds.containsAll(_initialSelectedIds);
+    final currentDescription = richTextController.document.toPlainText();
     return titleController.text.trim() != _initialTitle.trim() ||
-        descController.text.trim() != _initialDescription.trim() ||
+        currentDescription != _initialDescription ||
         hasSelectionChanged ||
         _fotoPath != _initialFotoPath;
   }
@@ -1276,14 +1412,13 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
   void initState() {
     super.initState();
     titleController = TextEditingController(text: widget.capitulo.titulo);
-    descController = TextEditingController(
-      text: widget.capitulo.descricao ?? '',
+    richTextController = RichTextHelper.smartController(
+      widget.capitulo.descricao,
     );
     selectedIds = {...widget.initialEntradaIds};
     _initialTitle = widget.capitulo.titulo;
-    _initialDescription = widget.capitulo.descricao ?? '';
+    _initialDescription = richTextController.document.toPlainText();
     _initialSelectedIds = {...widget.initialEntradaIds};
-    // Valida se o arquivo ainda existe antes de usar
     final path = widget.capitulo.fotoPath;
     _fotoPath = (path != null && File(path).existsSync()) ? path : null;
     _initialFotoPath = _fotoPath;
@@ -1292,8 +1427,21 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
   @override
   void dispose() {
     titleController.dispose();
-    descController.dispose();
+    richTextController.dispose();
     super.dispose();
+  }
+
+  String _getPeriodo(AppLocalizations l10n) {
+    if (selectedIds.isEmpty) return '';
+    final selectedEntries = widget.todasEntradas
+        .where((entry) => entry.id != null && selectedIds.contains(entry.id))
+        .toList()
+      ..sort((a, b) => a.data.compareTo(b.data));
+    if (selectedEntries.isEmpty) return '';
+    return l10n.chapterPeriod(
+      DateFormat('dd/MM/yy', l10n.localeName).format(selectedEntries.first.data),
+      DateFormat('dd/MM/yy', l10n.localeName).format(selectedEntries.last.data),
+    );
   }
 
   Future<void> _pickPhoto(ImageSource source) async {
@@ -1376,12 +1524,13 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
       ).showSnackBar(SnackBar(content: Text(l10n.chapterMinimumEntries)));
       return;
     }
+    final richTextJson = RichTextHelper.controllerToJson(richTextController);
+    final plainText = richTextController.document.toPlainText().trim();
+
     Navigator.of(context).pop(
       _EditCapituloResult(
         titulo: titleController.text.trim(),
-        descricao: descController.text.trim().isEmpty
-            ? null
-            : descController.text.trim(),
+        descricao: plainText.isEmpty ? null : richTextJson,
         entradaIds: {...selectedIds},
         fotoPath: _fotoPath,
       ),
@@ -1432,6 +1581,11 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final labelColor = isDark ? theme.colorScheme.onSurface : theme.colorScheme.onSurfaceVariant;
+
+    final periodoStr = _getPeriodo(l10n);
 
     return PopScope(
       canPop: false,
@@ -1445,121 +1599,192 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => _confirmDiscardChanges(l10n),
           ),
-          title: Text(l10n.chapterEditTitle),
+          title: Text(
+            l10n.chapterEditTitle,
+            style: GoogleFonts.notoSerif(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: labelColor,
+              height: 1.3,
+            ),
+          ),
         ),
         body: SafeArea(
-          top: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (_fotoPath != null) ...[
-                  SizedBox(
-                    width: 92,
-                    height: 72,
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: SizedBox(
-                            width: 92,
-                            height: 72,
-                            child: Image.file(
-                              File(_fotoPath!),
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) {
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) => setState(() => _fotoPath = null),
-                                );
-                                return const SizedBox.shrink();
-                              },
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Datas
+                      if (periodoStr.isNotEmpty) ...[
+                        Row(
+                          children: [
+                            Icon(Icons.calendar_today, size: 16, color: labelColor),
+                            const SizedBox(width: 8),
+                            Text(
+                              periodoStr,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: labelColor,
+                              ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Título
+                      CustomTextField(
+                        controller: titleController,
+                        label: '* ${l10n.chapterTitle}',
+                        hintText: l10n.chapterTitleHint,
+                        maxLength: 60,
+                        style: GoogleFonts.notoSerif(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          height: 1.4,
+                        ),
+                        inputFormatters: [
+                          SentenceCapitalizationTextInputFormatter(),
+                        ],
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Descrição ExpandableRichTextEditor
+                      ExpandableRichTextEditor(
+                        controller: richTextController,
+                        label: l10n.chapterDescription,
+                        hintText: l10n.chapterDescriptionHint,
+                        expandTooltip: l10n.expandTooltip,
+                        onChanged: () {
+                          // Chamado a cada digitação para controle de alterações se necessário
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Foto selecionada (preview no estilo de fotos de histórias)
+                      if (_fotoPath != null) ...[
+                        Text(
+                          l10n.chapterPhoto,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: labelColor,
                           ),
                         ),
-                        Positioned(
-                          top: 2,
-                          right: 2,
-                          child: IconButton.filled(
-                            onPressed: () => setState(() => _fotoPath = null),
-                            icon: const Icon(Icons.close, size: 14),
-                            tooltip: l10n.chapterRemovePhoto,
-                            style: IconButton.styleFrom(
-                              minimumSize: const Size(24, 24),
-                              padding: EdgeInsets.zero,
-                            ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          height: 100,
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.file(
+                                  File(_fotoPath!),
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 2,
+                                right: 2,
+                                child: IconButton.filled(
+                                  onPressed: () => setState(() => _fotoPath = null),
+                                  icon: const Icon(Icons.close, size: 14),
+                                  style: IconButton.styleFrom(
+                                    minimumSize: const Size(24, 24),
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Checklist de Entradas
+                      Text(
+                        l10n.chapterSelectEntries,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: labelColor,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _EntradasChecklist(
+                        entradas: widget.todasEntradas,
+                        tagNomesPorId: widget.tagNomesPorId,
+                        selected: selectedIds,
+                        onSelectionChanged: (_) => setState(() {}),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
+                ),
+
+                // Toolbar de foto inferior
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainer,
+                    border: Border(
+                      top: BorderSide(color: theme.colorScheme.outlineVariant, width: 1),
+                    ),
+                  ),
+                  child: SafeArea(
+                    top: false,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton.filledTonal(
+                          onPressed: () => _showPhotoOptions(context, l10n),
+                          icon: const Icon(Icons.camera_alt_outlined),
+                          tooltip: l10n.chapterPhotoActionLabel,
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-                ],
-                Text(
-                  l10n.chapterTitle,
-                  style: Theme.of(context).textTheme.labelMedium,
                 ),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: titleController,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
-                    hintText: l10n.chapterTitleHint,
-                    border: const OutlineInputBorder(),
+
+                // Botões inferiores Cancelar/Salvar
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  l10n.chapterDescription,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: descController,
-                  textCapitalization: TextCapitalization.sentences,
-                  minLines: 2,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: l10n.chapterDescriptionHint,
-                    border: const OutlineInputBorder(),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    border: Border.all(
+                      color: theme.colorScheme.outlineVariant,
+                      width: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.chapterSelectEntries,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                const SizedBox(height: 8),
-                _EntradasChecklist(
-                  entradas: widget.todasEntradas,
-                  tagNomesPorId: widget.tagNomesPorId,
-                  selected: selectedIds,
-                  onSelectionChanged: (_) => setState(() {}),
-                ),
-                const SizedBox(height: 12),
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => _showPhotoOptions(context, l10n),
-                    child: Text(l10n.chapterPhotoActionLabel),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: selectedIds.isNotEmpty
-                        ? () => _save(l10n)
-                        : null,
-                    child: Text(l10n.save),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _confirmDiscardChanges(l10n),
+                          child: Text(l10n.cancel),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: selectedIds.isNotEmpty ? () => _save(l10n) : null,
+                          child: Text(l10n.save),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -2147,15 +2372,19 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                                 if (capitulo.descricao != null &&
                                     capitulo.descricao!.trim().isNotEmpty) ...[
                                   const SizedBox(height: 12),
-                                  Text(
-                                    capitulo.descricao!.trim(),
-                                    style: GoogleFonts.plusJakartaSans(
-                                      textStyle: Theme.of(
-                                        context,
-                                      ).textTheme.bodyMedium,
-                                      color: colorScheme.onSurface,
-                                    ),
-                                  ),
+                                  RichTextHelper.isValidQuillJson(capitulo.descricao)
+                                      ? RichTextViewerWidget(
+                                          jsonContent: capitulo.descricao,
+                                        )
+                                      : Text(
+                                          capitulo.descricao!.trim(),
+                                          style: GoogleFonts.plusJakartaSans(
+                                            textStyle: Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium,
+                                            color: colorScheme.onSurface,
+                                          ),
+                                        ),
                                 ],
                               ],
                             ),

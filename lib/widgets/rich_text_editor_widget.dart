@@ -36,6 +36,9 @@ class RichTextEditorWidget extends StatefulWidget {
   /// Use false quando estiver dentro de SingleChildScrollView
   final bool expand;
 
+  /// Se true, a barra de ferramentas fica embaixo do editor
+  final bool toolbarAtBottom;
+
   const RichTextEditorWidget({
     required this.controller,
     super.key,
@@ -47,6 +50,7 @@ class RichTextEditorWidget extends StatefulWidget {
     this.readOnly = false,
     this.textStyle,
     this.expand = false,
+    this.toolbarAtBottom = true,
   });
 
   @override
@@ -152,10 +156,15 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
         color: theme.colorScheme.surface,
         border: Border.all(color: theme.colorScheme.outlineVariant),
         borderRadius: widget.showToolbar && !widget.readOnly
-            ? const BorderRadius.only(
-                bottomLeft: Radius.circular(8),
-                bottomRight: Radius.circular(8),
-              )
+            ? (widget.toolbarAtBottom
+                ? const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  )
+                : const BorderRadius.only(
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                  ))
             : BorderRadius.circular(8),
       ),
       child: QuillEditor(
@@ -175,19 +184,20 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
       editorContainer = Expanded(child: editorContainer);
     }
 
-    return Column(
-      mainAxisSize: widget.expand ? MainAxisSize.max : MainAxisSize.min,
-      children: [
-        // Toolbar de formatação (se habilitada)
-        if (widget.showToolbar && !widget.readOnly) ...[
-          Container(
+    final toolbar = (widget.showToolbar && !widget.readOnly)
+        ? Container(
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               border: Border.all(color: theme.colorScheme.outlineVariant),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
+              borderRadius: widget.toolbarAtBottom
+                  ? const BorderRadius.only(
+                      bottomLeft: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    )
+                  : const BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
             ),
             child: QuillSimpleToolbar(
               controller: widget.controller,
@@ -218,11 +228,15 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
                 showSuperscript: false,
               ),
             ),
-          ),
-        ],
+          )
+        : null;
 
-        // Editor de texto
+    return Column(
+      mainAxisSize: widget.expand ? MainAxisSize.max : MainAxisSize.min,
+      children: [
+        if (toolbar != null && !widget.toolbarAtBottom) toolbar,
         editorContainer,
+        if (toolbar != null && widget.toolbarAtBottom) toolbar,
       ],
     );
   }
