@@ -1467,7 +1467,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get entryNotificationsInfo =>
-      'Entradas com data pelo menos 2 horas à frente podem ter notificações agendadas.';
+      'Entradas com data pelo menos 3 horas à frente podem ter notificações agendadas.';
 
   @override
   String get backgroundRestrictionsWarningTitle =>

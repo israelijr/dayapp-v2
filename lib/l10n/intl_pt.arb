@@ -743,7 +743,7 @@
   },
   "notifications": "Notificações",
   "entryNotifications": "Notificações de Entradas",
-  "entryNotificationsInfo": "Entradas com data pelo menos 2 horas à frente podem ter notificações agendadas.",
+  "entryNotificationsInfo": "Entradas com data pelo menos 3 horas à frente podem ter notificações agendadas.",
   "backgroundRestrictionsWarningTitle": "Notificações e Segundo Plano",
   "backgroundRestrictionsWarningDesc": "Alguns sistemas reduzem drasticamente as atividades em segundo plano para economizar energia, o que pode bloquear suas notificações agendadas. Para garantir o funcionamento correto, abra as configurações do aplicativo no seu dispositivo e:\n• Desative a opção 'Pausar atividade do app quando sem uso' (ou similar).\n• Defina as restrições de bateria como 'Sem Restrição' (não se preocupe, o consumo de bateria do DayApp em segundo plano é desprezível).",
   "defaultAdvanceTitle": "Antecedência Padrão",

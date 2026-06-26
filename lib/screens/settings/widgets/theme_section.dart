@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../providers/premium_provider.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../theme/custom_color_schemes.dart';
+import '../../../theme/m3_expressive_theme.dart';
+
 
 class ThemeOption {
   const ThemeOption({
@@ -130,90 +133,126 @@ class ThemeSection extends StatelessWidget {
             final isSystemSelected =
                 themeProvider.themeMode == ThemeMode.system;
 
-            return AlertDialog(
-              title: Text(loc.themeAndScheme),
-              content: SizedBox(
-                width: double.maxFinite,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ThemeModeButton(
-                            icon: Icons.wb_sunny_outlined,
-                            tooltip: loc.themeLight,
-                            selected:
-                                themeProvider.themeMode == ThemeMode.light,
-                            enabled: !isSystemSelected,
-                            onPressed: () {
-                              unawaited(
-                                themeProvider.setThemeMode(ThemeMode.light),
-                              );
-                            },
-                          ),
-                          const SizedBox(width: 12),
-                          ThemeModeButton(
-                            icon: Icons.dark_mode_outlined,
-                            tooltip: loc.themeDark,
-                            selected: themeProvider.themeMode == ThemeMode.dark,
-                            enabled: !isSystemSelected,
-                            onPressed: () {
-                              unawaited(
-                                themeProvider.setThemeMode(ThemeMode.dark),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      ThemeListOption(
-                        icon: Icons.phone_iphone,
-                        label: loc.themeSystem,
-                        selected: isSystemSelected,
-                        onTap: () => _selectThemeOption(
-                          context,
-                          themeProvider,
-                          themeMode: ThemeMode.system,
+            final isDark = themeProvider.themeMode == ThemeMode.dark ||
+                (themeProvider.themeMode == ThemeMode.system &&
+                    MediaQuery.platformBrightnessOf(context) == Brightness.dark);
+
+            ThemeData dialogTheme;
+            final schemeFamilyKey = themeProvider.selectedSchemeKey;
+            if (isDark) {
+              final ColorScheme? darkScheme =
+                  CustomColorSchemes.getSchemeForFamily(
+                schemeFamilyKey,
+                Brightness.dark,
+              );
+              dialogTheme = darkScheme != null
+                  ? M3ExpressiveTheme.buildTheme(darkScheme)
+                  : M3ExpressiveTheme.getDarkTheme();
+            } else {
+              final ColorScheme? lightScheme =
+                  CustomColorSchemes.getSchemeForFamily(
+                schemeFamilyKey,
+                Brightness.light,
+              );
+              dialogTheme = lightScheme != null
+                  ? M3ExpressiveTheme.buildTheme(lightScheme)
+                  : M3ExpressiveTheme.getLightTheme();
+            }
+
+            dialogTheme = dialogTheme.copyWith(
+              textTheme: GoogleFonts.plusJakartaSansTextTheme(dialogTheme.textTheme),
+              primaryTextTheme: GoogleFonts.plusJakartaSansTextTheme(
+                dialogTheme.primaryTextTheme,
+              ),
+            );
+
+            return Theme(
+              data: dialogTheme,
+              child: AlertDialog(
+                title: Text(loc.themeAndScheme),
+                content: SizedBox(
+                  width: double.maxFinite,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ThemeModeButton(
+                              icon: Icons.wb_sunny_outlined,
+                              tooltip: loc.themeLight,
+                              selected:
+                                  themeProvider.themeMode == ThemeMode.light,
+                              enabled: !isSystemSelected,
+                              onPressed: () {
+                                unawaited(
+                                  themeProvider.setThemeMode(ThemeMode.light),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 12),
+                            ThemeModeButton(
+                              icon: Icons.dark_mode_outlined,
+                              tooltip: loc.themeDark,
+                              selected: themeProvider.themeMode == ThemeMode.dark,
+                              enabled: !isSystemSelected,
+                              onPressed: () {
+                                unawaited(
+                                  themeProvider.setThemeMode(ThemeMode.dark),
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      ),
-                      for (final option in _themeOptions) ...[
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 16),
                         ThemeListOption(
-                          icon: option.icon,
-                          label: option.label(loc),
-                          selected:
-                              !isSystemSelected &&
-                              option.familyKey ==
-                                  themeProvider.selectedSchemeKey,
-                          locked:
-                              option.premium && !premium.canUsePremiumThemes,
-                          onLockedTap: () {
-                            _showPremiumThemeDialog(context, loc);
-                          },
+                          icon: Icons.phone_iphone,
+                          label: loc.themeSystem,
+                          selected: isSystemSelected,
                           onTap: () => _selectThemeOption(
                             context,
                             themeProvider,
-                            themeMode: _resolveCustomThemeMode(
-                              context,
-                              themeProvider,
-                            ),
-                            familyKey: option.familyKey,
+                            themeMode: ThemeMode.system,
                           ),
                         ),
+                        for (final option in _themeOptions) ...[
+                          const SizedBox(height: 8),
+                          ThemeListOption(
+                            icon: option.icon,
+                            label: option.label(loc),
+                            selected:
+                                !isSystemSelected &&
+                                option.familyKey ==
+                                    themeProvider.selectedSchemeKey,
+                            locked:
+                                option.premium && !premium.canUsePremiumThemes,
+                            onLockedTap: () {
+                              _showPremiumThemeDialog(context, loc);
+                            },
+                            onTap: () => _selectThemeOption(
+                              context,
+                              themeProvider,
+                              themeMode: _resolveCustomThemeMode(
+                                context,
+                                themeProvider,
+                              ),
+                              familyKey: option.familyKey,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                    child: Text(loc.close),
+                  ),
+                ],
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(),
-                  child: Text(loc.close),
-                ),
-              ],
             );
           },
         );

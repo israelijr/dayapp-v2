@@ -18,11 +18,11 @@ class NotificationHelper {
   final NotificationPreferencesService _prefsService =
       NotificationPreferencesService();
 
-  /// Verifica se uma data permite agendar notificação (mínimo 2h de antecedência)
+  /// Verifica se uma data permite agendar notificação (mínimo 3h de antecedência)
   bool shouldScheduleNotification(DateTime entryDate) {
     final now = DateTime.now();
     final difference = entryDate.difference(now);
-    return difference.inHours >= 2;
+    return difference.inHours >= 3;
   }
 
   /// Calcula o horário da notificação baseado na antecedência
@@ -54,7 +54,7 @@ class NotificationHelper {
 
     // Verifica se a data permite notificação
     if (!shouldScheduleNotification(entryDate)) {
-      return; // Data muito próxima (menos de 2 horas)
+      return; // Data muito próxima (menos de 3 horas)
     }
 
     // Obtém a antecedência padrão

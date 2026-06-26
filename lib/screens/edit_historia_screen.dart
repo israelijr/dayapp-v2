@@ -586,7 +586,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
       // Cancela notificação existente (se houver)
       await NotificationHelper().cancelEntryNotification(widget.historia.id!);
 
-      // Se a nova data permitir notificação (pelo menos 2 horas à frente), oferece criar notificação
+      // Se a nova data permitir notificação (pelo menos 3 horas à frente), oferece criar notificação
       if (NotificationHelper().shouldScheduleNotification(selectedDate)) {
         if (mounted) {
           await _showNotificationDialog(widget.historia.id!);

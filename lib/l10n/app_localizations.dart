@@ -2706,7 +2706,7 @@ abstract class AppLocalizations {
   /// No description provided for @entryNotificationsInfo.
   ///
   /// In en, this message translates to:
-  /// **'Entries with a date at least 2 hours ahead may have scheduled notifications.'**
+  /// **'Entries with a date at least 3 hours ahead may have scheduled notifications.'**
   String get entryNotificationsInfo;
 
   /// No description provided for @backgroundRestrictionsWarningTitle.

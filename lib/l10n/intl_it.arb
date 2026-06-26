@@ -716,7 +716,7 @@
   },
   "notifications": "Notifiche",
   "entryNotifications": "Notifiche delle voci",
-  "entryNotificationsInfo": "Le voci con una data almeno 2 ore in anticipo possono avere notifiche pianificate.",
+  "entryNotificationsInfo": "Le voci con una data almeno 3 ore in anticipo possono avere notifiche pianificate.",
   "backgroundRestrictionsWarningTitle": "Notifiche e app in background",
   "backgroundRestrictionsWarningDesc": "Alcuni sistemi mettono in stand-by aggressivamente le app in background per risparmiare batteria, il che può bloccare le notifiche pianificate dell'app. Per garantire un corretto funzionamento, apri le impostazioni dell'app sul tuo dispositivo e:\n• Disabilita 'Sospendi attività app se inutilizzata' (o opzione simile).\n• Imposta le restrizioni della batteria su 'Non limitata' (il consumo in background è trascurabile).",
   "defaultAdvanceTitle": "Anticipo predefinito",

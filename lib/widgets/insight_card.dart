@@ -197,7 +197,12 @@ class InsightCard extends StatelessWidget {
                         child: TextButton(
                           onPressed: () => onSeeStories!(searchQuery),
                           style: TextButton.styleFrom(
-                            foregroundColor: colorScheme.secondary,
+                            foregroundColor: theme.brightness == Brightness.dark
+                                ? Colors.black
+                                : colorScheme.secondary,
+                            backgroundColor: theme.brightness == Brightness.dark
+                                ? colorScheme.onSecondaryContainer
+                                : null,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
                               vertical: 4,
@@ -207,7 +212,9 @@ class InsightCard extends StatelessWidget {
                             l10n.insightSeeStories,
                             style: GoogleFonts.plusJakartaSans(
                               textStyle: theme.textTheme.labelLarge?.copyWith(
-                                color: colorScheme.secondary,
+                                color: theme.brightness == Brightness.dark
+                                    ? Colors.black
+                                    : colorScheme.secondary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -267,6 +274,12 @@ class InsightCard extends StatelessWidget {
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               textStyle: theme.textTheme.labelMedium,
+              backgroundColor: theme.brightness == Brightness.dark
+                  ? colorScheme.onSecondaryContainer
+                  : null,
+              foregroundColor: theme.brightness == Brightness.dark
+                  ? Colors.black
+                  : null,
             ),
           ),
         ),

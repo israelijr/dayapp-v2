@@ -786,7 +786,7 @@
   },
   "notifications": "Notifications",
   "entryNotifications": "Entry notifications",
-  "entryNotificationsInfo": "Entries with a date at least 2 hours ahead may have scheduled notifications.",
+  "entryNotificationsInfo": "Entries with a date at least 3 hours ahead may have scheduled notifications.",
   "backgroundRestrictionsWarningTitle": "Notifications & Background Apps",
   "backgroundRestrictionsWarningDesc": "Some systems aggressively sleep background apps to save battery, which may block the app's scheduled notifications. To ensure proper functioning, open the app's settings on your device and:\n• Disable 'Pause app activity if unused' (or similar option).\n• Set battery restrictions to 'Unrestricted' (don't worry, background battery consumption is negligible).",
   "defaultAdvanceTitle": "Default advance",

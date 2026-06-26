@@ -1475,7 +1475,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get entryNotificationsInfo =>
-      'Le voci con una data almeno 2 ore in anticipo possono avere notifiche pianificate.';
+      'Le voci con una data almeno 3 ore in anticipo possono avere notifiche pianificate.';
 
   @override
   String get backgroundRestrictionsWarningTitle =>

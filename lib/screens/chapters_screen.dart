@@ -218,21 +218,26 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
   }
 
   Future<void> _loadData() async {
+    print('DEBUG: ChaptersScreen _loadData started');
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final premium = Provider.of<PremiumProvider>(context, listen: false);
     final userId = auth.user?.id;
+    print('DEBUG: ChaptersScreen _loadData userId=$userId');
     if (userId == null || userId.isEmpty) return;
 
     setState(() {
       _isLoading = true;
     });
 
+    print('DEBUG: ChaptersScreen _loadData fetching capitulos...');
     final capitulos = await _capituloRepository.fetchCapitulosResumoByUser(
       userId,
     );
+    print('DEBUG: ChaptersScreen _loadData fetched capitulos, fetching sugestoes...');
     final sugestoes = premium.canUseAutoChapterSuggestion
         ? await _sugestaoService.sugerirCapitulos(userId)
         : const <CapituloSugestao>[];
+    print('DEBUG: ChaptersScreen _loadData fetched sugestoes, updating state...');
 
     if (!mounted) return;
     setState(() {
@@ -240,6 +245,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
       _sugestoes = sugestoes;
       _isLoading = false;
     });
+    print('DEBUG: ChaptersScreen _loadData completed');
   }
 
   Future<void> _aceitarSugestao(CapituloSugestao sugestao) async {
@@ -983,9 +989,16 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
   final Set<int> selected = <int>{};
   String? _fotoPath;
 
+  bool get _isFormValid {
+    return titleController.text.trim().isNotEmpty && selected.isNotEmpty;
+  }
+
   bool get _hasDraftToConfirmExit {
     final plainText = richTextController.document.toPlainText().trim();
-    return titleController.text.trim().isNotEmpty && plainText.isNotEmpty;
+    return titleController.text.isNotEmpty ||
+        plainText.isNotEmpty ||
+        selected.isNotEmpty ||
+        _fotoPath != null;
   }
 
   @override
@@ -993,10 +1006,18 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
     super.initState();
     titleController = TextEditingController();
     richTextController = QuillController.basic();
+    titleController.addListener(_onTextChanged);
+    richTextController.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    setState(() {});
   }
 
   @override
   void dispose() {
+    titleController.removeListener(_onTextChanged);
+    richTextController.removeListener(_onTextChanged);
     titleController.dispose();
     richTextController.dispose();
     super.dispose();
@@ -1134,7 +1155,9 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
             child: Text(l10n.discard),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop('save'),
+            onPressed: !_isFormValid
+                ? null
+                : () => Navigator.of(context).pop('save'),
             child: Text(l10n.save),
           ),
         ],
@@ -1352,7 +1375,7 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: FilledButton(
-                          onPressed: selected.isNotEmpty ? () => _save(l10n) : null,
+                          onPressed: _isFormValid ? () => _save(l10n) : null,
                           child: Text(l10n.save),
                         ),
                       ),
@@ -1397,6 +1420,10 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
   String? _initialFotoPath;
   String? _fotoPath;
 
+  bool get _isFormValid {
+    return titleController.text.trim().isNotEmpty && selectedIds.isNotEmpty;
+  }
+
   bool get _hasUnsavedChanges {
     final hasSelectionChanged =
         selectedIds.length != _initialSelectedIds.length ||
@@ -1422,10 +1449,19 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
     final path = widget.capitulo.fotoPath;
     _fotoPath = (path != null && File(path).existsSync()) ? path : null;
     _initialFotoPath = _fotoPath;
+
+    titleController.addListener(_onTextChanged);
+    richTextController.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    setState(() {});
   }
 
   @override
   void dispose() {
+    titleController.removeListener(_onTextChanged);
+    richTextController.removeListener(_onTextChanged);
     titleController.dispose();
     richTextController.dispose();
     super.dispose();
@@ -1562,7 +1598,9 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
             child: Text(l10n.discard),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop('save'),
+            onPressed: !_isFormValid
+                ? null
+                : () => Navigator.of(context).pop('save'),
             child: Text(l10n.save),
           ),
         ],
@@ -1780,7 +1818,7 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: FilledButton(
-                          onPressed: selectedIds.isNotEmpty ? () => _save(l10n) : null,
+                          onPressed: _isFormValid ? () => _save(l10n) : null,
                           child: Text(l10n.save),
                         ),
                       ),

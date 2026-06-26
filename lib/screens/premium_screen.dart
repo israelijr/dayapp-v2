@@ -215,10 +215,10 @@ class _FeatureItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: colorScheme.secondaryContainer.withValues(alpha: 0.5),
+              color: colorScheme.primary.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, size: 20, color: colorScheme.onSecondaryContainer),
+            child: Icon(icon, size: 20, color: colorScheme.primary),
           ),
           const SizedBox(width: 16),
           Expanded(

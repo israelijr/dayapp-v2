@@ -679,7 +679,7 @@
   },
   "notifications": "Notificaciones",
   "entryNotifications": "Notificaciones de entradas",
-  "entryNotificationsInfo": "Las entradas con fecha al menos 2 horas por delante pueden tener notificaciones programadas.",
+  "entryNotificationsInfo": "Las entradas con fecha al menos 3 horas por delante pueden tener notificaciones programadas.",
   "backgroundRestrictionsWarningTitle": "Notificaciones y Segundo Plano",
   "backgroundRestrictionsWarningDesc": "Algunos sistemas reducen drásticamente las actividades en segundo plano para ahorrar energía, lo que puede bloquear las notificaciones programadas. Para asegurar el funcionamiento correcto, abre las configuraciones de la aplicación en tu dispositivo y:\n• Desactiva la opción 'Pausar actividad de la app cuando no se usa' (o similar).\n• Define las restricciones de batería como 'Sin restricciones' (no te preocupes, el consumo de batería en segundo plano es insignificante).",
   "defaultAdvanceTitle": "Antelación predeterminada",

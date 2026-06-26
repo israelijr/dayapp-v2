@@ -1458,7 +1458,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get entryNotificationsInfo =>
-      'Entries with a date at least 2 hours ahead may have scheduled notifications.';
+      'Entries with a date at least 3 hours ahead may have scheduled notifications.';
 
   @override
   String get backgroundRestrictionsWarningTitle =>

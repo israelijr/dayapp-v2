@@ -91,14 +91,21 @@ class BackgroundRestrictionsInfoScreen extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.info_outline_rounded,
-                            color: colorScheme.onSecondaryContainer,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : colorScheme.onSecondaryContainer,
                           ),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
                               l10n.entryNotificationsInfo,
                               style: textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSecondaryContainer,
+                                color: Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white
+                                    : colorScheme.onSecondaryContainer,
+                                fontWeight: Theme.of(context).brightness == Brightness.dark
+                                    ? FontWeight.w600
+                                    : null,
                                 height: 1.4,
                               ),
                             ),

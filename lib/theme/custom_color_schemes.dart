@@ -41,16 +41,26 @@ class CustomColorSchemes {
   // Relva - Dark
   static final ColorScheme relvaDark = const ColorScheme.dark().copyWith(
     primary: const Color(0xFF99D4A3),
+    onPrimary: const Color(0xFF00391B),
     secondary: const Color(0xFFB7CCB7),
+    onSecondary: const Color(0xFF243427),
     tertiary: const Color(0xFFA2CED8),
+    onTertiary: const Color(0xFF00363F),
     error: const Color(0xFFFFB4AB),
+    onError: const Color(0xFF690005),
     primaryContainer: const Color(0xFF18512B),
+    onPrimaryContainer: const Color(0xFFB4F1BD),
     secondaryContainer: const Color(0xFF394B3B),
+    onSecondaryContainer: const Color(0xFFD3E8D2),
     tertiaryContainer: const Color(0xFF204D55),
-    errorContainer: const Color(0xFF24D055),
+    onTertiaryContainer: const Color(0xFFBDEAF5),
+    errorContainer: const Color(0xFF93000A),
+    onErrorContainer: const Color(0xFFFFDAD6),
     surfaceContainerHighest: const Color.fromARGB(255, 61, 58, 58),
     surface: const Color(0xFF101510),
+    onSurface: const Color(0xFFDFE4DC),
     inverseSurface: const Color(0xFFDFE4DC),
+    onInverseSurface: const Color(0xFF101510),
   );
 
   // Outono (base Botanical Garden) - Light
@@ -114,16 +124,26 @@ class CustomColorSchemes {
   // Céu - Dark
   static final ColorScheme ceuDark = const ColorScheme.dark().copyWith(
     primary: const Color(0xFFADC6FF),
+    onPrimary: const Color(0xFF1B2F56),
     secondary: const Color(0xFFBFC6DC),
+    onSecondary: const Color(0xFF283041),
     tertiary: const Color(0xFFDEBCDF),
+    onTertiary: const Color(0xFF402843),
     error: const Color(0xFFFFB4AB),
+    onError: const Color(0xFF690005),
     primaryContainer: const Color(0xFF2B4678),
+    onPrimaryContainer: const Color(0xFFD8E2FF),
     secondaryContainer: const Color(0xFF3F4759),
+    onSecondaryContainer: const Color(0xFFD7E3FF),
     tertiaryContainer: const Color(0xFF583E5B),
+    onTertiaryContainer: const Color(0xFFFFD6FB),
     errorContainer: const Color(0xFF93000A),
+    onErrorContainer: const Color(0xFFFFDAD6),
     surfaceContainerHighest: const Color(0xFF282A2F),
     surface: const Color(0xFF111318),
+    onSurface: const Color(0xFFE2E2E9),
     inverseSurface: const Color(0xFFE2E2E9),
+    onInverseSurface: const Color(0xFF111318),
   );
 
   // Confort - Light
@@ -148,16 +168,26 @@ class CustomColorSchemes {
   // Confort - Dark
   static final ColorScheme confortDark = const ColorScheme.dark().copyWith(
     primary: const Color(0xFFDBC66E),
+    onPrimary: const Color(0xFF3B2F00),
     secondary: const Color(0xFFD1C6A1),
+    onSecondary: const Color(0xFF373016),
     tertiary: const Color(0xFFA9D0B3),
+    onTertiary: const Color(0xFF143722),
     error: const Color(0xFFFFB4AB),
+    onError: const Color(0xFF690005),
     primaryContainer: const Color(0xFF534600),
+    onPrimaryContainer: const Color(0xFFFFF0BA),
     secondaryContainer: const Color(0xFF4E472A),
+    onSecondaryContainer: const Color(0xFFEDE2BC),
     tertiaryContainer: const Color(0xFF2C4E38),
+    onTertiaryContainer: const Color(0xFFC5ECCE),
     errorContainer: const Color(0xFF93000A),
+    onErrorContainer: const Color(0xFFFFDAD6),
     surfaceContainerHighest: const Color(0xFF38352B),
     surface: const Color(0xFF15130B),
+    onSurface: const Color(0xFFE8E2D4),
     inverseSurface: const Color(0xFFE8E2D4),
+    onInverseSurface: const Color(0xFF15130B),
   );
 
   // Sunset - Light

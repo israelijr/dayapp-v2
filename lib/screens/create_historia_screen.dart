@@ -344,7 +344,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         videos: videos,
       );
 
-      // Se a data permitir notificação (pelo menos 2 horas à frente), perguntar sobre notificação
+      // Se a data permitir notificação (pelo menos 3 horas à frente), perguntar sobre notificação
       if (NotificationHelper().shouldScheduleNotification(selectedDate)) {
         await _showNotificationDialog(historiaId);
       }

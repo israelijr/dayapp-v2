@@ -716,7 +716,7 @@
   },
   "notifications": "Notifications",
   "entryNotifications": "Notifications d'entrée",
-  "entryNotificationsInfo": "Les entrées avec une date au moins 2 heures à l'avance peuvent avoir des notifications planifiées.",
+  "entryNotificationsInfo": "Les entrées avec une date au moins 3 heures à l'avance peuvent avoir des notifications planifiées.",
   "backgroundRestrictionsWarningTitle": "Notifications et applications en arrière-plan",
   "backgroundRestrictionsWarningDesc": "Certains systèmes endorment agressivement les applications en arrière-plan pour économiser la batterie, ce qui peut bloquer les notifications planifiées de l'application. Pour assurer un bon fonctionnement, ouvrez les paramètres de l'application sur votre appareil et :\n• Désactivez 'Suspendre l'activité de l'application si inutilisée' (ou une option similaire).\n• Définissez les restrictions de batterie sur 'Non restreint' (la consommation de batterie en arrière-plan est négligeable).",
   "defaultAdvanceTitle": "Avance par défaut",
