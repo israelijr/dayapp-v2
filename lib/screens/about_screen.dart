@@ -143,21 +143,6 @@ class _AboutScreenState extends State<AboutScreen> {
 
           const SizedBox(height: 24),
 
-          // Tecnologias
-          _buildSection(
-            context,
-            l10n.aboutScreenTechnologiesTitle,
-            '',
-            Icons.code,
-            children: [
-              _buildTechItem('Flutter', l10n.aboutFlutterDesc),
-              _buildTechItem('Dart', l10n.aboutDartDesc),
-              _buildTechItem('SQLite', l10n.aboutSqliteDesc),
-              _buildTechItem('Provider', l10n.aboutProviderDesc),
-              _buildTechItem(l10n.aboutMaterial3Title, l10n.aboutMaterial3Desc),
-            ],
-          ),
-          const SizedBox(height: 24),
 
           // Desenvolvedor
           _buildSection(
@@ -463,48 +448,6 @@ class _AboutScreenState extends State<AboutScreen> {
   }
 
   Widget _buildFeatureItem(String title, String description) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '• ',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: AppColors.labelColor(context),
-            ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.labelColor(context),
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTechItem(String title, String description) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(

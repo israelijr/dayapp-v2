@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/refresh_provider.dart';
+import '../services/backup_service.dart';
 import '../theme/animation_durations.dart';
+import 'pulse_animation.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int selectedIndex;
@@ -31,7 +34,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
 
     return AppBar(
-      automaticallyImplyLeading: selectedIndex != 1,
+      automaticallyImplyLeading: true,
       title: Text(
         selectedIndex == 0
             ? l10n.appTitle
@@ -47,6 +50,53 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
+        Consumer<RefreshProvider>(
+          builder: (context, refreshProvider, child) {
+            return FutureBuilder<int>(
+              future: BackupService().countPendingBackupStories(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data! > 0) {
+                  final pendingCount = snapshot.data!;
+                  return PulseAnimation(
+                    scaleTarget: 1.15,
+                    child: IconButton(
+                      icon: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Icon(
+                            Icons.cloud_upload_rounded,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 24,
+                          ),
+                          Positioned(
+                            right: -2,
+                            top: -2,
+                            child: Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.error,
+                                shape: BoxShape.circle,
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 8,
+                                minHeight: 8,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      tooltip: l10n.unsavedBackups(pendingCount),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/backup-manager');
+                      },
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            );
+          },
+        ),
         if (selectedIndex == 0)
           Builder(
             builder: (context) {

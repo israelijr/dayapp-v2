@@ -435,6 +435,7 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           _statusIsError = false;
           _statusIsSuccess = true;
         });
+        Provider.of<RefreshProvider>(context, listen: false).refresh();
       }
 
       // Aguarda um tempo para garantir que todos os eventos de lifecycle foram processados
