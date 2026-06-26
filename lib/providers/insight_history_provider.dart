@@ -39,7 +39,8 @@ class InsightHistoryProvider with ChangeNotifier {
   List<InsightHistoryEntry> get entries => _buildFiltered();
 
   /// Entradas agrupadas por mês.
-  List<InsightHistoryGroup> get groups => _buildGroups(_buildFiltered());
+  List<InsightHistoryGroup> getGroups(String locale) =>
+      _buildGroups(_buildFiltered(), locale);
 
   // ---------------------------------------------------------------------------
   // API pública
@@ -120,7 +121,10 @@ class InsightHistoryProvider with ChangeNotifier {
     return result;
   }
 
-  List<InsightHistoryGroup> _buildGroups(List<InsightHistoryEntry> entries) {
+  List<InsightHistoryGroup> _buildGroups(
+    List<InsightHistoryEntry> entries,
+    String locale,
+  ) {
     if (entries.isEmpty) return [];
 
     // Agrupa por ano-mês
@@ -139,18 +143,18 @@ class InsightHistoryProvider with ChangeNotifier {
       final year = int.parse(parts[0]);
       final month = int.parse(parts[1]);
       return InsightHistoryGroup(
-        label: _monthYearLabel(month, year),
+        label: _monthYearLabel(month, year, locale),
         entries: map[key]!,
       );
     }).toList();
   }
 
-  String _monthYearLabel(int month, int year) {
+  String _monthYearLabel(int month, int year, String locale) {
     final date = DateTime(year, month);
     final currentYear = DateTime.now().year;
 
     // Obtém o nome do mês localizado e garante a primeira letra maiúscula
-    String monthName = DateFormat.MMMM().format(date);
+    String monthName = DateFormat.MMMM(locale).format(date);
     if (monthName.isNotEmpty) {
       monthName = '${monthName[0].toUpperCase()}${monthName.substring(1)}';
     }

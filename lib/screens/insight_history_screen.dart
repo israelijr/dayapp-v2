@@ -158,7 +158,8 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
     InsightHistoryProvider provider,
     bool isPremiumUser,
   ) {
-    final groups = provider.groups;
+    final locale = Localizations.localeOf(context).toString();
+    final groups = provider.getGroups(locale);
 
     if (groups.isEmpty) {
       return Center(

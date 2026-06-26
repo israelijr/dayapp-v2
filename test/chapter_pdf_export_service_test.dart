@@ -179,4 +179,46 @@ void main() {
     final content = await file.readAsString();
     expect(content, contains('<h1>Relatorio de viagem (Parte 1 de 2)</h1>'));
   });
+
+  test('exports html with grouped consecutive images in image-grid layout', () async {
+    final document = ChapterExportDocument(
+      chapterId: 42,
+      userId: 'user-1',
+      chapterTitle: 'Viagem com Fotos',
+      startDate: DateTime(2026, 6, 1),
+      endDate: DateTime(2026, 6, 3),
+      storyCount: 1,
+      blocks: [
+        const TitleExportBlock(text: 'Viagem com Fotos'),
+        const ImageExportBlock(imagePath: 'path/to/photo1.jpg', caption: 'Foto 1', storyId: 1),
+        const ImageExportBlock(imagePath: 'path/to/photo2.jpg', caption: 'Foto 2', storyId: 1),
+        const ParagraphExportBlock(text: 'Texto intermediario', storyId: 1),
+        const ImageExportBlock(imagePath: 'path/to/single.jpg', caption: 'Foto Isolada', storyId: 1),
+      ],
+    );
+
+    const service = ChapterPdfExportService();
+    final file = await service.exportHtml(
+      document: document,
+      localeName: 'pt_BR',
+      storyCountLabel: '1 história',
+    );
+
+    expect(await file.exists(), isTrue);
+    final content = await file.readAsString();
+
+    // Deve conter a estilização de grid e A4
+    expect(content, contains('@page { size: A4; margin: 20mm 15mm; }'));
+    expect(content, contains('.image-grid { display: grid;'));
+
+    // As duas primeiras fotos devem ser agrupadas no grid
+    expect(content, contains('<div class="image-grid">'));
+    expect(content, contains('<div class="grid-item">'));
+    expect(content, contains('<div class="caption">Foto 1</div>'));
+    expect(content, contains('<div class="caption">Foto 2</div>'));
+
+    // A foto isolada deve ser renderizada normalmente sem o grid-item
+    expect(content, contains('<div class="image-block">'));
+    expect(content, contains('<div class="caption">Foto Isolada</div>'));
+  });
 }

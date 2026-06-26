@@ -40,19 +40,22 @@ class ChapterPdfExportService {
     );
     buffer.writeln('<title>${_escapeHtml(displayTitle)}</title>');
     buffer.writeln('<style>');
-    buffer.writeln(
-      'body{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; padding:20px; color:#222}',
-    );
-    buffer.writeln(
-      'h1{font-family: Noto Serif, serif; font-size:28px; margin:0 0 8px}',
-    );
-    buffer.writeln('.meta{color:#666;font-size:12px;margin-bottom:12px}');
-    buffer.writeln(
-      '.cover{max-width:720px;border-radius:10px;overflow:hidden;margin-bottom:14px}',
-    );
-    buffer.writeln('.image{max-width:100%;height:auto;border-radius:8px}');
-    buffer.writeln('.caption{color:#666;font-size:12px;margin-top:6px}');
-    buffer.writeln('p{line-height:1.6;font-size:14px;margin:8px 0}');
+    buffer.writeln('/* Configuração de páginas físicas A4 e quebras de página */');
+    buffer.writeln('@page { size: A4; margin: 20mm 15mm; }');
+    buffer.writeln('body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; font-size: 14px; max-width: 800px; margin: 0 auto; padding: 20px; color: #222; }');
+    buffer.writeln('h1 { font-family: Noto Serif, serif; font-size: 28px; margin: 0 0 8px; page-break-after: avoid; break-after: avoid; }');
+    buffer.writeln('h2 { font-family: Noto Serif, serif; font-size: 20px; margin: 24px 0 8px; page-break-after: avoid; break-after: avoid; }');
+    buffer.writeln('.meta { color: #666; font-size: 12px; margin-bottom: 12px; page-break-after: avoid; break-after: avoid; }');
+    buffer.writeln('.cover { max-width: 100%; max-height: 250px; border-radius: 8px; overflow: hidden; margin-bottom: 16px; page-break-inside: avoid; break-inside: avoid; }');
+    buffer.writeln('.cover img { width: 100%; height: 250px; object-fit: cover; }');
+    buffer.writeln('.image-block { max-width: 350px; margin: 12px auto; page-break-inside: avoid; break-inside: avoid; text-align: center; }');
+    buffer.writeln('.image { max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }');
+    buffer.writeln('.caption { color: #666; font-size: 11px; margin-top: 4px; line-height: 1.3; }');
+    buffer.writeln('p { margin: 8px 0; orphans: 3; widows: 3; }');
+    buffer.writeln('/* Estilo de grid para imagens consecutivas (tipo jornal) */');
+    buffer.writeln('.image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 16px 0; page-break-inside: avoid; break-inside: avoid; }');
+    buffer.writeln('.grid-item { display: flex; flex-direction: column; align-items: center; }');
+    buffer.writeln('.grid-item .image { width: 100%; height: 120px; object-fit: cover; }');
     buffer.writeln('</style>');
     buffer.writeln('</head>');
     buffer.writeln('<body>');
@@ -73,30 +76,65 @@ class ChapterPdfExportService {
       }
     }
 
-    for (final block in document.blocks) {
+    int i = 0;
+    while (i < document.blocks.length) {
+      final block = document.blocks[i];
       if (block is TitleExportBlock) {
         buffer.writeln('<h2>${_escapeHtml(block.text)}</h2>');
+        i++;
       } else if (block is DateExportBlock) {
         buffer.writeln(
           '<div class="meta">${_escapeHtml(DateFormat('dd/MM/yyyy', localeName).format(block.date))}</div>',
         );
+        i++;
       } else if (block is ParagraphExportBlock) {
         buffer.writeln('<p>${_escapeHtml(block.text)}</p>');
+        i++;
       } else if (block is ImageExportBlock) {
-        final pathSafe = _escapeHtmlAttr(block.imagePath);
-        if (pathSafe.isNotEmpty) {
-          final dataUri = await _imageFileToDataUri(block.imagePath);
-          buffer.writeln('<div class="image-block">');
-          if (dataUri != null) {
-            buffer.writeln('<img class="image" src="$dataUri" alt="image">');
+        final consecutiveImages = <ImageExportBlock>[];
+        while (i < document.blocks.length && document.blocks[i] is ImageExportBlock) {
+          consecutiveImages.add(document.blocks[i] as ImageExportBlock);
+          i++;
+        }
+
+        if (consecutiveImages.length == 1) {
+          final imgBlock = consecutiveImages.first;
+          final pathSafe = _escapeHtmlAttr(imgBlock.imagePath);
+          if (pathSafe.isNotEmpty) {
+            final dataUri = await _imageFileToDataUri(imgBlock.imagePath);
+            buffer.writeln('<div class="image-block">');
+            if (dataUri != null) {
+              buffer.writeln('<img class="image" src="$dataUri" alt="image">');
+            }
+            if (imgBlock.caption != null && imgBlock.caption!.isNotEmpty) {
+              buffer.writeln(
+                '<div class="caption">${_escapeHtml(imgBlock.caption!)}</div>',
+              );
+            }
+            buffer.writeln('</div>');
           }
-          if (block.caption != null && block.caption!.isNotEmpty) {
-            buffer.writeln(
-              '<div class="caption">${_escapeHtml(block.caption!)}</div>',
-            );
+        } else if (consecutiveImages.isNotEmpty) {
+          buffer.writeln('<div class="image-grid">');
+          for (final imgBlock in consecutiveImages) {
+            final pathSafe = _escapeHtmlAttr(imgBlock.imagePath);
+            if (pathSafe.isNotEmpty) {
+              final dataUri = await _imageFileToDataUri(imgBlock.imagePath);
+              buffer.writeln('<div class="grid-item">');
+              if (dataUri != null) {
+                buffer.writeln('<img class="image" src="$dataUri" alt="image">');
+              }
+              if (imgBlock.caption != null && imgBlock.caption!.isNotEmpty) {
+                buffer.writeln(
+                  '<div class="caption">${_escapeHtml(imgBlock.caption!)}</div>',
+                );
+              }
+              buffer.writeln('</div>');
+            }
           }
           buffer.writeln('</div>');
         }
+      } else {
+        i++;
       }
     }
 
@@ -131,8 +169,8 @@ class ChapterPdfExportService {
       try {
         final compressed = await FlutterImageCompress.compressWithList(
           originalBytes,
-          minWidth: 800,
-          minHeight: 800,
+          minWidth: 450,
+          minHeight: 450,
           quality: 65,
           rotate: 0,
         );
@@ -151,7 +189,7 @@ class ChapterPdfExportService {
           _processImageInIsolate,
           _ImageProcessingRequest(
             bytes: originalBytes,
-            maxDimension: 800,
+            maxDimension: 450,
             quality: 65,
           ),
         );
