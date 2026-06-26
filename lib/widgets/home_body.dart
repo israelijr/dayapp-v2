@@ -19,18 +19,17 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (selectedIndex == 0) {
-      return HomeContent(
-        isCardView: context.select<HomeLayoutProvider, bool>(
-          (provider) => provider.isCardView,
+    return IndexedStack(
+      index: selectedIndex,
+      children: [
+        HomeContent(
+          isCardView: context.select<HomeLayoutProvider, bool>(
+            (provider) => provider.isCardView,
+          ),
         ),
-      );
-    }
-
-    if (selectedIndex == 1) {
-      return GroupsScreen(onTabChanged: onCollectionsTabChanged);
-    }
-
-    return const SearchScreen();
+        GroupsScreen(onTabChanged: onCollectionsTabChanged),
+        const SearchScreen(),
+      ],
+    );
   }
 }

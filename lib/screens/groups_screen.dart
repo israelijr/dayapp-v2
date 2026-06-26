@@ -76,8 +76,11 @@ class _GroupsScreenState extends State<GroupsScreen>
     }
   }
 
-  Future<void> _loadCollections() async {
-    setState(() => _isLoading = true);
+  Future<void> _loadCollections({bool forceRefresh = false}) async {
+    final showSpinner = (_grupos.isEmpty && _capitulos.isEmpty) || forceRefresh;
+    if (showSpinner) {
+      setState(() => _isLoading = true);
+    }
     try {
       final auth = Provider.of<AuthProvider>(context, listen: false);
       final userId = auth.user?.id;
@@ -119,10 +122,14 @@ class _GroupsScreenState extends State<GroupsScreen>
         });
       }
     } finally {
-      if (mounted) {
+      if (mounted && showSpinner) {
         setState(() => _isLoading = false);
       }
     }
+  }
+
+  Future<void> _handlePullToRefresh() async {
+    await _loadCollections(forceRefresh: true);
   }
 
   Future<void> _navigateAndRefresh(Widget screen) async {
@@ -577,7 +584,7 @@ class _GroupsScreenState extends State<GroupsScreen>
                       controller: _tabController,
                       children: [
                         RefreshIndicator(
-                          onRefresh: _loadCollections,
+                          onRefresh: _handlePullToRefresh,
                           child: _capitulos.isEmpty
                               ? ListView(
                                   padding: const EdgeInsets.symmetric(
@@ -615,7 +622,7 @@ class _GroupsScreenState extends State<GroupsScreen>
                                 ),
                         ),
                         RefreshIndicator(
-                          onRefresh: _loadCollections,
+                          onRefresh: _handlePullToRefresh,
                           child: _grupos.isEmpty
                               ? ListView(
                                   padding: const EdgeInsets.symmetric(
