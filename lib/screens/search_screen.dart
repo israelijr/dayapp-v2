@@ -29,10 +29,12 @@ enum SearchType {
 class SearchScreen extends StatefulWidget {
   final String? initialQuery;
   final SearchType initialSearchType;
+  final bool showAppBar;
 
   const SearchScreen({
     this.initialQuery,
     this.initialSearchType = SearchType.text,
+    this.showAppBar = true,
     super.key,
   });
 
@@ -193,28 +195,26 @@ class _SearchScreenState extends State<SearchScreen> {
       data: screenTheme,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          // Removido o overshoot e garantido alinhamento limpo
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          title: Text(
-            l10n.search,
-            style: GoogleFonts.notoSerif(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onPrimary,
-            ),
-          ),
-          bottom: PreferredSize(
-            // Ajustado para 56h para acomodar confortavelmente a barra de chips sem sobreposição
-            preferredSize: const Size.fromHeight(56),
-            child: Padding(
-              // Adicionado padding no fundo para melhor espaçamento visual
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              child: _buildFilterChipsBar(),
-            ),
-          ),
-        ),
+        appBar: widget.showAppBar
+            ? AppBar(
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                title: Text(
+                  l10n.search,
+                  style: GoogleFonts.notoSerif(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(48),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+                    child: _buildFilterChipsBar(),
+                  ),
+                ),
+              )
+            : null,
         body: SafeArea(
           top: false,
           child: LayoutBuilder(
@@ -243,6 +243,13 @@ class _SearchScreenState extends State<SearchScreen> {
               );
               return Column(
                 children: [
+                  if (!widget.showAppBar) ...[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: _buildFilterChipsBar(),
+                    ),
+                    const Divider(height: 1),
+                  ],
                   ConstrainedBox(
                     constraints: BoxConstraints(maxHeight: filterMaxHeight),
                     child: SingleChildScrollView(
@@ -286,15 +293,10 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Row(
         children: [
           ChoiceChip(
-            label: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.text_fields, size: 18),
-                const SizedBox(width: 4),
-                Text(l10n.filterText),
-              ],
-            ),
+            avatar: const Icon(Icons.text_fields, size: 18),
+            label: Text(l10n.filterText),
             selected: _currentSearchType == SearchType.text,
+            showCheckmark: false,
             onSelected: (selected) {
               if (selected) {
                 setState(() {
@@ -306,15 +308,10 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           const SizedBox(width: 8),
           ChoiceChip(
-            label: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.label, size: 18),
-                const SizedBox(width: 4),
-                Text(l10n.filterTag),
-              ],
-            ),
+            avatar: const Icon(Icons.label, size: 18),
+            label: Text(l10n.filterTag),
             selected: _currentSearchType == SearchType.tag,
+            showCheckmark: false,
             onSelected: (selected) {
               if (selected) {
                 setState(() {
@@ -326,15 +323,10 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           const SizedBox(width: 8),
           ChoiceChip(
-            label: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.mood, size: 18),
-                const SizedBox(width: 4),
-                Text(l10n.filterEmoticon),
-              ],
-            ),
+            avatar: const Icon(Icons.mood, size: 18),
+            label: Text(l10n.filterEmoticon),
             selected: _currentSearchType == SearchType.emoticon,
+            showCheckmark: false,
             onSelected: (selected) {
               if (selected) {
                 setState(() {
@@ -356,7 +348,8 @@ class _SearchScreenState extends State<SearchScreen> {
         Expanded(
           child: CustomTextField(
             controller: _searchController,
-            label: _currentSearchType == SearchType.tag
+            label: '',
+            hintText: _currentSearchType == SearchType.tag
                 ? l10n.searchHintTag
                 : l10n.searchHintText,
             prefixIcon: const Icon(Icons.search),

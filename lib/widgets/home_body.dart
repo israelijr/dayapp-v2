@@ -28,7 +28,7 @@ class HomeBody extends StatelessWidget {
           ),
         ),
         GroupsScreen(onTabChanged: onCollectionsTabChanged),
-        const SearchScreen(),
+        const SearchScreen(showAppBar: false),
       ],
     );
   }

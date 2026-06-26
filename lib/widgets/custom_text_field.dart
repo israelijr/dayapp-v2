@@ -81,7 +81,7 @@ class CustomTextField extends StatelessWidget {
         onSubmitted: onSubmitted,
         textInputAction: textInputAction,
         decoration: InputDecoration(
-          labelText: label,
+          labelText: label.isEmpty ? null : label,
           hintText: hintText,
           helperText: helperText,
           helperStyle: helperStyle,
