@@ -265,6 +265,7 @@ class DatabaseHelper {
         await db.execute('ALTER TABLE historia ADD COLUMN arquivado TEXT;');
       } catch (e) {
         // Column may already exist
+        debugPrint('DatabaseHelper: coluna arquivado pode já existir na v5: $e');
       }
     }
     if (oldVersion < 6) {
@@ -341,10 +342,12 @@ class DatabaseHelper {
             }
           } catch (e) {
             // Skip video on error
+            debugPrint('DatabaseHelper: erro ao migrar vídeo na v7: $e');
           }
         }
       } catch (e) {
         // Old table doesn't exist or migration error
+        debugPrint('DatabaseHelper: erro na migração v7 de historia_videos: $e');
       }
 
       // Dropar tabela antiga e renomear nova
@@ -361,6 +364,7 @@ class DatabaseHelper {
         );
       } catch (e) {
         // Columns may already exist
+        debugPrint('DatabaseHelper: colunas excluido/data_exclusao na v8 podem já existir: $e');
       }
     }
     if (oldVersion < 9) {
@@ -395,6 +399,7 @@ class DatabaseHelper {
         }
       } catch (e) {
         // Error correcting table structure
+        debugPrint('DatabaseHelper: erro ao corrigir estrutura da tabela na v9: $e');
       }
     }
     if (oldVersion < 10) {
@@ -411,6 +416,7 @@ class DatabaseHelper {
         ''');
       } catch (e) {
         // Error creating notification_scheduled table
+        debugPrint('DatabaseHelper: erro ao criar tabela notification_scheduled na v10: $e');
       }
     }
     if (oldVersion < 11) {
@@ -418,6 +424,7 @@ class DatabaseHelper {
         await db.execute('ALTER TABLE grupos ADD COLUMN emoticon TEXT;');
       } catch (e) {
         // Column may already exist
+        debugPrint('DatabaseHelper: coluna emoticon de grupos na v11 pode já existir: $e');
       }
     }
     if (oldVersion < 12) {
@@ -433,6 +440,7 @@ class DatabaseHelper {
         );
       } catch (e) {
         // Column may already exist or operation not supported; ignore
+        debugPrint('DatabaseHelper: coluna backed_up na v13 pode já existir ou operação não suportada: $e');
       }
     }
     if (oldVersion < 14) {
@@ -451,6 +459,7 @@ class DatabaseHelper {
         );
       } catch (e) {
         // Colunas já existem ou erro na migração; ignorar
+        debugPrint('DatabaseHelper: colunas humor/energia na v14 podem já existir ou erro na migração: $e');
       }
     }
     if (oldVersion < 15) {
@@ -1007,8 +1016,9 @@ class DatabaseHelper {
         try {
           final f = File(fotoHistoria);
           if (await f.exists()) await f.delete();
-        } catch (_) {
+        } catch (e) {
           // Ignora erros ao deletar capa da história
+          debugPrint('DatabaseHelper: erro ao deletar capa da história ($fotoHistoria): $e');
         }
       }
     }

@@ -218,26 +218,21 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
   }
 
   Future<void> _loadData() async {
-    print('DEBUG: ChaptersScreen _loadData started');
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final premium = Provider.of<PremiumProvider>(context, listen: false);
     final userId = auth.user?.id;
-    print('DEBUG: ChaptersScreen _loadData userId=$userId');
     if (userId == null || userId.isEmpty) return;
 
     setState(() {
       _isLoading = true;
     });
 
-    print('DEBUG: ChaptersScreen _loadData fetching capitulos...');
     final capitulos = await _capituloRepository.fetchCapitulosResumoByUser(
       userId,
     );
-    print('DEBUG: ChaptersScreen _loadData fetched capitulos, fetching sugestoes...');
     final sugestoes = premium.canUseAutoChapterSuggestion
         ? await _sugestaoService.sugerirCapitulos(userId)
         : const <CapituloSugestao>[];
-    print('DEBUG: ChaptersScreen _loadData fetched sugestoes, updating state...');
 
     if (!mounted) return;
     setState(() {
@@ -245,7 +240,6 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
       _sugestoes = sugestoes;
       _isLoading = false;
     });
-    print('DEBUG: ChaptersScreen _loadData completed');
   }
 
   Future<void> _aceitarSugestao(CapituloSugestao sugestao) async {
@@ -942,6 +936,10 @@ class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
 
+    if (newValue.composing.isValid) {
+      return newValue;
+    }
+
     String capitalizeText(String text) {
       if (text.isEmpty) return text;
 
@@ -988,6 +986,8 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
   late final QuillController richTextController;
   final Set<int> selected = <int>{};
   String? _fotoPath;
+  bool _lastFormValid = false;
+  bool _lastDraftToConfirmExit = false;
 
   bool get _isFormValid {
     return titleController.text.trim().isNotEmpty && selected.isNotEmpty;
@@ -1006,12 +1006,21 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
     super.initState();
     titleController = TextEditingController();
     richTextController = QuillController.basic();
+    _lastFormValid = _isFormValid;
+    _lastDraftToConfirmExit = _hasDraftToConfirmExit;
     titleController.addListener(_onTextChanged);
     richTextController.addListener(_onTextChanged);
   }
 
   void _onTextChanged() {
-    setState(() {});
+    final isValid = _isFormValid;
+    final hasDraft = _hasDraftToConfirmExit;
+    if (isValid != _lastFormValid || hasDraft != _lastDraftToConfirmExit) {
+      setState(() {
+        _lastFormValid = isValid;
+        _lastDraftToConfirmExit = hasDraft;
+      });
+    }
   }
 
   @override
@@ -1104,8 +1113,9 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
     );
   }
 
-  void _save(AppLocalizations l10n) {
-    if (titleController.text.trim().isEmpty) {
+  Future<void> _save(AppLocalizations l10n) async {
+    final title = titleController.text.trim();
+    if (title.isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.chapterTitleRequired)));
@@ -1117,12 +1127,36 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
       ).showSnackBar(SnackBar(content: Text(l10n.chapterMinimumEntries)));
       return;
     }
+
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final userId = auth.user?.id;
+    if (userId != null) {
+      final exists = await CapituloRepository().doesChapterTitleExist(userId, title);
+      if (exists && mounted) {
+        showDialog<void>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(l10n.chapterTitleDuplicateTitle),
+            content: Text(l10n.chapterTitleDuplicateMessage),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text(l10n.confirm),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    }
+
     final richTextJson = RichTextHelper.controllerToJson(richTextController);
     final plainText = richTextController.document.toPlainText().trim();
 
+    if (!mounted) return;
     Navigator.of(context).pop(
       _CreateCapituloResult(
-        titulo: titleController.text.trim(),
+        titulo: title,
         descricao: plainText.isEmpty ? null : richTextJson,
         entradaIds: {...selected},
         fotoPath: _fotoPath,
@@ -1167,7 +1201,7 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
     if (!mounted) return;
 
     if (dialogResult == 'save') {
-      _save(l10n);
+      await _save(l10n);
     } else if (dialogResult == 'discard') {
       Navigator.of(context).pop();
     }
@@ -1419,6 +1453,8 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
   late final Set<int> _initialSelectedIds;
   String? _initialFotoPath;
   String? _fotoPath;
+  bool _lastFormValid = false;
+  bool _lastHasUnsavedChanges = false;
 
   bool get _isFormValid {
     return titleController.text.trim().isNotEmpty && selectedIds.isNotEmpty;
@@ -1449,13 +1485,22 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
     final path = widget.capitulo.fotoPath;
     _fotoPath = (path != null && File(path).existsSync()) ? path : null;
     _initialFotoPath = _fotoPath;
+    _lastFormValid = _isFormValid;
+    _lastHasUnsavedChanges = _hasUnsavedChanges;
 
     titleController.addListener(_onTextChanged);
     richTextController.addListener(_onTextChanged);
   }
 
   void _onTextChanged() {
-    setState(() {});
+    final isValid = _isFormValid;
+    final hasChanges = _hasUnsavedChanges;
+    if (isValid != _lastFormValid || hasChanges != _lastHasUnsavedChanges) {
+      setState(() {
+        _lastFormValid = isValid;
+        _lastHasUnsavedChanges = hasChanges;
+      });
+    }
   }
 
   @override
@@ -1547,8 +1592,9 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
     );
   }
 
-  void _save(AppLocalizations l10n) {
-    if (titleController.text.trim().isEmpty) {
+  Future<void> _save(AppLocalizations l10n) async {
+    final title = titleController.text.trim();
+    if (title.isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.chapterTitleRequired)));
@@ -1560,12 +1606,40 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
       ).showSnackBar(SnackBar(content: Text(l10n.chapterMinimumEntries)));
       return;
     }
+
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final userId = auth.user?.id;
+    if (userId != null) {
+      final exists = await CapituloRepository().doesChapterTitleExist(
+        userId,
+        title,
+        excludeId: widget.capitulo.id,
+      );
+      if (exists && mounted) {
+        showDialog<void>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(l10n.chapterTitleDuplicateTitle),
+            content: Text(l10n.chapterTitleDuplicateMessage),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text(l10n.confirm),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    }
+
     final richTextJson = RichTextHelper.controllerToJson(richTextController);
     final plainText = richTextController.document.toPlainText().trim();
 
+    if (!mounted) return;
     Navigator.of(context).pop(
       _EditCapituloResult(
-        titulo: titleController.text.trim(),
+        titulo: title,
         descricao: plainText.isEmpty ? null : richTextJson,
         entradaIds: {...selectedIds},
         fotoPath: _fotoPath,
@@ -1610,7 +1684,7 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
     if (!mounted) return;
 
     if (dialogResult == 'save') {
-      _save(l10n);
+      await _save(l10n);
     } else if (dialogResult == 'discard') {
       Navigator.of(context).pop();
     }

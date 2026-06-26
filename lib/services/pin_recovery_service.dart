@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'email_service.dart';
 import 'secure_storage_service.dart';
@@ -97,6 +98,7 @@ class PinRecoveryService {
 
       return true;
     } catch (e) {
+      debugPrint('PinRecoveryService.sendRecoveryCode: erro ao enviar código de recuperação: $e');
       return false;
     }
   }
@@ -119,6 +121,7 @@ class PinRecoveryService {
 
       return difference.inMinutes <= recoveryCodeValidityMinutes;
     } catch (e) {
+      debugPrint('PinRecoveryService.hasActiveRecoveryCode: erro ao verificar código ativo: $e');
       return false;
     }
   }
@@ -167,6 +170,7 @@ class PinRecoveryService {
 
       return true;
     } catch (e) {
+      debugPrint('PinRecoveryService.verifyRecoveryCode: erro ao verificar código: $e');
       return false;
     }
   }
@@ -193,6 +197,7 @@ class PinRecoveryService {
 
       return remaining > 0 ? remaining : 0;
     } catch (e) {
+      debugPrint('PinRecoveryService.getRemainingTime: erro ao obter tempo restante: $e');
       return null;
     }
   }

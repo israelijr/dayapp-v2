@@ -11,11 +11,11 @@ import 'package:dayapp/providers/theme_provider.dart';
 import 'package:dayapp/screens/chapters_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   _FakePathProviderPlatform({
@@ -136,16 +136,15 @@ void main() {
         ChangeNotifierProvider(create: (_) => RefreshProvider()),
         ChangeNotifierProvider.value(value: premiumProvider),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const ChaptersScreen(),
+        home: ChaptersScreen(),
       ),
     );
   }
 
   testWidgets('ChaptersScreen manually create chapter, triggers discard dialog when dirty', (tester) async {
-    print('DEBUG: Test started');
     // 1. Setup Auth and database user/entries
     final testUser = User(
       id: 'test-user',
@@ -174,69 +173,53 @@ void main() {
 
     final premium = _FakePremiumProvider();
 
-    print('DEBUG: Database set up, pumping widget...');
     // 2. Pump ChaptersScreen
     await tester.pumpWidget(buildChaptersScreen(
       authProvider: auth,
       premiumProvider: premium,
     ));
-    print('DEBUG: Widget pumped, starting first pump loop...');
     // Let database load complete and remove loader
     for (int i = 0; i < 10; i++) {
-      print('DEBUG: pump loop $i');
       await tester.pump(const Duration(milliseconds: 100));
     }
-    print('DEBUG: First pump loop finished');
 
     // Verify ChaptersScreen loaded
     expect(find.byType(ChaptersScreen), findsOneWidget);
-    print('DEBUG: Verified ChaptersScreen exists');
 
     // Tap Floating Action Button to create chapter
     final fab = find.byType(FloatingActionButton);
     expect(fab, findsOneWidget);
     await tester.tap(fab);
-    print('DEBUG: Tapped FAB, starting second pump loop...');
     for (int i = 0; i < 5; i++) {
-      print('DEBUG: second pump loop $i');
       await tester.pump(const Duration(milliseconds: 100));
     }
-    print('DEBUG: Second pump loop finished');
 
     // Verify _CreateCapituloPage has loaded
     expect(find.text('Criar Capítulo'), findsOneWidget);
-    print('DEBUG: Verified _CreateCapituloPage loaded');
 
     // 3. Make changes and verify discard dialog
     // Type in the title field
     final titleField = find.byType(TextField).first;
     await tester.enterText(titleField, 'New Chapter Title');
     await tester.pump();
-    print('DEBUG: Text entered in title field');
 
     // Try to go back via the AppBar back button
     final backButton = find.byIcon(Icons.arrow_back);
     expect(backButton, findsOneWidget);
     await tester.tap(backButton);
-    print('DEBUG: Tapped back button, pumping and settling...');
     await tester.pumpAndSettle();
-    print('DEBUG: Pump and settle finished');
 
     // Verify AlertDialog popped up with title "Descartar alterações?"
     expect(find.byType(AlertDialog), findsOneWidget);
     expect(find.text('Descartar alterações?'), findsOneWidget);
-    print('DEBUG: Verified AlertDialog exists');
 
     // Tap "Cancelar" in the dialog to close it and stay on page
     final cancelButton = find.text('Cancelar');
     expect(cancelButton, findsOneWidget);
     await tester.tap(cancelButton);
-    print('DEBUG: Tapped cancel button, pumping and settling...');
     await tester.pumpAndSettle();
-    print('DEBUG: Pump and settle finished');
 
     expect(find.byType(AlertDialog), findsNothing);
     expect(find.text('Criar Capítulo'), findsOneWidget);
-    print('DEBUG: Test finished successfully');
   });
 }

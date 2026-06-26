@@ -38,6 +38,7 @@ class _ChaptersEntryScreenState extends State<ChaptersEntryScreen> {
       });
     } catch (e) {
       // Em falha de leitura, mantém o padrão para não ocultar a introdução.
+      debugPrint('ChaptersEntryScreen._loadPreference: erro ao ler preferências: $e');
       if (!mounted) return;
       setState(() {
         _showIntroOnOpen = true;
@@ -57,6 +58,7 @@ class _ChaptersEntryScreenState extends State<ChaptersEntryScreen> {
       await prefs.setBool(_prefShowIntroOnOpen, value);
     } catch (e) {
       // Falha de persistência não deve interromper a navegação.
+      debugPrint('ChaptersEntryScreen._updateShowOnOpen: erro ao salvar preferência: $e');
     }
   }
 

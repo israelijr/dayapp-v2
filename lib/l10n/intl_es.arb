@@ -2506,5 +2506,13 @@
         "type": "int"
       }
     }
+  },
+  "chapterTitleDuplicateTitle": "Título Duplicado",
+  "@chapterTitleDuplicateTitle": {
+    "description": "Title shown in error dialog when trying to use a chapter title that already exists"
+  },
+  "chapterTitleDuplicateMessage": "Ya existe un capítulo con este título. Por favor, elija otro título.",
+  "@chapterTitleDuplicateMessage": {
+    "description": "Message shown in error dialog when trying to use a chapter title that already exists"
   }
 }

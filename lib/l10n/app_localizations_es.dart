@@ -2853,4 +2853,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String chapterExportSplitExplanation(int parts) {
     return 'Para garantizar un mejor rendimiento y compatibilidad al enviar, este capítulo se dividió en $parts archivos.';
   }
+
+  @override
+  String get chapterTitleDuplicateTitle => 'Título Duplicado';
+
+  @override
+  String get chapterTitleDuplicateMessage =>
+      'Ya existe un capítulo con este título. Por favor, elija otro título.';
 }

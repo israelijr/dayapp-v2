@@ -44,6 +44,10 @@ class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
 
+    if (newValue.composing.isValid) {
+      return newValue;
+    }
+
     String capitalizeText(String text) {
       if (text.isEmpty) return text;
 
@@ -100,6 +104,8 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
   final HistoriaRepository _historiaRepository = HistoriaRepository();
   // Controle de alterações não salvas
   bool _hasUnsavedChanges = false;
+  bool _lastFormValid = false;
+  bool _lastHasUnsavedChanges = false;
 
   // Estado do indicador de sync de backup incremental
   bool _isSyncing = false;
@@ -116,6 +122,8 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
     super.initState();
     // Inicializa o controller do Rich Text
     richTextController = QuillController.basic();
+    _lastFormValid = _isFormValid;
+    _lastHasUnsavedChanges = _hasUnsavedChanges;
     // Adiciona listeners para detectar mudanças
     titleController.addListener(_checkForChanges);
     richTextController.addListener(_checkForChanges);
@@ -135,15 +143,15 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         _selectedMood != 3 ||
         _selectedEnergy != 2;
 
-    /*     if (hasChanges != _hasUnsavedChanges) {
+    final isValid = titleController.text.trim().isNotEmpty && plainText.isNotEmpty;
+
+    if (hasChanges != _lastHasUnsavedChanges || isValid != _lastFormValid) {
       setState(() {
         _hasUnsavedChanges = hasChanges;
+        _lastHasUnsavedChanges = hasChanges;
+        _lastFormValid = isValid;
       });
-    } */
-
-    setState(() {
-      _hasUnsavedChanges = hasChanges;
-    });
+    }
   }
 
   @override

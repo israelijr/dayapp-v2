@@ -263,6 +263,22 @@ class CapituloRepository {
     return rows.map((row) => row['entrada_id'] as int).toSet();
   }
 
+  Future<bool> doesChapterTitleExist(String userId, String title, {int? excludeId}) async {
+    final db = await DatabaseHelper().database;
+    final rows = await db.query(
+      'capitulos',
+      columns: ['id'],
+      where: excludeId != null
+          ? 'user_id = ? AND LOWER(titulo) = ? AND id != ?'
+          : 'user_id = ? AND LOWER(titulo) = ?',
+      whereArgs: excludeId != null
+          ? [userId, title.trim().toLowerCase(), excludeId]
+          : [userId, title.trim().toLowerCase()],
+      limit: 1,
+    );
+    return rows.isNotEmpty;
+  }
+
   Future<void> updateChapterEntriesOrder({
     required int capituloId,
     required List<int> orderedEntryIds,

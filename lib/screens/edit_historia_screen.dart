@@ -43,6 +43,10 @@ class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
 
+    if (newValue.composing.isValid) {
+      return newValue;
+    }
+
     String capitalizeText(String text) {
       if (text.isEmpty) return text;
 
@@ -103,6 +107,8 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
 
   // Controle de alterações não salvas
   bool _hasUnsavedChanges = false;
+  bool _lastFormValid = false;
+  bool _lastHasUnsavedChanges = false;
   // flag usada para indicar que initState já terminou e os controllers estão
   // disponíveis. Isto permite que métodos chamados em testes (sem árvore)
   // não tentem acessar objetos ainda não inicializados.
@@ -176,6 +182,8 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
     _loadTags();
 
     _initialized = true; // marca estado como pronto para verificação
+    _lastFormValid = _isFormValid;
+    _lastHasUnsavedChanges = _hasUnsavedChanges;
   }
 
   final List<String> legacyEmoticons = [
@@ -269,9 +277,15 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
         _selectedMood != _initialMood ||
         _selectedEnergy != _initialEnergy;
 
-    setState(() {
-      _hasUnsavedChanges = hasChanges;
-    });
+    final isValid = _isFormValid;
+
+    if (hasChanges != _lastHasUnsavedChanges || isValid != _lastFormValid) {
+      setState(() {
+        _hasUnsavedChanges = hasChanges;
+        _lastHasUnsavedChanges = hasChanges;
+        _lastFormValid = isValid;
+      });
+    }
   }
 
   Future<void> _loadFotos() async {

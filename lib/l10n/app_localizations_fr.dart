@@ -2863,4 +2863,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String chapterExportSplitExplanation(int parts) {
     return 'Pour garantir de meilleures performances et une meilleure compatibilité lors de l\'envoi, ce chapitre a été divisé en $parts fichiers.';
   }
+
+  @override
+  String get chapterTitleDuplicateTitle => 'Titre Dupliqué';
+
+  @override
+  String get chapterTitleDuplicateMessage =>
+      'Un chapitre avec ce titre existe déjà. Veuillez choisir un autre titre.';
 }

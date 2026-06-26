@@ -13,6 +13,14 @@ class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
+    if (oldValue.text == newValue.text) {
+      return newValue;
+    }
+
+    if (newValue.composing.isValid) {
+      return newValue;
+    }
+
     String capitalizeText(String text) {
       if (text.isEmpty) return text;
 

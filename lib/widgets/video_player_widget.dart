@@ -90,6 +90,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         });
       }
     } catch (e) {
+      debugPrint('VideoPlayerWidget._initializeVideo: erro ao inicializar vídeo: $e');
       if (mounted) {
         setState(() {
           _hasError = true;
@@ -112,6 +113,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         }
       } catch (e) {
         // Erro ao obter tamanho do vídeo
+        debugPrint('VideoPlayerWidget._getVideoSize: erro ao ler tamanho do arquivo: $e');
       }
     }
     return '?';

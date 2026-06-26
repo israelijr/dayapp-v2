@@ -43,6 +43,7 @@ class VideoFileHelper {
       }
       return null;
     } catch (e) {
+      debugPrint('VideoFileHelper.readVideo: erro ao ler arquivo em $filePath: $e');
       return null;
     }
   }
@@ -57,6 +58,7 @@ class VideoFileHelper {
       }
       return false;
     } catch (e) {
+      debugPrint('VideoFileHelper.deleteVideo: erro ao deletar arquivo em $filePath: $e');
       return false;
     }
   }

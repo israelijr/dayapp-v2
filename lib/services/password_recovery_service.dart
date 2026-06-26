@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'email_service.dart';
@@ -56,6 +57,7 @@ class PasswordRecoveryService {
 
       return true;
     } catch (e) {
+      debugPrint('PasswordRecoveryService.sendRecoveryCode: erro ao enviar código de recuperação de senha: $e');
       return false;
     }
   }
@@ -74,6 +76,7 @@ class PasswordRecoveryService {
 
       return difference.inMinutes <= recoveryCodeValidityMinutes;
     } catch (e) {
+      debugPrint('PasswordRecoveryService.hasActiveRecoveryCode: erro ao verificar código ativo de recuperação: $e');
       return false;
     }
   }
@@ -117,6 +120,7 @@ class PasswordRecoveryService {
 
       return true;
     } catch (e) {
+      debugPrint('PasswordRecoveryService.verifyRecoveryCode: erro ao verificar código de recuperação de senha: $e');
       return false;
     }
   }
@@ -143,6 +147,7 @@ class PasswordRecoveryService {
 
       return remaining > 0 ? remaining : 0;
     } catch (e) {
+      debugPrint('PasswordRecoveryService.getRemainingTime: erro ao obter tempo restante de validade: $e');
       return null;
     }
   }

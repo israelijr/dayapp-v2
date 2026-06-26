@@ -5081,6 +5081,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To ensure better performance and compatibility when sharing, this chapter was split into {parts} files.'**
   String chapterExportSplitExplanation(int parts);
+
+  /// Title shown in error dialog when trying to use a chapter title that already exists
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate Title'**
+  String get chapterTitleDuplicateTitle;
+
+  /// Message shown in error dialog when trying to use a chapter title that already exists
+  ///
+  /// In en, this message translates to:
+  /// **'A chapter with this title already exists. Please choose another title.'**
+  String get chapterTitleDuplicateMessage;
 }
 
 class _AppLocalizationsDelegate

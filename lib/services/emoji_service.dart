@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class Emoji {
@@ -49,6 +50,7 @@ class EmojiService {
       }
     } catch (e) {
       // Erro ao carregar emojis - lista ficará vazia
+      debugPrint('EmojiService.loadEmojis: erro ao ler assets/emojis.json: $e');
     }
   }
 

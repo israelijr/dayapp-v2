@@ -118,6 +118,8 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                   final userId = provider.userId;
                   if (userId == null) return;
                   final navigator = Navigator.of(context);
+                  final messenger = ScaffoldMessenger.of(context);
+                  final locale = Localizations.localeOf(context).languageCode;
 
                   try {
                     if (isEditing) {
@@ -148,7 +150,27 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                     if (!mounted) return;
                     navigator.pop();
                   } catch (e) {
-                    // Tratar erro se necessário
+                    debugPrint('GroupsMaintenanceScreen: erro ao salvar grupo: $e');
+                    if (!mounted) return;
+                    
+                    String errorMsg;
+                    switch (locale) {
+                      case 'pt':
+                        errorMsg = 'Erro ao salvar grupo. Tente novamente.';
+                        break;
+                      case 'es':
+                        errorMsg = 'Error al guardar el grupo. Tente nuevamente.';
+                        break;
+                      case 'fr':
+                        errorMsg = 'Erreur lors de l\'enregistrement du groupe. Réessayez.';
+                        break;
+                      default:
+                        errorMsg = 'Error saving group. Please try again.';
+                    }
+                    
+                    messenger.showSnackBar(
+                      SnackBar(content: Text(errorMsg)),
+                    );
                   }
                 },
                 child: Text(AppLocalizations.of(context)!.save),

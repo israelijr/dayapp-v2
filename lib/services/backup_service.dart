@@ -157,6 +157,7 @@ class BackupService {
         await HistoriaRepository().markAllStoriesBackedUp();
       } catch (e) {
         // Não quebrar o fluxo de backup se a marcação falhar
+        debugPrint('BackupService: erro ao marcar histórias como salvas em backup: $e');
       }
 
       // 4. Criar arquivo de metadados (único arquivo que requer escrita temporária)
@@ -295,6 +296,7 @@ Versão: 2.0.0
         await metadataFile.delete();
       } catch (e) {
         // Silencioso — arquivo temporário, falha não é crítica
+        debugPrint('BackupService: erro ao deletar arquivo temporário de metadados de backup: $e');
       }
 
       onProgress?.call(l10n.backupProgressSuccess);

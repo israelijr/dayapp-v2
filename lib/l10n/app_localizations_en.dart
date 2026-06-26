@@ -2820,4 +2820,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String chapterExportSplitExplanation(int parts) {
     return 'To ensure better performance and compatibility when sharing, this chapter was split into $parts files.';
   }
+
+  @override
+  String get chapterTitleDuplicateTitle => 'Duplicate Title';
+
+  @override
+  String get chapterTitleDuplicateMessage =>
+      'A chapter with this title already exists. Please choose another title.';
 }

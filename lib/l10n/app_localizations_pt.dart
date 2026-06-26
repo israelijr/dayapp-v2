@@ -2839,6 +2839,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String chapterExportSplitExplanation(int parts) {
     return 'Para garantir um melhor desempenho e compatibilidade no envio, este capítulo foi dividido em $parts arquivos.';
   }
+
+  @override
+  String get chapterTitleDuplicateTitle => 'Título Duplicado';
+
+  @override
+  String get chapterTitleDuplicateMessage =>
+      'Já existe um capítulo com este título. Por favor, escolha outro título.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3010,4 +3017,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String chapterExportSplitExplanation(int parts) {
     return 'Para garantir um melhor desempenho e compatibilidade no envio, este capítulo foi dividido em $parts arquivos.';
   }
+
+  @override
+  String get chapterTitleDuplicateTitle => 'Título Duplicado';
+
+  @override
+  String get chapterTitleDuplicateMessage =>
+      'Já existe um capítulo com este título. Por favor, escolha outro título.';
 }
