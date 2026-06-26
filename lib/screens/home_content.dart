@@ -635,9 +635,9 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
         final userId =
             Provider.of<AuthProvider>(context, listen: false).user?.id ?? '';
         if (userId.isNotEmpty) {
-          // Usa refresh (força recálculo) para garantir dados atualizados
-          // após qualquer mutação de histórias
-          Provider.of<InsightProvider>(context, listen: false).refresh(userId);
+          // Usa loadInsights (que respeita o cache de 24h) em vez de refresh
+          // para evitar queries pesadas no banco a todo momento e a piscada
+          Provider.of<InsightProvider>(context, listen: false).loadInsights(userId);
         }
         // Restaura posição do scroll após dados serem carregados
         if (!mounted) return;
@@ -709,7 +709,19 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
         );
       },
       child: RefreshIndicator(
-        onRefresh: widget.onRefresh,
+        onRefresh: () async {
+          // Resolve referências antes do gap assíncrono para evitar avisos de use_build_context_synchronously
+          final storiesProvider = context.read<HomeStoriesProvider>();
+          final authProvider = context.read<AuthProvider>();
+          final insightProvider = context.read<InsightProvider>();
+
+          await storiesProvider.refreshStories(forceRefresh: true);
+          
+          final userId = authProvider.user?.id ?? '';
+          if (userId.isNotEmpty) {
+            await insightProvider.refresh(userId);
+          }
+        },
         child: Consumer<InsightProvider>(
           builder: (context, insightProvider, _) {
             final insights = insightProvider.insights;

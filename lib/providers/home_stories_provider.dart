@@ -36,12 +36,16 @@ class HomeStoriesProvider with ChangeNotifier {
 
   String get _userId => _authProvider.user?.id ?? '';
 
-  Future<void> loadInitialStories() async {
+  Future<void> loadInitialStories({bool forceRefresh = false}) async {
     _errorMessage = null;
-    _isInitialLoading = true;
-    _hasMoreData = true;
-    _historias.clear();
-    notifyListeners();
+
+    final showSpinner = _historias.isEmpty || forceRefresh;
+    if (showSpinner) {
+      _isInitialLoading = true;
+      _hasMoreData = true;
+      _historias.clear();
+      notifyListeners();
+    }
 
     try {
       if (_userId.isEmpty) {
@@ -66,19 +70,21 @@ class HomeStoriesProvider with ChangeNotifier {
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
-      _isInitialLoading = false;
+      if (showSpinner) {
+        _isInitialLoading = false;
+      }
       notifyListeners();
     }
   }
 
-  Future<void> refreshStories() async {
-    await loadInitialStories();
+  Future<void> refreshStories({bool forceRefresh = false}) async {
+    await loadInitialStories(forceRefresh: forceRefresh);
   }
 
   Future<void> toggleShowAllStories(bool value) async {
     _showAllStories = value;
     notifyListeners();
-    await loadInitialStories();
+    await loadInitialStories(forceRefresh: true);
   }
 
   Future<void> loadMoreStories() async {
@@ -114,13 +120,13 @@ class HomeStoriesProvider with ChangeNotifier {
   Future<void> archiveStory(Historia historia) async {
     await _repository.archiveHistoria(historia);
     _refreshProvider.refresh();
-    await refreshStories();
+    await refreshStories(forceRefresh: true);
   }
 
   Future<void> deleteStory(Historia historia) async {
     await _repository.deleteHistoria(historia);
     _refreshProvider.refresh();
-    await refreshStories();
+    await refreshStories(forceRefresh: true);
   }
 
   Future<void> updateStory(
@@ -129,6 +135,6 @@ class HomeStoriesProvider with ChangeNotifier {
   }) async {
     await _repository.updateHistoria(historia, updates: updates);
     _refreshProvider.refresh();
-    await refreshStories();
+    await refreshStories(forceRefresh: true);
   }
 }
