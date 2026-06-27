@@ -121,8 +121,8 @@ class HeroMemoryTemplate extends StatelessWidget {
                             Positioned(
                               left: 0,
                               child: SizedBox(
-                                width: thumbSize * 0.92,
-                                height: thumbSize * 0.92,
+                                width: thumbSize * 1.5,
+                                height: thumbSize * 1.5,
                                 child: buildThumbnailCard(
                                   displayPhotos[0],
                                   -0.1,
@@ -131,8 +131,8 @@ class HeroMemoryTemplate extends StatelessWidget {
                             ),
                             if (displayPhotos.length > 1)
                               Positioned(
-                                left: width * 0.25,
-                                top: 20,
+                                left: width * 0.38,
+                                top: 1,
                                 child: SizedBox(
                                   width: thumbSize * 0.82,
                                   height: thumbSize * 0.82,
@@ -144,7 +144,8 @@ class HeroMemoryTemplate extends StatelessWidget {
                               ),
                             if (displayPhotos.length > 2)
                               Positioned(
-                                right: 0,
+                                right: 5,
+                                top: 25,
                                 child: SizedBox(
                                   width: thumbSize,
                                   height: thumbSize,

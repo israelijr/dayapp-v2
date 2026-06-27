@@ -61,8 +61,8 @@ class PolaroidStackTemplate extends StatelessWidget {
         final photoAreaHeight = photoAreaWidth * 1.2;
         final largeWidth = photoAreaWidth * 0.65;
         final largeHeight = photoAreaHeight * 0.35;
-        final smallWidth = photoAreaWidth * 0.38;
-        final smallHeight = photoAreaHeight * 0.18;
+        final smallWidth = photoAreaWidth * 0.48;
+        final smallHeight = photoAreaHeight * 0.28;
 
         return IntrinsicHeight(
           child: Stack(
@@ -106,13 +106,14 @@ class PolaroidStackTemplate extends StatelessWidget {
                     const SizedBox(height: 100), // Safe area
                     // Área das fotos com altura proporcional ao largura
                     SizedBox(
-                      height: photoAreaHeight,
+                      // Multiplicador menor reduz o espaço em branco abaixo das fotos
+                      height: photoAreaHeight * 0.75,
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
                           // Foto Principal
                           Positioned(
-                            left: 0,
+                            left: -4,
                             top: photoAreaHeight * 0.05,
                             child: Transform.rotate(
                               angle: -0.08,
@@ -142,8 +143,8 @@ class PolaroidStackTemplate extends StatelessWidget {
                           // Terceira Foto
                           if (displayImages.length > 2)
                             Positioned(
-                              left: photoAreaWidth * 0.14,
-                              bottom: photoAreaHeight * 0.1,
+                              left: photoAreaWidth * 0.02,
+                              top: photoAreaHeight * 0.37,
                               child: Transform.rotate(
                                 angle: 0.05,
                                 child: buildPolaroidCard(
@@ -157,7 +158,7 @@ class PolaroidStackTemplate extends StatelessWidget {
                           if (displayImages.length > 3)
                             Positioned(
                               right: photoAreaWidth * 0.02,
-                              bottom: photoAreaHeight * 0.05,
+                              top: photoAreaHeight * 0.33,
                               child: Transform.rotate(
                                 angle: -0.06,
                                 child: buildPolaroidCard(
@@ -170,7 +171,7 @@ class PolaroidStackTemplate extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 1),
                     // Story Card que cresce
                     Container(
                       width: double.infinity,
@@ -179,7 +180,9 @@ class PolaroidStackTemplate extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: colorScheme.onSurface.withValues(alpha: 0.18),
+                            color: colorScheme.onSurface.withValues(
+                              alpha: 0.18,
+                            ),
                             blurRadius: 22,
                             offset: const Offset(0, 10),
                           ),
