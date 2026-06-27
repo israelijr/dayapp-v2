@@ -237,7 +237,6 @@ class ScrapbookTemplate extends StatelessWidget {
                         ],
                       ),
                     );
-                    );
                   },
                 ),
                 const SizedBox(height: 30),

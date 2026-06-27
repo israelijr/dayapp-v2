@@ -10,14 +10,16 @@ Future<Uint8List> renderStoryShareToImage(
 ) async {
   final paintKey = GlobalKey();
   final overlayEntry = OverlayEntry(
-    builder: (context) => Material(
-      type: MaterialType.transparency,
-      child: Transform.translate(
-        offset: const Offset(-9999, 0),
+    builder: (context) => Positioned(
+      left: -9999,
+      top: 0,
+      child: Material(
+        type: MaterialType.transparency,
         child: RepaintBoundary(
           key: paintKey,
           child: UnconstrainedBox(
             constrainedAxis: Axis.horizontal,
+            alignment: Alignment.topCenter,
             child: Container(
               width: 1080,
               constraints: const BoxConstraints(minHeight: 1920),
