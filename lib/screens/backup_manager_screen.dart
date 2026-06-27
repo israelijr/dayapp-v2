@@ -54,9 +54,8 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
         appBar: AppBar(
           title: Text(
             loc.manageBackups,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 20,
-              fontWeight: FontWeight.w600,
               // color: screenTheme.colorScheme.onPrimary,
               color:
                   Theme.of(context).appBarTheme.foregroundColor ??
@@ -140,9 +139,8 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
                                         children: [
                                           Text(
                                             loc.backupComplete,
-                                            style: GoogleFonts.notoSerif(
+                                            style: GoogleFonts.plusJakartaSans(
                                               fontSize: 18,
-                                              fontWeight: FontWeight.w600,
                                               color: AppColors.labelColor(
                                                 context,
                                               ),

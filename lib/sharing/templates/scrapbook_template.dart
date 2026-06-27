@@ -69,9 +69,8 @@ class ScrapbookTemplate extends StatelessWidget {
             softWrap: true,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.playfairDisplay(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 34,
-              fontWeight: FontWeight.w500,
               color: colorScheme.onSurface,
               height: 1.04,
             ),

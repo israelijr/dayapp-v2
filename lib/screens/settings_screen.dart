@@ -60,9 +60,8 @@ class _SettingsView extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             loc.settings,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 20,
-              fontWeight: FontWeight.w600,
               color:
                   theme.appBarTheme.foregroundColor ??
                   theme.colorScheme.primary,

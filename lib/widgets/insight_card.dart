@@ -100,10 +100,9 @@ class InsightCard extends StatelessWidget {
                                 Flexible(
                                   child: Text(
                                     title,
-                                    style: GoogleFonts.playfairDisplay(
+                                    style: GoogleFonts.plusJakartaSans(
                                       textStyle: theme.textTheme.titleMedium?.copyWith(
                                         color: colorScheme.onSecondaryContainer,
-                                        fontWeight: FontWeight.w600,
                                         height: 1.05,
                                       ),
                                     ),

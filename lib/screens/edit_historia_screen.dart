@@ -737,9 +737,8 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
         appBar: AppBar(
           title: Text(
             loc.editStory,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 20,
-              fontWeight: FontWeight.w600,
               height: 1.3,
               color: Theme.of(context).textTheme.titleLarge?.color,
             ),
@@ -782,9 +781,8 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                         label: loc.storyTitleLabel,
                         hintText: loc.storyTitleHint,
                         maxLength: 60,
-                        style: GoogleFonts.notoSerif(
+                        style: GoogleFonts.plusJakartaSans(
                           fontSize: 20,
-                          fontWeight: FontWeight.w600,
                           height: 1.4,
                         ),
                         inputFormatters: [

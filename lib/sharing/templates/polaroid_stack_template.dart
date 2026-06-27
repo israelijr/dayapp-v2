@@ -239,9 +239,8 @@ class PolaroidStackTemplate extends StatelessWidget {
                     story.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.playfairDisplay(
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 34,
-                      fontWeight: FontWeight.w600,
                       color: const Color(0xFF1A1A1A),
                       height: 1.05,
                     ),

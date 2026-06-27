@@ -522,9 +522,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.editProfile,
-          style: GoogleFonts.notoSerif(
+          style: GoogleFonts.plusJakartaSans(
             fontSize: 20,
-            fontWeight: FontWeight.w600,
             color:
                 Theme.of(context).appBarTheme.foregroundColor ??
                 Theme.of(context).colorScheme.primary,

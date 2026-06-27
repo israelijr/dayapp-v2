@@ -201,9 +201,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 scrolledUnderElevation: 0,
                 title: Text(
                   l10n.search,
-                  style: GoogleFonts.notoSerif(
+                  style: GoogleFonts.plusJakartaSans(
                     fontSize: 20,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 bottom: PreferredSize(

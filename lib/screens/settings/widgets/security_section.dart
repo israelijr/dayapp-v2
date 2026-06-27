@@ -52,13 +52,6 @@ class SecuritySection extends StatelessWidget {
                 onTap: () => _showBackgroundLockTimeoutDialog(context),
               ),
             ],
-            if (security.pinEnabled)
-              ListTile(
-                leading: const Icon(Icons.email_outlined),
-                title: Text(loc.informYourEmail),
-                subtitle: Text(security.userEmail ?? loc.noEmailRegistered),
-                onTap: () => _showEmailDialog(context),
-              ),
             const Divider(),
             if (!security.biometricAvailable)
               ListTile(
@@ -197,26 +190,6 @@ class SecuritySection extends StatelessWidget {
         '${InactivityService.getBackgroundTimeoutLabel(selectedSeconds, loc)}';
     await security.setBackgroundLockTimeout(selectedSeconds);
     messenger.showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  Future<void> _showEmailDialog(BuildContext context) async {
-    final loc = AppLocalizations.of(context)!;
-    final security = context.read<SettingsSecurityProvider>();
-    final messenger = ScaffoldMessenger.of(context);
-
-    final email = await showDialog<String>(
-      context: context,
-      builder: (context) => EmailDialog(initialEmail: security.userEmail),
-    );
-    if (email == null) return;
-
-    await security.saveUserEmail(email);
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(loc.profileUpdatedSuccess),
-        backgroundColor: AppColors.emoticonGreen,
-      ),
-    );
   }
 }
 
@@ -513,83 +486,6 @@ class BackgroundLockTimeoutDialogState
         ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(_selectedSeconds),
-          child: Text(loc.save),
-        ),
-      ],
-    );
-  }
-}
-
-class EmailDialog extends StatefulWidget {
-  const EmailDialog({required this.initialEmail, super.key});
-
-  final String? initialEmail;
-
-  @override
-  State<EmailDialog> createState() => EmailDialogState();
-}
-
-class EmailDialogState extends State<EmailDialog> {
-  late final TextEditingController _emailController;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailController = TextEditingController(text: widget.initialEmail);
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-
-    return AlertDialog(
-      title: Text(
-        loc.informYourEmail,
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: AppColors.labelColor(context),
-        ),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(loc.informYourEmail),
-          const SizedBox(height: 16),
-          CustomTextField(
-            controller: _emailController,
-            label: loc.email,
-            keyboardType: TextInputType.emailAddress,
-            prefixIcon: const Icon(Icons.email),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(loc.cancel),
-        ),
-        FilledButton(
-          onPressed: () {
-            final email = _emailController.text.trim();
-            if (email.isEmpty || !email.contains('@')) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(loc.emailInvalid),
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                ),
-              );
-              return;
-            }
-
-            Navigator.of(context).pop(email);
-          },
           child: Text(loc.save),
         ),
       ],

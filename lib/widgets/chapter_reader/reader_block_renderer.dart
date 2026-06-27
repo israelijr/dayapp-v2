@@ -22,9 +22,8 @@ class ReaderBlockRenderer extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 6, 20, 4),
         child: Text(
           titleBlock.text,
-          style: GoogleFonts.notoSerif(
+          style: GoogleFonts.plusJakartaSans(
             textStyle: Theme.of(context).textTheme.titleLarge,
-            fontWeight: FontWeight.w600,
             color: colorScheme.onSurface,
             height: 1.35,
           ),

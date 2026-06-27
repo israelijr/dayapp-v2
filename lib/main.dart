@@ -18,6 +18,7 @@ import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'db/database_helper.dart';
 import 'models/historia.dart';
 import 'providers/auth_provider.dart';
+import 'providers/chapter_filter_provider.dart';
 import 'providers/home_layout_provider.dart';
 import 'providers/home_stories_provider.dart';
 import 'providers/insight_provider.dart';
@@ -568,6 +569,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider(create: (_) => HomeLayoutProvider()),
         // Provider para manter posição do scroll em listas
         ChangeNotifierProvider(create: (_) => ScrollPositionProvider()),
+        ChangeNotifierProvider(create: (_) => ChapterFilterProvider()),
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (context, themeProvider, localeProvider, child) {

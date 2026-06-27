@@ -55,9 +55,8 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
             widget.isChanging
                 ? localizations.changePin
                 : localizations.configurePin,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 20,
-              fontWeight: FontWeight.w600,
               color: theme
                   .colorScheme
                   .onPrimaryContainer, // Ajustado para contraste padrão de AppBar

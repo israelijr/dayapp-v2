@@ -225,9 +225,8 @@ class _CompactHistoriaCardState extends State<CompactHistoriaCard> {
                             historia.titulo,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.notoSerif(
+                            style: GoogleFonts.plusJakartaSans(
                               fontSize: 20,
-                              fontWeight: FontWeight.w600,
                               height: 1.4,
                               color: Theme.of(
                                 context,

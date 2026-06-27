@@ -111,11 +111,4 @@ flutter:
     - assets/fonts/PlusJakartaSans-SemiBold.ttf
     - assets/fonts/PlusJakartaSans-Bold.ttf
     - assets/fonts/PlusJakartaSans-Italic.ttf
-    - assets/fonts/NotoSerif-Regular.ttf
-    - assets/fonts/NotoSerif-Medium.ttf
-    - assets/fonts/NotoSerif-SemiBold.ttf
-    - assets/fonts/NotoSerif-Bold.ttf
-    - assets/fonts/PlayfairDisplay-Regular.ttf
-    - assets/fonts/PlayfairDisplay-Medium.ttf
-    - assets/fonts/PlayfairDisplay-SemiBold.ttf
     

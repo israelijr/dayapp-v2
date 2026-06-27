@@ -52,9 +52,8 @@ class MinimalTimelineTemplate extends StatelessWidget {
                   story.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.playfairDisplay(
+                  style: GoogleFonts.plusJakartaSans(
                     fontSize: 42,
-                    fontWeight: FontWeight.w500,
                     color: colorScheme.onSurface,
                     height: 1.05,
                   ),

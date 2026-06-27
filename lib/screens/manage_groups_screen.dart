@@ -131,9 +131,8 @@ class _ManageGroupsScreenState extends State<ManageGroupsScreen> {
                           ),
                           title: Text(
                             grupo.nome,
-                            style: GoogleFonts.notoSerif(
+                            style: GoogleFonts.plusJakartaSans(
                               fontSize: 20,
-                              fontWeight: FontWeight.w600,
                               height: 1.4,
                               color: Theme.of(
                                 context,

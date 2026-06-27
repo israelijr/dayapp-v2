@@ -446,9 +446,8 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                     children: [
                       Text(
                         sugestao.tituloSugerido,
-                        style: GoogleFonts.notoSerif(
+                        style: GoogleFonts.plusJakartaSans(
                           fontSize: 18,
-                          fontWeight: FontWeight.w600,
                           height: 1.25,
                           color: colorScheme.onSurface,
                         ),
@@ -605,9 +604,8 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                     Expanded(
                       child: Text(
                         capitulo.titulo,
-                        style: GoogleFonts.notoSerif(
+                        style: GoogleFonts.plusJakartaSans(
                           fontSize: 20,
-                          fontWeight: FontWeight.w600,
                           height: 1.25,
                           color: colorScheme.onSurface,
                         ),
@@ -1230,9 +1228,8 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
           ),
           title: Text(
             l10n.chapterCreateTitle,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 20,
-              fontWeight: FontWeight.w600,
               color: labelColor,
               height: 1.3,
             ),
@@ -1270,9 +1267,8 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
                         label: '* ${l10n.chapterTitle}',
                         hintText: l10n.chapterTitleHint,
                         maxLength: 60,
-                        style: GoogleFonts.notoSerif(
+                        style: GoogleFonts.plusJakartaSans(
                           fontSize: 20,
-                          fontWeight: FontWeight.w600,
                           height: 1.4,
                         ),
                         inputFormatters: [
@@ -1713,9 +1709,8 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
           ),
           title: Text(
             l10n.chapterEditTitle,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 20,
-              fontWeight: FontWeight.w600,
               color: labelColor,
               height: 1.3,
             ),
@@ -1753,9 +1748,8 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
                         label: '* ${l10n.chapterTitle}',
                         hintText: l10n.chapterTitleHint,
                         maxLength: 60,
-                        style: GoogleFonts.notoSerif(
+                        style: GoogleFonts.plusJakartaSans(
                           fontSize: 20,
-                          fontWeight: FontWeight.w600,
                           height: 1.4,
                         ),
                         inputFormatters: [
@@ -2449,11 +2443,10 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                               children: [
                                 Text(
                                   capitulo.titulo,
-                                  style: GoogleFonts.notoSerif(
+                                  style: GoogleFonts.plusJakartaSans(
                                     textStyle: Theme.of(
                                       context,
                                     ).textTheme.titleLarge,
-                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -2511,9 +2504,8 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
                       l10n.chapterEntriesCount(_entradas.length),
-                      style: GoogleFonts.notoSerif(
+                      style: GoogleFonts.plusJakartaSans(
                         textStyle: Theme.of(context).textTheme.titleMedium,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -2676,9 +2668,8 @@ class _StoryHorizontalCardState extends State<_StoryHorizontalCard> {
                 historia.titulo,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.notoSerif(
+                style: GoogleFonts.plusJakartaSans(
                   textStyle: Theme.of(context).textTheme.titleSmall,
-                  fontWeight: FontWeight.w600,
                 ),
               ),
               if (descricao.isNotEmpty) ...[

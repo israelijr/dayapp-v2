@@ -1,5 +1,6 @@
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/providers/home_layout_provider.dart';
+import 'package:dayapp/providers/chapter_filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +17,11 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({
     required this.selectedIndex,
     required this.onCalendarTap,
+    this.collectionsTabIndex = 0,
     super.key,
   });
+
+  final int collectionsTabIndex;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -32,6 +36,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       context,
       listen: false,
     );
+    final filterProvider = Provider.of<ChapterFilterProvider>(context);
 
     return AppBar(
       automaticallyImplyLeading: true,
@@ -43,9 +48,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             : l10n.search,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: GoogleFonts.notoSerif(
+        style: GoogleFonts.plusJakartaSans(
           fontSize: 24,
-          fontWeight: FontWeight.w600,
           height: 1.3,
         ),
       ),
@@ -154,6 +158,69 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ],
               );
             },
+          ),
+        if (selectedIndex == 1 && collectionsTabIndex == 0)
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.tune_rounded),
+            onSelected: (value) {
+              if (value == 'sort_date') {
+                filterProvider.setSortOrder('date');
+              } else if (value == 'sort_title') {
+                filterProvider.setSortOrder('title');
+              } else if (value == 'limit_all') {
+                filterProvider.setItemLimit(null);
+              } else if (value.startsWith('limit_')) {
+                filterProvider.setItemLimit(int.parse(value.split('_')[1]));
+              }
+            },
+            itemBuilder:
+                (context) => [
+                  const PopupMenuItem(
+                    enabled: false,
+                    child: Text(
+                      "Ordenação",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  CheckedPopupMenuItem(
+                    value: 'sort_date',
+                    checked: filterProvider.sortOrder == 'date',
+                    child: const Text("Data (Update)"),
+                  ),
+                  CheckedPopupMenuItem(
+                    value: 'sort_title',
+                    checked: filterProvider.sortOrder == 'title',
+                    child: const Text("Título"),
+                  ),
+                  const PopupMenuDivider(),
+                  const PopupMenuItem(
+                    enabled: false,
+                    child: Text(
+                      "Visualização",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  CheckedPopupMenuItem(
+                    value: 'limit_all',
+                    checked: filterProvider.itemLimit == null,
+                    child: const Text("Ver todos"),
+                  ),
+                  CheckedPopupMenuItem(
+                    value: 'limit_10',
+                    checked: filterProvider.itemLimit == 10,
+                    child: const Text("Ver 10"),
+                  ),
+                  CheckedPopupMenuItem(
+                    value: 'limit_20',
+                    checked: filterProvider.itemLimit == 20,
+                    child: const Text("Ver 20"),
+                  ),
+                  CheckedPopupMenuItem(
+                    value: 'limit_50',
+                    checked: filterProvider.itemLimit == 50,
+                    child: const Text("Ver 50"),
+                  ),
+                ],
           ),
       ],
     );

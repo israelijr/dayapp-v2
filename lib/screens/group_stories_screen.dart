@@ -88,9 +88,8 @@ HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
                                     historia.titulo,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.notoSerif(
+                                    style: GoogleFonts.plusJakartaSans(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
                                       color: colorScheme.onSurface.withValues(
                                         alpha: 0.85,
                                       ),
@@ -136,9 +135,8 @@ HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
                                       historia.titulo,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.notoSerif(
+                                      style: GoogleFonts.plusJakartaSans(
                                         fontSize: 15,
-                                        fontWeight: FontWeight.w600,
                                         color: colorScheme.onSurface.withValues(
                                           alpha: 0.88,
                                         ),

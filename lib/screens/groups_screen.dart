@@ -13,9 +13,11 @@ import '../models/capitulo.dart';
 import '../models/capitulo_sugestao.dart';
 import '../models/grupo.dart';
 import '../providers/auth_provider.dart';
+import '../providers/chapter_filter_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../services/capitulo_sugestao_service.dart';
+import '../widgets/chapter_book_widget.dart';
 import 'archived_stories_screen.dart';
 import 'chapters_screen.dart';
 import 'group_stories_screen.dart';
@@ -141,6 +143,31 @@ class _GroupsScreenState extends State<GroupsScreen>
     await _navigateAndRefresh(ChapterDetailsScreen(resumo: resumo));
   }
 
+  List<CapituloResumo> _getDisplayChapters(ChapterFilterProvider filter) {
+    List<CapituloResumo> sortedList = List.from(_capitulos);
+
+    // Ordenação
+    if (filter.sortOrder == 'date') {
+      sortedList.sort((a, b) {
+        final dateA = a.capitulo.dataUpdate ?? a.capitulo.dataInicio;
+        final dateB = b.capitulo.dataUpdate ?? b.capitulo.dataInicio;
+        return dateB.compareTo(dateA); // Mais recentes primeiro
+      });
+    } else {
+      sortedList.sort(
+        (a, b) => a.capitulo.titulo.toLowerCase().compareTo(
+          b.capitulo.titulo.toLowerCase(),
+        ),
+      );
+    }
+
+    // Limite
+    if (filter.itemLimit != null) {
+      return sortedList.take(filter.itemLimit!).toList();
+    }
+    return sortedList;
+  }
+
   Widget _buildChapterCard(BuildContext context, CapituloResumo resumo) {
     final l10n = AppLocalizations.of(context)!;
     final capitulo = resumo.capitulo;
@@ -193,9 +220,8 @@ class _GroupsScreenState extends State<GroupsScreen>
                       Expanded(
                         child: Text(
                           capitulo.titulo,
-                          style: GoogleFonts.notoSerif(
+                          style: GoogleFonts.plusJakartaSans(
                             fontSize: 20,
-                            fontWeight: FontWeight.w600,
                             height: 1.25,
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
@@ -539,16 +565,7 @@ class _GroupsScreenState extends State<GroupsScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 32, 16, 12),
-                    child: Text(
-                      l10n.collectionsSubtitle,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        height: 1.6,
-                      ),
-                    ),
-                  ),
+                  const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TabBar(
@@ -585,41 +602,83 @@ class _GroupsScreenState extends State<GroupsScreen>
                       children: [
                         RefreshIndicator(
                           onRefresh: _handlePullToRefresh,
-                          child: _capitulos.isEmpty
-                              ? ListView(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 24,
-                                    horizontal: 16,
-                                  ),
-                                  children: [
-                                    if (_sugestoes.isNotEmpty)
-                                      _buildSuggestionBanner(context),
-                                    Center(child: Text(l10n.chapterNoItems)),
-                                  ],
-                                )
-                              : ListView.builder(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    16,
-                                    16,
-                                    16,
-                                    16,
-                                  ),
-                                  itemCount:
-                                      _capitulos.length +
-                                      (_sugestoes.isNotEmpty ? 1 : 0),
-                                  itemBuilder: (context, index) {
-                                    if (_sugestoes.isNotEmpty && index == 0) {
-                                      return _buildSuggestionBanner(context);
-                                    }
-                                    final chapterIndex = _sugestoes.isNotEmpty
-                                        ? index - 1
-                                        : index;
-                                    return _buildChapterCard(
-                                      context,
-                                      _capitulos[chapterIndex],
+                          child: Consumer<ChapterFilterProvider>(
+                            builder: (context, filter, child) {
+                              final displayChapters = _getDisplayChapters(
+                                filter,
+                              );
+                              return _capitulos.isEmpty
+                                  ? ListView(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 24,
+                                        horizontal: 16,
+                                      ),
+                                      children: [
+                                        if (_sugestoes.isNotEmpty)
+                                          _buildSuggestionBanner(context),
+                                        Center(
+                                          child: Text(l10n.chapterNoItems),
+                                        ),
+                                      ],
+                                    )
+                                  : GridView.builder(
+                                      padding: const EdgeInsets.all(16),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 16,
+                                            mainAxisSpacing: 16,
+                                            childAspectRatio: 0.85,
+                                          ),
+                                      itemCount:
+                                          displayChapters.length +
+                                          (_sugestoes.isNotEmpty ? 1 : 0),
+                                      itemBuilder: (context, index) {
+                                        if (_sugestoes.isNotEmpty &&
+                                            index == 0) {
+                                          return _buildSuggestionBanner(
+                                            context,
+                                          );
+                                        }
+                                        final chapterIndex =
+                                            _sugestoes.isNotEmpty
+                                                ? index - 1
+                                                : index;
+
+                                        if (chapterIndex >=
+                                            displayChapters.length) {
+                                          return const SizedBox.shrink();
+                                        }
+
+                                        final resumo =
+                                            displayChapters[chapterIndex];
+                                        final List<String> capas = [
+                                          'assets/image/capa1.jpg',
+                                          'assets/image/capa2.jpeg',
+                                          'assets/image/capa3.jpeg',
+                                          'assets/image/capa4.jpeg',
+                                          'assets/image/capa5.jpg',
+                                        ];
+                                        final randomIdx =
+                                            (resumo.capitulo.id ??
+                                                    resumo.capitulo.titulo
+                                                        .hashCode)
+                                                .abs() %
+                                            capas.length;
+
+                                        return ChapterBookWidget(
+                                          titulo: resumo.capitulo.titulo,
+                                          dataUpdate:
+                                              resumo.capitulo.dataUpdate ??
+                                              resumo.capitulo.dataInicio,
+                                          fotoPath: resumo.capitulo.fotoPath,
+                                          coverAsset: capas[randomIdx],
+                                          onTap: () => _openChapter(resumo),
+                                        );
+                                      },
                                     );
-                                  },
-                                ),
+                            },
+                          ),
                         ),
                         RefreshIndicator(
                           onRefresh: _handlePullToRefresh,

@@ -414,9 +414,8 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
           ),
           title: Text(
             historia.titulo,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 16,
-              fontWeight: FontWeight.w600,
               color: Theme.of(context).textTheme.titleMedium?.color,
               height: 1.25,
             ),
@@ -504,9 +503,8 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
           AppLocalizations.of(context)!.archivedTitle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.notoSerif(
+          style: GoogleFonts.plusJakartaSans(
             fontSize: 24,
-            fontWeight: FontWeight.w600,
             height: 1.3,
           ),
         ),

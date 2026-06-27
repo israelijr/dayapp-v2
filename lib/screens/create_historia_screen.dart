@@ -538,9 +538,8 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         appBar: AppBar(
           title: Text(
             loc.newStory,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 20,
-              fontWeight: FontWeight.w600,
               color: labelColor,
               height: 1.3,
             ),
@@ -628,9 +627,8 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                         label: '* ${loc.storyTitleLabel}',
                         hintText: loc.storyTitleHint,
                         maxLength: 60,
-                        style: GoogleFonts.notoSerif(
+                        style: GoogleFonts.plusJakartaSans(
                           fontSize: 20,
-                          fontWeight: FontWeight.w600,
                           height: 1.4,
                         ),
                         inputFormatters: [

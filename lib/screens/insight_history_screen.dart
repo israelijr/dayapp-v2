@@ -88,9 +88,8 @@ class _InsightHistoryScreenState extends State<InsightHistoryScreen> {
           appBar: AppBar(
             title: Text(
               l10n.insightHistoryTitle,
-              style: GoogleFonts.notoSerif(
+              style: GoogleFonts.plusJakartaSans(
                 fontSize: 20,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),

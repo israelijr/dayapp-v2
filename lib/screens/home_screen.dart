@@ -90,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: HomeAppBar(
           selectedIndex: _selectedIndex,
+          collectionsTabIndex: _collectionsTabIndex,
           onCalendarTap: () => Navigator.pushNamed(context, '/calendar'),
         ),
         drawer: const HomeDrawer(),

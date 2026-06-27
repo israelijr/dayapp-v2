@@ -502,9 +502,8 @@ class _ChapterReaderView extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 18, 20, 6),
           child: Text(
             document.chapterTitle,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               textStyle: Theme.of(context).textTheme.headlineSmall,
-              fontWeight: FontWeight.w600,
               color: colorScheme.onSurface,
             ),
           ),
@@ -611,9 +610,8 @@ class _StoryPhotoSelectionCard extends StatelessWidget {
       children: [
         Text(
           choice.storyTitle,
-          style: GoogleFonts.notoSerif(
+          style: GoogleFonts.plusJakartaSans(
             textStyle: Theme.of(context).textTheme.titleMedium,
-            fontWeight: FontWeight.w600,
             color: colorScheme.onSurface,
           ),
         ),

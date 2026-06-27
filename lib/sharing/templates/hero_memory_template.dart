@@ -157,9 +157,8 @@ class HeroMemoryTemplate extends StatelessWidget {
                                   softWrap: true,
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.notoSerif(
+                                  style: GoogleFonts.plusJakartaSans(
                                     fontSize: width * 0.082,
-                                    fontWeight: FontWeight.w700,
                                     color: colorScheme.onSurface,
                                     height: 1.03,
                                   ),

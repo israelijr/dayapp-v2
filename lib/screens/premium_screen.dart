@@ -30,8 +30,7 @@ class PremiumScreen extends StatelessWidget {
               centerTitle: true,
               title: Text(
                 loc.premiumScreenTitle,
-                style: GoogleFonts.notoSerif(
-                  fontWeight: FontWeight.bold,
+                style: GoogleFonts.plusJakartaSans(
                   color: colorScheme.onPrimary,
                   fontSize: 18,
                 ),

@@ -98,9 +98,8 @@ HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
                                     historia.titulo,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.notoSerif(
+                                    style: GoogleFonts.plusJakartaSans(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
                                       color: colorScheme.onSurface.withValues(
                                         alpha: 0.85,
                                       ),
@@ -146,9 +145,8 @@ HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
                                       historia.titulo,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.notoSerif(
+                                      style: GoogleFonts.plusJakartaSans(
                                         fontSize: 15,
-                                        fontWeight: FontWeight.w600,
                                         color: colorScheme.onSurface.withValues(
                                           alpha: 0.88,
                                         ),
@@ -778,9 +776,8 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                         Expanded(
                           child: Text(
                             '$greeting${userName.isNotEmpty ? ',\n$userName' : ''}.', // Adicionado \n para forçar a quebra após a vírgula se preferir, ou deixe sem para quebrar apenas se faltar espaço
-                            style: GoogleFonts.notoSerif(
+                            style: GoogleFonts.plusJakartaSans(
                               fontSize: 24,
-                              fontWeight: FontWeight.w700,
                               height: 1.2,
                               color: Theme.of(
                                 context,

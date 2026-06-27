@@ -36,7 +36,6 @@ class SettingsSecurityProvider with ChangeNotifier {
   bool _pinEnabled = false;
   int _backgroundLockTimeout =
       InactivityService.defaultBackgroundTimeoutSeconds;
-  String? _userEmail;
   bool _isLoading = false;
   Object? _loadError;
 
@@ -44,7 +43,6 @@ class SettingsSecurityProvider with ChangeNotifier {
   bool get biometricEnabled => _biometricEnabled;
   bool get pinEnabled => _pinEnabled;
   int get backgroundLockTimeout => _backgroundLockTimeout;
-  String? get userEmail => _userEmail;
   bool get isLoading => _isLoading;
   Object? get loadError => _loadError;
 
@@ -59,14 +57,12 @@ class SettingsSecurityProvider with ChangeNotifier {
         _biometricService.isBiometricEnabled(),
         _pinProvider.checkPinEnabled(),
         _inactivityService.getBackgroundLockTimeout(),
-        _recoveryService.getUserEmail(userId: _userId),
       ]);
 
       _biometricAvailable = results[0] as bool;
       _biometricEnabled = results[1] as bool;
       _pinEnabled = results[2] as bool;
       _backgroundLockTimeout = results[3] as int;
-      _userEmail = results[4] as String?;
     } catch (error) {
       _loadError = error;
     } finally {
@@ -116,12 +112,6 @@ class SettingsSecurityProvider with ChangeNotifier {
     await _inactivityService.setBackgroundLockTimeout(seconds);
     _backgroundLockTimeout = await _inactivityService
         .getBackgroundLockTimeout();
-    notifyListeners();
-  }
-
-  Future<void> saveUserEmail(String email) async {
-    await _recoveryService.saveUserEmail(email, userId: _userId);
-    _userEmail = await _recoveryService.getUserEmail(userId: _userId);
     notifyListeners();
   }
 }

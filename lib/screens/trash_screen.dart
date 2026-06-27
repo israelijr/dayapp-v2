@@ -312,9 +312,8 @@ class _TrashScreenState extends State<TrashScreen> {
                           children: [
                             Text(
                               historia.titulo,
-                              style: GoogleFonts.notoSerif(
+                              style: GoogleFonts.plusJakartaSans(
                                 fontSize: 18,
-                                fontWeight: FontWeight.w600,
                                 color: AppColors.labelColor(context),
                               ),
                             ),
@@ -408,9 +407,8 @@ class _TrashScreenState extends State<TrashScreen> {
           ),
           title: Text(
             loc.trash,
-            style: GoogleFonts.notoSerif(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 20,
-              fontWeight: FontWeight.w600,
             ),
           ),
         ),
