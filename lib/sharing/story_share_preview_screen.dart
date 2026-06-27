@@ -18,8 +18,13 @@ class StorySharePreviewScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: SingleChildScrollView(
-              child: StoryShareWidget(story: story),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                StoryShareWidget(story: story),
+                // Espaço extra no final para não ficar colado no botão de compartilhar
+                const SizedBox(height: 100),
+              ],
             ),
           ),
           // Botões no topo (Close) e rodapé (Share)

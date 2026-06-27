@@ -16,11 +16,14 @@ Future<Uint8List> renderStoryShareToImage(
         offset: const Offset(-9999, 0),
         child: RepaintBoundary(
           key: paintKey,
-          child: Container(
-            width: 1080,
-            constraints: const BoxConstraints(minHeight: 1920),
-            color: Colors.white, // Garantir fundo caso o template não cubra tudo
-            child: child,
+          child: UnconstrainedBox(
+            constrainedAxis: Axis.horizontal,
+            child: Container(
+              width: 1080,
+              constraints: const BoxConstraints(minHeight: 1920),
+              color: Colors.white,
+              child: child,
+            ),
           ),
         ),
       ),

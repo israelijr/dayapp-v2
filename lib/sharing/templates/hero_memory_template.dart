@@ -33,229 +33,194 @@ class HeroMemoryTemplate extends StatelessWidget {
     ).format(story.date);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth > 0
-            ? constraints.maxWidth
-            : MediaQuery.of(context).size.width;
-        final horizontalPadding = width * 0.08;
-        final topSafeArea = 100.0; // Espaço para botões de fechar e compartilhar
-        final thumbSize = width * 0.28;
-
-        Widget buildThumbnailCard(Uint8List imageBytes, double radius) {
-          return Transform.rotate(
-            angle: radius,
+    return IntrinsicHeight(
+      child: Stack(
+        children: [
+          // Fundo
+          Positioned.fill(
+            child: primaryPhoto != null
+                ? Image.memory(primaryPhoto, fit: BoxFit.cover)
+                : buildEmptyPhotoBackground(colorScheme),
+          ),
+          Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: colorScheme.surface.withValues(alpha: 0.34),
-                  width: 1.2,
+                gradient: LinearGradient(
+                  colors: [
+                    colorScheme.onSurface.withValues(alpha: 0.12),
+                    colorScheme.onSurface.withValues(alpha: 0.44),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.onSurface.withValues(alpha: 0.24),
-                    blurRadius: 18,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Image.memory(imageBytes, fit: BoxFit.cover),
               ),
             ),
-          );
-        }
-
-        return Stack(
-          children: [
-            // Fundo
-            Positioned.fill(
-              child: primaryPhoto != null
-                  ? Image.memory(primaryPhoto, fit: BoxFit.cover)
-                  : buildEmptyPhotoBackground(colorScheme),
-            ),
-            Positioned.fill(
+          ),
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      colorScheme.onSurface.withValues(alpha: 0.12),
-                      colorScheme.onSurface.withValues(alpha: 0.44),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
+                color: colorScheme.surface.withValues(alpha: 0.06),
               ),
             ),
-            Positioned.fill(
-              child: BackdropFilter(
-                filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Container(
-                  color: colorScheme.surface.withValues(alpha: 0.06),
-                ),
-              ),
+          ),
+          // Conteúdo que cresce
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              horizontalPadding,
+              topSafeArea,
+              horizontalPadding,
+              40,
             ),
-            // Conteúdo que cresce
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                horizontalPadding,
-                topSafeArea,
-                horizontalPadding,
-                40,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Área das Miniaturas
-                  if (displayPhotos.isNotEmpty)
-                    SizedBox(
-                      height: thumbSize * 1.2,
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Positioned(
-                            left: 0,
-                            child: SizedBox(
-                              width: thumbSize * 0.92,
-                              height: thumbSize * 0.92,
-                              child: buildThumbnailCard(displayPhotos[0], -0.1),
-                            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Área das Miniaturas
+                if (displayPhotos.isNotEmpty)
+                  SizedBox(
+                    height: thumbSize * 1.2,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned(
+                          left: 0,
+                          child: SizedBox(
+                            width: thumbSize * 0.92,
+                            height: thumbSize * 0.92,
+                            child: buildThumbnailCard(displayPhotos[0], -0.1),
                           ),
-                          if (displayPhotos.length > 1)
-                            Positioned(
-                              left: width * 0.25,
-                              top: 20,
-                              child: SizedBox(
-                                width: thumbSize * 0.82,
-                                height: thumbSize * 0.82,
-                                child:
-                                    buildThumbnailCard(displayPhotos[1], 0.08),
-                              ),
-                            ),
-                          if (displayPhotos.length > 2)
-                            Positioned(
-                              right: 0,
-                              child: SizedBox(
-                                width: thumbSize,
-                                height: thumbSize,
-                                child:
-                                    buildThumbnailCard(displayPhotos[2], 0.13),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  const SizedBox(height: 20),
-                  // Card de Texto
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(34),
-                    child: BackdropFilter(
-                      filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(
-                          width * 0.06,
-                          32,
-                          width * 0.06,
-                          28,
                         ),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              colorScheme.surface.withValues(alpha: 0.44),
-                              colorScheme.surfaceContainerLowest.withValues(
-                                alpha: 0.3,
-                              ),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(34),
-                          border: Border.all(
-                            color: colorScheme.surface.withValues(
-                              alpha: 0.52,
+                        if (displayPhotos.length > 1)
+                          Positioned(
+                            left: width * 0.25,
+                            top: 20,
+                            child: SizedBox(
+                              width: thumbSize * 0.82,
+                              height: thumbSize * 0.82,
+                              child:
+                                  buildThumbnailCard(displayPhotos[1], 0.08),
                             ),
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  colorScheme.onSurface.withValues(alpha: 0.26),
-                              blurRadius: 30,
-                              offset: const Offset(0, 10),
+                        if (displayPhotos.length > 2)
+                          Positioned(
+                            right: 0,
+                            child: SizedBox(
+                              width: thumbSize,
+                              height: thumbSize,
+                              child:
+                                  buildThumbnailCard(displayPhotos[2], 0.13),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 20),
+                // Card de Texto
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(34),
+                  child: BackdropFilter(
+                    filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(
+                        width * 0.06,
+                        32,
+                        width * 0.06,
+                        28,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            colorScheme.surface.withValues(alpha: 0.44),
+                            colorScheme.surfaceContainerLowest.withValues(
+                              alpha: 0.3,
                             ),
                           ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              story.title,
-                              softWrap: true,
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: width * 0.082,
-                                color: colorScheme.onSurface,
-                                height: 1.03,
-                                fontWeight: FontWeight.w700,
+                        borderRadius: BorderRadius.circular(34),
+                        border: Border.all(
+                          color: colorScheme.surface.withValues(
+                            alpha: 0.52,
+                          ),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                colorScheme.onSurface.withValues(alpha: 0.26),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            story.title,
+                            softWrap: true,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: width * 0.082,
+                              color: colorScheme.onSurface,
+                              height: 1.03,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          Text(
+                            normalizedDescription(story.description),
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: width * 0.039,
+                              height: 1.45,
+                              color: colorScheme.onSurface.withValues(
+                                alpha: 0.9,
                               ),
                             ),
-                            const SizedBox(height: 18),
-                            Text(
-                              normalizedDescription(story.description),
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: width * 0.039,
-                                height: 1.45,
-                                color: colorScheme.onSurface.withValues(
-                                  alpha: 0.9,
+                          ),
+                          const SizedBox(height: 24),
+                          Row(
+                            children: [
+                              Text(
+                                dateLabel,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: width * 0.036,
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.onSurfaceVariant,
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 24),
-                            Row(
-                              children: [
+                              if (story.emoticon != null &&
+                                  story.emoticon!.isNotEmpty) ...[
+                                const SizedBox(width: 8),
                                 Text(
-                                  dateLabel,
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: width * 0.036,
-                                    fontWeight: FontWeight.w600,
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                                if (story.emoticon != null &&
-                                    story.emoticon!.isNotEmpty) ...[
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    story.emoticon!,
-                                    style: TextStyle(
-                                      fontSize: width * 0.05,
-                                      height: 1,
-                                    ),
-                                  ),
-                                ],
-                                const Spacer(),
-                                Text(
-                                  'DayApp',
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: width * 0.033,
-                                    fontWeight: FontWeight.w700,
-                                    color: colorScheme.onSurfaceVariant,
+                                  story.emoticon!,
+                                  style: TextStyle(
+                                    fontSize: width * 0.05,
+                                    height: 1,
                                   ),
                                 ),
                               ],
-                            ),
-                          ],
-                        ),
+                              const Spacer(),
+                              Text(
+                                'DayApp',
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: width * 0.033,
+                                  fontWeight: FontWeight.w700,
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }

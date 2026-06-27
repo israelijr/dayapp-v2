@@ -24,14 +24,21 @@ class MinimalTimelineTemplate extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 100), // Área de segurança
-          // Imagem com altura fixa proporcional para garantir espaço
-          Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.4,
-            color: colorScheme.surfaceContainerHighest,
-            child: primary != null
-                ? Image.memory(primary, fit: BoxFit.cover)
-                : Container(color: colorScheme.surfaceContainerHighest),
+          // Imagem com altura fixa proporcional
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final width = constraints.maxWidth.isFinite
+                  ? constraints.maxWidth
+                  : MediaQuery.of(context).size.width;
+              return Container(
+                width: double.infinity,
+                height: width * 0.7, // Proporção mais equilibrada
+                color: colorScheme.surfaceContainerHighest,
+                child: primary != null
+                    ? Image.memory(primary, fit: BoxFit.cover)
+                    : Container(color: colorScheme.surfaceContainerHighest),
+              );
+            },
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(40, 30, 40, 40),
