@@ -2860,4 +2860,19 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get chapterTitleDuplicateMessage =>
       'Ya existe un capítulo con este título. Por favor, elija otro título.';
+
+  @override
+  String get pwdCriteriaMinLength => 'Minimum of 8 characters';
+
+  @override
+  String get pwdCriteriaUppercase => '1 uppercase letter';
+
+  @override
+  String get pwdCriteriaLowercase => '1 lowercase letter';
+
+  @override
+  String get pwdCriteriaNumber => '1 number';
+
+  @override
+  String get pwdCriteriaSpecial => '1 special character';
 }

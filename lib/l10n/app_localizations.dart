@@ -5093,6 +5093,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A chapter with this title already exists. Please choose another title.'**
   String get chapterTitleDuplicateMessage;
+
+  /// Password criteria: minimum 8 characters
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum of 8 characters'**
+  String get pwdCriteriaMinLength;
+
+  /// Password criteria: 1 uppercase letter
+  ///
+  /// In en, this message translates to:
+  /// **'1 uppercase letter'**
+  String get pwdCriteriaUppercase;
+
+  /// Password criteria: 1 lowercase letter
+  ///
+  /// In en, this message translates to:
+  /// **'1 lowercase letter'**
+  String get pwdCriteriaLowercase;
+
+  /// Password criteria: 1 number
+  ///
+  /// In en, this message translates to:
+  /// **'1 number'**
+  String get pwdCriteriaNumber;
+
+  /// Password criteria: 1 special character
+  ///
+  /// In en, this message translates to:
+  /// **'1 special character'**
+  String get pwdCriteriaSpecial;
 }
 
 class _AppLocalizationsDelegate

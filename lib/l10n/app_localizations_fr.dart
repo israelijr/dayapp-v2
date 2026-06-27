@@ -2870,4 +2870,19 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get chapterTitleDuplicateMessage =>
       'Un chapitre avec ce titre existe déjà. Veuillez choisir un autre titre.';
+
+  @override
+  String get pwdCriteriaMinLength => 'Minimum of 8 characters';
+
+  @override
+  String get pwdCriteriaUppercase => '1 uppercase letter';
+
+  @override
+  String get pwdCriteriaLowercase => '1 lowercase letter';
+
+  @override
+  String get pwdCriteriaNumber => '1 number';
+
+  @override
+  String get pwdCriteriaSpecial => '1 special character';
 }

@@ -2846,6 +2846,21 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get chapterTitleDuplicateMessage =>
       'Já existe um capítulo com este título. Por favor, escolha outro título.';
+
+  @override
+  String get pwdCriteriaMinLength => 'Minimum of 8 characters';
+
+  @override
+  String get pwdCriteriaUppercase => '1 uppercase letter';
+
+  @override
+  String get pwdCriteriaLowercase => '1 lowercase letter';
+
+  @override
+  String get pwdCriteriaNumber => '1 number';
+
+  @override
+  String get pwdCriteriaSpecial => '1 special character';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3024,4 +3039,19 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get chapterTitleDuplicateMessage =>
       'Já existe um capítulo com este título. Por favor, escolha outro título.';
+
+  @override
+  String get pwdCriteriaMinLength => 'Mínimo de 8 caracteres';
+
+  @override
+  String get pwdCriteriaUppercase => '1 letra maiúscula';
+
+  @override
+  String get pwdCriteriaLowercase => '1 letra minúscula';
+
+  @override
+  String get pwdCriteriaNumber => '1 número';
+
+  @override
+  String get pwdCriteriaSpecial => '1 caracter especial';
 }

@@ -14,6 +14,7 @@ import '../providers/pin_provider.dart';
 import '../services/file_utils.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/profile_avatar_picker.dart';
+import '../widgets/strong_password_field.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -303,6 +304,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     bool obscureCurrent = true;
     bool obscureNew = true;
     bool obscureConfirm = true;
+    bool isNewPasswordValid = false;
     String? dialogError;
 
     showDialog(
@@ -329,19 +331,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           setDialogState(() => obscureCurrent = !obscureCurrent),
                     ),
                   ),
-                  CustomTextField(
+                  StrongPasswordField(
                     controller: newPasswordController,
                     label: loc.newPasswordTitle,
-                    obscureText: obscureNew,
-                    helperText: loc.newPasswordMinLength,
                     prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        obscureNew ? Icons.visibility_off : Icons.visibility,
-                      ),
-                      onPressed: () =>
-                          setDialogState(() => obscureNew = !obscureNew),
-                    ),
+                    onValidChanged: (valid) {
+                      setDialogState(() {
+                        isNewPasswordValid = valid;
+                      });
+                    },
                   ),
                   CustomTextField(
                     controller: confirmPasswordController,
@@ -406,7 +404,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   setDialogState(() => dialogError = loc.fillAllFields);
                   return;
                 }
-                if (newPass.length < 6) {
+                
+                final hasMinLength = newPass.length >= 8;
+                final hasUppercase = newPass.contains(RegExp(r'[A-Z]'));
+                final hasLowercase = newPass.contains(RegExp(r'[a-z]'));
+                final hasNumber = newPass.contains(RegExp(r'[0-9]'));
+                final hasSpecial = newPass.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>_+\-=\[\]\/\\]'));
+
+                if (!hasMinLength || !hasUppercase || !hasLowercase || !hasNumber || !hasSpecial) {
                   setDialogState(() => dialogError = loc.newPasswordMinLength);
                   return;
                 }

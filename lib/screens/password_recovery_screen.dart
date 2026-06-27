@@ -6,6 +6,7 @@ import '../providers/auth_provider.dart';
 import '../services/password_recovery_service.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/custom_text_field.dart';
+import '../widgets/strong_password_field.dart';
 
 /// Tela de recuperação de senha por token enviado por e-mail.
 /// Fluxo em etapas:
@@ -37,6 +38,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   bool loading = false;
   bool obscureNewPassword = true;
   bool obscureConfirmPassword = true;
+  bool isNewPasswordValid = false;
   String? errorMessage;
   String? successMessage;
 
@@ -161,7 +163,13 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
       return;
     }
 
-    if (newPassword.length < 6) {
+    final hasMinLength = newPassword.length >= 8;
+    final hasUppercase = newPassword.contains(RegExp(r'[A-Z]'));
+    final hasLowercase = newPassword.contains(RegExp(r'[a-z]'));
+    final hasNumber = newPassword.contains(RegExp(r'[0-9]'));
+    final hasSpecial = newPassword.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>_+\-=\[\]\/\\]'));
+
+    if (!hasMinLength || !hasUppercase || !hasLowercase || !hasNumber || !hasSpecial) {
       setState(
         () => errorMessage = AppLocalizations.of(context)!.passwordMinLength,
       );
@@ -615,17 +623,16 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   Widget _buildNewPasswordStep() {
     return Column(
       children: [
-        CustomTextField(
+        StrongPasswordField(
           label: AppLocalizations.of(context)!.newPasswordMinLengthLabel,
           controller: newPasswordController,
-          obscureText: obscureNewPassword,
-          suffixIcon: IconButton(
-            icon: Icon(
-              obscureNewPassword ? Icons.visibility_off : Icons.visibility,
-            ),
-            onPressed: () =>
-                setState(() => obscureNewPassword = !obscureNewPassword),
-          ),
+          textColor: Theme.of(context).colorScheme.onPrimary,
+          successColor: AppColors.emoticonGreen,
+          onValidChanged: (valid) {
+            setState(() {
+              isNewPasswordValid = valid;
+            });
+          },
         ),
         CustomTextField(
           label: AppLocalizations.of(context)!.confirmNewPasswordLabel,

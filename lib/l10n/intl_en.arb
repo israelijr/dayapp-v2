@@ -2719,5 +2719,25 @@
   "chapterTitleDuplicateMessage": "A chapter with this title already exists. Please choose another title.",
   "@chapterTitleDuplicateMessage": {
     "description": "Message shown in error dialog when trying to use a chapter title that already exists"
+  },
+  "pwdCriteriaMinLength": "Minimum of 8 characters",
+  "@pwdCriteriaMinLength": {
+    "description": "Password criteria: minimum 8 characters"
+  },
+  "pwdCriteriaUppercase": "1 uppercase letter",
+  "@pwdCriteriaUppercase": {
+    "description": "Password criteria: 1 uppercase letter"
+  },
+  "pwdCriteriaLowercase": "1 lowercase letter",
+  "@pwdCriteriaLowercase": {
+    "description": "Password criteria: 1 lowercase letter"
+  },
+  "pwdCriteriaNumber": "1 number",
+  "@pwdCriteriaNumber": {
+    "description": "Password criteria: 1 number"
+  },
+  "pwdCriteriaSpecial": "1 special character",
+  "@pwdCriteriaSpecial": {
+    "description": "Password criteria: 1 special character"
   }
 }

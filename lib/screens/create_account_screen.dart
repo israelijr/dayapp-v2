@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../providers/auth_provider.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/custom_text_field.dart';
+import '../widgets/strong_password_field.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -19,8 +20,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  bool obscurePassword = true;
   bool obscureConfirm = true;
+  bool isPasswordValid = false;
 
   String? errorMessage;
   bool loading = false;
@@ -47,13 +48,22 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       });
       return;
     }
-    if (passwordController.text.length < 6) {
+    
+    final text = passwordController.text;
+    final hasMinLength = text.length >= 8;
+    final hasUppercase = text.contains(RegExp(r'[A-Z]'));
+    final hasLowercase = text.contains(RegExp(r'[a-z]'));
+    final hasNumber = text.contains(RegExp(r'[0-9]'));
+    final hasSpecial = text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>_+\-=\[\]\/\\]'));
+
+    if (!hasMinLength || !hasUppercase || !hasLowercase || !hasNumber || !hasSpecial) {
       setState(() {
         errorMessage = AppLocalizations.of(context)!.passwordMinLength;
         loading = false;
       });
       return;
     }
+
     final emailRegex = RegExp(r'^[\w\-\.\+]+@([\w\-]+\.)+[\w\-]{2,}$');
     if (!emailRegex.hasMatch(emailController.text.trim())) {
       setState(() {
@@ -128,24 +138,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 16),
-              CustomTextField(
+              StrongPasswordField(
                 controller: passwordController,
                 label: AppLocalizations.of(context)!.password,
-                obscureText: obscurePassword,
-                helperText: AppLocalizations.of(context)!.passwordMinLength,
-                helperStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.8),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    obscurePassword ? Icons.visibility : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      obscurePassword = !obscurePassword;
-                    });
-                  },
-                ),
+                textColor: Theme.of(context).colorScheme.onPrimary,
+                successColor: AppColors.emoticonGreen,
+                onValidChanged: (valid) {
+                  setState(() {
+                    isPasswordValid = valid;
+                  });
+                },
               ),
               const SizedBox(height: 16),
               CustomTextField(

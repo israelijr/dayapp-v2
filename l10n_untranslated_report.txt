@@ -28,7 +28,12 @@
     "premiumFeatureCustomThemes",
     "premiumFeatureInfo",
     "autoBackupPremiumRequired",
-    "autoBackupStorageInfo"
+    "autoBackupStorageInfo",
+    "pwdCriteriaMinLength",
+    "pwdCriteriaUppercase",
+    "pwdCriteriaLowercase",
+    "pwdCriteriaNumber",
+    "pwdCriteriaSpecial"
   ],
 
   "fr": [
@@ -51,7 +56,12 @@
     "premiumFeatureMonthlyInsights",
     "premiumFeatureWeeklyMood",
     "premiumFeatureCustomThemes",
-    "premiumFeatureInfo"
+    "premiumFeatureInfo",
+    "pwdCriteriaMinLength",
+    "pwdCriteriaUppercase",
+    "pwdCriteriaLowercase",
+    "pwdCriteriaNumber",
+    "pwdCriteriaSpecial"
   ],
 
   "it": [
@@ -74,7 +84,12 @@
     "premiumFeatureMonthlyInsights",
     "premiumFeatureWeeklyMood",
     "premiumFeatureCustomThemes",
-    "premiumFeatureInfo"
+    "premiumFeatureInfo",
+    "pwdCriteriaMinLength",
+    "pwdCriteriaUppercase",
+    "pwdCriteriaLowercase",
+    "pwdCriteriaNumber",
+    "pwdCriteriaSpecial"
   ],
 
   "pt": [
@@ -84,7 +99,12 @@
     "automaticBackupInfo",
     "automaticBackupInfoLocal",
     "autoBackupPremiumRequired",
-    "autoBackupStorageInfo"
+    "autoBackupStorageInfo",
+    "pwdCriteriaMinLength",
+    "pwdCriteriaUppercase",
+    "pwdCriteriaLowercase",
+    "pwdCriteriaNumber",
+    "pwdCriteriaSpecial"
   ],
 
   "pt_BR": [
