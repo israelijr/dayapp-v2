@@ -14,13 +14,7 @@ class StoryShareWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedTemplate = StoryShareTemplateSelector.selectTemplate(story);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(32),
-      child: SizedBox.expand(
-        // Garantir que o template ocupe toda a área disponível do pai.
-        child: _buildTemplate(context, selectedTemplate),
-      ),
-    );
+    return _buildTemplate(context, selectedTemplate);
   }
 
   Widget _buildTemplate(

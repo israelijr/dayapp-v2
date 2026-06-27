@@ -18,12 +18,20 @@ class StorySharePreviewScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Material(
-              color: Colors.transparent,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(34),
-                clipBehavior: Clip.antiAlias,
-                child: StoryShareWidget(story: story),
+            child: SingleChildScrollView(
+              child: StoryShareWidget(story: story),
+            ),
+          ),
+          // Botões no topo (Close) e rodapé (Share)
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 10,
+            right: 16,
+            child: IconButton.filled(
+              onPressed: () => Navigator.of(context).pop(false),
+              icon: const Icon(Icons.close),
+              style: IconButton.styleFrom(
+                backgroundColor: colorScheme.surface.withValues(alpha: 0.7),
+                foregroundColor: colorScheme.onSurface,
               ),
             ),
           ),
@@ -33,29 +41,16 @@ class StorySharePreviewScreen extends StatelessWidget {
             bottom: 16,
             child: SafeArea(
               top: false,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: colorScheme.surface,
-                        foregroundColor: colorScheme.onSurface,
-                        side: BorderSide(
-                          color: colorScheme.onSurface.withValues(alpha: 0.16),
-                        ),
-                      ),
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: Text(l10n.close),
-                    ),
+              child: FilledButton.icon(
+                onPressed: () => Navigator.of(context).pop(true),
+                icon: const Icon(Icons.share),
+                label: Text(l10n.share),
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 54),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: Text(l10n.share),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),

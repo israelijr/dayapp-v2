@@ -61,65 +61,64 @@ class ScrapbookTemplate extends StatelessWidget {
     }
 
     Widget buildTextContent() {
-      return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              story.title,
-              softWrap: true,
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 32,
-                color: colorScheme.onSurface,
-                height: 1.04,
-                fontWeight: FontWeight.w700,
-              ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            story.title,
+            softWrap: true,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 32,
+              color: colorScheme.onSurface,
+              height: 1.04,
+              fontWeight: FontWeight.w700,
             ),
-            const SizedBox(height: 14),
-            Text(
-              normalizedDescription(story.description),
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 15,
-                height: 1.65,
-                color: colorScheme.onSurface.withValues(alpha: 0.84),
-              ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            normalizedDescription(story.description),
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 15,
+              height: 1.65,
+              color: colorScheme.onSurface.withValues(alpha: 0.84),
             ),
-            const SizedBox(height: 18),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  moodLabel(context, story.mood),
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
-                    color: colorScheme.onSurface.withValues(alpha: 0.72),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  dateLabel,
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
-                    color: colorScheme.onSurface.withValues(alpha: 0.72),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'DayApp',
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                moodLabel(context, story.mood),
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 11,
+                  fontSize: 12,
+                  color: colorScheme.onSurface.withValues(alpha: 0.72),
                   fontWeight: FontWeight.w600,
-                  color: colorScheme.onSurface.withValues(alpha: 0.64),
                 ),
               ),
+              Text(
+                dateLabel,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 12,
+                  color: colorScheme.onSurface.withValues(alpha: 0.72),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              'DayApp',
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onSurface.withValues(alpha: 0.64),
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 
@@ -128,37 +127,28 @@ class ScrapbookTemplate extends StatelessWidget {
         final width = constraints.maxWidth > 0
             ? constraints.maxWidth
             : MediaQuery.of(context).size.width;
-        final height = constraints.maxHeight > 0
-            ? constraints.maxHeight
-            : MediaQuery.of(context).size.height * 0.6;
-        final cardWidth = (width * 0.84).clamp(300.0, 720.0).toDouble();
-        final desiredCardHeight = (height * 0.56)
-            .clamp(360.0, 620.0)
-            .toDouble();
-        final photoAreaHeight = (height * 0.28).clamp(160.0, 270.0).toDouble();
-        final topPadding = 90.0; // Espaço fixo para botões de ação
-        final bottomPadding = (height * 0.12).clamp(70.0, 130.0).toDouble();
-        final contentGap = (height * 0.02).clamp(10.0, 20.0).toDouble();
-        final maxCardHeight =
-            height - topPadding - bottomPadding - photoAreaHeight - contentGap;
-        final cardHeight = desiredCardHeight.clamp(200.0, maxCardHeight);
+        final photoAreaHeight = width * 0.6; // Altura fixa proporcional
+        final topPadding = 100.0; // Espaço para botões
 
         return Stack(
-          fit: StackFit.expand,
           children: [
-            if (backgroundImage != null)
-              Image.memory(backgroundImage, fit: BoxFit.cover)
-            else
-              buildEmptyPhotoBackground(colorScheme),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    colorScheme.onSurface.withValues(alpha: 0.14),
-                    colorScheme.onSurface.withValues(alpha: 0.38),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+            // Fundo
+            Positioned.fill(
+              child: backgroundImage != null
+                  ? Image.memory(backgroundImage, fit: BoxFit.cover)
+                  : buildEmptyPhotoBackground(colorScheme),
+            ),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      colorScheme.onSurface.withValues(alpha: 0.14),
+                      colorScheme.onSurface.withValues(alpha: 0.38),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
                 ),
               ),
             ),
@@ -170,142 +160,137 @@ class ScrapbookTemplate extends StatelessWidget {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(18, topPadding, 18, bottomPadding),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: photoAreaHeight,
-                      child: LayoutBuilder(
-                        builder: (context, photoConstraints) {
-                          final photoAreaWidth = photoConstraints.maxWidth;
-                          final mainWidth = (photoAreaWidth * 0.40)
-                              .clamp(145.0, 250.0)
-                              .toDouble();
-                          final mainHeight = (photoAreaHeight * 0.78)
-                              .clamp(132.0, 220.0)
-                              .toDouble();
-                          final sideWidth = (mainWidth * 0.58)
-                              .clamp(96.0, 170.0)
-                              .toDouble();
-                          final sideHeight = sideWidth * 1.08;
-                          final mainLeft = (photoAreaWidth - mainWidth) / 2;
-                          final mainTop = (photoAreaHeight - mainHeight) * 0.16;
+            // Conteúdo que cresce
+            Padding(
+              padding: EdgeInsets.fromLTRB(18, topPadding, 18, 40),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Área das Fotos
+                  SizedBox(
+                    height: photoAreaHeight,
+                    child: LayoutBuilder(
+                      builder: (context, photoConstraints) {
+                        final photoAreaWidth = photoConstraints.maxWidth;
+                        final mainWidth = photoAreaWidth * 0.45;
+                        final mainHeight = photoAreaHeight * 0.75;
+                        final sideWidth = mainWidth * 0.65;
+                        final sideHeight = sideWidth * 1.1;
 
-                          Uint8List? imageAt(int index) {
-                            if (displayImages.length > index) {
-                              return displayImages[index];
-                            }
-                            return floatingImages[index];
+                        final mainLeft = (photoAreaWidth - mainWidth) / 2;
+                        final mainTop = (photoAreaHeight - mainHeight) / 2;
+
+                        Uint8List? imageAt(int index) {
+                          if (displayImages.length > index) {
+                            return displayImages[index];
                           }
+                          return floatingImages[index];
+                        }
 
-                          return Stack(
-                            children: [
-                              Positioned(
-                                left: mainLeft,
-                                top: mainTop,
-                                child: SizedBox(
-                                  width: mainWidth,
-                                  height: mainHeight,
-                                  child: Transform.rotate(
-                                    angle: -0.03,
-                                    child: buildPhotoCard(imageAt(0)),
-                                  ),
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Positioned(
+                              left: mainLeft,
+                              top: mainTop,
+                              child: SizedBox(
+                                width: mainWidth,
+                                height: mainHeight,
+                                child: Transform.rotate(
+                                  angle: -0.03,
+                                  child: buildPhotoCard(imageAt(0)),
                                 ),
                               ),
-                              Positioned(
-                                left: mainLeft - sideWidth * 0.92,
-                                top: mainTop + mainHeight * 0.10,
-                                child: SizedBox(
-                                  width: sideWidth,
-                                  height: sideHeight * 1.52,
-                                  child: Transform.rotate(
-                                    angle: 0.1,
-                                    child: buildPhotoCard(imageAt(1)),
-                                  ),
+                            ),
+                            Positioned(
+                              left: mainLeft - sideWidth * 0.7,
+                              top: mainTop + 20,
+                              child: SizedBox(
+                                width: sideWidth,
+                                height: sideHeight,
+                                child: Transform.rotate(
+                                  angle: 0.1,
+                                  child: buildPhotoCard(imageAt(1)),
                                 ),
                               ),
-                              Positioned(
-                                left: mainLeft + mainWidth - sideWidth * 0.18,
-                                top: mainTop + mainHeight * 0.02,
-                                child: SizedBox(
-                                  width: sideWidth,
-                                  height: sideHeight,
-                                  child: Transform.rotate(
-                                    angle: 0.09,
-                                    child: buildPhotoCard(imageAt(2)),
-                                  ),
+                            ),
+                            Positioned(
+                              left: mainLeft + mainWidth - sideWidth * 0.3,
+                              top: mainTop - 10,
+                              child: SizedBox(
+                                width: sideWidth,
+                                height: sideHeight,
+                                child: Transform.rotate(
+                                  angle: 0.09,
+                                  child: buildPhotoCard(imageAt(2)),
                                 ),
                               ),
-                              Positioned(
-                                left: mainLeft + mainWidth * 0.86,
-                                top: mainTop + mainHeight - sideHeight * 0.60,
-                                child: SizedBox(
-                                  width: sideWidth * 1.2,
-                                  height: sideHeight * 1.0,
-                                  child: Transform.rotate(
-                                    angle: 0.06,
-                                    child: buildPhotoCard(imageAt(3)),
-                                  ),
+                            ),
+                            Positioned(
+                              left: mainLeft + mainWidth * 0.7,
+                              bottom: -10,
+                              child: SizedBox(
+                                width: sideWidth * 1.1,
+                                height: sideHeight * 0.9,
+                                child: Transform.rotate(
+                                  angle: 0.06,
+                                  child: buildPhotoCard(imageAt(3)),
                                 ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  // Card de Texto que cresce
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(38),
+                    child: BackdropFilter(
+                      filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                      child: Container(
+                        width: width * 0.85,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              colorScheme.surface.withValues(alpha: 0.50),
+                              colorScheme.surfaceContainerLow.withValues(
+                                alpha: 0.30,
                               ),
                             ],
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: contentGap),
-                    SizedBox(
-                      width: cardWidth,
-                      height: cardHeight,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(38),
-                        child: BackdropFilter(
-                          filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  colorScheme.surface.withValues(alpha: 0.50),
-                                  colorScheme.surfaceContainerLow.withValues(
-                                    alpha: 0.30,
-                                  ),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(38),
-                              border: Border.all(
-                                color: colorScheme.surface.withValues(
-                                  alpha: 0.56,
-                                ),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: colorScheme.onSurface.withValues(
-                                    alpha: 0.22,
-                                  ),
-                                  blurRadius: 30,
-                                  offset: const Offset(0, 18),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(22),
-                              child: buildTextContent(),
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(38),
+                          border: Border.all(
+                            color: colorScheme.surface.withValues(
+                              alpha: 0.56,
                             ),
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  colorScheme.onSurface.withValues(alpha: 0.22),
+                              blurRadius: 30,
+                              offset: const Offset(0, 18),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(26),
+                          child: buildTextContent(),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
         );
+      },
+    );
       },
     );
   }
