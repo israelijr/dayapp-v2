@@ -90,7 +90,7 @@ class PolaroidStackTemplate extends StatelessWidget {
           // 2. Conteúdo flutuante principal
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(28, 24, 28, 20),
+              padding: const EdgeInsets.fromLTRB(28, 90, 28, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -170,42 +170,12 @@ class PolaroidStackTemplate extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            /* // Contador de Fotos Extras
-                            if (extraCount > 0)
-                              Positioned(
-                                right: width * 0.16,
-                                bottom: height * 0.09,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: const Color(
-                                      0xFF212121,
-                                    ).withValues(alpha: 0.85),
-                                    borderRadius: BorderRadius.circular(999),
-                                  ),
-                                  child: Text(
-                                    '+$extraCount',
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ), */
                           ],
                         );
                       },
                     ),
                   ),
                   const SizedBox(height: 8),
-                  // The story card is intentionally left out of the Column flow
-                  // and positioned explicitly in the parent Stack so it can
-                  // be raised above overlayed action buttons without moving
-                  // the background or photos.
                   const SizedBox.shrink(),
                 ],
               ),
@@ -219,9 +189,12 @@ class PolaroidStackTemplate extends StatelessWidget {
             right: 28,
             bottom: 95,
             child: Container(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.45,
+              ),
               decoration: BoxDecoration(
-                color: colorScheme.surface.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(8),
+                color: colorScheme.surface.withValues(alpha: 0.75),
+                borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
                     color: colorScheme.onSurface.withValues(alpha: 0.18),
@@ -231,65 +204,64 @@ class PolaroidStackTemplate extends StatelessWidget {
                 ],
               ),
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    story.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 34,
-                      color: const Color(0xFF1A1A1A),
-                      height: 1.05,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    normalizedDescription(story.description),
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 15,
-                      height: 1.6,
-                      color: const Color(0xFF2C2C2C),
-                    ),
-                  ),
-                  const SizedBox(height: 22),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        dateLabel,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black.withValues(alpha: 0.70),
-                        ),
-                      ),
-                      Text(
-                        story.emoticon ?? '',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 18,
-                          color: Colors.black.withValues(alpha: 0.40),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'DayApp',
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      story.title,
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black.withValues(alpha: 0.55),
+                        fontSize: 32,
+                        color: const Color(0xFF1A1A1A),
+                        height: 1.05,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 12),
+                    Text(
+                      normalizedDescription(story.description),
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 15,
+                        height: 1.6,
+                        color: const Color(0xFF2C2C2C),
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          dateLabel,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black.withValues(alpha: 0.70),
+                          ),
+                        ),
+                        Text(
+                          story.emoticon ?? '',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 18,
+                            color: Colors.black.withValues(alpha: 0.40),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        'DayApp',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black.withValues(alpha: 0.55),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

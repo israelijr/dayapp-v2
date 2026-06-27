@@ -61,68 +61,65 @@ class ScrapbookTemplate extends StatelessWidget {
     }
 
     Widget buildTextContent() {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            story.title,
-            softWrap: true,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.plusJakartaSans(
-              fontSize: 34,
-              color: colorScheme.onSurface,
-              height: 1.04,
+      return SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              story.title,
+              softWrap: true,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 32,
+                color: colorScheme.onSurface,
+                height: 1.04,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          const SizedBox(height: 14),
-          Expanded(
-            child: Text(
+            const SizedBox(height: 14),
+            Text(
               normalizedDescription(story.description),
-              maxLines: 5,
-              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 15,
                 height: 1.65,
                 color: colorScheme.onSurface.withValues(alpha: 0.84),
               ),
             ),
-          ),
-          const SizedBox(height: 18),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                moodLabel(context, story.mood),
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 12,
-                  color: colorScheme.onSurface.withValues(alpha: 0.72),
-                  fontWeight: FontWeight.w600,
+            const SizedBox(height: 18),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  moodLabel(context, story.mood),
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 12,
+                    color: colorScheme.onSurface.withValues(alpha: 0.72),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              Text(
-                dateLabel,
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 12,
-                  color: colorScheme.onSurface.withValues(alpha: 0.72),
-                  fontWeight: FontWeight.w600,
+                Text(
+                  dateLabel,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 12,
+                    color: colorScheme.onSurface.withValues(alpha: 0.72),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              'DayApp',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface.withValues(alpha: 0.64),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'DayApp',
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface.withValues(alpha: 0.64),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     }
 
@@ -138,13 +135,13 @@ class ScrapbookTemplate extends StatelessWidget {
         final desiredCardHeight = (height * 0.56)
             .clamp(360.0, 620.0)
             .toDouble();
-        final photoAreaHeight = (height * 0.30).clamp(180.0, 290.0).toDouble();
-        final topPadding = (height * 0.05).clamp(20.0, 54.0).toDouble();
+        final photoAreaHeight = (height * 0.28).clamp(160.0, 270.0).toDouble();
+        final topPadding = 90.0; // Espaço fixo para botões de ação
         final bottomPadding = (height * 0.12).clamp(70.0, 130.0).toDouble();
         final contentGap = (height * 0.02).clamp(10.0, 20.0).toDouble();
         final maxCardHeight =
             height - topPadding - bottomPadding - photoAreaHeight - contentGap;
-        final cardHeight = desiredCardHeight.clamp(250.0, maxCardHeight);
+        final cardHeight = desiredCardHeight.clamp(200.0, maxCardHeight);
 
         return Stack(
           fit: StackFit.expand,

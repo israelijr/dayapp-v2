@@ -43,7 +43,8 @@ class HeroMemoryTemplate extends StatelessWidget {
             : MediaQuery.of(context).size.height * 0.6;
         final horizontalPadding = width * 0.08;
         final verticalPadding = height * 0.1;
-        final cardHeight = height * 0.56;
+        final topSafeArea = 80.0; // Espaço para botões de fechar e compartilhar
+        final cardHeight = height * 0.62;
         final thumbSize = width * 0.28;
 
         Widget buildThumbnailCard(Uint8List imageBytes, double radius) {
@@ -100,17 +101,22 @@ class HeroMemoryTemplate extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: verticalPadding,
+              padding: EdgeInsets.fromLTRB(
+                horizontalPadding,
+                topSafeArea + verticalPadding * 0.4,
+                horizontalPadding,
+                verticalPadding * 0.8,
               ),
               child: Stack(
+                clipBehavior: Clip.none,
                 children: [
                   Align(
                     alignment: Alignment.center,
-                    child: SizedBox(
+                    child: Container(
                       width: double.infinity,
-                      height: cardHeight,
+                      constraints: BoxConstraints(
+                        maxHeight: cardHeight,
+                      ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(34),
                         child: BackdropFilter(
@@ -149,26 +155,23 @@ class HeroMemoryTemplate extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  story.title,
-                                  softWrap: true,
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: width * 0.082,
-                                    color: colorScheme.onSurface,
-                                    height: 1.03,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    story.title,
+                                    softWrap: true,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: width * 0.082,
+                                      color: colorScheme.onSurface,
+                                      height: 1.03,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: height * 0.018),
-                                Expanded(
-                                  child: Text(
+                                  SizedBox(height: height * 0.018),
+                                  Text(
                                     normalizedDescription(story.description),
-                                    maxLines: 10,
-                                    overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.plusJakartaSans(
                                       fontSize: width * 0.039,
                                       height: 1.45,
@@ -177,43 +180,43 @@ class HeroMemoryTemplate extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(height: height * 0.014),
-                                Row(
-                                  children: [
-                                    Text(
-                                      dateLabel,
-                                      style: GoogleFonts.plusJakartaSans(
-                                        fontSize: width * 0.036,
-                                        fontWeight: FontWeight.w600,
-                                        color: colorScheme.onSurfaceVariant,
-                                      ),
-                                    ),
-                                    if (story.emoticon != null &&
-                                        story.emoticon!.isNotEmpty) ...[
-                                      SizedBox(width: width * 0.024),
+                                  SizedBox(height: height * 0.024),
+                                  Row(
+                                    children: [
                                       Text(
-                                        story.emoticon!,
-                                        style: TextStyle(
-                                          fontSize: width * 0.05,
-                                          height: 1,
-                                          color: colorScheme.onSurface
-                                              .withValues(alpha: 0.66),
+                                        dateLabel,
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: width * 0.036,
+                                          fontWeight: FontWeight.w600,
+                                          color: colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                                      if (story.emoticon != null &&
+                                          story.emoticon!.isNotEmpty) ...[
+                                        SizedBox(width: width * 0.024),
+                                        Text(
+                                          story.emoticon!,
+                                          style: TextStyle(
+                                            fontSize: width * 0.05,
+                                            height: 1,
+                                            color: colorScheme.onSurface
+                                                .withValues(alpha: 0.66),
+                                          ),
+                                        ),
+                                      ],
+                                      const Spacer(),
+                                      Text(
+                                        'DayApp',
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: width * 0.033,
+                                          fontWeight: FontWeight.w700,
+                                          color: colorScheme.onSurfaceVariant,
                                         ),
                                       ),
                                     ],
-                                    const Spacer(),
-                                    Text(
-                                      'DayApp',
-                                      style: GoogleFonts.plusJakartaSans(
-                                        fontSize: width * 0.033,
-                                        fontWeight: FontWeight.w700,
-                                        color: colorScheme.onSurfaceVariant,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -224,7 +227,7 @@ class HeroMemoryTemplate extends StatelessWidget {
                   // Renderiza condicionalmente as miniaturas baseado no número real de imagens
                   if (displayPhotos.isNotEmpty)
                     Positioned(
-                      top: 0,
+                      top: -height * 0.06,
                       left: width * 0.02,
                       child: SizedBox(
                         width: thumbSize * 0.92,
@@ -234,7 +237,7 @@ class HeroMemoryTemplate extends StatelessWidget {
                     ),
                   if (displayPhotos.length > 1)
                     Positioned(
-                      top: height * 0.03,
+                      top: -height * 0.03,
                       left: width * 0.3,
                       child: SizedBox(
                         width: thumbSize * 0.82,
@@ -244,7 +247,7 @@ class HeroMemoryTemplate extends StatelessWidget {
                     ),
                   if (displayPhotos.length > 2)
                     Positioned(
-                      top: height * 0.005,
+                      top: -height * 0.055,
                       right: width * 0.02,
                       child: SizedBox(
                         width: thumbSize,
