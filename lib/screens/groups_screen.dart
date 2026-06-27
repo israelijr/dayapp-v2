@@ -144,7 +144,7 @@ class _GroupsScreenState extends State<GroupsScreen>
   }
 
   List<CapituloResumo> _getDisplayChapters(ChapterFilterProvider filter) {
-    List<CapituloResumo> sortedList = List.from(_capitulos);
+    final List<CapituloResumo> sortedList = List.from(_capitulos);
 
     // Ordenação
     if (filter.sortOrder == 'date') {
@@ -642,8 +642,8 @@ class _GroupsScreenState extends State<GroupsScreen>
                                         }
                                         final chapterIndex =
                                             _sugestoes.isNotEmpty
-                                                ? index - 1
-                                                : index;
+                                            ? index - 1
+                                            : index;
 
                                         if (chapterIndex >=
                                             displayChapters.length) {
@@ -661,7 +661,9 @@ class _GroupsScreenState extends State<GroupsScreen>
                                         ];
                                         final randomIdx =
                                             (resumo.capitulo.id ??
-                                                    resumo.capitulo.titulo
+                                                    resumo
+                                                        .capitulo
+                                                        .titulo
                                                         .hashCode)
                                                 .abs() %
                                             capas.length;

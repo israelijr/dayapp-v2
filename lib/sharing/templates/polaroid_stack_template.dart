@@ -52,68 +52,68 @@ class PolaroidStackTemplate extends StatelessWidget {
       );
     }
 
-    return IntrinsicHeight(
-      child: Stack(
-        children: [
-          // 1. Fundo total
-          Positioned.fill(
-            child: photos.isNotEmpty
-                ? Image.memory(photos.first, fit: BoxFit.cover)
-                : buildEmptyPhotoBackground(colorScheme),
-          ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5.5, sigmaY: 5.5),
-              child: Container(color: Colors.black.withValues(alpha: 0.03)),
-            ),
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.of(context).size.width;
+        final photoAreaWidth = availableWidth - 56;
+        final photoAreaHeight = photoAreaWidth * 1.2;
+        final largeWidth = photoAreaWidth * 0.65;
+        final largeHeight = photoAreaHeight * 0.35;
+        final smallWidth = photoAreaWidth * 0.38;
+        final smallHeight = photoAreaHeight * 0.18;
 
-          // Gradiente linear
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.35),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+        return IntrinsicHeight(
+          child: Stack(
+            children: [
+              // 1. Fundo total
+              Positioned.fill(
+                child: photos.isNotEmpty
+                    ? Image.memory(photos.first, fit: BoxFit.cover)
+                    : buildEmptyPhotoBackground(colorScheme),
+              ),
+              Positioned.fill(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5.5, sigmaY: 5.5),
+                  child: Container(color: Colors.black.withValues(alpha: 0.03)),
                 ),
               ),
-            ),
-          ),
 
-          // 2. Conteúdo flutuante principal que cresce
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 100), // Safe area
-                // Área das fotos com altura proporcional ao largura
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final width = constraints.maxWidth.isFinite
-                        ? constraints.maxWidth
-                        : MediaQuery.of(context).size.width - 56;
-                    final height = width * 1.2; // Altura fixa proporcional
+              // Gradiente linear
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withValues(alpha: 0.35),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+              ),
 
-                    final largeWidth = width * 0.65;
-                    final largeHeight = height * 0.35;
-                    final smallWidth = width * 0.38;
-                    final smallHeight = height * 0.18;
-
-                    return SizedBox(
-                      height: height,
+              // 2. Conteúdo flutuante principal que cresce
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 28),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 100), // Safe area
+                    // Área das fotos com altura proporcional ao largura
+                    SizedBox(
+                      height: photoAreaHeight,
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
                           // Foto Principal
                           Positioned(
                             left: 0,
-                            top: height * 0.05,
+                            top: photoAreaHeight * 0.05,
                             child: Transform.rotate(
                               angle: -0.08,
                               child: buildPolaroidCard(
@@ -129,7 +129,7 @@ class PolaroidStackTemplate extends StatelessWidget {
                           if (displayImages.length > 1)
                             Positioned(
                               right: 0,
-                              top: height * 0.01,
+                              top: photoAreaHeight * 0.01,
                               child: Transform.rotate(
                                 angle: 0.10,
                                 child: buildPolaroidCard(
@@ -142,8 +142,8 @@ class PolaroidStackTemplate extends StatelessWidget {
                           // Terceira Foto
                           if (displayImages.length > 2)
                             Positioned(
-                              left: width * 0.14,
-                              bottom: height * 0.1,
+                              left: photoAreaWidth * 0.14,
+                              bottom: photoAreaHeight * 0.1,
                               child: Transform.rotate(
                                 angle: 0.05,
                                 child: buildPolaroidCard(
@@ -156,8 +156,8 @@ class PolaroidStackTemplate extends StatelessWidget {
                           // Quarta Foto
                           if (displayImages.length > 3)
                             Positioned(
-                              right: width * 0.02,
-                              bottom: height * 0.05,
+                              right: photoAreaWidth * 0.02,
+                              bottom: photoAreaHeight * 0.05,
                               child: Transform.rotate(
                                 angle: -0.06,
                                 child: buildPolaroidCard(
@@ -169,90 +169,90 @@ class PolaroidStackTemplate extends StatelessWidget {
                             ),
                         ],
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                // Story Card que cresce
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface.withValues(alpha: 0.85),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: colorScheme.onSurface.withValues(alpha: 0.18),
-                        blurRadius: 22,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        story.title,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 32,
-                          color: const Color(0xFF1A1A1A),
-                          height: 1.05,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                      Text(
-                        normalizedDescription(story.description),
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 15,
-                          height: 1.6,
-                          color: const Color(0xFF2C2C2C),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            dateLabel,
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black.withValues(alpha: 0.70),
-                            ),
+                    ),
+                    const SizedBox(height: 20),
+                    // Story Card que cresce
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface.withValues(alpha: 0.85),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: colorScheme.onSurface.withValues(alpha: 0.18),
+                            blurRadius: 22,
+                            offset: const Offset(0, 10),
                           ),
-                          if (story.emoticon != null)
-                            Text(
-                              story.emoticon!,
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 18,
-                                color: Colors.black.withValues(alpha: 0.40),
-                              ),
-                            ),
                         ],
                       ),
-                      const SizedBox(height: 12),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          'DayApp',
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black.withValues(alpha: 0.55),
+                      padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            story.title,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 32,
+                              color: const Color(0xFF1A1A1A),
+                              height: 1.05,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 14),
+                          Text(
+                            normalizedDescription(story.description),
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 15,
+                              height: 1.6,
+                              color: const Color(0xFF2C2C2C),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                dateLabel,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black.withValues(alpha: 0.70),
+                                ),
+                              ),
+                              if (story.emoticon != null)
+                                Text(
+                                  story.emoticon!,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 18,
+                                    color: Colors.black.withValues(alpha: 0.40),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'DayApp',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black.withValues(alpha: 0.55),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 40),
+                  ],
                 ),
-                const SizedBox(height: 40),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

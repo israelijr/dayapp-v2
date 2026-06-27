@@ -9,27 +9,34 @@ Future<Uint8List> renderStoryShareToImage(
   Widget child,
 ) async {
   final paintKey = GlobalKey();
+  double exportPixelRatio = 2.0;
+
   final overlayEntry = OverlayEntry(
-    builder: (context) => Positioned(
-      left: -9999,
-      top: 0,
-      child: Material(
-        type: MaterialType.transparency,
-        child: RepaintBoundary(
-          key: paintKey,
-          child: UnconstrainedBox(
-            constrainedAxis: Axis.horizontal,
-            alignment: Alignment.topCenter,
-            child: Container(
-              width: 1080,
-              constraints: const BoxConstraints(minHeight: 1920),
-              color: Colors.white,
-              child: child,
+    builder: (context) {
+      final screenWidth = MediaQuery.of(context).size.width;
+      exportPixelRatio = 1080.0 / screenWidth;
+
+      return Positioned(
+        left: -9999,
+        top: 0,
+        child: Material(
+          type: MaterialType.transparency,
+          child: RepaintBoundary(
+            key: paintKey,
+            child: UnconstrainedBox(
+              constrainedAxis: Axis.horizontal,
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: screenWidth,
+                constraints: BoxConstraints(minHeight: screenWidth * (1920.0 / 1080.0)),
+                color: Colors.white,
+                child: child,
+              ),
             ),
           ),
         ),
-      ),
-    ),
+      );
+    },
   );
 
   overlayState.insert(overlayEntry);
@@ -43,13 +50,24 @@ Future<Uint8List> renderStoryShareToImage(
     throw StateError('Unable to capture story share image render object.');
   }
 
+  final logicalHeight = boundary.size.height;
+  final logicalWidth = boundary.size.width;
+
+  double finalPixelRatio = 1080.0 / logicalWidth;
+  
+  // Limite seguro de textura para evitar downscale da GPU (que causa o texto borrado).
+  final maxDimension = logicalHeight > logicalWidth ? logicalHeight : logicalWidth;
+  if (maxDimension * finalPixelRatio > 4000) {
+    finalPixelRatio = 4000 / maxDimension;
+  }
+
   ui.Image? image;
   try {
-    image = await boundary.toImage(pixelRatio: 2.0);
+    image = await boundary.toImage(pixelRatio: finalPixelRatio);
   } on AssertionError catch (_) {
     await WidgetsBinding.instance.endOfFrame;
     await Future.delayed(const Duration(milliseconds: 150));
-    image = await boundary.toImage(pixelRatio: 2.0);
+    image = await boundary.toImage(pixelRatio: finalPixelRatio);
   }
 
   final byteData = await image.toByteData(format: ui.ImageByteFormat.png);

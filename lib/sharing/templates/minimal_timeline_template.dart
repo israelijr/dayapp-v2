@@ -18,7 +18,7 @@ class MinimalTimelineTemplate extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final dateLabel = DateFormat.yMMMMd(story.localeName).format(story.date);
 
-    return Container(
+    return ColoredBox(
       color: colorScheme.surface,
       child: Column(
         mainAxisSize: MainAxisSize.min,

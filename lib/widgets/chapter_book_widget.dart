@@ -12,10 +12,10 @@ class ChapterBookWidget extends StatelessWidget {
   final String? fotoPath;
 
   const ChapterBookWidget({
-    super.key,
     required this.titulo,
-    this.dataUpdate,
     required this.onTap,
+    super.key,
+    this.dataUpdate,
     this.coverAsset,
     this.fotoPath,
   });
@@ -88,10 +88,14 @@ class ChapterBookWidget extends StatelessWidget {
                     end: Alignment.centerRight,
                     colors: [
                       theme.colorScheme.primary.withValues(
-                        alpha: (coverAsset != null || fotoPath != null) ? 0.4 : 0.15,
+                        alpha: (coverAsset != null || fotoPath != null)
+                            ? 0.4
+                            : 0.15,
                       ),
                       theme.colorScheme.primary.withValues(
-                        alpha: (coverAsset != null || fotoPath != null) ? 0.2 : 0.05,
+                        alpha: (coverAsset != null || fotoPath != null)
+                            ? 0.2
+                            : 0.05,
                       ),
                       Colors.transparent,
                     ],
@@ -123,11 +127,14 @@ class ChapterBookWidget extends StatelessWidget {
                 width: 4,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(5, (_) => Container(
-                    height: 1,
-                    width: 2,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
-                  )),
+                  children: List.generate(
+                    5,
+                    (_) => Container(
+                      height: 1,
+                      width: 2,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                    ),
+                  ),
                 ),
               ),
               // Content

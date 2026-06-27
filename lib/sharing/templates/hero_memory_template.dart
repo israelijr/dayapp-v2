@@ -38,9 +38,9 @@ class HeroMemoryTemplate extends StatelessWidget {
         final width = constraints.maxWidth.isFinite
             ? constraints.maxWidth
             : MediaQuery.of(context).size.width;
-        
+
         final horizontalPadding = width * 0.08;
-        final topSafeArea = 100.0;
+        const topSafeArea = 100.0;
         final thumbSize = width * 0.28;
 
         Widget buildThumbnailCard(Uint8List imageBytes, double radius) {
@@ -123,7 +123,10 @@ class HeroMemoryTemplate extends StatelessWidget {
                               child: SizedBox(
                                 width: thumbSize * 0.92,
                                 height: thumbSize * 0.92,
-                                child: buildThumbnailCard(displayPhotos[0], -0.1),
+                                child: buildThumbnailCard(
+                                  displayPhotos[0],
+                                  -0.1,
+                                ),
                               ),
                             ),
                             if (displayPhotos.length > 1)
@@ -133,7 +136,10 @@ class HeroMemoryTemplate extends StatelessWidget {
                                 child: SizedBox(
                                   width: thumbSize * 0.82,
                                   height: thumbSize * 0.82,
-                                  child: buildThumbnailCard(displayPhotos[1], 0.08),
+                                  child: buildThumbnailCard(
+                                    displayPhotos[1],
+                                    0.08,
+                                  ),
                                 ),
                               ),
                             if (displayPhotos.length > 2)
@@ -142,7 +148,10 @@ class HeroMemoryTemplate extends StatelessWidget {
                                 child: SizedBox(
                                   width: thumbSize,
                                   height: thumbSize,
-                                  child: buildThumbnailCard(displayPhotos[2], 0.13),
+                                  child: buildThumbnailCard(
+                                    displayPhotos[2],
+                                    0.13,
+                                  ),
                                 ),
                               ),
                           ],
@@ -180,7 +189,9 @@ class HeroMemoryTemplate extends StatelessWidget {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: colorScheme.onSurface.withValues(alpha: 0.26),
+                                color: colorScheme.onSurface.withValues(
+                                  alpha: 0.26,
+                                ),
                                 blurRadius: 30,
                                 offset: const Offset(0, 10),
                               ),

@@ -48,10 +48,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             : l10n.search,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: GoogleFonts.plusJakartaSans(
-          fontSize: 24,
-          height: 1.3,
-        ),
+        style: GoogleFonts.plusJakartaSans(fontSize: 24, height: 1.3),
       ),
       actions: [
         Consumer<RefreshProvider>(
@@ -173,54 +170,53 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 filterProvider.setItemLimit(int.parse(value.split('_')[1]));
               }
             },
-            itemBuilder:
-                (context) => [
-                  const PopupMenuItem(
-                    enabled: false,
-                    child: Text(
-                      "Ordenação",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  CheckedPopupMenuItem(
-                    value: 'sort_date',
-                    checked: filterProvider.sortOrder == 'date',
-                    child: const Text("Data (Update)"),
-                  ),
-                  CheckedPopupMenuItem(
-                    value: 'sort_title',
-                    checked: filterProvider.sortOrder == 'title',
-                    child: const Text("Título"),
-                  ),
-                  const PopupMenuDivider(),
-                  const PopupMenuItem(
-                    enabled: false,
-                    child: Text(
-                      "Visualização",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  CheckedPopupMenuItem(
-                    value: 'limit_all',
-                    checked: filterProvider.itemLimit == null,
-                    child: const Text("Ver todos"),
-                  ),
-                  CheckedPopupMenuItem(
-                    value: 'limit_10',
-                    checked: filterProvider.itemLimit == 10,
-                    child: const Text("Ver 10"),
-                  ),
-                  CheckedPopupMenuItem(
-                    value: 'limit_20',
-                    checked: filterProvider.itemLimit == 20,
-                    child: const Text("Ver 20"),
-                  ),
-                  CheckedPopupMenuItem(
-                    value: 'limit_50',
-                    checked: filterProvider.itemLimit == 50,
-                    child: const Text("Ver 50"),
-                  ),
-                ],
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                enabled: false,
+                child: Text(
+                  'Ordenação',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              CheckedPopupMenuItem(
+                value: 'sort_date',
+                checked: filterProvider.sortOrder == 'date',
+                child: const Text('Data (Update)'),
+              ),
+              CheckedPopupMenuItem(
+                value: 'sort_title',
+                checked: filterProvider.sortOrder == 'title',
+                child: const Text('Título'),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem(
+                enabled: false,
+                child: Text(
+                  'Visualização',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              CheckedPopupMenuItem(
+                value: 'limit_all',
+                checked: filterProvider.itemLimit == null,
+                child: const Text('Ver todos'),
+              ),
+              CheckedPopupMenuItem(
+                value: 'limit_10',
+                checked: filterProvider.itemLimit == 10,
+                child: const Text('Ver 10'),
+              ),
+              CheckedPopupMenuItem(
+                value: 'limit_20',
+                checked: filterProvider.itemLimit == 20,
+                child: const Text('Ver 20'),
+              ),
+              CheckedPopupMenuItem(
+                value: 'limit_50',
+                checked: filterProvider.itemLimit == 50,
+                child: const Text('Ver 50'),
+              ),
+            ],
           ),
       ],
     );

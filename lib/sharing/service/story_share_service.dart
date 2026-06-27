@@ -99,7 +99,7 @@ class _ShareStoryShareableScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: SizedBox.expand(child: StoryShareWidget(story: story)),
+      child: StoryShareWidget(story: story),
     );
   }
 }

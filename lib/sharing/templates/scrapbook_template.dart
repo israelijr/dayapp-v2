@@ -122,66 +122,71 @@ class ScrapbookTemplate extends StatelessWidget {
       );
     }
 
-    return IntrinsicHeight(
-      child: Stack(
-        children: [
-          // Fundo
-          Positioned.fill(
-            child: backgroundImage != null
-                ? Image.memory(backgroundImage, fit: BoxFit.cover)
-                : buildEmptyPhotoBackground(colorScheme),
-          ),
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    colorScheme.onSurface.withValues(alpha: 0.14),
-                    colorScheme.onSurface.withValues(alpha: 0.38),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.of(context).size.width;
+        final photoAreaWidth = availableWidth - 36;
+        final photoAreaHeight = photoAreaWidth * 0.6;
+        final mainWidth = photoAreaWidth * 0.45;
+        final mainHeight = photoAreaHeight * 0.75;
+        final sideWidth = mainWidth * 0.65;
+        final sideHeight = sideWidth * 1.1;
+
+        final mainLeft = (photoAreaWidth - mainWidth) / 2;
+        final mainTop = (photoAreaHeight - mainHeight) / 2;
+
+        Uint8List? imageAt(int index) {
+          if (displayImages.length > index) {
+            return displayImages[index];
+          }
+          return floatingImages[index];
+        }
+        
+        final cardWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth * 0.85
+            : 300.0;
+
+        return IntrinsicHeight(
+          child: Stack(
+            children: [
+              // Fundo
+              Positioned.fill(
+                child: backgroundImage != null
+                    ? Image.memory(backgroundImage, fit: BoxFit.cover)
+                    : buildEmptyPhotoBackground(colorScheme),
+              ),
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        colorScheme.onSurface.withValues(alpha: 0.14),
+                        colorScheme.onSurface.withValues(alpha: 0.38),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ui.ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-              child: Container(
-                color: colorScheme.surface.withValues(alpha: 0.06),
+              Positioned.fill(
+                child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                  child: Container(
+                    color: colorScheme.surface.withValues(alpha: 0.06),
+                  ),
+                ),
               ),
-            ),
-          ),
-          // Conteúdo que cresce
-          Padding(
-            padding: const EdgeInsets.fromLTRB(18, 100, 18, 40),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Área das Fotos
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final photoAreaWidth = constraints.maxWidth.isFinite
-                        ? constraints.maxWidth
-                        : MediaQuery.of(context).size.width - 36;
-                    final photoAreaHeight = photoAreaWidth * 0.6;
-                    final mainWidth = photoAreaWidth * 0.45;
-                    final mainHeight = photoAreaHeight * 0.75;
-                    final sideWidth = mainWidth * 0.65;
-                    final sideHeight = sideWidth * 1.1;
-
-                    final mainLeft = (photoAreaWidth - mainWidth) / 2;
-                    final mainTop = (photoAreaHeight - mainHeight) / 2;
-
-                    Uint8List? imageAt(int index) {
-                      if (displayImages.length > index) {
-                        return displayImages[index];
-                      }
-                      return floatingImages[index];
-                    }
-
-                    return SizedBox(
+              // Conteúdo que cresce
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18, 100, 18, 40),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Área das Fotos
+                    SizedBox(
                       height: photoAreaHeight,
                       child: Stack(
                         clipBehavior: Clip.none,
@@ -236,17 +241,10 @@ class ScrapbookTemplate extends StatelessWidget {
                           ),
                         ],
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 30),
-                // Card de Texto que cresce
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final cardWidth = constraints.maxWidth.isFinite
-                        ? constraints.maxWidth * 0.85
-                        : 300.0;
-                    return ClipRRect(
+                    ),
+                    const SizedBox(height: 30),
+                    // Card de Texto que cresce
+                    ClipRRect(
                       borderRadius: BorderRadius.circular(38),
                       child: BackdropFilter(
                         filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
@@ -285,14 +283,14 @@ class ScrapbookTemplate extends StatelessWidget {
                           ),
                         ),
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
