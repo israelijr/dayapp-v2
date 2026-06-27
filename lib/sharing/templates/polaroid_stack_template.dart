@@ -251,8 +251,5 @@ class PolaroidStackTemplate extends StatelessWidget {
         ),
       ],
     );
-        ],
-      ),
-    );
   }
 }

@@ -291,7 +291,5 @@ class ScrapbookTemplate extends StatelessWidget {
         );
       },
     );
-      },
-    );
   }
 }
