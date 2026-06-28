@@ -240,7 +240,6 @@ Versão: 2.0.0
       // 7. Comprimir em ZIP via isolate (sem cópia prévia de arquivos)
       onProgress?.call(l10n.backupProgressCompressing);
       final now = DateTime.now();
-      final dateStr = '${now.year.toString().padLeft(4, '0')}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}';
       final timestamp = now.millisecondsSinceEpoch;
       final zipPath = path.join(tempDir.path, 'dayapp_backup_$timestamp.zip');
 

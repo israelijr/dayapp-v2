@@ -9,12 +9,10 @@ Future<Uint8List> renderStoryShareToImage(
   Widget child,
 ) async {
   final paintKey = GlobalKey();
-  double exportPixelRatio = 2.0;
 
   final overlayEntry = OverlayEntry(
     builder: (context) {
       final screenWidth = MediaQuery.of(context).size.width;
-      exportPixelRatio = 1080.0 / screenWidth;
 
       return Positioned(
         left: -9999,
