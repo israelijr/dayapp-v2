@@ -3,6 +3,7 @@ import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/models/historia.dart';
 import 'package:dayapp/providers/pin_provider.dart';
 import 'package:dayapp/sharing/renderer/story_share_renderer.dart';
+import 'package:dayapp/sharing/service/pdf_export_service.dart';
 import 'package:dayapp/sharing/story_data.dart';
 import 'package:dayapp/sharing/story_share_preview_screen.dart';
 import 'package:dayapp/sharing/templates/story_share_widget.dart';
@@ -51,33 +52,46 @@ class StoryShareService {
         localeName: localeName,
       );
 
-      final shouldShare = await navigator.push<bool>(
-        MaterialPageRoute<bool>(
+      final shareFormat = await navigator.push<ShareFormat>(
+        MaterialPageRoute<ShareFormat>(
           builder: (_) => StorySharePreviewScreen(story: storyData),
         ),
       );
 
-      if (shouldShare != true) {
+      if (shareFormat == null) {
         return;
       }
 
-      final bytes = await renderStoryShareToImage(
-        args.overlayState,
-        _ShareStoryShareableScene(story: storyData),
-      );
+      if (shareFormat == ShareFormat.image) {
+        final bytes = await renderStoryShareToImage(
+          args.overlayState,
+          _ShareStoryShareableScene(story: storyData),
+        );
 
-      await SharePlus.instance.share(
-        ShareParams(
-          files: [
-            XFile.fromData(
-              bytes,
-              mimeType: 'image/png',
-              name:
-                  'dayapp_story_${historia.id ?? DateTime.now().millisecondsSinceEpoch}.png',
-            ),
-          ],
-        ),
-      );
+        await SharePlus.instance.share(
+          ShareParams(
+            files: [
+              XFile.fromData(
+                bytes,
+                mimeType: 'image/png',
+                name:
+                    'dayapp_story_${historia.id ?? DateTime.now().millisecondsSinceEpoch}.png',
+              ),
+            ],
+          ),
+        );
+      } else if (shareFormat == ShareFormat.pdf) {
+        final file = await PdfExportService.generateStoryPdf(storyData);
+
+        await SharePlus.instance.share(
+          ShareParams(
+            files: [
+              XFile(file.path),
+            ],
+            subject: historia.titulo,
+          ),
+        );
+      }
     } catch (error, stackTrace) {
       debugPrint('StoryShareService: failed to share story: $error');
       debugPrint(stackTrace.toString());

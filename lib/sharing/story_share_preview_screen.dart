@@ -3,6 +3,8 @@ import 'package:dayapp/sharing/story_data.dart';
 import 'package:dayapp/sharing/templates/story_share_widget.dart';
 import 'package:flutter/material.dart';
 
+enum ShareFormat { image, pdf }
+
 class StorySharePreviewScreen extends StatelessWidget {
   final StoryData story;
 
@@ -32,7 +34,7 @@ class StorySharePreviewScreen extends StatelessWidget {
             top: MediaQuery.of(context).padding.top + 10,
             right: 16,
             child: IconButton.filled(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: () => Navigator.of(context).pop(null),
               icon: const Icon(Icons.close),
               style: IconButton.styleFrom(
                 backgroundColor: colorScheme.surface.withValues(alpha: 0.7),
@@ -47,7 +49,7 @@ class StorySharePreviewScreen extends StatelessWidget {
             child: SafeArea(
               top: false,
               child: FilledButton.icon(
-                onPressed: () => Navigator.of(context).pop(true),
+                onPressed: () => _showShareOptions(context, l10n),
                 icon: const Icon(Icons.share),
                 label: Text(l10n.share),
                 style: FilledButton.styleFrom(
@@ -60,6 +62,48 @@ class StorySharePreviewScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showShareOptions(BuildContext context, AppLocalizations l10n) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                'Opções',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Exportar como Imagem'),
+              subtitle: const Text('Ótimo para redes sociais.'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).pop(ShareFormat.image);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.html),
+              title: const Text('Exportar como HTML'),
+              subtitle: const Text('Inclui todas as imagens.'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).pop(ShareFormat.pdf);
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }
