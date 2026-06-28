@@ -947,8 +947,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get backupStarting => 'Iniciando copia de seguridad...';
 
   @override
-  String get backupCreatedSuccess =>
-      '¡Archivo de copia de seguridad creado! Usa el menú de compartir para guardarlo.';
+  String get backupCreatedSuccess => '¡Archivo de copia de seguridad creado!';
 
   @override
   String backupError(Object message) {

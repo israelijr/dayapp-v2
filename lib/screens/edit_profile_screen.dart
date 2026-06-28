@@ -302,9 +302,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final newPasswordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
     bool obscureCurrent = true;
-    bool obscureNew = true;
     bool obscureConfirm = true;
-    bool isNewPasswordValid = false;
     String? dialogError;
 
     showDialog(
@@ -325,10 +323,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        obscureCurrent ? Icons.visibility_off : Icons.visibility,
+                        obscureCurrent
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                       ),
-                      onPressed: () =>
-                          setDialogState(() => obscureCurrent = !obscureCurrent),
+                      onPressed: () => setDialogState(
+                        () => obscureCurrent = !obscureCurrent,
+                      ),
                     ),
                   ),
                   StrongPasswordField(
@@ -336,9 +337,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     label: loc.newPasswordTitle,
                     prefixIcon: const Icon(Icons.lock),
                     onValidChanged: (valid) {
-                      setDialogState(() {
-                        isNewPasswordValid = valid;
-                      });
+                      setDialogState(() {});
                     },
                   ),
                   CustomTextField(
@@ -348,10 +347,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     prefixIcon: const Icon(Icons.lock),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        obscureConfirm ? Icons.visibility_off : Icons.visibility,
+                        obscureConfirm
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                       ),
-                      onPressed: () =>
-                          setDialogState(() => obscureConfirm = !obscureConfirm),
+                      onPressed: () => setDialogState(
+                        () => obscureConfirm = !obscureConfirm,
+                      ),
                     ),
                   ),
                   if (dialogError != null) ...[
@@ -404,14 +406,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   setDialogState(() => dialogError = loc.fillAllFields);
                   return;
                 }
-                
+
                 final hasMinLength = newPass.length >= 8;
                 final hasUppercase = newPass.contains(RegExp(r'[A-Z]'));
                 final hasLowercase = newPass.contains(RegExp(r'[a-z]'));
                 final hasNumber = newPass.contains(RegExp(r'[0-9]'));
-                final hasSpecial = newPass.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>_+\-=\[\]\/\\]'));
+                final hasSpecial = newPass.contains(
+                  RegExp(r'[!@#$%^&*(),.?":{}|<>_+\-=\[\]\/\\]'),
+                );
 
-                if (!hasMinLength || !hasUppercase || !hasLowercase || !hasNumber || !hasSpecial) {
+                if (!hasMinLength ||
+                    !hasUppercase ||
+                    !hasLowercase ||
+                    !hasNumber ||
+                    !hasSpecial) {
                   setDialogState(() => dialogError = loc.newPasswordMinLength);
                   return;
                 }
@@ -658,7 +666,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     final now = DateTime.now();
                     final today = DateTime(now.year, now.month, now.day);
                     if (birthDate.isAfter(today)) {
-                      return AppLocalizations.of(context)!.birthDateCannotBeFuture;
+                      return AppLocalizations.of(
+                        context,
+                      )!.birthDateCannotBeFuture;
                     }
 
                     int age = today.year - birthDate.year;

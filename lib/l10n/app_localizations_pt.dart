@@ -941,8 +941,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get backupStarting => 'Iniciando backup...';
 
   @override
-  String get backupCreatedSuccess =>
-      'Arquivo de backup criado! Use o menu de compartilhamento para salvá-lo.';
+  String get backupCreatedSuccess => 'Arquivo de backup criado!';
 
   @override
   String backupError(Object message) {

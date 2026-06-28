@@ -402,7 +402,7 @@
   "processing": "Processando...",
   "pleaseWait": "Por favor, aguarde...",
   "backupStarting": "Iniciando backup...",
-  "backupCreatedSuccess": "Arquivo de backup criado! Use o menu de compartilhamento para salvá-lo.",
+  "backupCreatedSuccess": "Arquivo de backup criado!",
   "backupError": "Erro ao criar backup: {message}",
   "@backupError": {
     "placeholders": {

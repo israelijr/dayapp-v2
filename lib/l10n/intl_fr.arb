@@ -511,7 +511,7 @@
   "processing": "Traitement en cours...",
   "pleaseWait": "Veuillez patienter...",
   "backupStarting": "Démarrage de la sauvegarde...",
-  "backupCreatedSuccess": "Fichier de sauvegarde créé ! Utilisez le menu de partage pour l'enregistrer.",
+  "backupCreatedSuccess": "Fichier de sauvegarde créé !",
   "backupError": "Erreur lors de la création de la sauvegarde : {message}",
   "@backupError": {
     "placeholders": {

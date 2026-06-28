@@ -948,8 +948,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get backupStarting => 'Avvio del backup...';
 
   @override
-  String get backupCreatedSuccess =>
-      'File di backup creato! Usa il menu di condivisione per salvarlo.';
+  String get backupCreatedSuccess => 'File di backup creato!';
 
   @override
   String backupError(Object message) {

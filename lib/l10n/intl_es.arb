@@ -414,7 +414,7 @@
   "processing": "Procesando...",
   "pleaseWait": "Por favor espera...",
   "backupStarting": "Iniciando copia de seguridad...",
-  "backupCreatedSuccess": "¡Archivo de copia de seguridad creado! Usa el menú de compartir para guardarlo.",
+  "backupCreatedSuccess": "¡Archivo de copia de seguridad creado!",
   "backupError": "Error al crear copia de seguridad: {message}",
   "@backupError": {
     "placeholders": {

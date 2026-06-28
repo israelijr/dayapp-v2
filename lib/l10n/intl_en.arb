@@ -515,7 +515,7 @@
   "processing": "Processing...",
   "pleaseWait": "Please wait...",
   "backupStarting": "Starting backup...",
-  "backupCreatedSuccess": "Backup file created! Use the share menu to save it.",
+  "backupCreatedSuccess": "Backup file created!",
   "backupError": "Error creating backup: {message}",
   "@backupError": {
     "placeholders": {

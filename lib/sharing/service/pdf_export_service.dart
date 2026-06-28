@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:dayapp/helpers/rich_text_helper.dart';
+import 'package:dayapp/sharing/story_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:dayapp/helpers/rich_text_helper.dart';
-import 'package:dayapp/sharing/story_data.dart';
 
 class PdfExportService {
   static Future<File> generateStoryPdf(StoryData story) async {
@@ -26,17 +25,33 @@ class PdfExportService {
     );
     buffer.writeln('<title>${_escapeHtml(story.title)}</title>');
     buffer.writeln('<style>');
-    buffer.writeln('/* Configuração de páginas físicas A4 e quebras de página */');
+    buffer.writeln(
+      '/* Configuração de páginas físicas A4 e quebras de página */',
+    );
     buffer.writeln('@page { size: A4; margin: 20mm 15mm; }');
-    buffer.writeln('body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; font-size: 14px; max-width: 800px; margin: 0 auto; padding: 20px; color: #222; }');
-    buffer.writeln('h1 { font-family: Noto Serif, serif; font-size: 28px; margin: 0 0 8px; page-break-after: avoid; break-after: avoid; }');
-    buffer.writeln('.meta { color: #666; font-size: 12px; margin-bottom: 24px; page-break-after: avoid; break-after: avoid; border-bottom: 1px solid #eee; padding-bottom: 12px; }');
+    buffer.writeln(
+      'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; font-size: 14px; max-width: 800px; margin: 0 auto; padding: 20px; color: #222; }',
+    );
+    buffer.writeln(
+      'h1 { font-family: Noto Serif, serif; font-size: 28px; margin: 0 0 8px; page-break-after: avoid; break-after: avoid; }',
+    );
+    buffer.writeln(
+      '.meta { color: #666; font-size: 12px; margin-bottom: 24px; page-break-after: avoid; break-after: avoid; border-bottom: 1px solid #eee; padding-bottom: 12px; }',
+    );
     buffer.writeln('.content { margin: 8px 0; orphans: 3; widows: 3; }');
     buffer.writeln('.content p { margin: 8px 0; }');
-    buffer.writeln('.image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 24px 0; page-break-inside: avoid; break-inside: avoid; }');
-    buffer.writeln('.grid-item { display: flex; flex-direction: column; align-items: center; }');
-    buffer.writeln('.grid-item .image { width: 100%; height: auto; max-height: 200px; object-fit: cover; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }');
-    buffer.writeln('.footer { text-align: center; margin-top: 40px; padding-top: 10px; color: #999; font-size: 11px; border-top: 1px solid #eee; page-break-inside: avoid; break-inside: avoid; }');
+    buffer.writeln(
+      '.image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 24px 0; page-break-inside: avoid; break-inside: avoid; }',
+    );
+    buffer.writeln(
+      '.grid-item { display: flex; flex-direction: column; align-items: center; }',
+    );
+    buffer.writeln(
+      '.grid-item .image { width: 100%; height: auto; max-height: 200px; object-fit: cover; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }',
+    );
+    buffer.writeln(
+      '.footer { text-align: center; margin-top: 40px; padding-top: 10px; color: #999; font-size: 11px; border-top: 1px solid #eee; page-break-inside: avoid; break-inside: avoid; }',
+    );
     buffer.writeln('</style>');
     buffer.writeln('</head>');
     buffer.writeln('<body>');
@@ -48,7 +63,8 @@ class PdfExportService {
       String htmlContent = RichTextHelper.jsonToHtml(story.description);
       // Fallback if the parser didn't produce HTML tags
       if (!htmlContent.contains('<') && htmlContent.isNotEmpty) {
-        htmlContent = '<p>${_escapeHtml(htmlContent).replaceAll('\\n', '<br>')}</p>';
+        htmlContent =
+            '<p>${_escapeHtml(htmlContent).replaceAll('\\n', '<br>')}</p>';
       }
       buffer.writeln('<div class="content">$htmlContent</div>');
     }
@@ -78,7 +94,8 @@ class PdfExportService {
     return file;
   }
 
-  static String _normalizeLocale(String localeName) => localeName.split('_').first;
+  static String _normalizeLocale(String localeName) =>
+      localeName.split('_').first;
 
   static String _escapeHtml(String input) => input
       .replaceAll('&', '&amp;')

@@ -1836,7 +1836,7 @@ abstract class AppLocalizations {
   /// No description provided for @backupCreatedSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Backup file created! Use the share menu to save it.'**
+  /// **'Backup file created!'**
   String get backupCreatedSuccess;
 
   /// No description provided for @backupError.

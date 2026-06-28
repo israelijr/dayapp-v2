@@ -1,6 +1,6 @@
 import 'package:dayapp/l10n/generated/app_localizations.dart';
-import 'package:dayapp/providers/home_layout_provider.dart';
 import 'package:dayapp/providers/chapter_filter_provider.dart';
+import 'package:dayapp/providers/home_layout_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

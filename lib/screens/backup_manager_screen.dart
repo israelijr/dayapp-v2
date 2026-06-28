@@ -373,6 +373,7 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
     });
 
     try {
+      String resultingFilePath;
       if (_isLinuxDesktop) {
         final selectedFolderPath = await FilePicker.getDirectoryPath();
 
@@ -392,7 +393,7 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           return;
         }
 
-        await _backupService.saveBackupFileToFolder(
+        resultingFilePath = await _backupService.saveBackupFileToFolder(
           folderPath: selectedFolderPath,
           onProgress: (message) {
             if (mounted) setState(() => _statusMessage = message);
@@ -403,7 +404,7 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           l10n: loc,
         );
       } else {
-        await _backupService.shareBackupFile(
+        resultingFilePath = await _backupService.shareBackupFile(
           onProgress: (message) {
             if (mounted) setState(() => _statusMessage = message);
           },
@@ -419,9 +420,16 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
         return;
       }
 
-      final successMessage = _isLinuxDesktop
+      final fileName = resultingFilePath.replaceAll('\\', '/').split('/').last;
+      final now = DateTime.now();
+      final date = '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
+      final time = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+      final baseSuccessMessage = _isLinuxDesktop
           ? loc.backupProgressSuccess
           : loc.backupCreatedSuccess;
+          
+      final successMessage = '$baseSuccessMessage\n\nArquivo: $fileName\nGerado em: $date às $time';
 
       debugPrint('BACKUP: Compartilhamento concluído');
 

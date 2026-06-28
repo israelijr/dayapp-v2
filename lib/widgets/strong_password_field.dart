@@ -13,9 +13,9 @@ class StrongPasswordField extends StatefulWidget {
   final Color? successColor;
 
   const StrongPasswordField({
-    super.key,
     required this.controller,
     required this.label,
+    super.key,
     this.helperText,
     this.prefixIcon,
     this.onValidChanged,
@@ -52,12 +52,14 @@ class _StrongPasswordFieldState extends State<StrongPasswordField> {
 
   void _validatePassword() {
     final text = widget.controller.text;
-    
+
     final hasMinLength = text.length >= 8;
     final hasUppercase = text.contains(RegExp(r'[A-Z]'));
     final hasLowercase = text.contains(RegExp(r'[a-z]'));
     final hasNumber = text.contains(RegExp(r'[0-9]'));
-    final hasSpecial = text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>_+\-=\[\]\/\\]'));
+    final hasSpecial = text.contains(
+      RegExp(r'[!@#$%^&*(),.?":{}|<>_+\-=\[\]\/\\]'),
+    );
 
     if (_hasMinLength != hasMinLength ||
         _hasUppercase != hasUppercase ||
@@ -71,9 +73,14 @@ class _StrongPasswordFieldState extends State<StrongPasswordField> {
         _hasNumber = hasNumber;
         _hasSpecial = hasSpecial;
       });
-      
+
       if (widget.onValidChanged != null) {
-        final isValid = hasMinLength && hasUppercase && hasLowercase && hasNumber && hasSpecial;
+        final isValid =
+            hasMinLength &&
+            hasUppercase &&
+            hasLowercase &&
+            hasNumber &&
+            hasSpecial;
         widget.onValidChanged!(isValid);
       }
     }
@@ -111,7 +118,7 @@ class _StrongPasswordFieldState extends State<StrongPasswordField> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

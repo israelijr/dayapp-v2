@@ -13,10 +13,8 @@ class SettingsSecurityProvider with ChangeNotifier {
     InactivityService? inactivityService,
     PinRecoveryService? recoveryService,
   }) : _pinProvider = pinProvider,
-       _userId = userId,
        _biometricService = biometricService ?? BiometricService(),
-       _inactivityService = inactivityService ?? InactivityService(),
-       _recoveryService = recoveryService ?? PinRecoveryService() {
+       _inactivityService = inactivityService ?? InactivityService() {
     _pinEnabled = _pinProvider.isPinEnabled;
     _biometricEnabled = _pinProvider.isBiometricEnabled;
     _biometricAvailable = _biometricService.cachedAvailable ?? false;
@@ -26,10 +24,8 @@ class SettingsSecurityProvider with ChangeNotifier {
   }
 
   final PinProvider _pinProvider;
-  final String? _userId;
   final BiometricService _biometricService;
   final InactivityService _inactivityService;
-  final PinRecoveryService _recoveryService;
 
   bool _biometricAvailable = false;
   bool _biometricEnabled = false;
