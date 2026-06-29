@@ -18,68 +18,47 @@ class MetadataSelectorBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Row(
-          children: [
-            // Botão Pessoas
-            Expanded(
-              child: _buildBarButton(
-                context,
-                icon: Icons.people_alt_outlined,
-                tooltip: loc.pessoasLabel,
-                color: const Color(0xFFFFE0D3), // Pêssego suave
-                textColor: const Color(0xFFC85A32),
-                onTap: onPessoasPressed,
-              ),
-            ),
-            // Divisor
-            Container(
-              width: 1,
-              height: 48,
-              color: theme.colorScheme.outlineVariant,
-            ),
-            // Botão Local
-            Expanded(
-              child: _buildBarButton(
-                context,
-                icon: Icons.location_on_outlined,
-                tooltip: loc.localLabel,
-                color: const Color(0xFFDCE6FF), // Azul suave
-                textColor: const Color(0xFF4A69B8),
-                onTap: onLocalPressed,
-              ),
-            ),
-            // Divisor
-            Container(
-              width: 1,
-              height: 48,
-              color: theme.colorScheme.outlineVariant,
-            ),
-            // Botão Tags
-            Expanded(
-              child: _buildBarButton(
-                context,
-                icon: Icons.tag_outlined,
-                tooltip: loc.tagsLabel,
-                color: const Color(0xFFF0D6F5), // Lilás suave
-                textColor: const Color(0xFF904F9F),
-                onTap: onTagsPressed,
-              ),
-            ),
-          ],
+    return Row(
+      children: [
+        Expanded(
+          child: _buildChip(
+            context,
+            icon: Icons.people_alt_outlined,
+            tooltip: loc.pessoasLabel,
+            color: isDark ? const Color(0xFFC85A32).withValues(alpha: 0.2) : const Color(0xFFFFE0D3),
+            textColor: isDark ? const Color(0xFFFFE0D3) : const Color(0xFFC85A32),
+            onTap: onPessoasPressed,
+          ),
         ),
-      ),
+        const SizedBox(width: 4),
+        Expanded(
+          child: _buildChip(
+            context,
+            icon: Icons.location_on_outlined,
+            tooltip: loc.localLabel,
+            color: isDark ? const Color(0xFF4A69B8).withValues(alpha: 0.2) : const Color(0xFFDCE6FF),
+            textColor: isDark ? const Color(0xFFDCE6FF) : const Color(0xFF4A69B8),
+            onTap: onLocalPressed,
+          ),
+        ),
+        const SizedBox(width: 4),
+        Expanded(
+          child: _buildChip(
+            context,
+            icon: Icons.tag_outlined,
+            tooltip: loc.tagsLabel,
+            color: isDark ? const Color(0xFF904F9F).withValues(alpha: 0.2) : const Color(0xFFF0D6F5),
+            textColor: isDark ? const Color(0xFFF0D6F5) : const Color(0xFF904F9F),
+            onTap: onTagsPressed,
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildBarButton(
+  Widget _buildChip(
     BuildContext context, {
     required IconData icon,
     required String tooltip,
@@ -90,23 +69,21 @@ class MetadataSelectorBar extends StatelessWidget {
     return Tooltip(
       message: tooltip,
       child: Material(
-        color: Colors.transparent,
+        color: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: InkWell(
           onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Center(
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  icon,
-                  size: 22,
-                  color: textColor,
-                ),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Icon(
+                icon,
+                size: 20,
+                color: textColor,
               ),
             ),
           ),

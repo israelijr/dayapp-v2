@@ -25,6 +25,8 @@ class CustomTextField extends StatelessWidget {
   final String? suffixText;
   final String? helperText;
   final TextStyle? helperStyle;
+  final bool showBorder;
+  final bool filled;
 
   const CustomTextField({
     required this.label,
@@ -50,6 +52,8 @@ class CustomTextField extends StatelessWidget {
     this.suffixText,
     this.helperText,
     this.helperStyle,
+    this.showBorder = true,
+    this.filled = true,
   });
 
   @override
@@ -89,23 +93,23 @@ class CustomTextField extends StatelessWidget {
           prefixIcon: prefixIcon,
           suffixText: suffixText,
           suffixIcon: suffixIcon,
-          filled: true,
+          filled: filled,
           fillColor: isDark
               ? colorScheme.surfaceContainerHighest
               : Colors.white,
           contentPadding: contentPadding,
-          border: OutlineInputBorder(
+          border: showBorder ? OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: colorScheme.outlineVariant),
-          ),
-          enabledBorder: OutlineInputBorder(
+          ) : InputBorder.none,
+          enabledBorder: showBorder ? OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: colorScheme.outlineVariant),
-          ),
-          focusedBorder: OutlineInputBorder(
+          ) : InputBorder.none,
+          focusedBorder: showBorder ? OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: colorScheme.primary, width: 2),
-          ),
+          ) : InputBorder.none,
         ),
       ),
     );

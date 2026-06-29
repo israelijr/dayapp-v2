@@ -271,7 +271,14 @@ class _PessoasInputWidgetState extends State<PessoasInputWidget> {
               tooltip: loc.addPessoa,
               onPressed: () => _addPessoaFromText(_textController.text),
             ),
-            border: const OutlineInputBorder(),
+            filled: true,
+            fillColor: Theme.of(context).brightness == Brightness.dark
+                ? Theme.of(context).colorScheme.surfaceContainerHighest
+                : Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
           ),
           onChanged: _onTextChanged,
           onSubmitted: _addPessoaFromText,

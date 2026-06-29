@@ -19,69 +19,36 @@ class MoodEnergySelectorBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
-    final moodEmojis = ['😞', '🙁', '😐', '🙂', '😄'];
-    final energyEmojis = ['🔋', '🔋🔋', '🔋🔋🔋'];
-
-    final selectedMoodEmoji = moodEmojis[(selectedMood - 1).clamp(0, 4)];
-    final selectedEnergyEmoji = energyEmojis[(selectedEnergy - 1).clamp(0, 2)];
-
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(8),
-        //border: Border.all(
-          //color: theme.colorScheme.outlineVariant,
-         //width: 1,
-    //),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Row(
-          children: [
-            // Botão Humor
-            Expanded(
-              child: _buildBarButton(
-                context,
-                icon: Icons.face_outlined,
-                tooltip: loc.moodLabel,
-                color: const Color(0xFFFFF9C4), // Amarelo suave
-                textColor: const Color(0xFFFBC02D),
-                onTap: onMoodPressed,
-                trailing: Text(
-                  selectedMoodEmoji,
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
-            // Divisor
-            Container(
-              width: 1,
-              height: 44,
-              color: theme.colorScheme.outlineVariant,
-            ),
-            // Botão Energia
-            Expanded(
-              child: _buildBarButton(
-                context,
-                icon: Icons.bolt_outlined,
-                tooltip: loc.energyLabel,
-                color: const Color(0xFFE8F5E9), // Verde suave
-                textColor: const Color(0xFF2E7D32),
-                onTap: onEnergyPressed,
-                trailing: Text(
-                  selectedEnergyEmoji,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ],
+    return Row(
+      children: [
+        Expanded(
+          child: _buildChip(
+            context,
+            icon: Icons.face_outlined,
+            tooltip: loc.moodLabel,
+            color: isDark ? const Color(0xFFFBC02D).withValues(alpha: 0.2) : const Color(0xFFFFF9C4),
+            textColor: isDark ? const Color(0xFFFFF9C4) : const Color(0xFFFBC02D),
+            onTap: onMoodPressed,
+          ),
         ),
-      ),
+        const SizedBox(width: 4),
+        Expanded(
+          child: _buildChip(
+            context,
+            icon: Icons.bolt_outlined,
+            tooltip: loc.energyLabel,
+            color: isDark ? const Color(0xFF2E7D32).withValues(alpha: 0.2) : const Color(0xFFE8F5E9),
+            textColor: isDark ? const Color(0xFFE8F5E9) : const Color(0xFF2E7D32),
+            onTap: onEnergyPressed,
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildBarButton(
+  Widget _buildChip(
     BuildContext context, {
     required IconData icon,
     required String tooltip,
@@ -93,28 +60,32 @@ class MoodEnergySelectorBar extends StatelessWidget {
     return Tooltip(
       message: tooltip,
       child: Material(
-        color: Colors.transparent,
+        color: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: InkWell(
           onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
                     icon,
                     size: 20,
                     color: textColor,
                   ),
-                ),
-                ?trailing,
-              ],
+                  if (trailing != null) ...[
+                    const SizedBox(width: 4),
+                    trailing,
+                  ],
+                ],
+              ),
             ),
           ),
         ),

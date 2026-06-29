@@ -15,6 +15,7 @@ class ExpandableRichTextEditor extends StatefulWidget {
   final int minLines;
   final int maxLines;
   final VoidCallback? onChanged;
+  final bool showBorder;
 
   const ExpandableRichTextEditor({
     required this.controller,
@@ -24,6 +25,7 @@ class ExpandableRichTextEditor extends StatefulWidget {
     this.minLines = 8,
     this.maxLines = 15,
     this.onChanged,
+    this.showBorder = true,
     super.key,
   });
 
@@ -134,6 +136,7 @@ class _ExpandableRichTextEditorState extends State<ExpandableRichTextEditor> {
           maxLines: widget.maxLines,
           showToolbar: true,
           toolbarAtBottom: true, // Força a barra de ferramentas a ficar embaixo para evitar a sobreposição
+          showBorder: widget.showBorder,
           onChanged: widget.onChanged,
         ),
       ],

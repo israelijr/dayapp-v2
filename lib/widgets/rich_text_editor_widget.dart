@@ -39,6 +39,9 @@ class RichTextEditorWidget extends StatefulWidget {
   /// Se true, a barra de ferramentas fica embaixo do editor
   final bool toolbarAtBottom;
 
+  /// Se true, exibe a borda em torno do editor e da toolbar
+  final bool showBorder;
+
   const RichTextEditorWidget({
     required this.controller,
     super.key,
@@ -51,6 +54,7 @@ class RichTextEditorWidget extends StatefulWidget {
     this.textStyle,
     this.expand = false,
     this.toolbarAtBottom = true,
+    this.showBorder = true,
   });
 
   @override
@@ -163,7 +167,7 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
             ),
       decoration: BoxDecoration(
         color: isDark ? theme.colorScheme.surface : Colors.white,
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        border: widget.showBorder ? Border.all(color: theme.colorScheme.outlineVariant) : null,
         borderRadius: widget.showToolbar && !widget.readOnly
             ? (widget.toolbarAtBottom
                 ? const BorderRadius.only(
@@ -197,7 +201,7 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
         ? Container(
             decoration: BoxDecoration(
               color: isDark ? theme.colorScheme.surface : Colors.white,
-              border: Border.all(color: theme.colorScheme.outlineVariant),
+              border: widget.showBorder ? Border.all(color: theme.colorScheme.outlineVariant) : null,
               borderRadius: widget.toolbarAtBottom
                   ? const BorderRadius.only(
                       bottomLeft: Radius.circular(8),
@@ -210,7 +214,22 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
             ),
             child: QuillSimpleToolbar(
               controller: widget.controller,
-              config: const QuillSimpleToolbarConfig(
+              config: QuillSimpleToolbarConfig(
+                buttonOptions: QuillSimpleToolbarButtonOptions(
+                  base: QuillToolbarBaseButtonOptions(
+                    iconTheme: QuillIconTheme(
+                      iconButtonUnselectedData: IconButtonData(
+                        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                      ),
+                      iconButtonSelectedData: IconButtonData(
+                        color: theme.colorScheme.primary,
+                        style: IconButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 multiRowsDisplay: false,
                 showFontFamily: false,
                 showFontSize: false,

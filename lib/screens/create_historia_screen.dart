@@ -645,22 +645,45 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                       ),
                       const SizedBox(height: 16),
                       // Title
-                      CustomTextField(
-                        controller: titleController,
-                        label: '* ${loc.storyTitleLabel}',
-                        hintText: loc.storyTitleHint,
-                        maxLength: 60,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 20,
-                          height: 1.4,
-                        ),
-                        inputFormatters: [
-                          SentenceCapitalizationTextInputFormatter(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  '* ${loc.storyTitleLabel}',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: labelColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            controller: titleController,
+                            label: '',
+                            hintText: loc.storyTitleHint,
+                            maxLength: 60,
+                            showBorder: false,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              height: 1.5,
+                              color: theme.colorScheme.onSurface,
+                            ),
+                            inputFormatters: [
+                              SentenceCapitalizationTextInputFormatter(),
+                            ],
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                          ),
                         ],
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
                       ),
                       const SizedBox(height: 16),
 
@@ -669,35 +692,70 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                         label: '* ${loc.descriptionLabel}',
                         hintText: loc.descriptionHint,
                         expandTooltip: loc.expandTooltip,
+                        showBorder: false,
                         onChanged: () {
                           _checkForChanges();
                         },
                       ),
                       const SizedBox(height: 16),
 
-                      // Barra de Metadados Unificada
-                      MetadataSelectorBar(
-                        onPessoasPressed: () {
-                          setState(() {
-                            _showPessoasInput = !_showPessoasInput;
-                            _showLocalInput = false;
-                            _showTagsInput = false;
-                          });
-                        },
-                        onLocalPressed: () {
-                          setState(() {
-                            _showLocalInput = !_showLocalInput;
-                            _showPessoasInput = false;
-                            _showTagsInput = false;
-                          });
-                        },
-                        onTagsPressed: () {
-                          setState(() {
-                            _showTagsInput = !_showTagsInput;
-                            _showPessoasInput = false;
-                            _showLocalInput = false;
-                          });
-                        },
+                      // Barra Única de Comandos (Metadados, Humor e Energia)
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: MetadataSelectorBar(
+                              onPessoasPressed: () {
+                                setState(() {
+                                  _showPessoasInput = !_showPessoasInput;
+                                  _showLocalInput = false;
+                                  _showTagsInput = false;
+                                  _showMoodInput = false;
+                                  _showEnergyInput = false;
+                                });
+                              },
+                              onLocalPressed: () {
+                                setState(() {
+                                  _showLocalInput = !_showLocalInput;
+                                  _showPessoasInput = false;
+                                  _showTagsInput = false;
+                                  _showMoodInput = false;
+                                  _showEnergyInput = false;
+                                });
+                              },
+                              onTagsPressed: () {
+                                setState(() {
+                                  _showTagsInput = !_showTagsInput;
+                                  _showPessoasInput = false;
+                                  _showLocalInput = false;
+                                  _showMoodInput = false;
+                                  _showEnergyInput = false;
+                                });
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: MoodEnergySelectorBar(
+                              selectedMood: _selectedMood,
+                              selectedEnergy: _selectedEnergy,
+                              onMoodPressed: () => setState(() {
+                                _showMoodInput = !_showMoodInput;
+                                _showEnergyInput = false;
+                                _showPessoasInput = false;
+                                _showLocalInput = false;
+                                _showTagsInput = false;
+                              }),
+                              onEnergyPressed: () => setState(() {
+                                _showEnergyInput = !_showEnergyInput;
+                                _showMoodInput = false;
+                                _showPessoasInput = false;
+                                _showLocalInput = false;
+                                _showTagsInput = false;
+                              }),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 12),
 
@@ -759,28 +817,12 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                         const SizedBox(height: 16),
                       ],
 
-
-
-                      // Barra de Humor e Energia
-                      MoodEnergySelectorBar(
-                        selectedMood: _selectedMood,
-                        selectedEnergy: _selectedEnergy,
-                        onMoodPressed: () => setState(() {
-                          _showMoodInput = !_showMoodInput;
-                          _showEnergyInput = false; // Fecha o outro
-                        }),
-                        onEnergyPressed: () => setState(() {
-                          _showEnergyInput = !_showEnergyInput;
-                          _showMoodInput = false; // Fecha o outro
-                        }),
-                      ),
-                      const SizedBox(height: 8),
-
                       if (_showMoodInput) ...[
                         MoodInputWidget(
                           value: _selectedMood,
                           onChanged: (v) => setState(() {
                             _selectedMood = v;
+                            _showMoodInput = false;
                             _checkForChanges();
                           }),
                         ),
@@ -792,6 +834,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                           value: _selectedEnergy,
                           onChanged: (v) => setState(() {
                             _selectedEnergy = v;
+                            _showEnergyInput = false;
                             _checkForChanges();
                           }),
                         ),
