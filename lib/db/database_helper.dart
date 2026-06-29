@@ -28,8 +28,9 @@ class DatabaseHelper {
       final path = p.join(dbPath, 'dayapp.db');
       return await openDatabase(
         path,
-        version: 1,
+        version: 2,
         onCreate: _onCreate,
+        onUpgrade: _onUpgrade,
       );
     } catch (e) {
       rethrow;
@@ -69,6 +70,7 @@ class DatabaseHelper {
           backed_up INTEGER DEFAULT 0,
           humor INTEGER DEFAULT 3,
           energia INTEGER DEFAULT 2,
+          local TEXT,
           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );
       ''');
@@ -160,6 +162,38 @@ class DatabaseHelper {
         'CREATE INDEX idx_historia_tags_tag ON historia_tags(tag_id);',
       );
 
+      // Tabela de pessoas (v2)
+      await db.execute('''
+        CREATE TABLE pessoas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT NOT NULL,
+          nome TEXT NOT NULL,
+          slug TEXT NOT NULL,
+          UNIQUE(user_id, slug),
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+      ''');
+      // Tabela de relação N×N entre histórias e pessoas (v2)
+      await db.execute('''
+        CREATE TABLE historia_pessoas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          historia_id INTEGER NOT NULL,
+          pessoa_id INTEGER NOT NULL,
+          UNIQUE(historia_id, pessoa_id),
+          FOREIGN KEY (historia_id) REFERENCES historia(id) ON DELETE CASCADE,
+          FOREIGN KEY (pessoa_id) REFERENCES pessoas(id) ON DELETE CASCADE
+        );
+      ''');
+      await db.execute(
+        'CREATE INDEX idx_pessoas_user_slug ON pessoas(user_id, slug);',
+      );
+      await db.execute(
+        'CREATE INDEX idx_historia_pessoas_historia ON historia_pessoas(historia_id);',
+      );
+      await db.execute(
+        'CREATE INDEX idx_historia_pessoas_pessoa ON historia_pessoas(pessoa_id);',
+      );
+
       // Tabelas de capítulos (v17)
       await db.execute('''
         CREATE TABLE capitulos (
@@ -235,6 +269,52 @@ class DatabaseHelper {
       await db.execute(
         'CREATE UNIQUE INDEX idx_insight_history_user_type ON insight_history(user_id, type);',
       );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    try {
+      if (oldVersion < 2) {
+        // Adiciona a coluna local na tabela historia
+        await db.execute('ALTER TABLE historia ADD COLUMN local TEXT;');
+
+        // Cria a tabela de pessoas
+        await db.execute('''
+          CREATE TABLE pessoas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id TEXT NOT NULL,
+            nome TEXT NOT NULL,
+            slug TEXT NOT NULL,
+            UNIQUE(user_id, slug),
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+          );
+        ''');
+
+        // Cria a tabela de relação N×N entre histórias e pessoas
+        await db.execute('''
+          CREATE TABLE historia_pessoas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            historia_id INTEGER NOT NULL,
+            pessoa_id INTEGER NOT NULL,
+            UNIQUE(historia_id, pessoa_id),
+            FOREIGN KEY (historia_id) REFERENCES historia(id) ON DELETE CASCADE,
+            FOREIGN KEY (pessoa_id) REFERENCES pessoas(id) ON DELETE CASCADE
+          );
+        ''');
+
+        // Cria os índices correspondentes
+        await db.execute(
+          'CREATE INDEX idx_pessoas_user_slug ON pessoas(user_id, slug);',
+        );
+        await db.execute(
+          'CREATE INDEX idx_historia_pessoas_historia ON historia_pessoas(historia_id);',
+        );
+        await db.execute(
+          'CREATE INDEX idx_historia_pessoas_pessoa ON historia_pessoas(pessoa_id);',
+        );
+      }
     } catch (e) {
       rethrow;
     }

@@ -126,6 +126,7 @@
   },
   "statistics": "Statistics",
   "noStoriesYetTitle": "No stories yet",
+  "trashEmptyStateMessage": "Your trash is empty",
   "noStoriesYetSubtitle": "Start recording your days to see statistics",
   "trends": "Trends",
   "last30Days": "Last 30 days",
@@ -416,6 +417,10 @@
   "filterText": "Text",
   "filterTag": "Tag",
   "filterEmoticon": "Emoticon",
+  "filterDate": "Period",
+  "selectDateRange": "Select Period",
+  "startDate": "Start Date",
+  "endDate": "End Date",
   "searchHintTag": "Type a tag...",
   "searchHintText": "Search in title or description...",
   "clearSearchTooltip": "Clear search",
@@ -572,7 +577,7 @@
   "helpRestoreDesc": "Use \"Restore from File\" to recover data from a previous backup.",
   "helpPinSecurityTitle": "Security PIN",
   "helpPinSecurityDesc": "Set a 4- to 8-digit PIN to protect app access.",
-  "helpBiometricsDesc": "Use fingerprint or facial recognition to unlock the app quickly, if available on your device.",
+  "helpBiometricsDesc": "Use fingerprint to unlock the app quickly, if available on your device.",
   "helpPasswordUnlockTitle": "Password Unlock",
   "helpPasswordUnlockDesc": "In addition to PIN and biometrics, you can unlock the app using your account password. Useful if you forget the PIN or biometrics fail.",
   "helpBackgroundLockDesc": "When the app is minimized or you switch to another app, it locks automatically after the configured time. You can set the time freely in settings (seconds, minutes or hours).",
@@ -855,7 +860,7 @@
   },
   "biometricsNotAvailable": "Not available on this device",
   "biometricsDisabled": "Biometrics disabled",
-  "biometricConfiguredInfo": "Biometrics is configured. You can log in using your fingerprint or face recognition.",
+  "biometricConfiguredInfo": "Biometrics is configured. You can log in using your fingerprint.",
   "biometricAuthFailed": "Biometric authentication failed",
   "confirmIdentityToEnableBiometrics": "Confirm your identity to enable biometrics",
   "calendarTitle": "Calendar",
@@ -2739,5 +2744,102 @@
   "pwdCriteriaSpecial": "1 special character",
   "@pwdCriteriaSpecial": {
     "description": "Password criteria: 1 special character"
+  },
+  "invalidBackupFilenameTitle": "Invalid Filename",
+  "@invalidBackupFilenameTitle": {
+    "description": "Title of the dialog when the backup file name is invalid"
+  },
+  "invalidBackupFilenameMessage": "The selected file '{fileName}' is not a standard backup file.\n\nPlease choose a valid backup file.",
+  "@invalidBackupFilenameMessage": {
+    "description": "Message of the dialog when the backup file name is invalid",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreFailedTitle": "Restore Failed",
+  "@restoreFailedTitle": {
+    "description": "Title of the dialog when the backup restore operation fails"
+  },
+  "restoreFailedMessage": "The selected file is not a DayApp backup. Do you want to try again?",
+  "@restoreFailedMessage": {
+    "description": "Message of the dialog when the backup restore operation fails"
+  },
+  "backupFailedMessage": "An error occurred while creating the backup. Do you want to try again?",
+  "@backupFailedMessage": {
+    "description": "Message of the dialog when the backup creation operation fails"
+  },
+  "pessoasLabel": "People",
+  "@pessoasLabel": {
+    "description": "Rótulo do campo de pessoas na barra de metadados"
+  },
+  "localLabel": "Location",
+  "@localLabel": {
+    "description": "Rótulo do campo de local na barra de metadados"
+  },
+  "pessoasHint": "Type and press Enter or comma",
+  "@pessoasHint": {
+    "description": "Dica de preenchimento para adicionar pessoas"
+  },
+  "localHint": "Type location",
+  "@localHint": {
+    "description": "Dica de preenchimento para adicionar o local"
+  },
+  "addPessoa": "Add person",
+  "@addPessoa": {
+    "description": "Tooltip do botão de adicionar pessoa"
+  },
+  "pessoasSection": "People",
+  "@pessoasSection": {
+    "description": "Título da seção de pessoas vinculadas à história"
+  },
+  "localSection": "Location",
+  "@localSection": {
+    "description": "Título da seção de local vinculado à história"
+  },
+  "comQuemTitle": "Who were you with?",
+  "@comQuemTitle": {
+    "description": "Título do modal para adicionar pessoas"
+  },
+  "ondeTitle": "Where were you?",
+  "@ondeTitle": {
+    "description": "Título do modal para adicionar local"
+  },
+  "pessoasTooltip": "People",
+  "@pessoasTooltip": {
+    "description": "Tooltip para o botão de pessoas"
+  },
+  "localTooltip": "Location",
+  "@localTooltip": {
+    "description": "Tooltip para o botão de local"
+  },
+  "pessoaLongPressHint": "Press and hold to rename",
+  "@pessoaLongPressHint": {
+    "description": "Instrução para renomear nos chips de pessoa"
+  },
+  "renamePessoaTitle": "Rename person",
+  "@renamePessoaTitle": {
+    "description": "Título do diálogo de renomear pessoa"
+  },
+  "renamePessoaWarning": "Renaming will affect all stories containing this person.",
+  "@renamePessoaWarning": {
+    "description": "Aviso mostrado ao renomear uma pessoa"
+  },
+  "pessoaNameLabel": "Person name",
+  "@pessoaNameLabel": {
+    "description": "Rótulo do campo de texto para o nome da pessoa"
+  },
+  "moodLabel": "Mood",
+  "@moodLabel": {
+    "description": "Label for the mood column"
+  },
+  "energyLabel": "Energy",
+  "@energyLabel": {
+    "description": "Label for the energy column"
+  },
+  "backupFailedTitle": "Backup Failed",
+  "@backupFailedTitle": {
+    "description": "Title of the dialog when the backup creation operation fails"
   }
 }

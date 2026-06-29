@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/pin_provider.dart';
-import '../theme/m3_expressive_theme.dart';
 
 /// Widget de seleção de imagem que oferece opção de tirar foto ou buscar na galeria.
 /// Suporta seleção múltipla de imagens da galeria.
@@ -47,13 +46,16 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Dialog(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.photo_camera, size: 64, color: AppColors.primaryVariant),
+            Icon(Icons.photo_camera, size: 64, color: colorScheme.primary),
             const SizedBox(height: 16),
             Text(
               widget.allowMultiple
@@ -62,7 +64,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.labelColor(context),
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 24),
@@ -83,7 +85,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.labelColor(context),
+                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
               const SizedBox(height: 24),
@@ -100,8 +102,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                       : AppLocalizations.of(context)!.imagePickerGallerySingle,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryVariant,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -115,7 +117,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 icon: const Icon(Icons.camera_alt),
                 label: Text(AppLocalizations.of(context)!.imagePickerTakePhoto),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.primaryVariant,
+                  foregroundColor: colorScheme.primary,
+                  side: BorderSide(color: colorScheme.primary),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -127,6 +130,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             const SizedBox(height: 16),
             TextButton(
               onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
+              style: TextButton.styleFrom(
+                foregroundColor: colorScheme.primary,
+              ),
               child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ],

@@ -20,6 +20,7 @@ class Historia {
   final int humor;
   // 1=Baixa, 2=Normal (padrão), 3=Alta
   final int energia;
+  final String? local;
 
   Historia({
     required this.userId,
@@ -41,6 +42,7 @@ class Historia {
     this.backedUp = false,
     this.humor = 3,
     this.energia = 2,
+    this.local,
   });
 
   factory Historia.fromMap(Map<String, dynamic> map) {
@@ -76,6 +78,8 @@ class Historia {
       // Compatibilidade: histórias antigas sem humor/energia usam os valores padrão
       humor: map['humor'] as int? ?? 3,
       energia: map['energia'] as int? ?? 2,
+      // Compatibilidade: campo local pode ser nulo se não existir no banco
+      local: map.containsKey('local') ? map['local'] as String? : null,
     );
   }
 
@@ -100,6 +104,7 @@ class Historia {
       'backed_up': backedUp ? 1 : 0,
       'humor': humor,
       'energia': energia,
+      'local': local,
     };
   }
 }

@@ -1,5 +1,15 @@
 Always respond in Portuguese.
 Don't agree with me on everything. Analyze the project and propose better solutions.
+
 Sempre que a versão do app no 'pubspec.yaml' mudar, lembre-se de atualizar também a versão e o build correspondentes nos valores padrão da tela Sobre ('lib/screens/about_screen.dart').
+
 Sempre realize a localização (i18n) de todos os textos de interface (UI) e mensagens do usuário. Evite usar strings literais (hardcoded) nas telas e widgets; mapeie-as sempre nos arquivos de tradução ARB (em 'lib/l10n/') e utilize 'AppLocalizations' para acessá-las.
+
 Sempre trate o campo de descrição (tanto na história quanto no capítulo) antes de renderizá-lo em texto simples (plain text) na interface, utilizando `RichTextHelper.jsonToPlainText` ou `RichTextHelper.smartController` (no caso de RichTextViewerWidget), para evitar exibir o JSON bruto do Quill Delta (ex: [{"insert":"..."}]).
+
+Sempre siga a arquitetura de camadas estabelecida:
+- Banco de dados e queries SQL devem ser encapsulados apenas em 'repositories/'. Nunca use 'DatabaseHelper' ou queries cruas diretamente na UI.
+- Lógicas de negócio locais e estado reativo da tela devem ficar em 'providers/' utilizando ChangeNotifier.
+- Widgets nas telas ('screens/') devem se concentrar em renderização e utilizar 'Provider' (context.watch, context.select ou Consumer) para obter dados reativos. Use context.read apenas dentro de callbacks.
+
+Evite utilizar 'BuildContext' após operações assíncronas ('await') sem verificar se o widget ainda está montado ('if (!mounted) return;'). Em diálogos, prefira usar o contexto interno do builder para fechamento ou navegação.

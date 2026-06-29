@@ -126,6 +126,7 @@
   },
   "statistics": "Statistiques",
   "noStoriesYetTitle": "Pas encore d'histoires",
+  "trashEmptyStateMessage": "Votre corbeille est vide",
   "noStoriesYetSubtitle": "Commencez à enregistrer vos journées pour voir les statistiques",
   "trends": "Tendances",
   "last30Days": "30 derniers jours",
@@ -412,6 +413,10 @@
   "filterText": "Texte",
   "filterTag": "Étiquette",
   "filterEmoticon": "Émoticône",
+  "filterDate": "Période",
+  "selectDateRange": "Sélectionner une période",
+  "startDate": "Date de début",
+  "endDate": "Date de fin",
   "searchHintTag": "Tapez une étiquette...",
   "searchHintText": "Rechercher dans le titre ou la description...",
   "clearSearchTooltip": "Effacer la recherche",
@@ -568,7 +573,7 @@
   "helpRestoreDesc": "Utilisez \"Restaurer depuis un fichier\" pour récupérer les données d'une sauvegarde précédente.",
   "helpPinSecurityTitle": "PIN de sécurité",
   "helpPinSecurityDesc": "Définissez un PIN de 4 à 8 chiffres pour protéger l'accès à l'application.",
-  "helpBiometricsDesc": "Utilisez l'empreinte digitale ou la reconnaissance faciale pour déverrouiller rapidement l'application, si disponible sur votre appareil.",
+  "helpBiometricsDesc": "Utilisez l'empreinte digitale pour déverrouiller rapidement l'application, si disponible sur votre appareil.",
   "helpPasswordUnlockTitle": "Déverrouillage par mot de passe",
   "helpPasswordUnlockDesc": "En plus du PIN et de la biométrie, vous pouvez déverrouiller l'application en utilisant le mot de passe de votre compte. Utile si vous oubliez le PIN ou si la biométrie échoue.",
   "helpBackgroundLockDesc": "Lorsque l'application est minimisée ou que vous passez à une autre application, elle se verrouille automatiquement après le délai configuré. Vous pouvez définir le délai librement dans les paramètres (secondes, minutes ou heures).",
@@ -785,7 +790,7 @@
   },
   "biometricsNotAvailable": "Non disponible sur cet appareil",
   "biometricsDisabled": "Biométrie désactivée",
-  "biometricConfiguredInfo": "La biométrie est configurée. Vous pouvez vous connecter avec votre empreinte digitale ou la reconnaissance faciale.",
+  "biometricConfiguredInfo": "La biométrie est configurée. Vous pouvez vous connecter avec votre empreinte digitale.",
   "biometricAuthFailed": "Échec de l'authentification biométrique",
   "confirmIdentityToEnableBiometrics": "Confirmez votre identité pour activer la biométrie",
   "calendarTitle": "Calendrier",
@@ -2131,5 +2136,34 @@
   "chapterTitleDuplicateMessage": "Un chapitre avec ce titre existe déjà. Veuillez choisir un autre titre.",
   "@chapterTitleDuplicateMessage": {
     "description": "Message shown in error dialog when trying to use a chapter title that already exists"
+  },
+  "invalidBackupFilenameTitle": "Nom de fichier invalide",
+  "@invalidBackupFilenameTitle": {
+    "description": "Title of the dialog when the backup file name is invalid"
+  },
+  "invalidBackupFilenameMessage": "Le fichier sélectionné '{fileName}' n'est pas un fichier de sauvegarde standard.\n\nVeuillez choisir un fichier de sauvegarde valide.",
+  "@invalidBackupFilenameMessage": {
+    "description": "Message of the dialog when the backup file name is invalid",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreFailedTitle": "Échec de la restauration",
+  "@restoreFailedTitle": {
+    "description": "Title of the dialog when the backup restore operation fails"
+  },
+  "restoreFailedMessage": "Le fichier sélectionné n'est pas une sauvegarde de DayApp. Voulez-vous réessayer ?",
+  "@restoreFailedMessage": {
+    "description": "Message of the dialog when the backup restore operation fails"
+  },
+  "backupFailedTitle": "Échec de la sauvegarde",
+  "@backupFailedTitle": {
+    "description": "Title of the dialog when the backup creation operation fails"
+  },
+  "backupFailedMessage": "Une erreur est survenue lors de la création de la sauvegarde. Voulez-vous réessayer ?",
+  "@backupFailedMessage": {
+    "description": "Message of the dialog when the backup creation operation fails"
   }
 }

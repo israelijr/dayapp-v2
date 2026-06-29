@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../helpers/notification_helper.dart';
 import '../helpers/rich_text_helper.dart';
+import '../models/pessoa.dart';
 import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../providers/refresh_provider.dart';
@@ -23,7 +24,10 @@ import '../widgets/emoji_selection_modal.dart';
 import '../widgets/entry_toolbar.dart';
 import '../widgets/expandable_rich_text_editor.dart';
 import '../widgets/image_picker_widget.dart';
+import '../widgets/metadata_selector_bar.dart';
+import '../widgets/mood_energy_selector_bar.dart';
 import '../widgets/mood_energy_selectors.dart';
+import '../widgets/pessoas_input_widget.dart';
 import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
 
@@ -101,6 +105,17 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
 
   // Lista de tags selecionadas
   List<Tag> _selectedTags = [];
+  // Lista de pessoas selecionadas e local
+  List<Pessoa> _selectedPessoas = [];
+  final localController = TextEditingController();
+  
+  // Controle de visibilidade dos inputs correspondentes à barra unificada
+  bool _showPessoasInput = false;
+  bool _showLocalInput = false;
+  bool _showTagsInput = false;
+  bool _showMoodInput = false;
+  bool _showEnergyInput = false;
+
   final HistoriaRepository _historiaRepository = HistoriaRepository();
   // Controle de alterações não salvas
   bool _hasUnsavedChanges = false;
@@ -127,6 +142,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
     // Adiciona listeners para detectar mudanças
     titleController.addListener(_checkForChanges);
     richTextController.addListener(_checkForChanges);
+    localController.addListener(_checkForChanges);
   }
 
   void _checkForChanges() {
@@ -136,6 +152,8 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         titleController.text.isNotEmpty ||
         plainText.isNotEmpty ||
         _selectedTags.isNotEmpty ||
+        _selectedPessoas.isNotEmpty ||
+        localController.text.isNotEmpty ||
         fotos.isNotEmpty ||
         audios.isNotEmpty ||
         videos.isNotEmpty ||
@@ -158,8 +176,10 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
   void dispose() {
     titleController.removeListener(_checkForChanges);
     richTextController.removeListener(_checkForChanges);
+    localController.removeListener(_checkForChanges);
     titleController.dispose();
     richTextController.dispose();
+    localController.dispose();
     super.dispose();
   }
 
@@ -347,6 +367,8 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         humor: _selectedMood,
         energia: _selectedEnergy,
         tags: _selectedTags,
+        pessoas: _selectedPessoas,
+        local: localController.text.trim().isEmpty ? null : localController.text.trim(),
         fotos: fotos,
         audios: audios,
         videos: videos,
@@ -606,6 +628,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                           const Spacer(flex: 1),
                           if (selectedEmoticon != null)
                             Chip(
+                              side: BorderSide.none,
                               label: Text(
                                 selectedEmoticon!,
                                 style: const TextStyle(fontSize: 20),
@@ -652,64 +675,128 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Tags
-                      Builder(
-                        builder: (context) {
-                          final auth = Provider.of<AuthProvider>(
-                            context,
-                            listen: false,
-                          );
-                          return TagInputWidget(
-                            userId: auth.user?.id ?? '',
-                            initialTags: _selectedTags,
-                            onTagsChanged: (tags) {
-                              setState(() {
-                                _selectedTags = tags;
-                                _checkForChanges();
-                              });
-                            },
-                          );
+                      // Barra de Metadados Unificada
+                      MetadataSelectorBar(
+                        onPessoasPressed: () {
+                          setState(() {
+                            _showPessoasInput = !_showPessoasInput;
+                            _showLocalInput = false;
+                            _showTagsInput = false;
+                          });
+                        },
+                        onLocalPressed: () {
+                          setState(() {
+                            _showLocalInput = !_showLocalInput;
+                            _showPessoasInput = false;
+                            _showTagsInput = false;
+                          });
+                        },
+                        onTagsPressed: () {
+                          setState(() {
+                            _showTagsInput = !_showTagsInput;
+                            _showPessoasInput = false;
+                            _showLocalInput = false;
+                          });
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
 
-                      // Humor (como você se sentiu)
-                      Text(
-                        loc.moodQuestion,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: labelColor,
+                      // Input painel para Pessoas
+                      if (_showPessoasInput) ...[
+                        Builder(
+                          builder: (context) {
+                            final auth = Provider.of<AuthProvider>(
+                              context,
+                              listen: false,
+                            );
+                            return PessoasInputWidget(
+                              userId: auth.user?.id ?? '',
+                              initialPessoas: _selectedPessoas,
+                              onPessoasChanged: (pessoas) {
+                                setState(() {
+                                  _selectedPessoas = pessoas;
+                                  _checkForChanges();
+                                });
+                              },
+                            );
+                          },
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      MoodSelector(
-                        value: _selectedMood,
-                        onChanged: (v) => setState(() {
-                          _selectedMood = v;
-                          _checkForChanges();
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Input painel para Local
+                      if (_showLocalInput) ...[
+                        CustomTextField(
+                          controller: localController,
+                          label: loc.localLabel,
+                          hintText: loc.localHint,
+                          prefixIcon: const Icon(Icons.location_on_outlined),
+                          onChanged: (_) => _checkForChanges(),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Input painel para Tags
+                      if (_showTagsInput) ...[
+                        Builder(
+                          builder: (context) {
+                            final auth = Provider.of<AuthProvider>(
+                              context,
+                              listen: false,
+                            );
+                            return TagInputWidget(
+                              userId: auth.user?.id ?? '',
+                              initialTags: _selectedTags,
+                              onTagsChanged: (tags) {
+                                setState(() {
+                                  _selectedTags = tags;
+                                  _checkForChanges();
+                                });
+                              },
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+
+
+                      // Barra de Humor e Energia
+                      MoodEnergySelectorBar(
+                        selectedMood: _selectedMood,
+                        selectedEnergy: _selectedEnergy,
+                        onMoodPressed: () => setState(() {
+                          _showMoodInput = !_showMoodInput;
+                          _showEnergyInput = false; // Fecha o outro
+                        }),
+                        onEnergyPressed: () => setState(() {
+                          _showEnergyInput = !_showEnergyInput;
+                          _showMoodInput = false; // Fecha o outro
                         }),
                       ),
-
-                      // Energia
-                      const SizedBox(height: 16),
-                      Text(
-                        loc.energyQuestion,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: labelColor,
-                        ),
-                      ),
                       const SizedBox(height: 8),
-                      EnergySelector(
-                        value: _selectedEnergy,
-                        onChanged: (v) => setState(() {
-                          _selectedEnergy = v;
-                          _checkForChanges();
-                        }),
-                      ),
-                      const SizedBox(height: 24),
+
+                      if (_showMoodInput) ...[
+                        MoodInputWidget(
+                          value: _selectedMood,
+                          onChanged: (v) => setState(() {
+                            _selectedMood = v;
+                            _checkForChanges();
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+
+                      if (_showEnergyInput) ...[
+                        EnergyInputWidget(
+                          value: _selectedEnergy,
+                          onChanged: (v) => setState(() {
+                            _selectedEnergy = v;
+                            _checkForChanges();
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
 
                       // Media Previews
                       if (fotos.isNotEmpty) ...[
@@ -865,4 +952,6 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
       ),
     );
   }
+
+
 }

@@ -126,6 +126,7 @@
   },
   "statistics": "Statistiche",
   "noStoriesYetTitle": "Ancora nessuna storia",
+  "trashEmptyStateMessage": "Il tuo cestino è vuoto",
   "noStoriesYetSubtitle": "Inizia a registrare le tue giornate per vedere le statistiche",
   "trends": "Tendenze",
   "last30Days": "Ultimi 30 giorni",
@@ -412,6 +413,10 @@
   "filterText": "Testo",
   "filterTag": "Tag",
   "filterEmoticon": "Emoticon",
+  "filterDate": "Periodo",
+  "selectDateRange": "Seleziona periodo",
+  "startDate": "Data di inizio",
+  "endDate": "Data di fine",
   "searchHintTag": "Digita un tag...",
   "searchHintText": "Cerca nel titolo o nella descrizione...",
   "clearSearchTooltip": "Cancella ricerca",
@@ -568,7 +573,7 @@
   "helpRestoreDesc": "Usa \"Ripristina da file\" per recuperare i dati da un backup precedente.",
   "helpPinSecurityTitle": "PIN di sicurezza",
   "helpPinSecurityDesc": "Imposta un PIN da 4 a 8 cifre per proteggere l'accesso all'app.",
-  "helpBiometricsDesc": "Usa l'impronta digitale o il riconoscimento facciale per sbloccare rapidamente l'app, se disponibile sul tuo dispositivo.",
+  "helpBiometricsDesc": "Usa l'impronta digitale per sbloccare rapidamente l'app, se disponibile sul tuo dispositivo.",
   "helpPasswordUnlockTitle": "Sblocco con password",
   "helpPasswordUnlockDesc": "Oltre al PIN e alla biometria, puoi sbloccare l'app usando la password del tuo account. Utile se dimentichi il PIN o se la biometria fallisce.",
   "helpBackgroundLockDesc": "Quando l'app viene minimizzata o passi a un'altra app, si blocca automaticamente dopo il tempo configurato. Puoi impostare il tempo liberamente nelle impostazioni (secondi, minuti o ore).",
@@ -785,7 +790,7 @@
   },
   "biometricsNotAvailable": "Non disponibile su questo dispositivo",
   "biometricsDisabled": "Biometria disabilitata",
-  "biometricConfiguredInfo": "La biometria è configurata. Puoi accedere con l'impronta digitale o il riconoscimento facciale.",
+  "biometricConfiguredInfo": "La biometria è configurata. Puoi accedere con l'impronta digitale.",
   "biometricAuthFailed": "Autenticazione biometrica fallita",
   "confirmIdentityToEnableBiometrics": "Conferma la tua identità per abilitare la biometria",
   "calendarTitle": "Calendario",
@@ -2131,5 +2136,34 @@
   "chapterTitleDuplicateMessage": "Esiste già un capitolo con questo titolo. Scegli un altro titolo.",
   "@chapterTitleDuplicateMessage": {
     "description": "Message shown in error dialog when trying to use a chapter title that already exists"
+  },
+  "invalidBackupFilenameTitle": "Nome file non valido",
+  "@invalidBackupFilenameTitle": {
+    "description": "Title of the dialog when the backup file name is invalid"
+  },
+  "invalidBackupFilenameMessage": "Il file selezionato '{fileName}' non è un file di backup standard.\n\nScegli un file di backup valido.",
+  "@invalidBackupFilenameMessage": {
+    "description": "Message of the dialog when the backup file name is invalid",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreFailedTitle": "Ripristino non riuscito",
+  "@restoreFailedTitle": {
+    "description": "Title of the dialog when the backup restore operation fails"
+  },
+  "restoreFailedMessage": "Il file selezionato non è un backup di DayApp. Vuoi riprovare?",
+  "@restoreFailedMessage": {
+    "description": "Message of the dialog when the backup restore operation fails"
+  },
+  "backupFailedTitle": "Backup non riuscito",
+  "@backupFailedTitle": {
+    "description": "Title of the dialog when the backup creation operation fails"
+  },
+  "backupFailedMessage": "Si è verificato un errore durante la creazione del backup. Vuoi riprovare?",
+  "@backupFailedMessage": {
+    "description": "Message of the dialog when the backup creation operation fails"
   }
 }

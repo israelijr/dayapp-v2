@@ -62,13 +62,16 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
   }
 
   Widget _buildInitialDialog() {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Dialog(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.audiotrack, size: 64, color: AppColors.primaryVariant),
+            Icon(Icons.audiotrack, size: 64, color: colorScheme.primary),
             const SizedBox(height: 16),
             Text(
               widget.allowMultiple
@@ -77,7 +80,7 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.labelColor(context),
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 24),
@@ -98,7 +101,7 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.labelColor(context),
+                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
               const SizedBox(height: 24),
@@ -117,8 +120,8 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
                         )!.audioPickerSelectFilesSingle,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryVariant,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -136,7 +139,8 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
                 icon: const Icon(Icons.mic),
                 label: Text(AppLocalizations.of(context)!.audioPickerRecord),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.primaryVariant,
+                  foregroundColor: colorScheme.primary,
+                  side: BorderSide(color: colorScheme.primary),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -148,6 +152,9 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
             const SizedBox(height: 16),
             TextButton(
               onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
+              style: TextButton.styleFrom(
+                foregroundColor: colorScheme.primary,
+              ),
               child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ],
@@ -157,6 +164,9 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
   }
 
   Widget _buildRecordingInterface() {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Dialog(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
@@ -167,8 +177,8 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
               _isRecording ? Icons.mic : Icons.mic_none,
               size: 64,
               color: _isRecording
-                  ? Theme.of(context).colorScheme.error
-                  : AppColors.primaryVariant,
+                  ? colorScheme.error
+                  : colorScheme.primary,
             ),
             const SizedBox(height: 16),
             Text(
@@ -180,7 +190,7 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.labelColor(context),
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 16),
@@ -189,7 +199,7 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
               style: TextStyle(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryVariant,
+                color: colorScheme.primary,
               ),
             ),
             const SizedBox(height: 24),
@@ -199,8 +209,8 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
                 icon: const Icon(Icons.fiber_manual_record),
                 label: Text(AppLocalizations.of(context)!.startRecording),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                  foregroundColor: Theme.of(context).colorScheme.onError,
+                  backgroundColor: colorScheme.error,
+                  foregroundColor: colorScheme.onError,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 12,
@@ -227,7 +237,7 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
                   IconButton(
                     onPressed: _stopRecording,
                     icon: const Icon(Icons.stop_circle, size: 48),
-                    color: Theme.of(context).colorScheme.error,
+                    color: colorScheme.error,
                   ),
                 ],
               ),
@@ -241,6 +251,9 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
                 if (!mounted) return;
                 Navigator.of(context).pop();
               },
+              style: TextButton.styleFrom(
+                foregroundColor: colorScheme.primary,
+              ),
               child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ],

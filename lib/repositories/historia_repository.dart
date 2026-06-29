@@ -6,8 +6,10 @@ import '../db/database_helper.dart';
 import '../db/historia_audio_helper.dart';
 import '../db/historia_foto_helper.dart';
 import '../db/historia_video_helper.dart';
+import '../db/pessoa_helper.dart';
 import '../db/tag_helper.dart';
 import '../models/historia.dart';
+import '../models/pessoa.dart';
 import '../models/tag.dart';
 
 class HistoriaRepository {
@@ -161,6 +163,24 @@ class HistoriaRepository {
     return results.map((map) => Historia.fromMap(map)).toList(growable: false);
   }
 
+  Future<List<Historia>> searchUserStoriesByDateRange({
+    required String userId,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    final db = await DatabaseHelper().database;
+    final startStr = DateTime(startDate.year, startDate.month, startDate.day, 0, 0, 0).toIso8601String();
+    final endStr = DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59, 999).toIso8601String();
+
+    final results = await db.query(
+      _table,
+      where: 'user_id = ? AND excluido IS NULL AND data >= ? AND data <= ?',
+      whereArgs: [userId, startStr, endStr],
+      orderBy: 'data DESC',
+    );
+    return results.map((map) => Historia.fromMap(map)).toList(growable: false);
+  }
+
   Future<List<String>> fetchTagNamesForStory(int historiaId) async {
     final db = await DatabaseHelper().database;
     final rows = await db.rawQuery(
@@ -170,6 +190,21 @@ class HistoriaRepository {
       JOIN tags t ON t.id = ht.tag_id
       WHERE ht.historia_id = ?
       ORDER BY t.nome ASC
+      ''',
+      [historiaId],
+    );
+    return rows.map((row) => row['nome'] as String).toList(growable: false);
+  }
+
+  Future<List<String>> fetchPessoaNamesForStory(int historiaId) async {
+    final db = await DatabaseHelper().database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT p.nome
+      FROM historia_pessoas hp
+      JOIN pessoas p ON p.id = hp.pessoa_id
+      WHERE hp.historia_id = ?
+      ORDER BY p.nome ASC
       ''',
       [historiaId],
     );
@@ -259,7 +294,9 @@ class HistoriaRepository {
     String? descricao,
     String? emoticon,
     String? arquivado,
+    String? local,
     List<Tag>? tags,
+    List<Pessoa>? pessoas,
     List<Uint8List>? newFotos,
     List<Map<String, dynamic>>? newAudios,
     List<Map<String, dynamic>>? newVideos,
@@ -280,6 +317,7 @@ class HistoriaRepository {
         'backed_up': 0,
         'humor': humor,
         'energia': energia,
+        'local': local,
       },
       where: 'id = ?',
       whereArgs: [historia.id],
@@ -287,6 +325,10 @@ class HistoriaRepository {
 
     if (tags != null) {
       await TagHelper().setTagsForHistoria(historia.id!, tags, db);
+    }
+
+    if (pessoas != null) {
+      await PessoaHelper().setPessoasForHistoria(historia.id!, pessoas, db);
     }
 
     if (newFotos != null && newFotos.isNotEmpty) {
@@ -331,8 +373,10 @@ class HistoriaRepository {
     String? emoticon,
     String? grupo,
     String? arquivado,
+    String? local,
     DateTime? dataCriacao,
     List<Tag>? tags,
+    List<Pessoa>? pessoas,
     List<Uint8List>? fotos,
     List<Map<String, dynamic>>? audios,
     List<Map<String, dynamic>>? videos,
@@ -351,11 +395,16 @@ class HistoriaRepository {
       'data_update': DateTime.now().toIso8601String(),
       'humor': humor,
       'energia': energia,
+      'local': local,
       'backed_up': 0,
     });
 
     if (tags != null && tags.isNotEmpty) {
       await TagHelper().setTagsForHistoria(historiaId, tags, db);
+    }
+
+    if (pessoas != null && pessoas.isNotEmpty) {
+      await PessoaHelper().setPessoasForHistoria(historiaId, pessoas, db);
     }
 
     if (fotos != null && fotos.isNotEmpty) {

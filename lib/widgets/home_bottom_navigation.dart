@@ -20,37 +20,35 @@ class HomeBottomNavigation extends StatelessWidget {
       onDestinationSelected: onItemTapped,
       destinations: [
         NavigationDestination(
-          icon: Image.asset('assets/image/home_1.png', width: 20, height: 20),
-          selectedIcon: Image.asset(
-            'assets/image/home_2.png',
-            width: 20,
-            height: 20,
+          icon: const ImageIcon(
+            AssetImage('assets/image/home_1.png'),
+            size: 20,
+          ),
+          selectedIcon: const ImageIcon(
+            AssetImage('assets/image/home_2.png'),
+            size: 20,
           ),
           label: l10n.home,
         ),
         NavigationDestination(
-          icon: Image.asset(
-            'assets/image/colecao_1.png',
-            width: 20,
-            height: 20,
+          icon: const ImageIcon(
+            AssetImage('assets/image/colecao_1.png'),
+            size: 20,
           ),
-          selectedIcon: Image.asset(
-            'assets/image/colecao_2.png',
-            width: 20,
-            height: 20,
+          selectedIcon: const ImageIcon(
+            AssetImage('assets/image/colecao_2.png'),
+            size: 20,
           ),
           label: l10n.collectionsTitle,
         ),
         NavigationDestination(
-          icon: Image.asset(
-            'assets/image/pesquisar_1.png',
-            width: 20,
-            height: 20,
+          icon: const ImageIcon(
+            AssetImage('assets/image/pesquisar_1.png'),
+            size: 20,
           ),
-          selectedIcon: Image.asset(
-            'assets/image/pesquisar_2.png',
-            width: 20,
-            height: 20,
+          selectedIcon: const ImageIcon(
+            AssetImage('assets/image/pesquisar_2.png'),
+            size: 20,
           ),
           label: l10n.search,
         ),

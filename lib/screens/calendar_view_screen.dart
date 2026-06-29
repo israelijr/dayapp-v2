@@ -1,3 +1,4 @@
+import 'package:dayapp/db/historia_foto_helper.dart';
 import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/app_localizations.dart';
 import 'package:dayapp/models/historia.dart';
@@ -5,9 +6,9 @@ import 'package:dayapp/providers/auth_provider.dart';
 import 'package:dayapp/providers/calendar_stories_provider.dart';
 import 'package:dayapp/providers/refresh_provider.dart';
 import 'package:dayapp/repositories/historia_repository.dart';
+import 'package:dayapp/services/thumbnail_service.dart';
 import 'package:dayapp/theme/m3_expressive_theme.dart';
-import 'package:dayapp/widgets/historia_media_widgets.dart';
-import 'package:dayapp/widgets/rich_text_viewer_widget.dart';
+import 'package:dayapp/widgets/story_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +62,7 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
     super.dispose();
   }
 
-  String _convertLegacyEmoticon(String emoticon) {
+  String? _convertLegacyEmoticon(String emoticon) {
     switch (emoticon) {
       case 'Feliz':
         return '😊';
@@ -84,7 +85,7 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
       case 'Muito Triste':
         return '😭';
       default:
-        return emoticon;
+        return null;
     }
   }
 
@@ -135,217 +136,97 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
     }
   }
 
-  void _showHistoriaDetails(Historia historia) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: const Color(0x00000000),
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        builder: (context, scrollController) {
-          return Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(20),
-              ),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 12),
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    padding: const EdgeInsets.all(16),
-                    child: _buildDetailedHistoriaView(historia),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+  Future<void> _openStoryPreview(Historia historia) async {
+    try {
+      await _warmupStoryPreviewMedia(
+        historia,
+      ).timeout(const Duration(milliseconds: 180));
+    } catch (_) {
+      // Ignora timeout/falha de prewarm para não bloquear a navegação.
+    }
+
+    if (!mounted) return;
+
+    final heroTag = _storyHeroTag(historia);
+    final navigator = Navigator.of(context);
+    final action = await navigator.push<StoryPreviewAction>(
+      MaterialPageRoute(
+        builder: (_) => StoryPreviewScreen(
+          historia: historia,
+          localeName: AppLocalizations.of(context)!.localeName,
+          convertLegacyEmoticon: _convertLegacyEmoticon,
+          heroTag: heroTag,
+          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+          showEditDelete: true,
+          showMoodNotes: true,
+          showBottomActions: true,
+        ),
       ),
     );
+
+    if (!mounted || action == null || action == StoryPreviewAction.close) {
+      return;
+    }
+
+    if (action == StoryPreviewAction.edit) {
+      final navigator = Navigator.of(context);
+      final updated = await navigator.push(
+        RouteTransitionHelper.slideUpRotateTransition(
+          EditHistoriaScreen(historia: historia),
+        ),
+      );
+      if (!mounted) return;
+      if (updated == true) {
+        await context.read<CalendarStoriesProvider>().loadHistorias();
+      }
+      return;
+    }
+
+    if (action == StoryPreviewAction.delete) {
+      await _deleteHistoria(historia);
+    }
   }
 
-  Widget _buildDetailedHistoriaView(Historia historia) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            if (historia.emoticon != null)
-              Container(
-                width: 60,
-                height: 60,
-                margin: const EdgeInsets.only(right: 16),
-                alignment: Alignment.center,
-                child: Text(
-                  _convertLegacyEmoticon(historia.emoticon!),
-                  style: const TextStyle(fontSize: 48),
-                ),
-              ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    historia.titulo,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.labelColor(context),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    DateFormat('dd/MM/yyyy HH:mm').format(historia.data),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-        if (historia.descricao != null && historia.descricao!.isNotEmpty)
-          RichTextViewerWidget(jsonContent: historia.descricao!),
-        const SizedBox(height: 20),
-        if (historia.fotoHistoria != null && historia.fotoHistoria!.isNotEmpty)
-          HistoriaFotosGrid(historiaId: historia.id ?? 0, height: 220),
-      ],
-    );
+  Future<void> _warmupStoryPreviewMedia(Historia historia) async {
+    final historiaId = historia.id;
+    if (historiaId == null || historiaId <= 0) return;
+
+    try {
+      final fotos = await HistoriaFotoHelper().getFotosComBytesByHistoria(
+        historiaId,
+      );
+      if (fotos.isEmpty) return;
+
+      final thumbnailsInput = fotos
+          .map((foto) => MapEntry('foto_${foto.id}', foto.bytes))
+          .toList(growable: false);
+
+      await ThumbnailService().preloadThumbnails(thumbnailsInput);
+    } catch (e) {
+      debugPrint('CalendarViewScreen: falha no prewarm de mídia da preview: $e');
+    }
+  }
+
+  String _storyHeroTag(Historia historia) {
+    final id =
+        historia.id?.toString() ??
+        '${historia.titulo}_${historia.data.millisecondsSinceEpoch}';
+    return 'calendar_story_card_$id';
   }
 
   Widget _buildHistoriaCard(Historia historia) {
-    final l10n = AppLocalizations.of(context)!;
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: InkWell(
-        onTap: () => _showHistoriaDetails(historia),
-        onDoubleTap: () async {
-          final result =
-              await Navigator.push(
-                    context,
-                    RouteTransitionHelper.slideUpRotateTransition(
-                      EditHistoriaScreen(historia: historia),
-                    ),
-                  )
-                  as bool?;
-          if (!mounted) return;
-          if (result == true) {
-            await context.read<CalendarStoriesProvider>().loadHistorias();
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  if (historia.emoticon != null)
-                    Container(
-                      width: 40,
-                      height: 40,
-                      margin: const EdgeInsets.only(right: 12),
-                      alignment: Alignment.center,
-                      child: Text(
-                        _convertLegacyEmoticon(historia.emoticon!),
-                        style: const TextStyle(fontSize: 32),
-                      ),
-                    ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          historia.titulo,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.labelColor(context),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          DateFormat('HH:mm').format(historia.data),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (historia.arquivado != null)
-                    const Padding(
-                      padding: EdgeInsets.only(right: 4),
-                      child: Icon(Icons.archive_outlined, size: 16),
-                    ),
-                  PopupMenuButton<String>(
-                    icon: const Icon(Icons.more_vert),
-                    onSelected: (value) async {
-                      if (value == 'edit') {
-                        final result =
-                            await Navigator.push(
-                                  context,
-                                  RouteTransitionHelper.slideUpRotateTransition(
-                                    EditHistoriaScreen(historia: historia),
-                                  ),
-                                )
-                                as bool?;
-                        if (!mounted) return;
-                        if (result == true) {
-                          await context
-                              .read<CalendarStoriesProvider>()
-                              .loadHistorias();
-                        }
-                      } else if (value == 'delete') {
-                        await _deleteHistoria(historia);
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      PopupMenuItem(value: 'edit', child: Text(l10n.edit)),
-                      PopupMenuItem(
-                        value: 'delete',
-                        child: Text(l10n.deleteLabel),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              if (historia.descricao != null &&
-                  historia.descricao!.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                SizedBox(
-                  height: 50,
-                  child: RichTextViewerWidget(jsonContent: historia.descricao),
-                ),
-              ],
-              HistoriaFotosGrid(historiaId: historia.id ?? 0, height: 80),
-            ],
-          ),
-        ),
-      ),
+    return StoryCard(
+      historia: historia,
+      heroTag: _storyHeroTag(historia),
+      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+      convertLegacyEmoticon: _convertLegacyEmoticon,
+      stateLabel: historia.grupo?.isNotEmpty == true
+          ? historia.grupo
+          : historia.arquivado != null
+          ? AppLocalizations.of(context)!.archivedStateLabel
+          : null,
+      onPreview: () => _openStoryPreview(historia),
+      onDoubleTap: () => _openStoryPreview(historia),
     );
   }
 
@@ -464,4 +345,111 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
             ),
     );
   }
+}
+
+HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
+  return (
+    BuildContext flightContext,
+    Animation<double> animation,
+    HeroFlightDirection flightDirection,
+    BuildContext fromHeroContext,
+    BuildContext toHeroContext,
+  ) {
+    final colorScheme = Theme.of(toHeroContext).colorScheme;
+    final dateText = DateFormat(
+      'dd/MM/yyyy HH:mm',
+      'pt_BR',
+    ).format(historia.data);
+    final easedAnimation = CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+
+    return AnimatedBuilder(
+      animation: easedAnimation,
+      builder: (context, child) {
+        final rawProgress = easedAnimation.value;
+        final progress = flightDirection == HeroFlightDirection.push
+            ? rawProgress
+            : 1 - rawProgress;
+        final compactOpacity = (1 - ((progress - 0.12) / 0.42)).clamp(0.0, 1.0);
+        final expandedOpacity = ((progress - 0.32) / 0.48).clamp(0.0, 1.0);
+
+        return Material(
+          color: Colors.transparent,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: colorScheme.onSurface.withValues(alpha: 0.10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.onSurface.withValues(alpha: 0.03),
+                    blurRadius: 20,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Opacity(
+                        opacity: compactOpacity,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.open_in_full_rounded,
+                                  size: 16,
+                                  color: colorScheme.onSurfaceVariant
+                                      .withValues(alpha: 0.55),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    historia.titulo,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: colorScheme.onSurface,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Opacity(
+                        opacity: expandedOpacity,
+                        child: Center(
+                          child: Text(
+                            dateText,
+                            style: TextStyle(
+                              color: colorScheme.onSurfaceVariant,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  };
 }

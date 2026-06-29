@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../theme/m3_expressive_theme.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
@@ -93,19 +92,19 @@ class CustomTextField extends StatelessWidget {
           filled: true,
           fillColor: isDark
               ? colorScheme.surfaceContainerHighest
-              : colorScheme.surface,
+              : Colors.white,
           contentPadding: contentPadding,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(color: colorScheme.outlineVariant),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(color: colorScheme.outlineVariant),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.primaryVariant, width: 2),
+            borderSide: BorderSide(color: colorScheme.primary, width: 2),
           ),
         ),
       ),

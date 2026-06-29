@@ -16,8 +16,8 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-  String _version = '1.0.23';
-  String _buildNumber = '30';
+  String _version = '1.0.24';
+  String _buildNumber = '31';
 
   // Contador para easter egg (7 toques na versão = abre PremiumDebugScreen)
   int _debugTapCount = 0;

@@ -525,6 +525,12 @@ abstract class AppLocalizations {
   /// **'No stories yet'**
   String get noStoriesYetTitle;
 
+  /// No description provided for @trashEmptyStateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your trash is empty'**
+  String get trashEmptyStateMessage;
+
   /// No description provided for @noStoriesYetSubtitle.
   ///
   /// In en, this message translates to:
@@ -1533,6 +1539,30 @@ abstract class AppLocalizations {
   /// **'Emoticon'**
   String get filterEmoticon;
 
+  /// No description provided for @filterDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get filterDate;
+
+  /// No description provided for @selectDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Period'**
+  String get selectDateRange;
+
+  /// No description provided for @startDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get startDate;
+
+  /// No description provided for @endDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get endDate;
+
   /// No description provided for @searchHintTag.
   ///
   /// In en, this message translates to:
@@ -2118,7 +2148,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpBiometricsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Use fingerprint or facial recognition to unlock the app quickly, if available on your device.'**
+  /// **'Use fingerprint to unlock the app quickly, if available on your device.'**
   String get helpBiometricsDesc;
 
   /// No description provided for @helpPasswordUnlockTitle.
@@ -2886,7 +2916,7 @@ abstract class AppLocalizations {
   /// No description provided for @biometricConfiguredInfo.
   ///
   /// In en, this message translates to:
-  /// **'Biometrics is configured. You can log in using your fingerprint or face recognition.'**
+  /// **'Biometrics is configured. You can log in using your fingerprint.'**
   String get biometricConfiguredInfo;
 
   /// No description provided for @biometricAuthFailed.
@@ -5123,6 +5153,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'1 special character'**
   String get pwdCriteriaSpecial;
+
+  /// Title of the dialog when the backup file name is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Filename'**
+  String get invalidBackupFilenameTitle;
+
+  /// Message of the dialog when the backup file name is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'The selected file \'{fileName}\' is not a standard backup file.\n\nPlease choose a valid backup file.'**
+  String invalidBackupFilenameMessage(String fileName);
+
+  /// Title of the dialog when the backup restore operation fails
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Failed'**
+  String get restoreFailedTitle;
+
+  /// Message of the dialog when the backup restore operation fails
+  ///
+  /// In en, this message translates to:
+  /// **'The selected file is not a DayApp backup. Do you want to try again?'**
+  String get restoreFailedMessage;
+
+  /// Message of the dialog when the backup creation operation fails
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while creating the backup. Do you want to try again?'**
+  String get backupFailedMessage;
+
+  /// Rótulo do campo de pessoas na barra de metadados
+  ///
+  /// In en, this message translates to:
+  /// **'People'**
+  String get pessoasLabel;
+
+  /// Rótulo do campo de local na barra de metadados
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get localLabel;
+
+  /// Dica de preenchimento para adicionar pessoas
+  ///
+  /// In en, this message translates to:
+  /// **'Type and press Enter or comma'**
+  String get pessoasHint;
+
+  /// Dica de preenchimento para adicionar o local
+  ///
+  /// In en, this message translates to:
+  /// **'Type location'**
+  String get localHint;
+
+  /// Tooltip do botão de adicionar pessoa
+  ///
+  /// In en, this message translates to:
+  /// **'Add person'**
+  String get addPessoa;
+
+  /// Título da seção de pessoas vinculadas à história
+  ///
+  /// In en, this message translates to:
+  /// **'People'**
+  String get pessoasSection;
+
+  /// Título da seção de local vinculado à história
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get localSection;
+
+  /// Título do modal para adicionar pessoas
+  ///
+  /// In en, this message translates to:
+  /// **'Who were you with?'**
+  String get comQuemTitle;
+
+  /// Título do modal para adicionar local
+  ///
+  /// In en, this message translates to:
+  /// **'Where were you?'**
+  String get ondeTitle;
+
+  /// Tooltip para o botão de pessoas
+  ///
+  /// In en, this message translates to:
+  /// **'People'**
+  String get pessoasTooltip;
+
+  /// Tooltip para o botão de local
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get localTooltip;
+
+  /// Instrução para renomear nos chips de pessoa
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold to rename'**
+  String get pessoaLongPressHint;
+
+  /// Título do diálogo de renomear pessoa
+  ///
+  /// In en, this message translates to:
+  /// **'Rename person'**
+  String get renamePessoaTitle;
+
+  /// Aviso mostrado ao renomear uma pessoa
+  ///
+  /// In en, this message translates to:
+  /// **'Renaming will affect all stories containing this person.'**
+  String get renamePessoaWarning;
+
+  /// Rótulo do campo de texto para o nome da pessoa
+  ///
+  /// In en, this message translates to:
+  /// **'Person name'**
+  String get pessoaNameLabel;
+
+  /// Label for the mood column
+  ///
+  /// In en, this message translates to:
+  /// **'Mood'**
+  String get moodLabel;
+
+  /// Label for the energy column
+  ///
+  /// In en, this message translates to:
+  /// **'Energy'**
+  String get energyLabel;
+
+  /// Title of the dialog when the backup creation operation fails
+  ///
+  /// In en, this message translates to:
+  /// **'Backup Failed'**
+  String get backupFailedTitle;
 }
 
 class _AppLocalizationsDelegate

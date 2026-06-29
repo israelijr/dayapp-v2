@@ -172,5 +172,34 @@
   "pwdCriteriaSpecial": "1 caracter especial",
   "@pwdCriteriaSpecial": {
     "description": "Critério de senha: 1 caracter especial"
+  },
+  "invalidBackupFilenameTitle": "Nome de Arquivo Inválido",
+  "@invalidBackupFilenameTitle": {
+    "description": "Title of the dialog when the backup file name is invalid"
+  },
+  "invalidBackupFilenameMessage": "O arquivo selecionado '{fileName}' não é um arquivo padrão do backup.\n\nPor favor, escolha um arquivo de backup válido.",
+  "@invalidBackupFilenameMessage": {
+    "description": "Message of the dialog when the backup file name is invalid",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreFailedTitle": "Falha na Restauração",
+  "@restoreFailedTitle": {
+    "description": "Title of the dialog when the backup restore operation fails"
+  },
+  "restoreFailedMessage": "O arquivo selecionado não é um backup do DayApp. Deseja tentar novamente?",
+  "@restoreFailedMessage": {
+    "description": "Message of the dialog when the backup restore operation fails"
+  },
+  "backupFailedTitle": "Falha no Backup",
+  "@backupFailedTitle": {
+    "description": "Title of the dialog when the backup creation operation fails"
+  },
+  "backupFailedMessage": "Ocorreu um erro ao criar o backup. Deseja tentar novamente?",
+  "@backupFailedMessage": {
+    "description": "Message of the dialog when the backup creation operation fails"
   }
 }

@@ -116,6 +116,7 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final effectiveTextStyle =
         widget.textStyle ??
         DefaultTextStyle.of(context).style.copyWith(fontSize: 16);
@@ -140,6 +141,14 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
         const VerticalSpacing(0, 0),
         null,
       ),
+      lists: DefaultListBlockStyle(
+        effectiveTextStyle,
+        const HorizontalSpacing(0, 0),
+        const VerticalSpacing(8, 0),
+        const VerticalSpacing(0, 0),
+        null,
+        null,
+      ),
     );
 
     // Widget do editor com decoração
@@ -153,7 +162,7 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
                   : double.infinity,
             ),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: isDark ? theme.colorScheme.surface : Colors.white,
         border: Border.all(color: theme.colorScheme.outlineVariant),
         borderRadius: widget.showToolbar && !widget.readOnly
             ? (widget.toolbarAtBottom
@@ -187,7 +196,7 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
     final toolbar = (widget.showToolbar && !widget.readOnly)
         ? Container(
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
+              color: isDark ? theme.colorScheme.surface : Colors.white,
               border: Border.all(color: theme.colorScheme.outlineVariant),
               borderRadius: widget.toolbarAtBottom
                   ? const BorderRadius.only(

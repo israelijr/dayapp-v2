@@ -916,82 +916,93 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                 : storiesCount + (widget.hasMoreData ? 1 : 0);
             final totalItems = headerCount + totalBodyItems;
 
-            return ListView.builder(
-              key: ValueKey<bool>(widget.isCardView),
-              controller: storiesCount > 0 ? widget.scrollController : null,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-              itemCount: totalItems,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return greetingBanner();
-                }
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                return ListView.builder(
+                  key: ValueKey<bool>(widget.isCardView),
+                  controller: storiesCount > 0 ? widget.scrollController : null,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  itemCount: totalItems,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return greetingBanner();
+                    }
 
-                if (index < headerCount) {
-                  final insightIndex = index - 1;
-                  return buildInsightCard(insights[insightIndex]);
-                }
+                    if (index < headerCount) {
+                      final insightIndex = index - 1;
+                      return buildInsightCard(insights[insightIndex]);
+                    }
 
-                // Índice no corpo (histórias / mensagem vazia)
-                final bodyIndex = index - headerCount;
+                    // Índice no corpo (histórias / mensagem vazia)
+                    final bodyIndex = index - headerCount;
 
-                // Mensagem de lista vazia quando há insights mas não há histórias
-                if (storiesCount == 0) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/image/home_vazia.png',
-                            width: 120,
-                            height: 120,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Icon(
-                                Icons.auto_stories_outlined,
-                                size: 64,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withValues(alpha: 0.4),
-                              );
-                            },
+                    // Mensagem de lista vazia quando há insights mas não há histórias
+                    if (storiesCount == 0) {
+                      final shortestSide = MediaQuery.sizeOf(context).shortestSide;
+                      final imageSize = (shortestSide * 0.35).clamp(90.0, 140.0) * 1.3;
+                      
+                      // Calculate remaining height to center it vertically in the remaining space
+                      final double estimatedHeaderHeight = 140.0 + (insights.length * 150.0);
+                      final double remainingHeight = (constraints.maxHeight - estimatedHeaderHeight - 32.0).clamp(280.0, 800.0);
+
+                      return SizedBox(
+                        height: remainingHeight,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                'assets/image/home_vazia.png',
+                                width: imageSize,
+                                height: imageSize,
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(
+                                    Icons.auto_stories_outlined,
+                                    size: 64,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withValues(alpha: 0.4),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                AppLocalizations.of(context)!.noStoriesHere,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 12),
-                          Text(
-                            AppLocalizations.of(context)!.noStoriesHere,
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              height: 1.4,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
+                        ),
+                      );
+                    }
+
+                    // Histórias
+                    if (bodyIndex < storiesCount) {
+                      final historia = widget.historias[bodyIndex];
+                      return widget.isCardView
+                          ? widget.buildCardView(historia)
+                          : widget.buildIconView(historia);
+                    }
+
+                    // Indicador de carregamento de mais dados
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Center(
+                        child: widget.isLoadingMore
+                            ? const CircularProgressIndicator()
+                            : const SizedBox.shrink(),
                       ),
-                    ),
-                  );
-                }
-
-                // Histórias
-                if (bodyIndex < storiesCount) {
-                  final historia = widget.historias[bodyIndex];
-                  return widget.isCardView
-                      ? widget.buildCardView(historia)
-                      : widget.buildIconView(historia);
-                }
-
-                // Indicador de carregamento de mais dados
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Center(
-                    child: widget.isLoadingMore
-                        ? const CircularProgressIndicator()
-                        : const SizedBox.shrink(),
-                  ),
+                    );
+                  },
                 );
               },
             );

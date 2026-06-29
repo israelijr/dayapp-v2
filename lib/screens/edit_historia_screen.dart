@@ -9,12 +9,14 @@ import 'package:provider/provider.dart';
 import '../db/historia_audio_helper.dart';
 import '../db/historia_foto_helper.dart';
 import '../db/historia_video_helper.dart';
+import '../db/pessoa_helper.dart';
 import '../db/tag_helper.dart';
 import '../helpers/audio_file_helper.dart';
 import '../helpers/notification_helper.dart';
 import '../helpers/photo_file_helper.dart';
 import '../helpers/rich_text_helper.dart';
 import '../models/historia.dart';
+import '../models/pessoa.dart';
 import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../repositories/historia_repository.dart';
@@ -27,7 +29,10 @@ import '../widgets/emoji_selection_modal.dart';
 import '../widgets/entry_toolbar.dart';
 import '../widgets/expandable_rich_text_editor.dart';
 import '../widgets/image_picker_widget.dart';
+import '../widgets/metadata_selector_bar.dart';
+import '../widgets/mood_energy_selector_bar.dart';
 import '../widgets/mood_energy_selectors.dart';
+import '../widgets/pessoas_input_widget.dart';
 import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
 
@@ -105,6 +110,19 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
   List<Tag> _selectedTags = [];
   List<Tag> _initialTags = [];
 
+  // Lista de pessoas e local
+  List<Pessoa> _selectedPessoas = [];
+  List<Pessoa> _initialPessoas = [];
+  late TextEditingController localController;
+  late String? _initialLocal;
+
+  // Controle de visibilidade dos inputs correspondentes à barra unificada
+  bool _showPessoasInput = false;
+  bool _showLocalInput = false;
+  bool _showTagsInput = false;
+  bool _showMoodInput = false;
+  bool _showEnergyInput = false;
+
   // Controle de alterações não salvas
   bool _hasUnsavedChanges = false;
   bool _lastFormValid = false;
@@ -171,15 +189,20 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
     _initialMood = widget.historia.humor;
     _initialEnergy = widget.historia.energia;
 
+    localController = TextEditingController(text: widget.historia.local);
+    _initialLocal = widget.historia.local;
+
     // Adiciona listeners para detectar mudanças
     titleController.addListener(_checkForChanges);
     richTextController.addListener(_checkForChanges);
+    localController.addListener(_checkForChanges);
 
     _loadFotos();
     _loadAudios();
     _loadVideos();
     _loadEmojiTranslation();
     _loadTags();
+    _loadPessoas();
 
     _initialized = true; // marca estado como pronto para verificação
     _lastFormValid = _isFormValid;
@@ -259,6 +282,22 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
     }
   }
 
+  Future<void> _loadPessoas() async {
+    final id = widget.historia.id;
+    if (id == null) return;
+    try {
+      final pessoas = await PessoaHelper().getPessoasByHistoria(id);
+      if (mounted) {
+        setState(() {
+          _selectedPessoas = pessoas;
+          _initialPessoas = List.from(pessoas);
+        });
+      }
+    } catch (e) {
+      debugPrint('Erro ao carregar pessoas: $e');
+    }
+  }
+
   void _checkForChanges() {
     if (!_initialized) {
       return; // não faz nada antes dos controllers estarem prontos
@@ -268,10 +307,17 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
     final tagsChanged =
         _selectedTags.length != _initialTags.length ||
         _selectedTags.any((t) => !_initialTags.any((i) => i.slug == t.slug));
+    final pessoasChanged =
+        _selectedPessoas.length != _initialPessoas.length ||
+        _selectedPessoas.any((p) => !_initialPessoas.any((i) => i.slug == p.slug));
+    final localChanged = localController.text != (_initialLocal ?? '');
+
     final hasChanges =
         titleController.text != _initialTitle ||
         currentDescription != _initialDescription ||
         tagsChanged ||
+        pessoasChanged ||
+        localChanged ||
         selectedDate != _initialDate ||
         selectedEmoticon != _initialEmoticon ||
         _selectedMood != _initialMood ||
@@ -556,7 +602,9 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
       humor: _selectedMood,
       energia: _selectedEnergy,
       arquivado: widget.historia.arquivado,
+      local: localController.text.trim().isEmpty ? null : localController.text.trim(),
       tags: _selectedTags,
+      pessoas: _selectedPessoas,
       newFotos: fotos
           .asMap()
           .entries
@@ -678,8 +726,10 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
   void dispose() {
     titleController.removeListener(_checkForChanges);
     richTextController.removeListener(_checkForChanges);
+    localController.removeListener(_checkForChanges);
     titleController.dispose();
     richTextController.dispose();
+    localController.dispose();
     super.dispose();
   }
 
@@ -771,6 +821,22 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                             constraints: const BoxConstraints(),
                           ),
                           const Spacer(flex: 1),
+                          if (selectedEmoticon != null)
+                            Chip(
+                              side: BorderSide.none,
+                              label: Text(
+                                _convertLegacyEmoticon(selectedEmoticon!),
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              onDeleted: () {
+                                setState(() {
+                                  selectedEmoticon = null;
+                                  ,
+                                  selectedEmojiTranslation = null;
+                                  _checkForChanges();
+                                });
+                              },
+                            ),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -806,108 +872,132 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Tags
-                      Builder(
-                        builder: (context) {
-                          final auth = Provider.of<AuthProvider>(
-                            context,
-                            listen: false,
-                          );
-                          return TagInputWidget(
-                            userId: auth.user?.id ?? '',
-                            initialTags: _selectedTags,
-                            onTagsChanged: (tags) {
-                              setState(() {
-                                _selectedTags = tags;
-                                _checkForChanges();
-                              });
-                            },
-                          );
+                      const SizedBox(height: 16),
+
+                      // Barra de Metadados Unificada
+                      MetadataSelectorBar(
+                        onPessoasPressed: () {
+                          setState(() {
+                            _showPessoasInput = !_showPessoasInput;
+                            _showLocalInput = false;
+                            _showTagsInput = false;
+                          });
+                        },
+                        onLocalPressed: () {
+                          setState(() {
+                            _showLocalInput = !_showLocalInput;
+                            _showPessoasInput = false;
+                            _showTagsInput = false;
+                          });
+                        },
+                        onTagsPressed: () {
+                          setState(() {
+                            _showTagsInput = !_showTagsInput;
+                            _showPessoasInput = false;
+                            _showLocalInput = false;
+                          });
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
 
-                      // Humor (como você se sentiu)
-                      const SizedBox(height: 16),
-                      Text(
-                        loc.moodQuestion,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      MoodSelector(
-                        value: _selectedMood,
-                        onChanged: (v) => setState(() {
-                          _selectedMood = v;
-                          _checkForChanges();
-                        }),
-                      ),
-
-                      // Energia
-                      const SizedBox(height: 16),
-                      Text(
-                        loc.energyQuestion,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      EnergySelector(
-                        value: _selectedEnergy,
-                        onChanged: (v) => setState(() {
-                          _selectedEnergy = v;
-                          _checkForChanges();
-                        }),
-                      ),
-
-                      // Emoticon (agora abaixo do Archive Switch) - ocupa largura disponível
-                      if (selectedEmoticon != null) ...[
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 4.0),
-                                child: Chip(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 6,
-                                  ),
-                                  avatar: SizedBox(
-                                    width: 48,
-                                    height: 48,
-                                    child: Center(
-                                      child: FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Text(
-                                          _convertLegacyEmoticon(
-                                            selectedEmoticon!,
-                                          ),
-                                          style: const TextStyle(fontSize: 32),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  label: const SizedBox.shrink(),
-                                  onDeleted: () {
-                                    setState(() {
-                                      selectedEmoticon = null;
-                                      selectedEmojiTranslation = null;
-                                      _checkForChanges();
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
+                      // Input painel para Pessoas
+                      if (_showPessoasInput) ...[
+                        Builder(
+                          builder: (context) {
+                            final auth = Provider.of<AuthProvider>(
+                              context,
+                              listen: false,
+                            );
+                            return PessoasInputWidget(
+                              userId: auth.user?.id ?? '',
+                              initialPessoas: _selectedPessoas,
+                              onPessoasChanged: (pessoas) {
+                                setState(() {
+                                  _selectedPessoas = pessoas;
+                                  _checkForChanges();
+                                });
+                              },
+                            );
+                          },
                         ),
                         const SizedBox(height: 16),
                       ],
+
+                      // Input painel para Local
+                      if (_showLocalInput) ...[
+                        CustomTextField(
+                          controller: localController,
+                          label: loc.localLabel,
+                          hintText: loc.localHint,
+                          prefixIcon: const Icon(Icons.location_on_outlined),
+                          onChanged: (_) => _checkForChanges(),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Input painel para Tags
+                      if (_showTagsInput) ...[
+                        Builder(
+                          builder: (context) {
+                            final auth = Provider.of<AuthProvider>(
+                              context,
+                              listen: false,
+                            );
+                            return TagInputWidget(
+                              userId: auth.user?.id ?? '',
+                              initialTags: _selectedTags,
+                              onTagsChanged: (tags) {
+                                setState(() {
+                                  _selectedTags = tags;
+                                  _checkForChanges();
+                                });
+                              },
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+
+
+                      // Barra de Humor e Energia
+                      MoodEnergySelectorBar(
+                        selectedMood: _selectedMood,
+                        selectedEnergy: _selectedEnergy,
+                        onMoodPressed: () => setState(() {
+                          _showMoodInput = !_showMoodInput;
+                          _showEnergyInput = false; // Fecha o outro
+                        }),
+                        onEnergyPressed: () => setState(() {
+                          _showEnergyInput = !_showEnergyInput;
+                          _showMoodInput = false; // Fecha o outro
+                        }),
+                      ),
+                      const SizedBox(height: 8),
+
+                      if (_showMoodInput) ...[
+                        MoodInputWidget(
+                          value: _selectedMood,
+                          onChanged: (v) => setState(() {
+                            _selectedMood = v;
+                            _checkForChanges();
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+
+                      if (_showEnergyInput) ...[
+                        EnergyInputWidget(
+                          value: _selectedEnergy,
+                          onChanged: (v) => setState(() {
+                            _selectedEnergy = v;
+                            _checkForChanges();
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+
+
 
                       // Media Previews
                       if (fotos.isNotEmpty) ...[
@@ -1057,4 +1147,6 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
       ),
     );
   }
+
+
 }

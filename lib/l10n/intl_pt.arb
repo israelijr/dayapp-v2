@@ -122,6 +122,7 @@
   },
   "statistics": "Estatísticas",
   "noStoriesYetTitle": "Nenhuma história registrada ainda",
+  "trashEmptyStateMessage": "Sua lixeira está vazia",
   "noStoriesYetSubtitle": "Comece a registrar seus dias para ver as estatísticas",
   "trends": "Tendências",
   "last30Days": "Últimos 30 dias",
@@ -457,7 +458,7 @@
   "helpRestoreDesc": "Use \"Restaurar de Arquivo\" para recuperar dados de um backup anterior.",
   "helpPinSecurityTitle": "PIN de Segurança",
   "helpPinSecurityDesc": "Configure um PIN de 4 a 8 dígitos para proteger o acesso ao app.",
-  "helpBiometricsDesc": "Use digital ou reconhecimento facial para desbloquear o app rapidamente, se disponível no dispositivo.",
+  "helpBiometricsDesc": "Use sua digital para desbloquear o app rapidamente, se disponível no dispositivo.",
   "helpPasswordUnlockTitle": "Desbloqueio por Senha",
   "helpPasswordUnlockDesc": "Além de PIN e biometria, você pode desbloquear o app usando a senha da sua conta. Útil caso esqueça o PIN ou a biometria falhe.",
   "helpBackgroundLockDesc": "Quando o app é minimizado ou você troca para outro app, ele é bloqueado automaticamente após o tempo configurado. Você pode definir o tempo livremente nas configurações (segundos, minutos ou horas).",
@@ -757,7 +758,7 @@
   "backupWithVideosZip": "Backup com vídeos em arquivo ZIP",
   "biometricsNotAvailable": "Não disponível neste dispositivo",
   "biometricsDisabled": "Biometria desabilitada",
-  "biometricConfiguredInfo": "A biometria está configurada. Você pode fazer login usando sua digital ou reconhecimento facial.",
+  "biometricConfiguredInfo": "A biometria está configurada. Você pode fazer login usando sua digital.",
   "biometricAuthFailed": "Falha na autenticação biométrica",
   "confirmIdentityToEnableBiometrics": "Confirme sua identidade para habilitar a biometria",
   "calendarTitle": "Calendário",
@@ -1292,6 +1293,10 @@
   "filterText": "Texto",
   "filterTag": "Tag",
   "filterEmoticon": "Emoticon",
+  "filterDate": "Período",
+  "selectDateRange": "Selecionar Período",
+  "startDate": "Data Inicial",
+  "endDate": "Data Final",
   "searchHintTag": "Digite uma tag...",
   "searchHintText": "Pesquisar no título ou na descrição...",
   "clearSearchTooltip": "Limpar pesquisa",
@@ -2670,5 +2675,102 @@
   "chapterTitleDuplicateMessage": "Já existe um capítulo com este título. Por favor, escolha outro título.",
   "@chapterTitleDuplicateMessage": {
     "description": "Mensagem exibida no diálogo de erro ao tentar usar um título de capítulo que já existe"
+  },
+  "invalidBackupFilenameTitle": "Nome de Ficheiro Inválido",
+  "@invalidBackupFilenameTitle": {
+    "description": "Title of the dialog when the backup file name is invalid"
+  },
+  "invalidBackupFilenameMessage": "O ficheiro selecionado '{fileName}' não é um ficheiro padrão do backup.\n\nPor favor, escolha um ficheiro de backup válido.",
+  "@invalidBackupFilenameMessage": {
+    "description": "Message of the dialog when the backup file name is invalid",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreFailedTitle": "Falha na Restauração",
+  "@restoreFailedTitle": {
+    "description": "Title of the dialog when the backup restore operation fails"
+  },
+  "restoreFailedMessage": "O ficheiro selecionado não é um backup do DayApp. Deseja tentar novamente?",
+  "@restoreFailedMessage": {
+    "description": "Message of the dialog when the backup restore operation fails"
+  },
+  "backupFailedMessage": "Ocorreu um erro ao criar o backup. Deseja tentar novamente?",
+  "@backupFailedMessage": {
+    "description": "Message of the dialog when the backup creation operation fails"
+  },
+  "pessoasLabel": "Pessoas",
+  "@pessoasLabel": {
+    "description": "Rótulo do campo de pessoas na barra de metadados"
+  },
+  "localLabel": "Local",
+  "@localLabel": {
+    "description": "Rótulo do campo de local na barra de metadados"
+  },
+  "pessoasHint": "Digite e pressione Enter ou vírgula",
+  "@pessoasHint": {
+    "description": "Dica de preenchimento para adicionar pessoas"
+  },
+  "localHint": "Digite o local",
+  "@localHint": {
+    "description": "Dica de preenchimento para adicionar o local"
+  },
+  "addPessoa": "Adicionar pessoa",
+  "@addPessoa": {
+    "description": "Tooltip do botão de adicionar pessoa"
+  },
+  "pessoasSection": "Pessoas",
+  "@pessoasSection": {
+    "description": "Título da seção de pessoas vinculadas à história"
+  },
+  "localSection": "Local",
+  "@localSection": {
+    "description": "Título da seção de local vinculado à história"
+  },
+  "comQuemTitle": "Com quem você estava?",
+  "@comQuemTitle": {
+    "description": "Título do modal para adicionar pessoas"
+  },
+  "ondeTitle": "Onde você estava?",
+  "@ondeTitle": {
+    "description": "Título do modal para adicionar local"
+  },
+  "pessoasTooltip": "Pessoas",
+  "@pessoasTooltip": {
+    "description": "Tooltip para o botão de pessoas"
+  },
+  "localTooltip": "Local",
+  "@localTooltip": {
+    "description": "Tooltip para o botão de local"
+  },
+  "pessoaLongPressHint": "Pressione e segure para renomear",
+  "@pessoaLongPressHint": {
+    "description": "Instrução para renomear nos chips de pessoa"
+  },
+  "renamePessoaTitle": "Renomear pessoa",
+  "@renamePessoaTitle": {
+    "description": "Título do diálogo de renomear pessoa"
+  },
+  "renamePessoaWarning": "Renomear afetará todas as histórias que contêm esta pessoa.",
+  "@renamePessoaWarning": {
+    "description": "Aviso mostrado ao renomear uma pessoa"
+  },
+  "pessoaNameLabel": "Nome da pessoa",
+  "@pessoaNameLabel": {
+    "description": "Rótulo do campo de texto para o nome da pessoa"
+  },
+  "moodLabel": "Humor",
+  "@moodLabel": {
+    "description": "Rótulo para a coluna de humor"
+  },
+  "energyLabel": "Energia",
+  "@energyLabel": {
+    "description": "Rótulo para a coluna de energia"
+  },
+  "backupFailedTitle": "Falha no Backup",
+  "@backupFailedTitle": {
+    "description": "Title of the dialog when the backup creation operation fails"
   }
 }

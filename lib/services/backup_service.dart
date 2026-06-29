@@ -241,7 +241,8 @@ Versão: 2.0.0
       onProgress?.call(l10n.backupProgressCompressing);
       final now = DateTime.now();
       final timestamp = now.millisecondsSinceEpoch;
-      final zipPath = path.join(tempDir.path, 'dayapp_backup_$timestamp.zip');
+      final ddmmm = _formatDdMmm(now, l10n.localeName);
+      final zipPath = path.join(tempDir.path, 'dayapp_${ddmmm}_$timestamp.zip');
 
       final receivePort = ReceivePort();
       final isolate = await Isolate.spawn(backupZipIsolateEntrypoint, {
@@ -895,5 +896,47 @@ Versão: 2.0.0
     } catch (e) {
       rethrow;
     }
+  }
+
+  /// Valida se o nome do arquivo de backup (com ou sem extensão)
+  /// corresponde a um dos padrões adotados pelo app.
+  bool isValidBackupFileName(String fileName) {
+    // Garante que o arquivo termina com .zip
+    if (!fileName.toLowerCase().endsWith('.zip')) {
+      return false;
+    }
+    // Remove a extensão .zip (4 caracteres do final)
+    final baseName = fileName.substring(0, fileName.length - 4);
+
+    final regExpCompat1 = RegExp(r'^dayapp_backup_\d+$');
+    final regExpCompat2 = RegExp(r'^dayapp_\d{6}_\d+$');
+    final regExpNew = RegExp(r'^dayapp_\d{2}[a-zA-Z]{3}_\d+$');
+
+    return regExpCompat1.hasMatch(baseName) ||
+        regExpCompat2.hasMatch(baseName) ||
+        regExpNew.hasMatch(baseName);
+  }
+
+  String _formatDdMmm(DateTime dateTime, String locale) {
+    final dd = dateTime.day.toString().padLeft(2, '0');
+    final lang = locale.split('_').first.toLowerCase();
+    String mmm;
+    if (lang == 'pt') {
+      const meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+      mmm = meses[dateTime.month - 1];
+    } else if (lang == 'es') {
+      const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+      mmm = meses[dateTime.month - 1];
+    } else if (lang == 'fr') {
+      const meses = ['jan', 'fev', 'mar', 'avr', 'mai', 'jun', 'jul', 'aou', 'sep', 'oct', 'nov', 'dec'];
+      mmm = meses[dateTime.month - 1];
+    } else if (lang == 'it') {
+      const meses = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
+      mmm = meses[dateTime.month - 1];
+    } else {
+      const meses = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+      mmm = meses[dateTime.month - 1];
+    }
+    return '$dd$mmm';
   }
 }

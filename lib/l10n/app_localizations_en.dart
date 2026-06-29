@@ -234,6 +234,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noStoriesYetTitle => 'No stories yet';
 
   @override
+  String get trashEmptyStateMessage => 'Your trash is empty';
+
+  @override
   String get noStoriesYetSubtitle =>
       'Start recording your days to see statistics';
 
@@ -772,6 +775,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filterEmoticon => 'Emoticon';
 
   @override
+  String get filterDate => 'Period';
+
+  @override
+  String get selectDateRange => 'Select Period';
+
+  @override
+  String get startDate => 'Start Date';
+
+  @override
+  String get endDate => 'End Date';
+
+  @override
   String get searchHintTag => 'Type a tag...';
 
   @override
@@ -1105,7 +1120,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpBiometricsDesc =>
-      'Use fingerprint or facial recognition to unlock the app quickly, if available on your device.';
+      'Use fingerprint to unlock the app quickly, if available on your device.';
 
   @override
   String get helpPasswordUnlockTitle => 'Password Unlock';
@@ -1558,7 +1573,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get biometricConfiguredInfo =>
-      'Biometrics is configured. You can log in using your fingerprint or face recognition.';
+      'Biometrics is configured. You can log in using your fingerprint.';
 
   @override
   String get biometricAuthFailed => 'Biometric authentication failed';
@@ -2841,4 +2856,78 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pwdCriteriaSpecial => '1 special character';
+
+  @override
+  String get invalidBackupFilenameTitle => 'Invalid Filename';
+
+  @override
+  String invalidBackupFilenameMessage(String fileName) {
+    return 'The selected file \'$fileName\' is not a standard backup file.\n\nPlease choose a valid backup file.';
+  }
+
+  @override
+  String get restoreFailedTitle => 'Restore Failed';
+
+  @override
+  String get restoreFailedMessage =>
+      'The selected file is not a DayApp backup. Do you want to try again?';
+
+  @override
+  String get backupFailedMessage =>
+      'An error occurred while creating the backup. Do you want to try again?';
+
+  @override
+  String get pessoasLabel => 'People';
+
+  @override
+  String get localLabel => 'Location';
+
+  @override
+  String get pessoasHint => 'Type and press Enter or comma';
+
+  @override
+  String get localHint => 'Type location';
+
+  @override
+  String get addPessoa => 'Add person';
+
+  @override
+  String get pessoasSection => 'People';
+
+  @override
+  String get localSection => 'Location';
+
+  @override
+  String get comQuemTitle => 'Who were you with?';
+
+  @override
+  String get ondeTitle => 'Where were you?';
+
+  @override
+  String get pessoasTooltip => 'People';
+
+  @override
+  String get localTooltip => 'Location';
+
+  @override
+  String get pessoaLongPressHint => 'Press and hold to rename';
+
+  @override
+  String get renamePessoaTitle => 'Rename person';
+
+  @override
+  String get renamePessoaWarning =>
+      'Renaming will affect all stories containing this person.';
+
+  @override
+  String get pessoaNameLabel => 'Person name';
+
+  @override
+  String get moodLabel => 'Mood';
+
+  @override
+  String get energyLabel => 'Energy';
+
+  @override
+  String get backupFailedTitle => 'Backup Failed';
 }

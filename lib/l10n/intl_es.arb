@@ -122,6 +122,7 @@
   },
   "statistics": "Estadísticas",
   "noStoriesYetTitle": "Ninguna historia registrada aún",
+  "trashEmptyStateMessage": "Tu papelera está vacía",
   "noStoriesYetSubtitle": "Comienza a registrar tus días para ver las estadísticas",
   "trends": "Tendencias",
   "last30Days": "Últimos 30 días",
@@ -338,6 +339,10 @@
   "filterText": "Texto",
   "filterTag": "Tag",
   "filterEmoticon": "Emoticon",
+  "filterDate": "Período",
+  "selectDateRange": "Seleccionar período",
+  "startDate": "Fecha de inicio",
+  "endDate": "Fecha de fin",
   "searchHintTag": "Escribe una etiqueta...",
   "searchHintText": "Buscar en título o descripción...",
   "clearSearchTooltip": "Limpiar búsqueda",
@@ -469,7 +474,7 @@
   "helpRestoreDesc": "Usa \"Restaurar desde archivo\" para recuperar datos de una copia anterior.",
   "helpPinSecurityTitle": "PIN de seguridad",
   "helpPinSecurityDesc": "Configura un PIN de 4 a 8 dígitos para proteger el acceso a la app.",
-  "helpBiometricsDesc": "Usa huella o reconocimiento facial para desbloquear la app rápidamente, si está disponible en tu dispositivo.",
+  "helpBiometricsDesc": "Usa huella para desbloquear la app rápidamente, si está disponible en tu dispositivo.",
   "helpPasswordUnlockTitle": "Desbloqueo por contraseña",
   "helpPasswordUnlockDesc": "Además de PIN y biometría, puedes desbloquear la app usando tu contraseña de cuenta. Útil si olvidas el PIN o la biometría falla.",
   "helpBackgroundLockDesc": "Cuando la app se minimiza o cambias a otra app, se bloquea automáticamente después del tiempo configurado. Puedes establecer el tiempo libremente en la configuración (segundos, minutos u horas).",
@@ -693,7 +698,7 @@
   "backupWithVideosZip": "Copia de seguridad con videos en archivo ZIP",
   "biometricsNotAvailable": "No disponible en este dispositivo",
   "biometricsDisabled": "Biometría deshabilitada",
-  "biometricConfiguredInfo": "La biometría está configurada. Puede iniciar sesión usando su huella dactilar o reconocimiento facial.",
+  "biometricConfiguredInfo": "La biometría está configurada. Puede iniciar sesión usando su huella dactilar.",
   "biometricAuthFailed": "Error en la autenticación biométrica",
   "confirmIdentityToEnableBiometrics": "Confirme su identidad para habilitar la biometría",
   "calendarTitle": "Calendario",
@@ -2514,5 +2519,34 @@
   "chapterTitleDuplicateMessage": "Ya existe un capítulo con este título. Por favor, elija otro título.",
   "@chapterTitleDuplicateMessage": {
     "description": "Message shown in error dialog when trying to use a chapter title that already exists"
+  },
+  "invalidBackupFilenameTitle": "Nombre de archivo inválido",
+  "@invalidBackupFilenameTitle": {
+    "description": "Title of the dialog when the backup file name is invalid"
+  },
+  "invalidBackupFilenameMessage": "El archivo seleccionado '{fileName}' no es un archivo de copia de seguridad estándar.\n\nPor favor, seleccione un archivo de copia de seguridad válido.",
+  "@invalidBackupFilenameMessage": {
+    "description": "Message of the dialog when the backup file name is invalid",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreFailedTitle": "Fallo en la restauración",
+  "@restoreFailedTitle": {
+    "description": "Title of the dialog when the backup restore operation fails"
+  },
+  "restoreFailedMessage": "El archivo seleccionado no es una copia de seguridad de DayApp. ¿Desea intentarlo de nuevo?",
+  "@restoreFailedMessage": {
+    "description": "Message of the dialog when the backup restore operation fails"
+  },
+  "backupFailedTitle": "Fallo en la copia de seguridad",
+  "@backupFailedTitle": {
+    "description": "Title of the dialog when the backup creation operation fails"
+  },
+  "backupFailedMessage": "Ocurrió un error al crear la copia de seguridad. ¿Desea intentarlo de nuevo?",
+  "@backupFailedMessage": {
+    "description": "Message of the dialog when the backup creation operation fails"
   }
 }

@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/pin_provider.dart';
-import '../theme/m3_expressive_theme.dart';
 
 /// Widget de seleção de vídeo que oferece opção de gravar ou buscar arquivos.
 /// Suporta seleção múltipla de vídeos da galeria/arquivos.
@@ -43,13 +42,16 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Dialog(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.videocam, size: 64, color: AppColors.primaryVariant),
+            Icon(Icons.videocam, size: 64, color: colorScheme.primary),
             const SizedBox(height: 16),
             Text(
               widget.allowMultiple
@@ -58,7 +60,7 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.labelColor(context),
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 24),
@@ -79,7 +81,7 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.labelColor(context),
+                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
               const SizedBox(height: 24),
@@ -98,8 +100,8 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
                         )!.videoPickerSelectFilesSingle,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryVariant,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -113,7 +115,8 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
                 icon: const Icon(Icons.videocam),
                 label: Text(AppLocalizations.of(context)!.videoPickerRecord),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.primaryVariant,
+                  foregroundColor: colorScheme.primary,
+                  side: BorderSide(color: colorScheme.primary),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -125,6 +128,9 @@ class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
             const SizedBox(height: 16),
             TextButton(
               onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
+              style: TextButton.styleFrom(
+                foregroundColor: colorScheme.primary,
+              ),
               child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ],

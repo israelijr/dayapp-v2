@@ -5,17 +5,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../db/tag_helper.dart';
+import '../db/historia_foto_helper.dart';
 import '../models/historia.dart';
-import '../models/tag.dart';
 import '../providers/auth_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../repositories/historia_repository.dart';
 import '../services/emoji_service.dart';
+import '../services/thumbnail_service.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/emoji_selection_modal.dart';
-import '../widgets/historia_media_widgets.dart';
-import '../widgets/rich_text_viewer_widget.dart';
+import '../widgets/story_card.dart';
 import 'edit_historia_screen.dart';
 
 /// Enum para os tipos de pesquisa disponíveis
@@ -23,6 +22,7 @@ enum SearchType {
   text, // Pesquisa por texto no título ou descrição
   tag, // Pesquisa por tag
   emoticon, // Pesquisa por emoticon
+  date, // Pesquisa por período de datas
 }
 
 /// Tela de pesquisa de histórias
@@ -48,6 +48,8 @@ class _SearchScreenState extends State<SearchScreen> {
   SearchType _currentSearchType = SearchType.text;
   String? _selectedEmoticon; // Emoji caractere selecionado (ex: 😄)
   String? _selectedEmojiTranslation; // Tradução do emoji (ex: Sorrir)
+  DateTime? _startDate; // Data de início do período
+  DateTime? _endDate; // Data de fim do período
   List<Historia> _searchResults = [];
   final HistoriaRepository _historiaRepository = HistoriaRepository();
   bool _isSearching = false;
@@ -64,7 +66,8 @@ class _SearchScreenState extends State<SearchScreen> {
     }
     _loadEmojis();
     if (initialQuery.isNotEmpty &&
-        widget.initialSearchType != SearchType.emoticon) {
+        widget.initialSearchType != SearchType.emoticon &&
+        widget.initialSearchType != SearchType.date) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         _performSearch();
@@ -89,6 +92,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   /// Executa a pesquisa com base no tipo selecionado
   Future<void> _performSearch() async {
+    // Fechar o teclado ao clicar no botão pesquisar / disparar busca
+    FocusScope.of(context).unfocus();
+
     final loc = AppLocalizations.of(context)!;
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final userId = auth.user?.id ?? '';
@@ -145,6 +151,21 @@ class _SearchScreenState extends State<SearchScreen> {
           results = await _historiaRepository.searchUserStoriesByEmoticon(
             userId: userId,
             emoticon: _selectedEmoticon!,
+          );
+          break;
+
+        case SearchType.date:
+          if (_startDate == null || _endDate == null) {
+            setState(() {
+              _searchResults = [];
+              _isSearching = false;
+            });
+            return;
+          }
+          results = await _historiaRepository.searchUserStoriesByDateRange(
+            userId: userId,
+            startDate: _startDate!,
+            endDate: _endDate!,
           );
           break;
       }
@@ -207,9 +228,12 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(48),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
-                    child: _buildFilterChipsBar(),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                      child: _buildSearchTypeSelector(),
+                    ),
                   ),
                 ),
               )
@@ -245,7 +269,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (!widget.showAppBar) ...[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                      child: _buildFilterChipsBar(),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: _buildSearchTypeSelector(),
+                      ),
                     ),
                     const Divider(height: 1),
                   ],
@@ -274,9 +301,11 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Campo de pesquisa ou seleção de emoticon (chips foram movidos para AppBar.bottom)
+          // Campo de pesquisa ou seleção de emoticon ou período
           if (_currentSearchType == SearchType.emoticon)
             _buildEmoticonSelector()
+          else if (_currentSearchType == SearchType.date)
+            _buildDateRangeSelector()
           else
             _buildTextSearchField(),
         ],
@@ -284,57 +313,107 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  /// Barra de chips rolável horizontalmente para evitar quebras de linha e sobreposições em telas menores
-  Widget _buildFilterChipsBar() {
+  void _clearSearchState() {
+    _searchController.clear();
+    _selectedEmoticon = null;
+    _selectedEmojiTranslation = null;
+    _startDate = null;
+    _endDate = null;
+    _searchResults = [];
+    _hasSearched = false;
+  }
+
+  Widget _buildSearchTypeSelector() {
     final l10n = AppLocalizations.of(context)!;
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          ChoiceChip(
-            avatar: const Icon(Icons.text_fields, size: 18),
-            label: Text(l10n.filterText),
-            selected: _currentSearchType == SearchType.text,
-            showCheckmark: false,
-            onSelected: (selected) {
-              if (selected) {
-                setState(() {
-                  _currentSearchType = SearchType.text;
-                  _selectedEmoticon = null;
-                });
-              }
-            },
+    IconData icon;
+    String label;
+    switch (_currentSearchType) {
+      case SearchType.text:
+        icon = Icons.text_fields;
+        label = l10n.filterText;
+        break;
+      case SearchType.tag:
+        icon = Icons.label;
+        label = l10n.filterTag;
+        break;
+      case SearchType.emoticon:
+        icon = Icons.mood;
+        label = l10n.filterEmoticon;
+        break;
+      case SearchType.date:
+        icon = Icons.calendar_today;
+        label = l10n.filterDate;
+        break;
+    }
+
+    return PopupMenuButton<SearchType>(
+      initialValue: _currentSearchType,
+      onSelected: (SearchType type) {
+        if (_currentSearchType != type) {
+          setState(() {
+            _currentSearchType = type;
+            _clearSearchState();
+          });
+        }
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: SearchType.text,
+          child: Row(
+            children: [
+              const Icon(Icons.text_fields),
+              const SizedBox(width: 8),
+              Text(l10n.filterText),
+            ],
           ),
-          const SizedBox(width: 8),
-          ChoiceChip(
-            avatar: const Icon(Icons.label, size: 18),
-            label: Text(l10n.filterTag),
-            selected: _currentSearchType == SearchType.tag,
-            showCheckmark: false,
-            onSelected: (selected) {
-              if (selected) {
-                setState(() {
-                  _currentSearchType = SearchType.tag;
-                  _selectedEmoticon = null;
-                });
-              }
-            },
+        ),
+        PopupMenuItem(
+          value: SearchType.tag,
+          child: Row(
+            children: [
+              const Icon(Icons.label),
+              const SizedBox(width: 8),
+              Text(l10n.filterTag),
+            ],
           ),
-          const SizedBox(width: 8),
-          ChoiceChip(
-            avatar: const Icon(Icons.mood, size: 18),
-            label: Text(l10n.filterEmoticon),
-            selected: _currentSearchType == SearchType.emoticon,
-            showCheckmark: false,
-            onSelected: (selected) {
-              if (selected) {
-                setState(() {
-                  _currentSearchType = SearchType.emoticon;
-                });
-              }
-            },
+        ),
+        PopupMenuItem(
+          value: SearchType.emoticon,
+          child: Row(
+            children: [
+              const Icon(Icons.mood),
+              const SizedBox(width: 8),
+              Text(l10n.filterEmoticon),
+            ],
           ),
-        ],
+        ),
+        PopupMenuItem(
+          value: SearchType.date,
+          child: Row(
+            children: [
+              const Icon(Icons.calendar_today),
+              const SizedBox(width: 8),
+              Text(l10n.filterDate),
+            ],
+          ),
+        ),
+      ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          border: Border.all(color: Theme.of(context).dividerColor),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 18, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 8),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+            const Icon(Icons.arrow_drop_down, size: 20),
+          ],
+        ),
       ),
     );
   }
@@ -357,11 +436,23 @@ class _SearchScreenState extends State<SearchScreen> {
                     icon: const Icon(Icons.clear),
                     onPressed: () {
                       _searchController.clear();
-                      setState(() {});
+                      setState(() {
+                        _searchResults = [];
+                        _hasSearched = false;
+                      });
                     },
                   )
                 : null,
-            onChanged: (_) => setState(() {}),
+            onChanged: (value) {
+              if (value.trim().isEmpty) {
+                setState(() {
+                  _searchResults = [];
+                  _hasSearched = false;
+                });
+              } else {
+                setState(() {});
+              }
+            },
             onSubmitted: (_) => _performSearch(),
             textInputAction: TextInputAction.search,
           ),
@@ -395,19 +486,35 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  // Seletor de emoticons
   Widget _buildEmoticonSelector() {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Exibe apenas o texto de instrução de forma limpa
-        Text(
-          l10n.tapToSelectEmoji,
-          style: TextStyle(
-            fontSize: 14,
-            color: Theme.of(context).textTheme.bodySmall?.color,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              l10n.tapToSelectEmoji,
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
+            ),
+            if (_selectedEmoticon != null)
+              TextButton.icon(
+                onPressed: () {
+                  setState(() {
+                    _selectedEmoticon = null;
+                    _selectedEmojiTranslation = null;
+                    _searchResults = [];
+                    _hasSearched = false;
+                  });
+                },
+                icon: const Icon(Icons.clear, size: 16),
+                label: Text(l10n.clear),
+              ),
+          ],
         ),
         const SizedBox(height: 12),
 
@@ -490,6 +597,125 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ],
     );
+  }
+
+  Widget _buildDateRangeSelector() {
+    final l10n = AppLocalizations.of(context)!;
+    final dateRangeSelected = _startDate != null && _endDate != null;
+
+    String displayText = l10n.selectDateRange;
+    if (dateRangeSelected) {
+      final startStr = DateFormat('dd/MM/yyyy', 'pt_BR').format(_startDate!);
+      final endStr = DateFormat('dd/MM/yyyy', 'pt_BR').format(_endDate!);
+      displayText = '$startStr - $endStr';
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              l10n.filterDate,
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
+            ),
+            if (dateRangeSelected)
+              TextButton.icon(
+                onPressed: () {
+                  setState(() {
+                    _startDate = null;
+                    _endDate = null;
+                    _searchResults = [];
+                    _hasSearched = false;
+                  });
+                },
+                icon: const Icon(Icons.clear, size: 16),
+                label: Text(l10n.clear),
+              ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        InkWell(
+          onTap: _openDateRangePicker,
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: dateRangeSelected
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Theme.of(context).cardColor,
+              border: Border.all(
+                color: dateRangeSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).dividerColor,
+                width: dateRangeSelected ? 2 : 1,
+              ),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.calendar_today,
+                  size: 32,
+                  color: dateRangeSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    displayText,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: dateRangeSelected ? FontWeight.bold : FontWeight.normal,
+                      color: dateRangeSelected
+                          ? Theme.of(context).colorScheme.onPrimaryContainer
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (dateRangeSelected) ...[
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: _performSearch,
+              child: Text(l10n.searchButton),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Future<void> _openDateRangePicker() async {
+    final l10n = AppLocalizations.of(context)!;
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      initialDateRange: _startDate != null && _endDate != null
+          ? DateTimeRange(start: _startDate!, end: _endDate!)
+          : null,
+      saveText: l10n.searchButton,
+    );
+
+    if (picked != null) {
+      setState(() {
+        _startDate = picked.start;
+        _endDate = picked.end;
+      });
+      await _performSearch();
+    }
   }
 
   // Constrói a área de resultados
@@ -701,26 +927,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  /// Navega para a tela de edição de uma história
-  void _editHistoria(Historia historia) {
-    final refreshProvider = Provider.of<RefreshProvider>(
-      context,
-      listen: false,
-    );
-    Navigator.push(
-      context,
-      RouteTransitionHelper.slideUpRotateTransition(
-        EditHistoriaScreen(historia: historia),
-      ),
-    ).then((updated) {
-      if (updated == true) {
-        _performSearch();
-        if (mounted) {
-          refreshProvider.refresh();
-        }
-      }
-    });
-  }
+
 
   /// Atualiza campos de uma história no banco
   Future<void> _updateHistoriaFields(
@@ -766,308 +973,235 @@ class _SearchScreenState extends State<SearchScreen> {
     Provider.of<RefreshProvider>(context, listen: false).refresh();
   }
 
-  /// Desagrupa uma história (remove do grupo)
-  Future<void> _desagruparHistoria(Historia historia) async {
-    final l10n = AppLocalizations.of(context)!;
-    await _updateHistoriaFields(historia, {
-      'grupo': null,
-      'tag': null,
-      'arquivado': null,
-    });
-    if (!mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(l10n.storyUngrouped)));
-    _performSearch();
-    Provider.of<RefreshProvider>(context, listen: false).refresh();
+
+
+  String? _convertLegacyEmoticon(String emoticon) {
+    switch (emoticon) {
+      case 'Feliz':
+        return '😊';
+      case 'Tranquilo':
+        return '😌';
+      case 'Aliviado':
+        return '😮‍💨';
+      case 'Pensativo':
+        return '🤔';
+      case 'Sono':
+        return '😴';
+      case 'Preocupado':
+        return '😟';
+      case 'Assustado':
+        return '😨';
+      case 'Bravo':
+        return '😠';
+      case 'Triste':
+        return '😢';
+      case 'Muito Triste':
+        return '😭';
+      default:
+        return null;
+    }
   }
 
-  /// Desarquiva uma história
-  Future<void> _desarquivarHistoria(Historia historia) async {
-    final l10n = AppLocalizations.of(context)!;
-    await _updateHistoriaFields(historia, {'arquivado': null});
+  Future<void> _openStoryPreview(Historia historia) async {
+    try {
+      await _warmupStoryPreviewMedia(
+        historia,
+      ).timeout(const Duration(milliseconds: 180));
+    } catch (_) {
+      // Ignora timeout/falha de prewarm para não bloquear a navegação.
+    }
+
     if (!mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(l10n.unarchive)));
-    _performSearch();
-    Provider.of<RefreshProvider>(context, listen: false).refresh();
+
+    final heroTag = _storyHeroTag(historia);
+    final navigator = Navigator.of(context);
+    final action = await navigator.push<StoryPreviewAction>(
+      MaterialPageRoute(
+        builder: (_) => StoryPreviewScreen(
+          historia: historia,
+          localeName: AppLocalizations.of(context)!.localeName,
+          convertLegacyEmoticon: _convertLegacyEmoticon,
+          heroTag: heroTag,
+          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+          showEditDelete: true,
+          showMoodNotes: true,
+          showBottomActions: true,
+        ),
+      ),
+    );
+
+    if (!mounted || action == null || action == StoryPreviewAction.close) {
+      return;
+    }
+
+    if (action == StoryPreviewAction.edit) {
+      final navigator = Navigator.of(context);
+      final updated = await navigator.push(
+        RouteTransitionHelper.slideUpRotateTransition(
+          EditHistoriaScreen(historia: historia),
+        ),
+      );
+      if (!mounted) return;
+      if (updated == true) {
+        _performSearch();
+        Provider.of<RefreshProvider>(context, listen: false).refresh();
+      }
+      return;
+    }
+
+    if (action == StoryPreviewAction.delete) {
+      await _deleteHistoria(historia);
+    }
+  }
+
+  Future<void> _warmupStoryPreviewMedia(Historia historia) async {
+    final historiaId = historia.id;
+    if (historiaId == null || historiaId <= 0) return;
+
+    try {
+      final fotos = await HistoriaFotoHelper().getFotosComBytesByHistoria(
+        historiaId,
+      );
+      if (fotos.isEmpty) return;
+
+      final thumbnailsInput = fotos
+          .map((foto) => MapEntry('foto_${foto.id}', foto.bytes))
+          .toList(growable: false);
+
+      await ThumbnailService().preloadThumbnails(thumbnailsInput);
+    } catch (e) {
+      debugPrint('SearchScreen: falha no prewarm de mídia da preview: $e');
+    }
+  }
+
+  String _storyHeroTag(Historia historia) {
+    final id =
+        historia.id?.toString() ??
+        '${historia.titulo}_${historia.data.millisecondsSinceEpoch}';
+    return 'search_story_card_$id';
   }
 
   /// Card de uma história
   Widget _buildHistoriaCard(Historia historia) {
-    final l10n = AppLocalizations.of(context)!;
-    final temGrupo = historia.grupo != null && historia.grupo!.isNotEmpty;
-    final estaArquivado = historia.arquivado != null;
+    return StoryCard(
+      historia: historia,
+      heroTag: _storyHeroTag(historia),
+      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+      convertLegacyEmoticon: _convertLegacyEmoticon,
+      stateLabel: historia.grupo?.isNotEmpty == true
+          ? historia.grupo
+          : historia.arquivado != null
+          ? AppLocalizations.of(context)!.archivedStateLabel
+          : null,
+      onPreview: () => _openStoryPreview(historia),
+      onDoubleTap: () => _openStoryPreview(historia),
+    );
+  }
+}
 
-    return GestureDetector(
-      onTap: () => _editHistoria(historia),
-      child: Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Cabeçalho: badges de grupo/arquivado + menu de 3 pontos
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Badges de grupo e arquivado
-                  Expanded(
-                    child: Wrap(
-                      spacing: 6,
-                      runSpacing: 4,
-                      children: [
-                        if (temGrupo)
-                          _buildBadge(
-                            icon: Icons.folder_outlined,
-                            label: historia.grupo!,
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.tertiaryContainer,
-                            foregroundColor: Theme.of(
-                              context,
-                            ).colorScheme.onTertiaryContainer,
-                          ),
-                        if (estaArquivado)
-                          _buildBadge(
-                            icon: Icons.archive_outlined,
-                            label: l10n.archivedStateLabel,
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.surfaceContainerHighest,
-                            foregroundColor: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
-                          ),
-                      ],
-                    ),
-                  ),
-                  // Menu de 3 pontos
-                  PopupMenuButton<String>(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.more_vert,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                    onSelected: (value) async {
-                      switch (value) {
-                        case 'editar':
-                          _editHistoria(historia);
-                        case 'desagrupar':
-                          await _desagruparHistoria(historia);
-                        case 'desarquivar':
-                          await _desarquivarHistoria(historia);
-                        case 'excluir':
-                          await _deleteHistoria(historia);
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 'editar',
-                        child: Row(
-                          children: [
-                            const Icon(Icons.edit_outlined, size: 20),
-                            const SizedBox(width: 12),
-                            Text(l10n.edit),
-                          ],
-                        ),
-                      ),
-                      if (temGrupo)
-                        PopupMenuItem(
-                          value: 'desagrupar',
-                          child: Row(
-                            children: [
-                              const Icon(Icons.folder_off_outlined, size: 20),
-                              const SizedBox(width: 12),
-                              Text(l10n.ungroup),
-                            ],
-                          ),
-                        ),
-                      if (estaArquivado)
-                        PopupMenuItem(
-                          value: 'desarquivar',
-                          child: Row(
-                            children: [
-                              const Icon(Icons.unarchive_outlined, size: 20),
-                              const SizedBox(width: 12),
-                              Text(l10n.unarchive),
-                            ],
-                          ),
-                        ),
-                      PopupMenuItem(
-                        value: 'excluir',
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.delete_outline,
-                              size: 20,
-                              color: Theme.of(context).colorScheme.error,
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              l10n.deleteLabel,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
+  return (
+    BuildContext flightContext,
+    Animation<double> animation,
+    HeroFlightDirection flightDirection,
+    BuildContext fromHeroContext,
+    BuildContext toHeroContext,
+  ) {
+    final colorScheme = Theme.of(toHeroContext).colorScheme;
+    final dateText = DateFormat(
+      'dd/MM/yyyy HH:mm',
+      'pt_BR',
+    ).format(historia.data);
+    final easedAnimation = CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+
+    return AnimatedBuilder(
+      animation: easedAnimation,
+      builder: (context, child) {
+        final rawProgress = easedAnimation.value;
+        final progress = flightDirection == HeroFlightDirection.push
+            ? rawProgress
+            : 1 - rawProgress;
+        final compactOpacity = (1 - ((progress - 0.12) / 0.42)).clamp(0.0, 1.0);
+        final expandedOpacity = ((progress - 0.32) / 0.48).clamp(0.0, 1.0);
+
+        return Material(
+          color: Colors.transparent,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: colorScheme.onSurface.withValues(alpha: 0.10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.onSurface.withValues(alpha: 0.03),
+                    blurRadius: 20,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
-
-              // Visualização das fotos com grade e visualizador completo
-              HistoriaFotosGrid(historiaId: historia.id ?? 0, height: 120),
-              // Áudios e vídeos
-              HistoriaMediaRow(
-                historiaId: historia.id ?? 0,
-                emoticon: historia.emoticon,
-              ),
-
-              // Título e emoticon
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      historia.titulo,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.titleLarge?.color,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  if (historia.emoticon != null &&
-                      historia.emoticon!.isNotEmpty) ...[
-                    const SizedBox(width: 8),
-                    _buildEmoticonWidget(historia.emoticon!),
-                  ],
-                ],
-              ),
-
-              // Tags (novo sistema + legado)
-              FutureBuilder<List<Tag>>(
-                future: TagHelper().getTagsByHistoria(historia.id ?? 0),
-                builder: (context, tagSnapshot) {
-                  final newTags = tagSnapshot.data ?? [];
-                  final legacyTag = historia.tag;
-                  final tagNames = newTags.isNotEmpty
-                      ? newTags.map((t) => t.nome).toList()
-                      : (legacyTag != null && legacyTag.isNotEmpty
-                            ? [legacyTag]
-                            : <String>[]);
-                  if (tagNames.isEmpty) return const SizedBox.shrink();
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Stack(
+                    fit: StackFit.expand,
                     children: [
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 4,
-                        runSpacing: 4,
-                        children: tagNames
-                            .map(
-                              (name) => Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
+                      Opacity(
+                        opacity: compactOpacity,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.open_in_full_rounded,
+                                  size: 16,
+                                  color: colorScheme.onSurfaceVariant
+                                      .withValues(alpha: 0.55),
                                 ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.secondaryContainer,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  name,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSecondaryContainer,
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    historia.titulo,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: colorScheme.onSurface,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                            .toList(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Opacity(
+                        opacity: expandedOpacity,
+                        child: Center(
+                          child: Text(
+                            dateText,
+                            style: TextStyle(
+                              color: colorScheme.onSurfaceVariant,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   );
                 },
               ),
-
-              // Descrição (resumo)
-              if (historia.descricao != null &&
-                  historia.descricao!.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                SizedBox(
-                  height: 48,
-                  child: RichTextViewerWidget(jsonContent: historia.descricao),
-                ),
-              ],
-
-              // Hora
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(
-                    Icons.access_time,
-                    size: 14,
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    DateFormat('HH:mm', 'pt_BR').format(historia.data),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).textTheme.bodySmall?.color,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
-  }
-
-  /// Widget auxiliar para badges de grupo e arquivado
-  Widget _buildBadge({
-    required IconData icon,
-    required String label,
-    required Color backgroundColor,
-    required Color foregroundColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: foregroundColor),
-          const SizedBox(width: 4),
-          Text(label, style: TextStyle(fontSize: 12, color: foregroundColor)),
-        ],
-      ),
-    );
-  }
-
-  /// Widget do emoticon - exibe o emoji Unicode diretamente
-  Widget _buildEmoticonWidget(String emoticon) {
-    // O emoticon é armazenado como caractere Unicode (ex: 😄)
-    return Text(emoticon, style: const TextStyle(fontSize: 28));
-  }
+  };
 }

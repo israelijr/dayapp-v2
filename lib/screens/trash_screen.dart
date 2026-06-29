@@ -434,33 +434,40 @@ class _TrashScreenState extends State<TrashScreen> {
             final historias = snapshot.data ?? [];
 
             if (historias.isEmpty) {
+              final shortestSide = MediaQuery.sizeOf(context).shortestSide;
+              final imageSize = (shortestSide * 0.35).clamp(90.0, 140.0) * 1.4;
               return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.delete_outline,
-                      size: 80,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      loc.noStoriesYetTitle,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/image/lixeira_vazia.png',
+                        width: imageSize,
+                        height: imageSize,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.delete_outline,
+                            size: 64,
+                            color: Theme.of(context).colorScheme.outline,
+                          );
+                        },
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      loc.noStoriesHere,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      const SizedBox(height: 16),
+                      Text(
+                        loc.trashEmptyStateMessage,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             }

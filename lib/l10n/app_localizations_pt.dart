@@ -234,6 +234,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noStoriesYetTitle => 'Nenhuma história registrada ainda';
 
   @override
+  String get trashEmptyStateMessage => 'Sua lixeira está vazia';
+
+  @override
   String get noStoriesYetSubtitle =>
       'Comece a registrar seus dias para ver as estatísticas';
 
@@ -777,6 +780,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get filterEmoticon => 'Emoticon';
 
   @override
+  String get filterDate => 'Período';
+
+  @override
+  String get selectDateRange => 'Selecionar Período';
+
+  @override
+  String get startDate => 'Data Inicial';
+
+  @override
+  String get endDate => 'Data Final';
+
+  @override
   String get searchHintTag => 'Digite uma tag...';
 
   @override
@@ -1112,7 +1127,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get helpBiometricsDesc =>
-      'Use digital ou reconhecimento facial para desbloquear o app rapidamente, se disponível no dispositivo.';
+      'Use sua digital para desbloquear o app rapidamente, se disponível no dispositivo.';
 
   @override
   String get helpPasswordUnlockTitle => 'Desbloqueio por Senha';
@@ -1567,7 +1582,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get biometricConfiguredInfo =>
-      'A biometria está configurada. Você pode fazer login usando sua digital ou reconhecimento facial.';
+      'A biometria está configurada. Você pode fazer login usando sua digital.';
 
   @override
   String get biometricAuthFailed => 'Falha na autenticação biométrica';
@@ -2860,6 +2875,80 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get pwdCriteriaSpecial => '1 special character';
+
+  @override
+  String get invalidBackupFilenameTitle => 'Nome de Ficheiro Inválido';
+
+  @override
+  String invalidBackupFilenameMessage(String fileName) {
+    return 'O ficheiro selecionado \'$fileName\' não é um ficheiro padrão do backup.\n\nPor favor, escolha um ficheiro de backup válido.';
+  }
+
+  @override
+  String get restoreFailedTitle => 'Falha na Restauração';
+
+  @override
+  String get restoreFailedMessage =>
+      'O ficheiro selecionado não é um backup do DayApp. Deseja tentar novamente?';
+
+  @override
+  String get backupFailedMessage =>
+      'Ocorreu um erro ao criar o backup. Deseja tentar novamente?';
+
+  @override
+  String get pessoasLabel => 'Pessoas';
+
+  @override
+  String get localLabel => 'Local';
+
+  @override
+  String get pessoasHint => 'Digite e pressione Enter ou vírgula';
+
+  @override
+  String get localHint => 'Digite o local';
+
+  @override
+  String get addPessoa => 'Adicionar pessoa';
+
+  @override
+  String get pessoasSection => 'Pessoas';
+
+  @override
+  String get localSection => 'Local';
+
+  @override
+  String get comQuemTitle => 'Com quem você estava?';
+
+  @override
+  String get ondeTitle => 'Onde você estava?';
+
+  @override
+  String get pessoasTooltip => 'Pessoas';
+
+  @override
+  String get localTooltip => 'Local';
+
+  @override
+  String get pessoaLongPressHint => 'Pressione e segure para renomear';
+
+  @override
+  String get renamePessoaTitle => 'Renomear pessoa';
+
+  @override
+  String get renamePessoaWarning =>
+      'Renomear afetará todas as histórias que contêm esta pessoa.';
+
+  @override
+  String get pessoaNameLabel => 'Nome da pessoa';
+
+  @override
+  String get moodLabel => 'Humor';
+
+  @override
+  String get energyLabel => 'Energia';
+
+  @override
+  String get backupFailedTitle => 'Falha no Backup';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3053,4 +3142,26 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get pwdCriteriaSpecial => '1 caracter especial';
+
+  @override
+  String get invalidBackupFilenameTitle => 'Nome de Arquivo Inválido';
+
+  @override
+  String invalidBackupFilenameMessage(String fileName) {
+    return 'O arquivo selecionado \'$fileName\' não é um arquivo padrão do backup.\n\nPor favor, escolha um arquivo de backup válido.';
+  }
+
+  @override
+  String get restoreFailedTitle => 'Falha na Restauração';
+
+  @override
+  String get restoreFailedMessage =>
+      'O arquivo selecionado não é um backup do DayApp. Deseja tentar novamente?';
+
+  @override
+  String get backupFailedMessage =>
+      'Ocorreu um erro ao criar o backup. Deseja tentar novamente?';
+
+  @override
+  String get backupFailedTitle => 'Falha no Backup';
 }

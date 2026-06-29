@@ -39,6 +39,28 @@ class RichTextViewerWidget extends StatelessWidget {
     // Cria o controller a partir do JSON ou Texto Simples
     final controller = RichTextHelper.smartController(jsonContent);
 
+    final effectiveTextStyle =
+        textStyle ??
+        DefaultTextStyle.of(context).style.copyWith(fontSize: 16);
+
+    final customStyles = DefaultStyles(
+      paragraph: DefaultTextBlockStyle(
+        effectiveTextStyle,
+        const HorizontalSpacing(0, 0),
+        const VerticalSpacing(8, 0),
+        const VerticalSpacing(0, 0),
+        null,
+      ),
+      lists: DefaultListBlockStyle(
+        effectiveTextStyle,
+        const HorizontalSpacing(0, 0),
+        const VerticalSpacing(8, 0),
+        const VerticalSpacing(0, 0),
+        null,
+        null,
+      ),
+    );
+
     return QuillEditor(
       controller: controller,
       focusNode: FocusNode(canRequestFocus: false),
@@ -48,6 +70,7 @@ class RichTextViewerWidget extends StatelessWidget {
         // Desabilita todas as interações
         enableInteractiveSelection: false,
         enableScribble: false,
+        customStyles: customStyles,
       ),
     );
   }

@@ -236,6 +236,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get noStoriesYetTitle => 'Ancora nessuna storia';
 
   @override
+  String get trashEmptyStateMessage => 'Il tuo cestino è vuoto';
+
+  @override
   String get noStoriesYetSubtitle =>
       'Inizia a registrare le tue giornate per vedere le statistiche';
 
@@ -785,6 +788,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get filterEmoticon => 'Emoticon';
 
   @override
+  String get filterDate => 'Periodo';
+
+  @override
+  String get selectDateRange => 'Seleziona periodo';
+
+  @override
+  String get startDate => 'Data di inizio';
+
+  @override
+  String get endDate => 'Data di fine';
+
+  @override
   String get searchHintTag => 'Digita un tag...';
 
   @override
@@ -1119,7 +1134,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get helpBiometricsDesc =>
-      'Usa l\'impronta digitale o il riconoscimento facciale per sbloccare rapidamente l\'app, se disponibile sul tuo dispositivo.';
+      'Usa l\'impronta digitale per sbloccare rapidamente l\'app, se disponibile sul tuo dispositivo.';
 
   @override
   String get helpPasswordUnlockTitle => 'Sblocco con password';
@@ -1576,7 +1591,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get biometricConfiguredInfo =>
-      'La biometria è configurata. Puoi accedere con l\'impronta digitale o il riconoscimento facciale.';
+      'La biometria è configurata. Puoi accedere con l\'impronta digitale.';
 
   @override
   String get biometricAuthFailed => 'Autenticazione biometrica fallita';
@@ -2868,4 +2883,78 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get pwdCriteriaSpecial => '1 special character';
+
+  @override
+  String get invalidBackupFilenameTitle => 'Nome file non valido';
+
+  @override
+  String invalidBackupFilenameMessage(String fileName) {
+    return 'Il file selezionato \'$fileName\' non è un file di backup standard.\n\nScegli un file di backup valido.';
+  }
+
+  @override
+  String get restoreFailedTitle => 'Ripristino non riuscito';
+
+  @override
+  String get restoreFailedMessage =>
+      'Il file selezionato non è un backup di DayApp. Vuoi riprovare?';
+
+  @override
+  String get backupFailedMessage =>
+      'Si è verificato un errore durante la creazione del backup. Vuoi riprovare?';
+
+  @override
+  String get pessoasLabel => 'People';
+
+  @override
+  String get localLabel => 'Location';
+
+  @override
+  String get pessoasHint => 'Type and press Enter or comma';
+
+  @override
+  String get localHint => 'Type location';
+
+  @override
+  String get addPessoa => 'Add person';
+
+  @override
+  String get pessoasSection => 'People';
+
+  @override
+  String get localSection => 'Location';
+
+  @override
+  String get comQuemTitle => 'Who were you with?';
+
+  @override
+  String get ondeTitle => 'Where were you?';
+
+  @override
+  String get pessoasTooltip => 'People';
+
+  @override
+  String get localTooltip => 'Location';
+
+  @override
+  String get pessoaLongPressHint => 'Press and hold to rename';
+
+  @override
+  String get renamePessoaTitle => 'Rename person';
+
+  @override
+  String get renamePessoaWarning =>
+      'Renaming will affect all stories containing this person.';
+
+  @override
+  String get pessoaNameLabel => 'Person name';
+
+  @override
+  String get moodLabel => 'Mood';
+
+  @override
+  String get energyLabel => 'Energy';
+
+  @override
+  String get backupFailedTitle => 'Backup non riuscito';
 }
