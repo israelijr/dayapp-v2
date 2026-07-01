@@ -29,6 +29,7 @@ import '../widgets/emoji_selection_modal.dart';
 import '../widgets/entry_toolbar.dart';
 import '../widgets/expandable_rich_text_editor.dart';
 import '../widgets/image_picker_widget.dart';
+import '../widgets/local_input_widget.dart';
 import '../widgets/metadata_selector_bar.dart';
 import '../widgets/mood_energy_selector_bar.dart';
 import '../widgets/mood_energy_selectors.dart';
@@ -309,7 +310,9 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
         _selectedTags.any((t) => !_initialTags.any((i) => i.slug == t.slug));
     final pessoasChanged =
         _selectedPessoas.length != _initialPessoas.length ||
-        _selectedPessoas.any((p) => !_initialPessoas.any((i) => i.slug == p.slug));
+        _selectedPessoas.any(
+          (p) => !_initialPessoas.any((i) => i.slug == p.slug),
+        );
     final localChanged = localController.text != (_initialLocal ?? '');
 
     final hasChanges =
@@ -593,72 +596,89 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
   }
 
   Future<bool> _save({bool navigateAfterSave = true}) async {
-    final updated = await _historiaRepository.saveEditedHistoria(
-      historia: widget.historia,
-      titulo: _capitalizeText(titleController.text.trim()),
-      descricao: RichTextHelper.controllerToJson(richTextController),
-      emoticon: selectedEmoticon,
-      data: selectedDate,
-      humor: _selectedMood,
-      energia: _selectedEnergy,
-      arquivado: widget.historia.arquivado,
-      local: localController.text.trim().isEmpty ? null : localController.text.trim(),
-      tags: _selectedTags,
-      pessoas: _selectedPessoas,
-      newFotos: fotos
-          .asMap()
-          .entries
-          .where(
-            (entry) => entry.key >= fotoIds.length || fotoIds[entry.key] == 0,
-          )
-          .map((entry) => entry.value)
-          .toList(growable: false),
-      newAudios: audios
-          .asMap()
-          .entries
-          .where(
-            (entry) => entry.key >= audioIds.length || audioIds[entry.key] == 0,
-          )
-          .map(
-            (entry) => {
-              'audio': entry.value['audio'],
-              'duration': entry.value['duration'],
-            },
-          )
-          .toList(growable: false),
-      newVideos: videos
-          .asMap()
-          .entries
-          .where(
-            (entry) => entry.key >= videoIds.length || videoIds[entry.key] == 0,
-          )
-          .map(
-            (entry) => {
-              'video': entry.value['video'],
-              'duration': entry.value['duration'],
-            },
-          )
-          .toList(growable: false),
-    );
+    try {
+      final updated = await _historiaRepository.saveEditedHistoria(
+        historia: widget.historia,
+        titulo: _capitalizeText(titleController.text.trim()),
+        descricao: RichTextHelper.controllerToJson(richTextController),
+        emoticon: selectedEmoticon,
+        data: selectedDate,
+        humor: _selectedMood,
+        energia: _selectedEnergy,
+        arquivado: widget.historia.arquivado,
+        local: localController.text.trim().isEmpty
+            ? null
+            : localController.text.trim(),
+        tags: _selectedTags,
+        pessoas: _selectedPessoas,
+        newFotos: fotos
+            .asMap()
+            .entries
+            .where(
+              (entry) => entry.key >= fotoIds.length || fotoIds[entry.key] == 0,
+            )
+            .map((entry) => entry.value)
+            .toList(growable: false),
+        newAudios: audios
+            .asMap()
+            .entries
+            .where(
+              (entry) =>
+                  entry.key >= audioIds.length || audioIds[entry.key] == 0,
+            )
+            .map(
+              (entry) => {
+                'audio': entry.value['audio'],
+                'duration': entry.value['duration'],
+              },
+            )
+            .toList(growable: false),
+        newVideos: videos
+            .asMap()
+            .entries
+            .where(
+              (entry) =>
+                  entry.key >= videoIds.length || videoIds[entry.key] == 0,
+            )
+            .map(
+              (entry) => {
+                'video': entry.value['video'],
+                'duration': entry.value['duration'],
+              },
+            )
+            .toList(growable: false),
+      );
 
-    if (!updated) return false;
+      if (!updated) return false;
 
-    // Verifica se a data foi alterada
-    if (selectedDate != _initialDate) {
-      // Cancela notificação existente (se houver)
-      await NotificationHelper().cancelEntryNotification(widget.historia.id!);
+      // Verifica se a data foi alterada
+      if (selectedDate != _initialDate) {
+        // Cancela notificação existente (se houver)
+        await NotificationHelper().cancelEntryNotification(widget.historia.id!);
 
-      // Se a nova data permitir notificação (pelo menos 3 horas à frente), oferece criar notificação
-      if (NotificationHelper().shouldScheduleNotification(selectedDate)) {
-        if (mounted) {
-          await _showNotificationDialog(widget.historia.id!);
+        // Se a nova data permitir notificação (pelo menos 3 horas à frente), oferece criar notificação
+        if (NotificationHelper().shouldScheduleNotification(selectedDate)) {
+          if (mounted) {
+            await _showNotificationDialog(widget.historia.id!);
+          }
         }
       }
-    }
 
-    if (!mounted) return false;
-    if (navigateAfterSave) Navigator.pop(context, true);
-    return true;
+      if (!mounted) return false;
+      if (navigateAfterSave) Navigator.pop(context, true);
+      return true;
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.errorSavingStory(e.toString()),
+            ),
+          ),
+        );
+      }
+      return false;
+    }
   }
 
   Future<void> _handleCancel() async {
@@ -704,7 +724,6 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
       Navigator.of(context).pop();
     }
   }
-
 
   Future<void> _selectEmoji() async {
     final Emoji? result = await showModalBottomSheet<Emoji>(
@@ -890,6 +909,8 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                         label: loc.descriptionLabel,
                         hintText: loc.descriptionHint,
                         expandTooltip: loc.expandTooltip,
+                        minLines: 12,
+                        maxLines: 22,
                         showBorder: false,
                         onChanged: () {
                           _checkForChanges();
@@ -984,12 +1005,18 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
 
                       // Input painel para Local
                       if (_showLocalInput) ...[
-                        CustomTextField(
-                          controller: localController,
-                          label: loc.localLabel,
-                          hintText: loc.localHint,
-                          prefixIcon: const Icon(Icons.location_on_outlined),
-                          onChanged: (_) => _checkForChanges(),
+                        Builder(
+                          builder: (context) {
+                            final auth = Provider.of<AuthProvider>(
+                              context,
+                              listen: false,
+                            );
+                            return LocalInputWidget(
+                              userId: auth.user?.id ?? '',
+                              controller: localController,
+                              onChanged: (_) => _checkForChanges(),
+                            );
+                          },
                         ),
                         const SizedBox(height: 16),
                       ],
@@ -1040,8 +1067,6 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                         ),
                         const SizedBox(height: 8),
                       ],
-
-
 
                       // Media Previews
                       if (fotos.isNotEmpty) ...[
@@ -1191,6 +1216,4 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
       ),
     );
   }
-
-
 }

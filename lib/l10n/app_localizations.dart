@@ -3618,6 +3618,42 @@ abstract class AppLocalizations {
     String moodAvg,
   );
 
+  /// Title of the premium insight about people present on radiant days
+  ///
+  /// In en, this message translates to:
+  /// **'Wellness Circle'**
+  String get insightWellnessCircleTitle;
+
+  /// Description of the premium wellness circle insight
+  ///
+  /// In en, this message translates to:
+  /// **'People who are present on your most radiant days: {names}.'**
+  String insightWellnessCircleDescription(String names);
+
+  /// Title of the premium insight about places with positive mood
+  ///
+  /// In en, this message translates to:
+  /// **'Peaceful Places'**
+  String get insightPeacefulPlacesTitle;
+
+  /// Description of the premium peaceful places insight
+  ///
+  /// In en, this message translates to:
+  /// **'Where your mood stays more positive: {places}.'**
+  String insightPeacefulPlacesDescription(String places);
+
+  /// Title of the premium insight about low mood and energy
+  ///
+  /// In en, this message translates to:
+  /// **'Take a Deep Breath'**
+  String get insightBreatheDeepTitle;
+
+  /// Description of the premium take a deep breath insight
+  ///
+  /// In en, this message translates to:
+  /// **'Where your energy and mood are low: {places}.'**
+  String insightBreatheDeepDescription(String places);
+
   /// Title of the insight encouraging detailed writing
   ///
   /// In en, this message translates to:

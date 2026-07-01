@@ -26,6 +26,7 @@ class PolaroidStackTemplate extends StatelessWidget {
       'dd MMM yyyy',
       story.localeName,
     ).format(story.date);
+    final metadataLine = storyMetadataLine(story);
 
     Widget buildPolaroidCard(Uint8List? image, double width, double height) {
       return Container(
@@ -233,6 +234,19 @@ class PolaroidStackTemplate extends StatelessWidget {
                                 ),
                             ],
                           ),
+                          if (metadataLine.isNotEmpty) ...[
+                            const SizedBox(height: 8),
+                            Text(
+                              metadataLine,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black.withValues(alpha: 0.70),
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 12),
                           Align(
                             alignment: Alignment.centerRight,

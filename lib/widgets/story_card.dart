@@ -1,7 +1,9 @@
 import 'package:dayapp/db/historia_foto_helper.dart';
+import 'package:dayapp/db/pessoa_helper.dart';
 import 'package:dayapp/db/tag_helper.dart';
 import 'package:dayapp/l10n/app_localizations.dart';
 import 'package:dayapp/models/historia.dart';
+import 'package:dayapp/models/pessoa.dart';
 import 'package:dayapp/models/tag.dart';
 import 'package:dayapp/providers/premium_provider.dart';
 import 'package:dayapp/sharing/service/story_share_service.dart';
@@ -46,6 +48,78 @@ class StoryCard extends StatelessWidget {
     this.stateLabel,
     super.key,
   });
+
+  Widget _buildLocationAndPeople(BuildContext context) {
+    final location = historia.local?.trim();
+    final hasLocation = location != null && location.isNotEmpty;
+
+    return FutureBuilder<List<Pessoa>>(
+      future: PessoaHelper().getPessoasByHistoria(historia.id ?? 0),
+      builder: (context, snapshot) {
+        final people = snapshot.data ?? const <Pessoa>[];
+        final hasPeople = people.isNotEmpty;
+        if (!hasLocation && !hasPeople) {
+          return const SizedBox.shrink();
+        }
+
+        final color = Theme.of(
+          context,
+        ).colorScheme.onSurfaceVariant.withValues(alpha: 0.72);
+        final peopleText = people.map((p) => p.nome).join(', ');
+
+        return Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Row(
+            children: [
+              if (hasLocation) ...[
+                Icon(Icons.place_outlined, size: 13, color: color),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    location,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.2,
+                      color: color,
+                    ),
+                  ),
+                ),
+              ],
+              if (hasLocation && hasPeople) ...[
+                const SizedBox(width: 8),
+                Icon(
+                  Icons.circle,
+                  size: 4,
+                  color: color.withValues(alpha: 0.7),
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (hasPeople) ...[
+                Icon(Icons.people_alt_outlined, size: 13, color: color),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    peopleText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.2,
+                      color: color,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,6 +305,7 @@ class StoryCard extends StatelessWidget {
                             ),
                           ],
                         ),
+                        _buildLocationAndPeople(context),
                         const SizedBox(height: 8),
                         FutureBuilder<List<Tag>>(
                           future: TagHelper().getTagsByHistoria(
@@ -371,6 +446,74 @@ class StoryPreviewScreen extends StatelessWidget {
     if (energy <= 1) return l10n.storyPreviewEnergyLowNarrative;
     if (energy == 2) return l10n.storyPreviewEnergyNormalNarrative;
     return l10n.storyPreviewEnergyHighNarrative;
+  }
+
+  Widget _buildPreviewLocationAndPeople(ColorScheme colorScheme) {
+    final location = historia.local?.trim();
+    final hasLocation = location != null && location.isNotEmpty;
+
+    return FutureBuilder<List<Pessoa>>(
+      future: PessoaHelper().getPessoasByHistoria(historia.id ?? 0),
+      builder: (context, snapshot) {
+        final people = snapshot.data ?? const <Pessoa>[];
+        final hasPeople = people.isNotEmpty;
+        if (!hasLocation && !hasPeople) {
+          return const SizedBox.shrink();
+        }
+
+        final color = colorScheme.onSurfaceVariant.withValues(alpha: 0.78);
+        final peopleText = people.map((p) => p.nome).join(', ');
+
+        return Padding(
+          padding: const EdgeInsets.only(top: 14),
+          child: Row(
+            children: [
+              if (hasLocation) ...[
+                Icon(Icons.place_outlined, size: 14, color: color),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    location,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: color,
+                    ),
+                  ),
+                ),
+              ],
+              if (hasLocation && hasPeople) ...[
+                const SizedBox(width: 8),
+                Icon(
+                  Icons.circle,
+                  size: 4,
+                  color: color.withValues(alpha: 0.7),
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (hasPeople) ...[
+                Icon(Icons.people_alt_outlined, size: 14, color: color),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    peopleText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: color,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _shareStory(BuildContext context) async {
@@ -557,6 +700,7 @@ class StoryPreviewScreen extends StatelessWidget {
                           ),
                         ),
                       ],
+                      _buildPreviewLocationAndPeople(colorScheme),
                     ],
                   ),
                 ),

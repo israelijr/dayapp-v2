@@ -91,7 +91,8 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
           Scrollable.ensureVisible(
             _focusNode.context!,
             duration: const Duration(milliseconds: 200),
-            alignment: 0.8, // 80% do topo da tela (mantém o campo acima do teclado)
+            alignment:
+                0.8, // 80% do topo da tela (mantém o campo acima do teclado)
           );
         }
       });
@@ -165,27 +166,31 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
                   ? widget.maxLines! * 20.0
                   : double.infinity,
             ),
-      decoration: BoxDecoration(
-        color: isDark ? theme.colorScheme.surface : Colors.white,
-        border: widget.showBorder ? Border.all(color: theme.colorScheme.outlineVariant) : null,
-        borderRadius: widget.showToolbar && !widget.readOnly
-            ? (widget.toolbarAtBottom
-                ? const BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  )
-                : const BorderRadius.only(
-                    bottomLeft: Radius.circular(8),
-                    bottomRight: Radius.circular(8),
-                  ))
-            : BorderRadius.circular(8),
-      ),
+      decoration: widget.showBorder
+          ? BoxDecoration(
+              color: isDark ? theme.colorScheme.surface : Colors.white,
+              border: Border.all(color: theme.colorScheme.outlineVariant),
+              borderRadius: widget.showToolbar && !widget.readOnly
+                  ? (widget.toolbarAtBottom
+                        ? const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          )
+                        : const BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
+                          ))
+                  : BorderRadius.circular(8),
+            )
+          : null,
       child: QuillEditor(
         controller: widget.controller,
         focusNode: _focusNode,
         scrollController: _scrollController,
         config: QuillEditorConfig(
-          placeholder: widget.hintText ?? AppLocalizations.of(context)!.editorPlaceholder,
+          placeholder:
+              widget.hintText ??
+              AppLocalizations.of(context)!.editorPlaceholder,
           padding: const EdgeInsets.all(12),
           customStyles: customStyles,
         ),
@@ -198,62 +203,81 @@ class _RichTextEditorWidgetState extends State<RichTextEditorWidget> {
     }
 
     final toolbar = (widget.showToolbar && !widget.readOnly)
-        ? Container(
-            decoration: BoxDecoration(
-              color: isDark ? theme.colorScheme.surface : Colors.white,
-              border: widget.showBorder ? Border.all(color: theme.colorScheme.outlineVariant) : null,
-              borderRadius: widget.toolbarAtBottom
-                  ? const BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                    )
-                  : const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-            ),
-            child: QuillSimpleToolbar(
-              controller: widget.controller,
-              config: QuillSimpleToolbarConfig(
-                buttonOptions: QuillSimpleToolbarButtonOptions(
-                  base: QuillToolbarBaseButtonOptions(
-                    iconTheme: QuillIconTheme(
-                      iconButtonUnselectedData: IconButtonData(
-                        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+        ? Theme(
+            data: theme.copyWith(dividerColor: Colors.transparent),
+            child: Container(
+              decoration: widget.showBorder
+                  ? BoxDecoration(
+                      color: isDark ? theme.colorScheme.surface : Colors.white,
+                      border: Border.all(
+                        color: theme.colorScheme.outlineVariant,
                       ),
-                      iconButtonSelectedData: IconButtonData(
-                        color: theme.colorScheme.primary,
-                        style: IconButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
+                      borderRadius: widget.toolbarAtBottom
+                          ? const BorderRadius.only(
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8),
+                            )
+                          : const BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              topRight: Radius.circular(8),
+                            ),
+                    )
+                  : null,
+              child: QuillSimpleToolbar(
+                controller: widget.controller,
+                config: QuillSimpleToolbarConfig(
+                  showDividers: widget.showBorder,
+                  color: widget.showBorder ? null : Colors.transparent,
+                  sectionDividerColor: Colors.transparent,
+                  decoration: widget.showBorder
+                      ? null
+                      : const BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.fromBorderSide(BorderSide.none),
+                        ),
+                  buttonOptions: QuillSimpleToolbarButtonOptions(
+                    base: QuillToolbarBaseButtonOptions(
+                      iconTheme: QuillIconTheme(
+                        iconButtonUnselectedData: IconButtonData(
+                          color: theme.colorScheme.onSurfaceVariant.withValues(
+                            alpha: 0.6,
+                          ),
+                        ),
+                        iconButtonSelectedData: IconButtonData(
+                          color: theme.colorScheme.primary,
+                          style: IconButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primaryContainer
+                                .withValues(alpha: 0.4),
+                          ),
                         ),
                       ),
                     ),
                   ),
+                  multiRowsDisplay: false,
+                  showFontFamily: false,
+                  showFontSize: false,
+                  showAlignmentButtons: false,
+                  showDirection: false,
+                  showHeaderStyle: false,
+                  showListCheck: false,
+                  showCodeBlock: false,
+                  showInlineCode: false,
+                  showColorButton: false,
+                  showBackgroundColorButton: false,
+                  showClearFormat: true,
+                  showBoldButton: true,
+                  showItalicButton: true,
+                  showUnderLineButton: true,
+                  showStrikeThrough: true,
+                  showListBullets: true,
+                  showListNumbers: true,
+                  showIndent: false,
+                  showLink: false,
+                  showQuote: false,
+                  showSearchButton: false,
+                  showSubscript: false,
+                  showSuperscript: false,
                 ),
-                multiRowsDisplay: false,
-                showFontFamily: false,
-                showFontSize: false,
-                showAlignmentButtons: false,
-                showDirection: false,
-                showHeaderStyle: false,
-                showListCheck: false,
-                showCodeBlock: false,
-                showInlineCode: false,
-                showColorButton: false,
-                showBackgroundColorButton: false,
-                showClearFormat: true,
-                showBoldButton: true,
-                showItalicButton: true,
-                showUnderLineButton: true,
-                showStrikeThrough: true,
-                showListBullets: true,
-                showListNumbers: true,
-                showIndent: false,
-                showLink: false,
-                showQuote: false,
-                showSearchButton: false,
-                showSubscript: false,
-                showSuperscript: false,
               ),
             ),
           )

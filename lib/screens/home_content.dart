@@ -635,7 +635,10 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
         if (userId.isNotEmpty) {
           // Usa loadInsights (que respeita o cache de 24h) em vez de refresh
           // para evitar queries pesadas no banco a todo momento e a piscada
-          Provider.of<InsightProvider>(context, listen: false).loadInsights(userId);
+          Provider.of<InsightProvider>(
+            context,
+            listen: false,
+          ).loadInsights(userId);
         }
         // Restaura posição do scroll após dados serem carregados
         if (!mounted) return;
@@ -714,7 +717,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
           final insightProvider = context.read<InsightProvider>();
 
           await storiesProvider.refreshStories(forceRefresh: true);
-          
+
           final userId = authProvider.user?.id ?? '';
           if (userId.isNotEmpty) {
             await insightProvider.refresh(userId);
@@ -889,8 +892,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                 insight: insight,
                 onDismiss: () =>
                     insightProvider.dismissInsight(userId, insight.type),
-                onPremiumCTA: () =>
-                    Navigator.of(context).pushNamed('/premium'),
+                onPremiumCTA: () => Navigator.of(context).pushNamed('/premium'),
                 onSeeStories: (query) {
                   final searchType = insight.type == InsightType.positiveTag
                       ? SearchType.tag
@@ -911,9 +913,46 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             }
 
             // Lista unificada: saudação + insights (topo) + histórias (corpo).
-            final totalBodyItems = storiesCount == 0
-                ? 1 // placeholder de lista vazia
-                : storiesCount + (widget.hasMoreData ? 1 : 0);
+            // Quando `showAllStories` for true, agrupamos por data e
+            // construímos uma lista plana `bodyItems` contendo cabeçalhos
+            // de data e histórias para renderização consistente (igual à tela de busca).
+            final List<Object> bodyItems = [];
+            if (storiesCount == 0) {
+              // placeholder de lista vazia
+            } else if (widget.showAllStories) {
+              // Agrupar por data (dd/MM/yyyy)
+              final Map<String, List<Historia>> grouped = {};
+              for (final h in widget.historias) {
+                final key = DateFormat('dd/MM/yyyy', 'pt_BR').format(h.data);
+                grouped.putIfAbsent(key, () => []).add(h);
+              }
+
+              final sortedDates = grouped.keys.toList()
+                ..sort((a, b) {
+                  final dateA = DateFormat('dd/MM/yyyy', 'pt_BR').parse(a);
+                  final dateB = DateFormat('dd/MM/yyyy', 'pt_BR').parse(b);
+                  return dateB.compareTo(dateA);
+                });
+
+              for (final dateKey in sortedDates) {
+                final list = grouped[dateKey]!;
+                bodyItems.add({
+                  'type': 'header',
+                  'date': dateKey,
+                  'count': list.length,
+                });
+                for (final h in list) {
+                  bodyItems.add(h);
+                }
+              }
+              if (widget.hasMoreData) bodyItems.add({'type': 'loading'});
+            } else {
+              // Não agrupar: manter ordem original (simples lista de histórias)
+              bodyItems.addAll(widget.historias);
+              if (widget.hasMoreData) bodyItems.add({'type': 'loading'});
+            }
+
+            final totalBodyItems = storiesCount == 0 ? 1 : bodyItems.length;
             final totalItems = headerCount + totalBodyItems;
 
             return LayoutBuilder(
@@ -922,7 +961,10 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                   key: ValueKey<bool>(widget.isCardView),
                   controller: storiesCount > 0 ? widget.scrollController : null,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 12,
+                  ),
                   itemCount: totalItems,
                   itemBuilder: (context, index) {
                     if (index == 0) {
@@ -939,12 +981,18 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
 
                     // Mensagem de lista vazia quando há insights mas não há histórias
                     if (storiesCount == 0) {
-                      final shortestSide = MediaQuery.sizeOf(context).shortestSide;
-                      final imageSize = (shortestSide * 0.35).clamp(90.0, 140.0) * 1.3;
-                      
+                      final shortestSide = MediaQuery.sizeOf(
+                        context,
+                      ).shortestSide;
+                      final imageSize =
+                          (shortestSide * 0.35).clamp(90.0, 140.0) * 1.3;
+
                       // Calculate remaining height to center it vertically in the remaining space
-                      final double estimatedHeaderHeight = 140.0 + (insights.length * 150.0);
-                      final double remainingHeight = (constraints.maxHeight - estimatedHeaderHeight - 32.0).clamp(280.0, 800.0);
+                      final double estimatedHeaderHeight =
+                          140.0 + (insights.length * 150.0);
+                      final double remainingHeight =
+                          (constraints.maxHeight - estimatedHeaderHeight - 32.0)
+                              .clamp(280.0, 800.0);
 
                       return SizedBox(
                         height: remainingHeight,
@@ -962,9 +1010,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                                   return Icon(
                                     Icons.auto_stories_outlined,
                                     size: 64,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
+                                    color: Theme.of(context).colorScheme.primary
                                         .withValues(alpha: 0.4),
                                   );
                                 },
@@ -975,7 +1021,9 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -985,9 +1033,110 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                       );
                     }
 
-                    // Histórias
-                    if (bodyIndex < storiesCount) {
-                      final historia = widget.historias[bodyIndex];
+                    // Histórias / headers quando showAllStories == true
+                    if (bodyIndex <
+                        (storiesCount == 0 ? 1 : bodyItems.length)) {
+                      if (storiesCount == 0) {
+                        // Shouldn't reach here because handled above, but safeguard
+                        return const SizedBox.shrink();
+                      }
+
+                      final item = bodyItems[bodyIndex];
+                      if (item is Map && item['type'] == 'header') {
+                        final dateKey = item['date'] as String;
+                        final count = item['count'] as int;
+                        // Reuse header style from SearchScreen
+                        final l10n = AppLocalizations.of(context)!;
+                        final date = DateFormat(
+                          'dd/MM/yyyy',
+                          'pt_BR',
+                        ).parse(dateKey);
+                        final now = DateTime.now();
+                        final today = DateTime(now.year, now.month, now.day);
+                        final yesterday = today.subtract(
+                          const Duration(days: 1),
+                        );
+                        final parsedDate = DateTime(
+                          date.year,
+                          date.month,
+                          date.day,
+                        );
+
+                        String displayDate;
+                        if (parsedDate == today) {
+                          displayDate = l10n.today;
+                        } else if (parsedDate == yesterday) {
+                          displayDate = l10n.yesterday;
+                        } else {
+                          displayDate = DateFormat(
+                            "EEEE, d 'de' MMMM",
+                            'pt_BR',
+                          ).format(date);
+                          displayDate =
+                              displayDate[0].toUpperCase() +
+                              displayDate.substring(1);
+                        }
+
+                        return Container(
+                          margin: const EdgeInsets.only(top: 16, bottom: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today,
+                                size: 18,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onPrimaryContainer,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  displayDate,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimaryContainer,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  '$count',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      final historia = item as Historia;
                       return widget.isCardView
                           ? widget.buildCardView(historia)
                           : widget.buildIconView(historia);

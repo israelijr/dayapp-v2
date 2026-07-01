@@ -32,9 +32,9 @@ void main() {
   });
 
   group('Database v2 and Pessoa CRUD Tests', () {
-    test('Database opens on version 2 and tables exist', () async {
+    test('Database opens on version 3 and tables exist', () async {
       final db = await DatabaseHelper().database;
-      expect(await db.getVersion(), 2);
+      expect(await db.getVersion(), 3);
 
       // Verify that 'pessoas' and 'historia_pessoas' tables exist
       final tables = await db.rawQuery(
@@ -166,6 +166,38 @@ void main() {
       final updatedPeople = await PessoaHelper().getPessoasByHistoria(storyId);
       expect(updatedPeople.length, 1);
       expect(updatedPeople.first.nome, 'Alice');
+    });
+
+    test('Self-healing automatically adds missing columns and tables', () async {
+      final db = await DatabaseHelper().database;
+      
+      // 1. Força estado inconsistente apagando tabelas e recriando historia sem 'local'
+      await db.execute('DROP TABLE IF EXISTS historia_pessoas');
+      await db.execute('DROP TABLE IF EXISTS pessoas');
+      await db.execute('DROP TABLE IF EXISTS historia');
+      await db.execute('''
+        CREATE TABLE historia (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT NOT NULL,
+          titulo TEXT NOT NULL,
+          data TIMESTAMP NOT NULL
+        );
+      ''');
+
+      // 2. Reseta conexão e reabre para disparar o verifyAndHealSchema
+      await DatabaseHelper().resetDatabase();
+      final healedDb = await DatabaseHelper().database;
+
+      // 3. Valida se as tabelas de pessoas foram recriadas
+      final tables = await healedDb.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table' AND (name='pessoas' OR name='historia_pessoas')",
+      );
+      expect(tables.length, 2);
+
+      // 4. Valida se a coluna local foi re-adicionada
+      final columns = await healedDb.rawQuery('PRAGMA table_info(historia)');
+      final hasLocal = columns.any((column) => column['name'] == 'local');
+      expect(hasLocal, isTrue);
     });
   });
 }

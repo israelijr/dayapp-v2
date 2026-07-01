@@ -11,7 +11,10 @@ enum InsightType {
   energyChart, // gráfico de humor dos últimos 7 dias
   writingLength, // FREE: incentivo de escrita de textos maiores/longos
   chapterEngagement, // PREMIUM: engajamento do capítulo
-  chapterHappiest; // PREMIUM: capítulo mais feliz
+  chapterHappiest, // PREMIUM: capítulo mais feliz
+  wellnessCircle, // PREMIUM: pessoas presentes nos dias mais radiantes
+  peacefulPlaces, // PREMIUM: locais associados a humor positivo
+  breatheDeep; // PREMIUM: locais associados a baixa energia/humor
 
   /// Converte para string armazenável (cache, banco).
   String get value {
@@ -36,6 +39,12 @@ enum InsightType {
         return 'chapter_engagement';
       case InsightType.chapterHappiest:
         return 'chapter_happiest';
+      case InsightType.wellnessCircle:
+        return 'wellness_circle';
+      case InsightType.peacefulPlaces:
+        return 'peaceful_places';
+      case InsightType.breatheDeep:
+        return 'breathe_deep';
     }
   }
 
@@ -62,6 +71,12 @@ enum InsightType {
         return InsightType.chapterEngagement;
       case 'chapter_happiest':
         return InsightType.chapterHappiest;
+      case 'wellness_circle':
+        return InsightType.wellnessCircle;
+      case 'peaceful_places':
+        return InsightType.peacefulPlaces;
+      case 'breathe_deep':
+        return InsightType.breatheDeep;
       default:
         // Tipo desconhecido (cache antigo) — trata como tendência por segurança
         return InsightType.trend;
@@ -75,6 +90,9 @@ enum InsightType {
       case InsightType.energyChart:
       case InsightType.chapterEngagement:
       case InsightType.chapterHappiest:
+      case InsightType.wellnessCircle:
+      case InsightType.peacefulPlaces:
+      case InsightType.breatheDeep:
         return true;
       default:
         return false;

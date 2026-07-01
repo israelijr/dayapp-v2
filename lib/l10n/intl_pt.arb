@@ -1585,6 +1585,45 @@
       }
     }
   },
+  "insightWellnessCircleTitle": "Círculo de Bem-Estar",
+  "@insightWellnessCircleTitle": {
+    "description": "Título do insight premium sobre pessoas presentes em dias radiantes"
+  },
+  "insightWellnessCircleDescription": "Pessoas que estão presentes nos dias mais radiantes: {names}.",
+  "@insightWellnessCircleDescription": {
+    "description": "Descrição do insight premium de círculo de bem-estar",
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "insightPeacefulPlacesTitle": "Locais de Paz",
+  "@insightPeacefulPlacesTitle": {
+    "description": "Título do insight premium sobre locais com humor positivo"
+  },
+  "insightPeacefulPlacesDescription": "Onde seu humor se mantém mais positivo: {places}.",
+  "@insightPeacefulPlacesDescription": {
+    "description": "Descrição do insight premium de locais de paz",
+    "placeholders": {
+      "places": {
+        "type": "String"
+      }
+    }
+  },
+  "insightBreatheDeepTitle": "Respirar Fundo",
+  "@insightBreatheDeepTitle": {
+    "description": "Título do insight premium sobre baixa energia e humor"
+  },
+  "insightBreatheDeepDescription": "Onde sua energia e humor estão em baixa: {places}.",
+  "@insightBreatheDeepDescription": {
+    "description": "Descrição do insight premium respirar fundo",
+    "placeholders": {
+      "places": {
+        "type": "String"
+      }
+    }
+  },
   "insightWritingLengthTitle": "Reflexões Profundas",
   "@insightWritingLengthTitle": {
     "description": "Título do insight de escrita detalhada"

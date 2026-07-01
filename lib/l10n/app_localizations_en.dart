@@ -1963,6 +1963,30 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get insightWellnessCircleTitle => 'Wellness Circle';
+
+  @override
+  String insightWellnessCircleDescription(String names) {
+    return 'People who are present on your most radiant days: $names.';
+  }
+
+  @override
+  String get insightPeacefulPlacesTitle => 'Peaceful Places';
+
+  @override
+  String insightPeacefulPlacesDescription(String places) {
+    return 'Where your mood stays more positive: $places.';
+  }
+
+  @override
+  String get insightBreatheDeepTitle => 'Take a Deep Breath';
+
+  @override
+  String insightBreatheDeepDescription(String places) {
+    return 'Where your energy and mood are low: $places.';
+  }
+
+  @override
   String get insightWritingLengthTitle => 'Deep Reflections';
 
   @override

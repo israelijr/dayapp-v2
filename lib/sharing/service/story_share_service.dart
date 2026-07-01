@@ -1,4 +1,5 @@
 import 'package:dayapp/db/historia_foto_helper.dart';
+import 'package:dayapp/db/pessoa_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/models/historia.dart';
 import 'package:dayapp/providers/pin_provider.dart';
@@ -45,11 +46,18 @@ class StoryShareService {
       final photos = await HistoriaFotoHelper().getFotosComBytesByHistoria(
         historia.id ?? 0,
       );
+      final pessoas = await PessoaHelper().getPessoasByHistoria(
+        historia.id ?? 0,
+      );
       final images = photos.map((photo) => photo.bytes).toList();
       final storyData = StoryData.fromHistoria(
         historia,
         images,
         localeName: localeName,
+        people: pessoas
+            .map((pessoa) => StoryPerson(name: pessoa.nome))
+            .toList(growable: false),
+        location: historia.local,
       );
 
       final shareFormat = await navigator.push<ShareFormat>(
@@ -84,12 +92,7 @@ class StoryShareService {
         final file = await PdfExportService.generateStoryPdf(storyData);
 
         await SharePlus.instance.share(
-          ShareParams(
-            files: [
-              XFile(file.path),
-            ],
-            subject: historia.titulo,
-          ),
+          ShareParams(files: [XFile(file.path)], subject: historia.titulo),
         );
       }
     } catch (error, stackTrace) {

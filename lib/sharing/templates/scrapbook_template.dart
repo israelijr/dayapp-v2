@@ -33,6 +33,7 @@ class ScrapbookTemplate extends StatelessWidget {
       'dd MMM yyyy',
       story.localeName,
     ).format(story.date);
+    final metadataLine = storyMetadataLine(story);
 
     Widget buildPhotoCard(Uint8List? image) {
       return Container(
@@ -106,6 +107,19 @@ class ScrapbookTemplate extends StatelessWidget {
               ),
             ],
           ),
+          if (metadataLine.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              metadataLine,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 12,
+                color: colorScheme.onSurface.withValues(alpha: 0.72),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
           const SizedBox(height: 12),
           Align(
             alignment: Alignment.centerRight,
@@ -143,7 +157,7 @@ class ScrapbookTemplate extends StatelessWidget {
           }
           return floatingImages[index];
         }
-        
+
         final cardWidth = constraints.maxWidth.isFinite
             ? constraints.maxWidth * 0.85
             : 300.0;

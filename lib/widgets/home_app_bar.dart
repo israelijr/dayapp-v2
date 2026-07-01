@@ -199,7 +199,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               CheckedPopupMenuItem(
                 value: 'limit_all',
                 checked: filterProvider.itemLimit == null,
-                child: const Text('Ver todos'),
+                child: Text(l10n.homeShowAllStoriesLabel),
               ),
               CheckedPopupMenuItem(
                 value: 'limit_10',

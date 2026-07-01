@@ -203,7 +203,8 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
     // Salva posição do scroll ao sair da tela
     _saveScrollPosition();
     _scrollController.dispose();
-    _storiesProvider.dispose();
+    // _storiesProvider is provided to the widget tree via ChangeNotifierProvider
+    // and will be disposed by the provider. Avoid double-dispose here.
     super.dispose();
   }
 
@@ -331,9 +332,9 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
               final ungroupedMsg = AppLocalizations.of(
                 slidableContext,
               )!.storyUngrouped;
-              await context.read<GroupStoriesProvider>().ungroupHistoria(
-                historia,
-              );
+              await slidableContext
+                  .read<GroupStoriesProvider>()
+                  .ungroupHistoria(historia);
               if (!mounted) return;
               _messengerKey.currentState?.showSnackBar(
                 SnackBar(content: Text(ungroupedMsg)),
@@ -505,7 +506,9 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
               if (historias.isEmpty) {
                 return Center(
                   child: Text(
-                    AppLocalizations.of(context)!.noStoriesInGroup(widget.grupo.nome),
+                    AppLocalizations.of(
+                      context,
+                    )!.noStoriesInGroup(widget.grupo.nome),
                     style: TextStyle(color: AppColors.labelColor(context)),
                   ),
                 );

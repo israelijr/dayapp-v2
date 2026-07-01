@@ -24,6 +24,7 @@ import '../widgets/emoji_selection_modal.dart';
 import '../widgets/entry_toolbar.dart';
 import '../widgets/expandable_rich_text_editor.dart';
 import '../widgets/image_picker_widget.dart';
+import '../widgets/local_input_widget.dart';
 import '../widgets/metadata_selector_bar.dart';
 import '../widgets/mood_energy_selector_bar.dart';
 import '../widgets/mood_energy_selectors.dart';
@@ -108,7 +109,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
   // Lista de pessoas selecionadas e local
   List<Pessoa> _selectedPessoas = [];
   final localController = TextEditingController();
-  
+
   // Controle de visibilidade dos inputs correspondentes à barra unificada
   bool _showPessoasInput = false;
   bool _showLocalInput = false;
@@ -161,7 +162,8 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         _selectedMood != 3 ||
         _selectedEnergy != 2;
 
-    final isValid = titleController.text.trim().isNotEmpty && plainText.isNotEmpty;
+    final isValid =
+        titleController.text.trim().isNotEmpty && plainText.isNotEmpty;
 
     if (hasChanges != _lastHasUnsavedChanges || isValid != _lastFormValid) {
       setState(() {
@@ -368,7 +370,9 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         energia: _selectedEnergy,
         tags: _selectedTags,
         pessoas: _selectedPessoas,
-        local: localController.text.trim().isEmpty ? null : localController.text.trim(),
+        local: localController.text.trim().isEmpty
+            ? null
+            : localController.text.trim(),
         fotos: fotos,
         audios: audios,
         videos: videos,
@@ -478,7 +482,6 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
       Navigator.of(context).pop();
     }
   }
-
 
   Future<void> _selectEmoji() async {
     final Emoji? result = await showModalBottomSheet<Emoji>(
@@ -692,6 +695,8 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                         label: '* ${loc.descriptionLabel}',
                         hintText: loc.descriptionHint,
                         expandTooltip: loc.expandTooltip,
+                        minLines: 12,
+                        maxLines: 22,
                         showBorder: false,
                         onChanged: () {
                           _checkForChanges();
@@ -784,12 +789,18 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
 
                       // Input painel para Local
                       if (_showLocalInput) ...[
-                        CustomTextField(
-                          controller: localController,
-                          label: loc.localLabel,
-                          hintText: loc.localHint,
-                          prefixIcon: const Icon(Icons.location_on_outlined),
-                          onChanged: (_) => _checkForChanges(),
+                        Builder(
+                          builder: (context) {
+                            final auth = Provider.of<AuthProvider>(
+                              context,
+                              listen: false,
+                            );
+                            return LocalInputWidget(
+                              userId: auth.user?.id ?? '',
+                              controller: localController,
+                              onChanged: (_) => _checkForChanges(),
+                            );
+                          },
                         ),
                         const SizedBox(height: 16),
                       ],
@@ -817,6 +828,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                         const SizedBox(height: 16),
                       ],
 
+                      // Input de Humor
                       if (_showMoodInput) ...[
                         MoodInputWidget(
                           value: _selectedMood,
@@ -829,6 +841,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                         const SizedBox(height: 8),
                       ],
 
+                      // Input de Energia
                       if (_showEnergyInput) ...[
                         EnergyInputWidget(
                           value: _selectedEnergy,
@@ -995,6 +1008,4 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
       ),
     );
   }
-
-
 }

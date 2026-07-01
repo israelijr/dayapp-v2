@@ -15,6 +15,7 @@ class PdfExportService {
     final buffer = StringBuffer();
     final dateFormat = DateFormat.yMMMMd(story.localeName);
     final dateString = dateFormat.format(story.date);
+    final metadata = _buildMetadataLine(story);
 
     buffer.writeln('<!doctype html>');
     buffer.writeln('<html lang="${_normalizeLocale(story.localeName)}">');
@@ -38,6 +39,11 @@ class PdfExportService {
     buffer.writeln(
       '.meta { color: #666; font-size: 12px; margin-bottom: 24px; page-break-after: avoid; break-after: avoid; border-bottom: 1px solid #eee; padding-bottom: 12px; }',
     );
+    buffer.writeln('.meta-date { font-weight: 600; }');
+    buffer.writeln('.meta-details { margin-top: 6px; }');
+    buffer.writeln(
+      '.meta-brand { margin-top: 8px; text-align: right; font-weight: 700; color: #777; }',
+    );
     buffer.writeln('.content { margin: 8px 0; orphans: 3; widows: 3; }');
     buffer.writeln('.content p { margin: 8px 0; }');
     buffer.writeln(
@@ -49,15 +55,20 @@ class PdfExportService {
     buffer.writeln(
       '.grid-item .image { width: 100%; height: auto; max-height: 200px; object-fit: cover; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }',
     );
-    buffer.writeln(
-      '.footer { text-align: center; margin-top: 40px; padding-top: 10px; color: #999; font-size: 11px; border-top: 1px solid #eee; page-break-inside: avoid; break-inside: avoid; }',
-    );
     buffer.writeln('</style>');
     buffer.writeln('</head>');
     buffer.writeln('<body>');
 
     buffer.writeln('<h1>${_escapeHtml(story.title)}</h1>');
-    buffer.writeln('<div class="meta">${_escapeHtml(dateString)}</div>');
+    buffer.writeln('<div class="meta">');
+    buffer.writeln('<div class="meta-date">${_escapeHtml(dateString)}</div>');
+    if (metadata.isNotEmpty) {
+      buffer.writeln(
+        '<div class="meta-details">${_escapeHtml(metadata)}</div>',
+      );
+    }
+    buffer.writeln('<div class="meta-brand">DayApp</div>');
+    buffer.writeln('</div>');
 
     if (story.description != null && story.description!.isNotEmpty) {
       String htmlContent = RichTextHelper.jsonToHtml(story.description);
@@ -82,8 +93,6 @@ class PdfExportService {
       buffer.writeln('</div>');
     }
 
-    buffer.writeln('<div class="footer">DayApp</div>');
-
     buffer.writeln('</body></html>');
 
     final tempDir = await getTemporaryDirectory();
@@ -96,6 +105,22 @@ class PdfExportService {
 
   static String _normalizeLocale(String localeName) =>
       localeName.split('_').first;
+
+  static String _buildMetadataLine(StoryData story) {
+    final parts = <String>[];
+    final location = story.location?.trim();
+    if (location != null && location.isNotEmpty) {
+      parts.add(location);
+    }
+    final people = story.people
+        .map((person) => person.name.trim())
+        .where((name) => name.isNotEmpty)
+        .join(', ');
+    if (people.isNotEmpty) {
+      parts.add(people);
+    }
+    return parts.join(' • ');
+  }
 
   static String _escapeHtml(String input) => input
       .replaceAll('&', '&amp;')

@@ -74,6 +74,9 @@ class InsightService {
     final chapterEngagementFuture = calculateChapterEngagement(userId);
     final chapterHappiestFuture = calculateChapterHappiest(userId);
     final writingLengthFuture = calculateWritingLength(userId);
+    final wellnessCircleFuture = calculateWellnessCircle(userId);
+    final peacefulPlacesFuture = calculatePeacefulPlaces(userId);
+    final breatheDeepFuture = calculateBreatheDeep(userId);
 
     final trendInsight = await trendFuture;
     final positiveTagInsight = await positiveTagFuture;
@@ -85,6 +88,9 @@ class InsightService {
     final chapterEngagementInsight = await chapterEngagementFuture;
     final chapterHappiestInsight = await chapterHappiestFuture;
     final writingLengthInsight = await writingLengthFuture;
+    final wellnessCircleInsight = await wellnessCircleFuture;
+    final peacefulPlacesInsight = await peacefulPlacesFuture;
+    final breatheDeepInsight = await breatheDeepFuture;
 
     // Prioridade: tendência > equilíbrio > horário > escrita detalhada > capítulos > tag > dia > resumo > energia
     final ordered = <Insight>[];
@@ -94,6 +100,9 @@ class InsightService {
     if (writingLengthInsight != null) ordered.add(writingLengthInsight);
     if (chapterEngagementInsight != null) ordered.add(chapterEngagementInsight);
     if (chapterHappiestInsight != null) ordered.add(chapterHappiestInsight);
+    if (wellnessCircleInsight != null) ordered.add(wellnessCircleInsight);
+    if (peacefulPlacesInsight != null) ordered.add(peacefulPlacesInsight);
+    if (breatheDeepInsight != null) ordered.add(breatheDeepInsight);
     if (positiveTagInsight != null) ordered.add(positiveTagInsight);
     if (bestWeekdayInsight != null) ordered.add(bestWeekdayInsight);
     if (monthlySummaryInsight != null) ordered.add(monthlySummaryInsight);
@@ -513,10 +522,7 @@ class InsightService {
       icon: '📖',
       title: 'insightChapterEngagementTitle',
       description: 'insightChapterEngagementDesc',
-      metadata: {
-        'chapter_title': titulo,
-        'count': total,
-      },
+      metadata: {'chapter_title': titulo, 'count': total},
     );
   }
 
@@ -554,10 +560,7 @@ class InsightService {
       icon: '💖',
       title: 'insightChapterHappiestTitle',
       description: 'insightChapterHappiestDesc',
-      metadata: {
-        'chapter_title': titulo,
-        'avg_mood': mediaHumor,
-      },
+      metadata: {'chapter_title': titulo, 'avg_mood': mediaHumor},
     );
   }
 
@@ -602,10 +605,7 @@ class InsightService {
             icon: '✍️',
             title: 'insightWritingLengthTitle',
             description: 'insightWritingLengthCongrats',
-            metadata: {
-              'style': 'congrats',
-              'count': words,
-            },
+            metadata: {'style': 'congrats', 'count': words},
           );
         }
       }
@@ -621,14 +621,159 @@ class InsightService {
           icon: '✍️',
           title: 'insightWritingLengthTitle',
           description: 'insightWritingLengthTip',
-          metadata: {
-            'style': 'tip',
-            'avg_words': avgWords.round(),
-          },
+          metadata: {'style': 'tip', 'avg_words': avgWords.round()},
         );
       }
     }
 
     return null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Cálculo: Círculo de Bem-Estar (PREMIUM)
+  // ---------------------------------------------------------------------------
+
+  /// Pessoas mais presentes quando o dia foi radiante
+  /// (humor entre 4 e 5, energia = 3).
+  Future<Insight?> calculateWellnessCircle(String userId) async {
+    final db = await _db.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT p.nome, COUNT(*) AS total
+      FROM historia h
+      JOIN historia_pessoas hp ON hp.historia_id = h.id
+      JOIN pessoas p ON p.id = hp.pessoa_id
+      WHERE h.user_id = ?
+        AND h.excluido IS NULL
+        AND h.humor BETWEEN 4 AND 5
+        AND h.energia = 3
+      GROUP BY p.id, p.nome
+      HAVING total >= ?
+      ORDER BY total DESC, MAX(h.data) DESC, p.nome ASC
+      LIMIT 3
+      ''',
+      [userId, _minGroupHistorias],
+    );
+
+    if (rows.isEmpty) return null;
+
+    final names = rows
+        .map((r) => (r['nome'] as String? ?? '').trim())
+        .where((name) => name.isNotEmpty)
+        .toList();
+    if (names.isEmpty) return null;
+
+    final totalStoriesRows = await db.rawQuery(
+      '''
+      SELECT COUNT(*) AS total
+      FROM historia
+      WHERE user_id = ?
+        AND excluido IS NULL
+        AND humor BETWEEN 4 AND 5
+        AND energia = 3
+      ''',
+      [userId],
+    );
+    final totalStories = (totalStoriesRows.first['total'] as int?) ?? 0;
+
+    return Insight(
+      type: InsightType.wellnessCircle,
+      icon: '🤝',
+      title: 'insightWellnessCircleTitle',
+      description: 'insightWellnessCircleDescription',
+      metadata: {
+        'names': names,
+        'count': names.length,
+        'stories_count': totalStories,
+      },
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Cálculo: Locais de Paz (PREMIUM)
+  // ---------------------------------------------------------------------------
+
+  /// Locais com humor positivo consistente
+  /// (humor entre 4 e 5, energia 2 ou 3).
+  Future<Insight?> calculatePeacefulPlaces(String userId) async {
+    final db = await _db.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT h.local, COUNT(*) AS total, AVG(h.humor) AS avg_mood
+      FROM historia h
+      WHERE h.user_id = ?
+        AND h.excluido IS NULL
+        AND h.local IS NOT NULL
+        AND TRIM(h.local) <> ''
+        AND h.humor BETWEEN 4 AND 5
+        AND h.energia IN (2, 3)
+      GROUP BY LOWER(TRIM(h.local))
+      HAVING total >= ?
+      ORDER BY avg_mood DESC, total DESC, MAX(h.data) DESC
+      LIMIT 3
+      ''',
+      [userId, _minGroupHistorias],
+    );
+
+    if (rows.isEmpty) return null;
+
+    final places = rows
+        .map((r) => (r['local'] as String? ?? '').trim())
+        .where((place) => place.isNotEmpty)
+        .toList();
+    if (places.isEmpty) return null;
+
+    final avgMood = (rows.first['avg_mood'] as num?)?.toDouble() ?? 0.0;
+
+    return Insight(
+      type: InsightType.peacefulPlaces,
+      icon: '🌿',
+      title: 'insightPeacefulPlacesTitle',
+      description: 'insightPeacefulPlacesDescription',
+      metadata: {'places': places, 'count': places.length, 'avg_mood': avgMood},
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Cálculo: Respirar Fundo (PREMIUM)
+  // ---------------------------------------------------------------------------
+
+  /// Locais com baixa energia e humor
+  /// (humor entre 1 e 2, energia = 1).
+  Future<Insight?> calculateBreatheDeep(String userId) async {
+    final db = await _db.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT h.local, COUNT(*) AS total
+      FROM historia h
+      WHERE h.user_id = ?
+        AND h.excluido IS NULL
+        AND h.local IS NOT NULL
+        AND TRIM(h.local) <> ''
+        AND h.humor BETWEEN 1 AND 2
+        AND h.energia = 1
+      GROUP BY LOWER(TRIM(h.local))
+      HAVING total >= ?
+      ORDER BY total DESC, MAX(h.data) DESC
+      LIMIT 3
+      ''',
+      [userId, _minGroupHistorias],
+    );
+
+    if (rows.isEmpty) return null;
+
+    final places = rows
+        .map((r) => (r['local'] as String? ?? '').trim())
+        .where((place) => place.isNotEmpty)
+        .toList();
+    if (places.isEmpty) return null;
+
+    return Insight(
+      type: InsightType.breatheDeep,
+      icon: '🫁',
+      title: 'insightBreatheDeepTitle',
+      description: 'insightBreatheDeepDescription',
+      metadata: {'places': places, 'count': places.length},
+    );
   }
 }

@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../../db/database_helper.dart';
+import '../../db/historia_foto_helper.dart';
+import '../../services/thumbnail_service.dart';
+import '../story_card.dart';
+
 class ReaderBlockRenderer extends StatelessWidget {
   final ExportBlock block;
 
@@ -18,14 +23,82 @@ class ReaderBlockRenderer extends StatelessWidget {
 
     if (block is TitleExportBlock) {
       final titleBlock = block as TitleExportBlock;
+
+      Future<void> openPreview() async {
+        final storyId = titleBlock.storyId;
+        if (storyId == null) return;
+        final historia = await DatabaseHelper().getHistoria(storyId);
+        if (historia == null) return;
+
+        try {
+          final fotos = await HistoriaFotoHelper().getFotosComBytesByHistoria(
+            historia.id ?? 0,
+          );
+          if (fotos.isNotEmpty) {
+            final thumbnailsInput = fotos
+                .map((foto) => MapEntry('foto_${foto.id}', foto.bytes))
+                .toList(growable: false);
+            await ThumbnailService().preloadThumbnails(thumbnailsInput);
+          }
+        } catch (_) {
+          // ignore prewarm errors
+        }
+
+        if (!context.mounted) return;
+
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => StoryPreviewScreen(
+              historia: historia,
+              localeName: AppLocalizations.of(context)!.localeName,
+              convertLegacyEmoticon: (em) {
+                switch (em) {
+                  case 'Feliz':
+                    return '😊';
+                  case 'Tranquilo':
+                    return '😌';
+                  case 'Aliviado':
+                    return '😮‍💨';
+                  case 'Pensativo':
+                    return '🤔';
+                  case 'Sono':
+                    return '😴';
+                  case 'Preocupado':
+                    return '😟';
+                  case 'Assustado':
+                    return '😨';
+                  case 'Bravo':
+                    return '😠';
+                  case 'Triste':
+                    return '😢';
+                  case 'Muito Triste':
+                    return '😭';
+                  default:
+                    return null;
+                }
+              },
+              heroTag:
+                  'chapter_story_${historia.id ?? historia.titulo.hashCode}',
+              showEditDelete: true,
+              showMoodNotes: true,
+              showBottomActions: true,
+            ),
+          ),
+        );
+      }
+
       return Padding(
         padding: const EdgeInsets.fromLTRB(20, 6, 20, 4),
-        child: Text(
-          titleBlock.text,
-          style: GoogleFonts.plusJakartaSans(
-            textStyle: Theme.of(context).textTheme.titleLarge,
-            color: colorScheme.onSurface,
-            height: 1.35,
+        child: GestureDetector(
+          onTap: titleBlock.storyId != null ? openPreview : null,
+          child: Text(
+            titleBlock.text,
+            style: GoogleFonts.plusJakartaSans(
+              textStyle: Theme.of(context).textTheme.titleLarge,
+              color: colorScheme.onSurface,
+              height: 1.35,
+            ),
           ),
         ),
       );

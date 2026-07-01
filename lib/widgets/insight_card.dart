@@ -101,10 +101,12 @@ class InsightCard extends StatelessWidget {
                                   child: Text(
                                     title,
                                     style: GoogleFonts.plusJakartaSans(
-                                      textStyle: theme.textTheme.titleMedium?.copyWith(
-                                        color: colorScheme.onSecondaryContainer,
-                                        height: 1.05,
-                                      ),
+                                      textStyle: theme.textTheme.titleMedium
+                                          ?.copyWith(
+                                            color: colorScheme
+                                                .onSecondaryContainer,
+                                            height: 1.05,
+                                          ),
                                     ),
                                   ),
                                 ),
@@ -123,26 +125,27 @@ class InsightCard extends StatelessWidget {
                               Text(
                                 periodLabel,
                                 style: GoogleFonts.plusJakartaSans(
-                                  textStyle: theme.textTheme.bodySmall?.copyWith(
-                                    color: colorScheme.onSecondaryContainer.withValues(
-                                      alpha: 0.74,
-                                    ),
-                                    height: 1.45,
-                                  ),
+                                  textStyle: theme.textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: colorScheme.onSecondaryContainer
+                                            .withValues(alpha: 0.74),
+                                        height: 1.45,
+                                      ),
                                 ),
                               ),
                             ],
-                            if (!isLocked && insight.type != InsightType.energyChart) ...[
+                            if (!isLocked &&
+                                insight.type != InsightType.energyChart) ...[
                               const SizedBox(height: 6),
                               Text(
                                 description,
                                 style: GoogleFonts.plusJakartaSans(
-                                  textStyle: theme.textTheme.bodySmall?.copyWith(
-                                    color: colorScheme.onSecondaryContainer.withValues(
-                                      alpha: 0.74,
-                                    ),
-                                    height: 1.5,
-                                  ),
+                                  textStyle: theme.textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: colorScheme.onSecondaryContainer
+                                            .withValues(alpha: 0.74),
+                                        height: 1.5,
+                                      ),
                                 ),
                               ),
                             ],
@@ -418,6 +421,12 @@ class InsightCard extends StatelessWidget {
         return l10n.insightChapterEngagementTitle;
       case InsightType.chapterHappiest:
         return l10n.insightChapterHappiestTitle;
+      case InsightType.wellnessCircle:
+        return l10n.insightWellnessCircleTitle;
+      case InsightType.peacefulPlaces:
+        return l10n.insightPeacefulPlacesTitle;
+      case InsightType.breatheDeep:
+        return l10n.insightBreatheDeepTitle;
     }
   }
 
@@ -447,6 +456,12 @@ class InsightCard extends StatelessWidget {
         return _resolveChapterEngagement(l10n);
       case InsightType.chapterHappiest:
         return _resolveChapterHappiest(l10n);
+      case InsightType.wellnessCircle:
+        return _resolveWellnessCircle(l10n);
+      case InsightType.peacefulPlaces:
+        return _resolvePeacefulPlaces(l10n);
+      case InsightType.breatheDeep:
+        return _resolveBreatheDeep(l10n);
     }
   }
 
@@ -534,6 +549,51 @@ class InsightCard extends StatelessWidget {
     return l10n.insightChapterHappiestDesc(title, moodStr, avgMoodStr);
   }
 
+  String _resolveWellnessCircle(AppLocalizations l10n) {
+    final names =
+        (insight.metadata?['names'] as List<dynamic>?)
+            ?.whereType<String>()
+            .map((name) => name.trim())
+            .where((name) => name.isNotEmpty)
+            .toList() ??
+        const <String>[];
+    final joined = names.take(3).join(', ');
+    if (joined.isEmpty) {
+      return l10n.insightWellnessCircleDescription('');
+    }
+    return l10n.insightWellnessCircleDescription(joined);
+  }
+
+  String _resolvePeacefulPlaces(AppLocalizations l10n) {
+    final places =
+        (insight.metadata?['places'] as List<dynamic>?)
+            ?.whereType<String>()
+            .map((place) => place.trim())
+            .where((place) => place.isNotEmpty)
+            .toList() ??
+        const <String>[];
+    final joined = places.take(3).join(', ');
+    if (joined.isEmpty) {
+      return l10n.insightPeacefulPlacesDescription('');
+    }
+    return l10n.insightPeacefulPlacesDescription(joined);
+  }
+
+  String _resolveBreatheDeep(AppLocalizations l10n) {
+    final places =
+        (insight.metadata?['places'] as List<dynamic>?)
+            ?.whereType<String>()
+            .map((place) => place.trim())
+            .where((place) => place.isNotEmpty)
+            .toList() ??
+        const <String>[];
+    final joined = places.take(3).join(', ');
+    if (joined.isEmpty) {
+      return l10n.insightBreatheDeepDescription('');
+    }
+    return l10n.insightBreatheDeepDescription(joined);
+  }
+
   String? _resolvePeriodLabel(AppLocalizations l10n) {
     if (insight.type == InsightType.energyChart) {
       final today = DateTime.now();
@@ -571,6 +631,12 @@ class InsightCard extends StatelessWidget {
         return Icons.menu_book_outlined;
       case InsightType.chapterHappiest:
         return Icons.favorite_border;
+      case InsightType.wellnessCircle:
+        return Icons.people_alt_outlined;
+      case InsightType.peacefulPlaces:
+        return Icons.spa_outlined;
+      case InsightType.breatheDeep:
+        return Icons.air;
     }
   }
 

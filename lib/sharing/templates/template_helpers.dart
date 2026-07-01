@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dayapp/l10n/generated/app_localizations.dart';
+import 'package:dayapp/sharing/story_data.dart';
 import 'package:flutter/material.dart';
 
 String normalizedDescription(String? raw) {
@@ -81,4 +82,25 @@ Widget buildEmptyPhotoBackground(ColorScheme colorScheme) {
       ),
     ),
   );
+}
+
+String storyPeopleLine(StoryData story) {
+  final names = story.people
+      .map((person) => person.name.trim())
+      .where((name) => name.isNotEmpty)
+      .toList(growable: false);
+  return names.join(', ');
+}
+
+String storyMetadataLine(StoryData story) {
+  final location = story.location?.trim();
+  final people = storyPeopleLine(story);
+  final parts = <String>[];
+  if (location != null && location.isNotEmpty) {
+    parts.add(location);
+  }
+  if (people.isNotEmpty) {
+    parts.add(people);
+  }
+  return parts.join(' • ');
 }

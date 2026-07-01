@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../db/pessoa_helper.dart';
 import '../db/tag_helper.dart';
 import '../models/historia.dart';
+import '../models/pessoa.dart';
 import '../models/tag.dart';
 
 class CompactHistoriaCard extends StatefulWidget {
@@ -36,27 +38,94 @@ class CompactHistoriaCard extends StatefulWidget {
 
 class _CompactHistoriaCardState extends State<CompactHistoriaCard> {
   List<Tag> _tags = const [];
+  List<Pessoa> _pessoas = const [];
 
   @override
   void initState() {
     super.initState();
-    _loadTags();
+    _loadMetadata();
   }
 
   @override
   void didUpdateWidget(CompactHistoriaCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Recarrega tags apenas se a história mudou
+    // Recarrega metadados apenas se a história mudou
     if (oldWidget.historia.id != widget.historia.id) {
-      _loadTags();
+      _loadMetadata();
     }
   }
 
-  Future<void> _loadTags() async {
+  Future<void> _loadMetadata() async {
     final id = widget.historia.id;
     if (id == null) return;
-    final result = await TagHelper().getTagsByHistoria(id);
-    if (mounted) setState(() => _tags = result);
+    final tags = await TagHelper().getTagsByHistoria(id);
+    final pessoas = await PessoaHelper().getPessoasByHistoria(id);
+    if (mounted) {
+      setState(() {
+        _tags = tags;
+        _pessoas = pessoas;
+      });
+    }
+  }
+
+  Widget _buildLocationAndPeople(BuildContext context) {
+    final color = Theme.of(context).textTheme.bodySmall?.color;
+    final local = widget.historia.local?.trim();
+    final hasLocal = local != null && local.isNotEmpty;
+    final hasPessoas = _pessoas.isNotEmpty;
+
+    if (!hasLocal && !hasPessoas) {
+      return const SizedBox.shrink();
+    }
+
+    final pessoasTexto = _pessoas.map((p) => p.nome).join(', ');
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Row(
+        children: [
+          if (hasLocal) ...[
+            Icon(Icons.place_outlined, size: 13, color: color),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                local,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.2,
+                  color: color,
+                ),
+              ),
+            ),
+          ],
+          if (hasLocal && hasPessoas) ...[
+            const SizedBox(width: 8),
+            Icon(Icons.circle, size: 4, color: color?.withValues(alpha: 0.7)),
+            const SizedBox(width: 8),
+          ],
+          if (hasPessoas) ...[
+            Icon(Icons.people_alt_outlined, size: 13, color: color),
+            const SizedBox(width: 4),
+            Expanded(
+              child: Text(
+                pessoasTexto,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.2,
+                  color: color,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
   }
 
   String? _convertLegacyEmoticon(String emoticon) {
@@ -275,6 +344,7 @@ class _CompactHistoriaCardState extends State<CompactHistoriaCard> {
                               ],
                             ],
                           ),
+                          _buildLocationAndPeople(context),
                           if (historia.id != null) ...[
                             const SizedBox(height: 6),
                             _buildTags(context, colorScheme),

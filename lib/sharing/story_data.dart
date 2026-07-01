@@ -50,6 +50,8 @@ class StoryData {
     Historia historia,
     List<Uint8List> images, {
     String localeName = 'pt_BR',
+    List<StoryPerson> people = const [],
+    String? location,
   }) {
     final tag = historia.tag;
     final subtitle = (tag != null && tag.isNotEmpty) ? tag : historia.assunto;
@@ -68,8 +70,8 @@ class StoryData {
       energy: historia.energia,
       images: List<Uint8List>.unmodifiable(images),
       mediaItems: mediaItems,
-      people: const [],
-      location: null,
+      people: List<StoryPerson>.unmodifiable(people),
+      location: location ?? historia.local,
       tags: (tag != null && tag.isNotEmpty) ? [tag] : const [],
     );
   }

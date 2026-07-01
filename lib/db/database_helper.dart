@@ -26,12 +26,14 @@ class DatabaseHelper {
     try {
       final dbPath = await getDatabasesPath();
       final path = p.join(dbPath, 'dayapp.db');
-      return await openDatabase(
+      final db = await openDatabase(
         path,
-        version: 2,
+        version: 3,
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
       );
+      await _verifyAndHealSchema(db);
+      return db;
     } catch (e) {
       rethrow;
     }
@@ -277,49 +279,250 @@ class DatabaseHelper {
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     try {
       if (oldVersion < 2) {
-        // Adiciona a coluna local na tabela historia
-        await db.execute('ALTER TABLE historia ADD COLUMN local TEXT;');
+        // Adiciona a coluna local na tabela historia se oldVersion < 2
+        try {
+          await db.execute('ALTER TABLE historia ADD COLUMN local TEXT;');
+        } catch (e) {
+          debugPrint('DatabaseHelper: erro ao adicionar coluna local (v2): $e');
+        }
 
         // Cria a tabela de pessoas
-        await db.execute('''
-          CREATE TABLE pessoas (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT NOT NULL,
-            nome TEXT NOT NULL,
-            slug TEXT NOT NULL,
-            UNIQUE(user_id, slug),
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        try {
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS pessoas (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              user_id TEXT NOT NULL,
+              nome TEXT NOT NULL,
+              slug TEXT NOT NULL,
+              UNIQUE(user_id, slug),
+              FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+          ''');
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS historia_pessoas (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              historia_id INTEGER NOT NULL,
+              pessoa_id INTEGER NOT NULL,
+              UNIQUE(historia_id, pessoa_id),
+              FOREIGN KEY (historia_id) REFERENCES historia(id) ON DELETE CASCADE,
+              FOREIGN KEY (pessoa_id) REFERENCES pessoas(id) ON DELETE CASCADE
+            );
+          ''');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_pessoas_user_slug ON pessoas(user_id, slug);',
           );
-        ''');
-
-        // Cria a tabela de relação N×N entre histórias e pessoas
-        await db.execute('''
-          CREATE TABLE historia_pessoas (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            historia_id INTEGER NOT NULL,
-            pessoa_id INTEGER NOT NULL,
-            UNIQUE(historia_id, pessoa_id),
-            FOREIGN KEY (historia_id) REFERENCES historia(id) ON DELETE CASCADE,
-            FOREIGN KEY (pessoa_id) REFERENCES pessoas(id) ON DELETE CASCADE
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_historia_pessoas_historia ON historia_pessoas(historia_id);',
           );
-        ''');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_historia_pessoas_pessoa ON historia_pessoas(pessoa_id);',
+          );
+        } catch (e) {
+          debugPrint('DatabaseHelper: erro ao criar tabelas/indices de pessoas (v2): $e');
+        }
+      }
 
-        // Cria os índices correspondentes
-        await db.execute(
-          'CREATE INDEX idx_pessoas_user_slug ON pessoas(user_id, slug);',
-        );
-        await db.execute(
-          'CREATE INDEX idx_historia_pessoas_historia ON historia_pessoas(historia_id);',
-        );
-        await db.execute(
-          'CREATE INDEX idx_historia_pessoas_pessoa ON historia_pessoas(pessoa_id);',
-        );
+      if (oldVersion < 3) {
+        // Garante que a coluna local existe na tabela historia
+        try {
+          await db.execute('ALTER TABLE historia ADD COLUMN local TEXT;');
+        } catch (e) {
+          debugPrint('DatabaseHelper: coluna local na v3 já existe ou erro: $e');
+        }
+
+        // Garante que as tabelas pessoas e historia_pessoas existem
+        try {
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS pessoas (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              user_id TEXT NOT NULL,
+              nome TEXT NOT NULL,
+              slug TEXT NOT NULL,
+              UNIQUE(user_id, slug),
+              FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+          ''');
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS historia_pessoas (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              historia_id INTEGER NOT NULL,
+              pessoa_id INTEGER NOT NULL,
+              UNIQUE(historia_id, pessoa_id),
+              FOREIGN KEY (historia_id) REFERENCES historia(id) ON DELETE CASCADE,
+              FOREIGN KEY (pessoa_id) REFERENCES pessoas(id) ON DELETE CASCADE
+            );
+          ''');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_pessoas_user_slug ON pessoas(user_id, slug);',
+          );
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_historia_pessoas_historia ON historia_pessoas(historia_id);',
+          );
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_historia_pessoas_pessoa ON historia_pessoas(pessoa_id);',
+          );
+        } catch (e) {
+          debugPrint('DatabaseHelper: erro ao garantir tabelas/indices de pessoas (v3): $e');
+        }
       }
     } catch (e) {
       rethrow;
     }
   }
 
+  Future<void> _verifyAndHealSchema(Database db) async {
+    try {
+      // 1. Verificar colunas na tabela historia
+      final columns = await db.rawQuery('PRAGMA table_info(historia)');
+      final existingColumns = columns.map((c) => c['name'] as String).toSet();
+
+      final requiredColumns = {
+        'local': 'TEXT',
+        'backed_up': 'INTEGER DEFAULT 0',
+        'humor': 'INTEGER DEFAULT 3',
+        'energia': 'INTEGER DEFAULT 2',
+        'arquivado': 'TEXT',
+        'grupo': 'TEXT',
+        'excluido': 'TEXT',
+        'data_exclusao': 'TIMESTAMP',
+      };
+
+      for (final entry in requiredColumns.entries) {
+        if (!existingColumns.contains(entry.key)) {
+          try {
+            await db.execute('ALTER TABLE historia ADD COLUMN ${entry.key} ${entry.value};');
+            debugPrint('DatabaseHelper: coluna ${entry.key} adicionada via Self-Healing.');
+          } catch (e) {
+            debugPrint('DatabaseHelper: erro ao adicionar coluna ${entry.key} via Self-Healing: $e');
+          }
+        }
+      }
+
+      // 2. Garantir que todas as tabelas e índices adicionais existam
+      // Usamos CREATE TABLE IF NOT EXISTS para cada uma delas de forma silenciosa e resiliente
+      
+      // Tabela de pessoas (v2)
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS pessoas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT NOT NULL,
+          nome TEXT NOT NULL,
+          slug TEXT NOT NULL,
+          UNIQUE(user_id, slug),
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+      ''');
+
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS historia_pessoas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          historia_id INTEGER NOT NULL,
+          pessoa_id INTEGER NOT NULL,
+          UNIQUE(historia_id, pessoa_id),
+          FOREIGN KEY (historia_id) REFERENCES historia(id) ON DELETE CASCADE,
+          FOREIGN KEY (pessoa_id) REFERENCES pessoas(id) ON DELETE CASCADE
+        );
+      ''');
+
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_pessoas_user_slug ON pessoas(user_id, slug);');
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_historia_pessoas_historia ON historia_pessoas(historia_id);');
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_historia_pessoas_pessoa ON historia_pessoas(pessoa_id);');
+
+      // Tabela de capítutos e sugestões (v17, v19, v20)
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS capitulos (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT NOT NULL,
+          titulo TEXT NOT NULL,
+          descricao TEXT,
+          data_inicio TIMESTAMP NOT NULL,
+          data_fim TIMESTAMP NOT NULL,
+          score_confianca REAL,
+          criado_automaticamente INTEGER DEFAULT 0,
+          foto_path TEXT,
+          data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          data_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+      ''');
+
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS capitulo_entradas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          capitulo_id INTEGER NOT NULL,
+          entrada_id INTEGER NOT NULL,
+          display_order INTEGER,
+          UNIQUE(capitulo_id, entrada_id),
+          FOREIGN KEY (capitulo_id) REFERENCES capitulos(id) ON DELETE CASCADE,
+          FOREIGN KEY (entrada_id) REFERENCES historia(id) ON DELETE CASCADE
+        );
+      ''');
+
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS capitulo_sugestoes_ignoradas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT NOT NULL,
+          fingerprint TEXT NOT NULL,
+          data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE(user_id, fingerprint),
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+      ''');
+
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulos_user_data ON capitulos(user_id, data_inicio, data_fim);');
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_capitulo ON capitulo_entradas(capitulo_id);');
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_entrada ON capitulo_entradas(entrada_id);');
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_ordem ON capitulo_entradas(capitulo_id, display_order);');
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulo_sugestoes_user ON capitulo_sugestoes_ignoradas(user_id);');
+
+      // Tabela de insights (v18)
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS insight_history (
+          id          INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id     TEXT    NOT NULL,
+          type        TEXT    NOT NULL,
+          title       TEXT    NOT NULL,
+          description TEXT    NOT NULL,
+          icon        TEXT    NOT NULL,
+          metadata    TEXT,
+          seen_at     INTEGER NOT NULL,
+          is_premium  INTEGER NOT NULL DEFAULT 0,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+      ''');
+
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_insight_history_user_seen ON insight_history(user_id, seen_at DESC);');
+      await db.execute('CREATE UNIQUE INDEX IF NOT EXISTS idx_insight_history_user_type ON insight_history(user_id, type);');
+
+      // Verificar colunas extras nas outras tabelas
+      // 1. capitulo_entradas: display_order
+      try {
+        final ceCols = await db.rawQuery('PRAGMA table_info(capitulo_entradas)');
+        final ceExisting = ceCols.map((c) => c['name'] as String).toSet();
+        if (!ceExisting.contains('display_order')) {
+          await db.execute('ALTER TABLE capitulo_entradas ADD COLUMN display_order INTEGER;');
+          debugPrint('DatabaseHelper: coluna display_order adicionada via Self-Healing.');
+        }
+      } catch (e) {
+        debugPrint('DatabaseHelper: erro ao garantir display_order em capitulo_entradas: $e');
+      }
+
+      // 2. capitulos: foto_path
+      try {
+        final capCols = await db.rawQuery('PRAGMA table_info(capitulos)');
+        final capExisting = capCols.map((c) => c['name'] as String).toSet();
+        if (!capExisting.contains('foto_path')) {
+          await db.execute('ALTER TABLE capitulos ADD COLUMN foto_path TEXT;');
+          debugPrint('DatabaseHelper: coluna foto_path adicionada via Self-Healing.');
+        }
+      } catch (e) {
+        debugPrint('DatabaseHelper: erro ao garantir foto_path em capitulos: $e');
+      }
+
+    } catch (e) {
+      debugPrint('DatabaseHelper: erro durante o verifyAndHealSchema: $e');
+    }
+  }
 
   Future<Historia?> getHistoria(int id) async {
     final db = await database;

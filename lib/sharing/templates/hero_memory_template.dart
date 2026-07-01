@@ -31,6 +31,7 @@ class HeroMemoryTemplate extends StatelessWidget {
       'dd MMM yyyy',
       story.localeName,
     ).format(story.date);
+    final metadataLine = storyMetadataLine(story);
     final colorScheme = Theme.of(context).colorScheme;
 
     return LayoutBuilder(
@@ -245,16 +246,32 @@ class HeroMemoryTemplate extends StatelessWidget {
                                       ),
                                     ),
                                   ],
-                                  const Spacer(),
-                                  Text(
-                                    'DayApp',
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: width * 0.033,
-                                      fontWeight: FontWeight.w700,
-                                      color: colorScheme.onSurfaceVariant,
-                                    ),
-                                  ),
                                 ],
+                              ),
+                              if (metadataLine.isNotEmpty) ...[
+                                const SizedBox(height: 8),
+                                Text(
+                                  metadataLine,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: width * 0.033,
+                                    fontWeight: FontWeight.w600,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                              const SizedBox(height: 8),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  'DayApp',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: width * 0.033,
+                                    fontWeight: FontWeight.w700,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
                               ),
                             ],
                           ),

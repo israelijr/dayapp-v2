@@ -237,7 +237,7 @@ class MoodEnergySelectorPanel extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: theme.colorScheme.outlineVariant,
-          width: 1,
+          width:1,
         ),
       ),
       child: Row(
@@ -444,11 +444,11 @@ class MoodInputWidget extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant,
-          width: 1,
-        ),
+         borderRadius: BorderRadius.circular(8),
+         //border: Border.all(
+          // color: theme.colorScheme.outlineVariant,
+          // width: 1,
+        // ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -457,7 +457,8 @@ class MoodInputWidget extends StatelessWidget {
           Text(
             loc.moodQuestion,
             style: theme.textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+              //fontWeight: FontWeight.bold,
+fontSize: 15.0,
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
@@ -538,10 +539,10 @@ class EnergyInputWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant,
-          width: 1,
-        ),
+        //border: Border.all(
+        //  color: theme.colorScheme.outlineVariant,
+        //  width: 1,
+       // ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -550,7 +551,8 @@ class EnergyInputWidget extends StatelessWidget {
           Text(
             loc.energyQuestion,
             style: theme.textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+              //fontWeight: FontWeight.bold,
+fontSize: 15.0,
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),

@@ -24,12 +24,13 @@ import '../providers/refresh_provider.dart';
 import '../repositories/capitulo_repository.dart';
 import '../repositories/historia_repository.dart';
 import '../screens/chapter_reader_screen.dart';
+import '../screens/edit_historia_screen.dart';
 import '../services/capitulo_sugestao_service.dart';
 import '../widgets/compact_historia_card.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/expandable_rich_text_editor.dart';
-import '../widgets/historia_media_widgets.dart';
 import '../widgets/rich_text_viewer_widget.dart';
+import '../widgets/story_card.dart';
 
 Future<void> openCreateChapterScreen(BuildContext context) async {
   final l10n = AppLocalizations.of(context)!;
@@ -38,7 +39,9 @@ Future<void> openCreateChapterScreen(BuildContext context) async {
   if (userId == null) return;
 
   final capituloRepository = CapituloRepository();
-  final entradasJaVinculadas = await capituloRepository.getEntradasJaVinculadas(userId);
+  final entradasJaVinculadas = await capituloRepository.getEntradasJaVinculadas(
+    userId,
+  );
   final entradasComTags = await capituloRepository.listEntradasElegiveisComTags(
     userId,
   );
@@ -297,7 +300,8 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     final userId = auth.user?.id;
     if (userId == null) return;
 
-    final entradasJaVinculadas = await _capituloRepository.getEntradasJaVinculadas(userId);
+    final entradasJaVinculadas = await _capituloRepository
+        .getEntradasJaVinculadas(userId);
     final entradasComTags = await _capituloRepository
         .listEntradasElegiveisComTags(userId);
     if (!mounted) return;
@@ -574,7 +578,8 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     final capitulo = resumo.capitulo;
     final rawDesc = capitulo.descricao?.trim();
-    final descricao = (rawDesc != null && RichTextHelper.isValidQuillJson(rawDesc))
+    final descricao =
+        (rawDesc != null && RichTextHelper.isValidQuillJson(rawDesc))
         ? RichTextHelper.jsonToPlainText(rawDesc).trim()
         : rawDesc;
     final periodo = l10n.chapterPeriod(
@@ -1032,13 +1037,17 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
 
   String _getPeriodo(AppLocalizations l10n) {
     if (selected.isEmpty) return '';
-    final selectedEntries = widget.entradas
-        .where((entry) => entry.id != null && selected.contains(entry.id))
-        .toList()
-      ..sort((a, b) => a.data.compareTo(b.data));
+    final selectedEntries =
+        widget.entradas
+            .where((entry) => entry.id != null && selected.contains(entry.id))
+            .toList()
+          ..sort((a, b) => a.data.compareTo(b.data));
     if (selectedEntries.isEmpty) return '';
     return l10n.chapterPeriod(
-      DateFormat('dd/MM/yy', l10n.localeName).format(selectedEntries.first.data),
+      DateFormat(
+        'dd/MM/yy',
+        l10n.localeName,
+      ).format(selectedEntries.first.data),
       DateFormat('dd/MM/yy', l10n.localeName).format(selectedEntries.last.data),
     );
   }
@@ -1129,7 +1138,10 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final userId = auth.user?.id;
     if (userId != null) {
-      final exists = await CapituloRepository().doesChapterTitleExist(userId, title);
+      final exists = await CapituloRepository().doesChapterTitleExist(
+        userId,
+        title,
+      );
       if (exists && mounted) {
         showDialog<void>(
           context: context,
@@ -1210,7 +1222,9 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final labelColor = isDark ? theme.colorScheme.onSurface : theme.colorScheme.onSurfaceVariant;
+    final labelColor = isDark
+        ? theme.colorScheme.onSurface
+        : theme.colorScheme.onSurfaceVariant;
 
     final periodoStr = _getPeriodo(l10n);
 
@@ -1248,7 +1262,11 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
                       if (periodoStr.isNotEmpty) ...[
                         Row(
                           children: [
-                            Icon(Icons.calendar_today, size: 16, color: labelColor),
+                            Icon(
+                              Icons.calendar_today,
+                              size: 16,
+                              color: labelColor,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               periodoStr,
@@ -1321,7 +1339,8 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
                                 top: 2,
                                 right: 2,
                                 child: IconButton.filled(
-                                  onPressed: () => setState(() => _fotoPath = null),
+                                  onPressed: () =>
+                                      setState(() => _fotoPath = null),
                                   icon: const Icon(Icons.close, size: 14),
                                   style: IconButton.styleFrom(
                                     minimumSize: const Size(24, 24),
@@ -1358,11 +1377,17 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
 
                 // Toolbar de foto inferior
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainer,
                     border: Border(
-                      top: BorderSide(color: theme.colorScheme.outlineVariant, width: 1),
+                      top: BorderSide(
+                        color: theme.colorScheme.outlineVariant,
+                        width: 1,
+                      ),
                     ),
                   ),
                   child: SafeArea(
@@ -1510,13 +1535,19 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
 
   String _getPeriodo(AppLocalizations l10n) {
     if (selectedIds.isEmpty) return '';
-    final selectedEntries = widget.todasEntradas
-        .where((entry) => entry.id != null && selectedIds.contains(entry.id))
-        .toList()
-      ..sort((a, b) => a.data.compareTo(b.data));
+    final selectedEntries =
+        widget.todasEntradas
+            .where(
+              (entry) => entry.id != null && selectedIds.contains(entry.id),
+            )
+            .toList()
+          ..sort((a, b) => a.data.compareTo(b.data));
     if (selectedEntries.isEmpty) return '';
     return l10n.chapterPeriod(
-      DateFormat('dd/MM/yy', l10n.localeName).format(selectedEntries.first.data),
+      DateFormat(
+        'dd/MM/yy',
+        l10n.localeName,
+      ).format(selectedEntries.first.data),
       DateFormat('dd/MM/yy', l10n.localeName).format(selectedEntries.last.data),
     );
   }
@@ -1691,7 +1722,9 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final labelColor = isDark ? theme.colorScheme.onSurface : theme.colorScheme.onSurfaceVariant;
+    final labelColor = isDark
+        ? theme.colorScheme.onSurface
+        : theme.colorScheme.onSurfaceVariant;
 
     final periodoStr = _getPeriodo(l10n);
 
@@ -1729,7 +1762,11 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
                       if (periodoStr.isNotEmpty) ...[
                         Row(
                           children: [
-                            Icon(Icons.calendar_today, size: 16, color: labelColor),
+                            Icon(
+                              Icons.calendar_today,
+                              size: 16,
+                              color: labelColor,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               periodoStr,
@@ -1802,7 +1839,8 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
                                 top: 2,
                                 right: 2,
                                 child: IconButton.filled(
-                                  onPressed: () => setState(() => _fotoPath = null),
+                                  onPressed: () =>
+                                      setState(() => _fotoPath = null),
                                   icon: const Icon(Icons.close, size: 14),
                                   style: IconButton.styleFrom(
                                     minimumSize: const Size(24, 24),
@@ -1839,11 +1877,17 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
 
                 // Toolbar de foto inferior
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainer,
                     border: Border(
-                      top: BorderSide(color: theme.colorScheme.outlineVariant, width: 1),
+                      top: BorderSide(
+                        color: theme.colorScheme.outlineVariant,
+                        width: 1,
+                      ),
                     ),
                   ),
                   child: SafeArea(
@@ -2067,6 +2111,7 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
   List<Historia> _entradas = const [];
   bool _isLoading = true;
   bool _didChange = false;
+  final HistoriaRepository _historiaRepository = HistoriaRepository();
 
   @override
   void initState() {
@@ -2105,7 +2150,8 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
     final userId = _resumo.capitulo.userId;
     if (userId.isEmpty) return;
 
-    final entradasJaVinculadas = await widget.capituloRepository.getEntradasJaVinculadas(userId);
+    final entradasJaVinculadas = await widget.capituloRepository
+        .getEntradasJaVinculadas(userId);
     final entradasComTags = await widget.capituloRepository
         .listEntradasElegiveisComTags(userId);
     if (!mounted) return;
@@ -2115,7 +2161,9 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
         if (e.id != null) e.id!,
     };
 
-    final entradasDeOutrosCapitulos = entradasJaVinculadas.difference(draftEntradaIds);
+    final entradasDeOutrosCapitulos = entradasJaVinculadas.difference(
+      draftEntradaIds,
+    );
 
     final todasEntradas = entradasComTags
         .map((e) => e.historia)
@@ -2272,84 +2320,78 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
     await _loadChapterData();
   }
 
-  void _abrirHistoria(Historia historia) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => DraggableScrollableSheet(
-        initialChildSize: 0.75,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        builder: (ctx, scrollController) => Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Column(
-            children: [
-              // Handle do modal
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 12),
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              // Conteúdo da história
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Fotos
-                      HistoriaFotosGrid(
-                        historiaId: historia.id ?? 0,
-                        height: 200,
-                      ),
-                      // Mídia (áudios e vídeos)
-                      HistoriaMediaRow(
-                        historiaId: historia.id ?? 0,
-                        emoticon: historia.emoticon,
-                      ),
-                      const SizedBox(height: 8),
-                      // Título
-                      Text(
-                        historia.titulo,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      // Data
-                      Text(
-                        DateFormat(
-                          'dd/MM/yyyy',
-                          AppLocalizations.of(context)!.localeName,
-                        ).format(historia.data),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      // Descrição (Rich Text)
-                      if (historia.descricao != null &&
-                          historia.descricao!.isNotEmpty) ...[
-                        const SizedBox(height: 12),
-                        RichTextViewerWidget(jsonContent: historia.descricao),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+  String? _convertLegacyEmoticon(String emoticon) {
+    switch (emoticon) {
+      case 'Feliz':
+        return '😊';
+      case 'Tranquilo':
+        return '😌';
+      case 'Aliviado':
+        return '😮‍💨';
+      case 'Pensativo':
+        return '🤔';
+      case 'Sono':
+        return '😴';
+      case 'Preocupado':
+        return '😟';
+      case 'Assustado':
+        return '😨';
+      case 'Bravo':
+        return '😠';
+      case 'Triste':
+        return '😢';
+      case 'Muito Triste':
+        return '😭';
+      default:
+        return null;
+    }
+  }
+
+  Future<void> _deleteHistoria(Historia historia) async {
+    await _historiaRepository.deleteHistoria(historia);
+    if (!mounted) return;
+    _didChange = true;
+    Provider.of<RefreshProvider>(context, listen: false).refresh();
+    await _loadChapterData();
+  }
+
+  Future<void> _abrirHistoria(Historia historia) async {
+    final action = await Navigator.of(context).push<StoryPreviewAction>(
+      MaterialPageRoute(
+        builder: (_) => StoryPreviewScreen(
+          historia: historia,
+          localeName: AppLocalizations.of(context)!.localeName,
+          convertLegacyEmoticon: _convertLegacyEmoticon,
+          heroTag: 'chapter_story_${historia.id ?? historia.titulo.hashCode}',
+          showEditDelete: true,
+          showMoodNotes: true,
+          showBottomActions: true,
         ),
       ),
     );
+
+    if (!mounted || action == null || action == StoryPreviewAction.close) {
+      return;
+    }
+
+    if (action == StoryPreviewAction.edit) {
+      final updated = await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => EditHistoriaScreen(historia: historia),
+        ),
+      );
+      if (!mounted) return;
+      if (updated == true) {
+        _didChange = true;
+        Provider.of<RefreshProvider>(context, listen: false).refresh();
+        await _loadChapterData();
+      }
+      return;
+    }
+
+    if (action == StoryPreviewAction.delete) {
+      await _deleteHistoria(historia);
+    }
   }
 
   @override
@@ -2477,7 +2519,9 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                                 if (capitulo.descricao != null &&
                                     capitulo.descricao!.trim().isNotEmpty) ...[
                                   const SizedBox(height: 12),
-                                  RichTextHelper.isValidQuillJson(capitulo.descricao)
+                                  RichTextHelper.isValidQuillJson(
+                                        capitulo.descricao,
+                                      )
                                       ? RichTextViewerWidget(
                                           jsonContent: capitulo.descricao,
                                         )

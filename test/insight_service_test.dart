@@ -134,9 +134,18 @@ void main() {
     });
 
     // Vincular histórias ao capítulo (3 entradas)
-    await db.insert('capitulo_entradas', {'capitulo_id': capId, 'entrada_id': id1});
-    await db.insert('capitulo_entradas', {'capitulo_id': capId, 'entrada_id': id2});
-    await db.insert('capitulo_entradas', {'capitulo_id': capId, 'entrada_id': id3});
+    await db.insert('capitulo_entradas', {
+      'capitulo_id': capId,
+      'entrada_id': id1,
+    });
+    await db.insert('capitulo_entradas', {
+      'capitulo_id': capId,
+      'entrada_id': id2,
+    });
+    await db.insert('capitulo_entradas', {
+      'capitulo_id': capId,
+      'entrada_id': id3,
+    });
 
     final service = InsightService();
     final result = await service.calculateChapterEngagement('user-test');
@@ -218,13 +227,31 @@ void main() {
       'data_fim': '2026-06-19T00:00:00.000',
     });
 
-    await db.insert('capitulo_entradas', {'capitulo_id': cap1, 'entrada_id': h1});
-    await db.insert('capitulo_entradas', {'capitulo_id': cap1, 'entrada_id': h2});
-    await db.insert('capitulo_entradas', {'capitulo_id': cap1, 'entrada_id': h3});
+    await db.insert('capitulo_entradas', {
+      'capitulo_id': cap1,
+      'entrada_id': h1,
+    });
+    await db.insert('capitulo_entradas', {
+      'capitulo_id': cap1,
+      'entrada_id': h2,
+    });
+    await db.insert('capitulo_entradas', {
+      'capitulo_id': cap1,
+      'entrada_id': h3,
+    });
 
-    await db.insert('capitulo_entradas', {'capitulo_id': cap2, 'entrada_id': h4});
-    await db.insert('capitulo_entradas', {'capitulo_id': cap2, 'entrada_id': h5});
-    await db.insert('capitulo_entradas', {'capitulo_id': cap2, 'entrada_id': h6});
+    await db.insert('capitulo_entradas', {
+      'capitulo_id': cap2,
+      'entrada_id': h4,
+    });
+    await db.insert('capitulo_entradas', {
+      'capitulo_id': cap2,
+      'entrada_id': h5,
+    });
+    await db.insert('capitulo_entradas', {
+      'capitulo_id': cap2,
+      'entrada_id': h6,
+    });
 
     final service = InsightService();
     final result = await service.calculateChapterHappiest('user-test');
@@ -309,6 +336,183 @@ void main() {
     expect(result!.type, InsightType.writingLength);
     expect(result.description, 'insightWritingLengthTip');
     expect(result.metadata?['style'], 'tip');
-    expect(result.metadata?['avg_words'], 3); // média arredondada de (3+5+2)/3 = 3.33 => 3
+    expect(
+      result.metadata?['avg_words'],
+      3,
+    ); // média arredondada de (3+5+2)/3 = 3.33 => 3
+  });
+
+  test('InsightService - calculateWellnessCircle', () async {
+    final dbHelper = DatabaseHelper();
+    final db = await dbHelper.database;
+
+    await db.insert('users', {
+      'id': 'user-test',
+      'nome': 'Test User',
+      'email': 'test@example.com',
+      'senha': 'password',
+    });
+
+    final pessoaAna = await db.insert('pessoas', {
+      'user_id': 'user-test',
+      'nome': 'Ana',
+      'slug': 'ana',
+    });
+    final pessoaBruno = await db.insert('pessoas', {
+      'user_id': 'user-test',
+      'nome': 'Bruno',
+      'slug': 'bruno',
+    });
+
+    Future<void> addStoryWithPeople({
+      required String title,
+      required int humor,
+      required int energia,
+      required List<int> peopleIds,
+    }) async {
+      final historiaId = await db.insert('historia', {
+        'user_id': 'user-test',
+        'titulo': title,
+        'data': DateTime.now().toIso8601String(),
+        'descricao': 'Teste',
+        'humor': humor,
+        'energia': energia,
+      });
+
+      for (final pessoaId in peopleIds) {
+        await db.insert('historia_pessoas', {
+          'historia_id': historiaId,
+          'pessoa_id': pessoaId,
+        });
+      }
+    }
+
+    await addStoryWithPeople(
+      title: 'Dia 1',
+      humor: 4,
+      energia: 3,
+      peopleIds: [pessoaAna, pessoaBruno],
+    );
+    await addStoryWithPeople(
+      title: 'Dia 2',
+      humor: 5,
+      energia: 3,
+      peopleIds: [pessoaAna],
+    );
+    await addStoryWithPeople(
+      title: 'Dia 3',
+      humor: 4,
+      energia: 3,
+      peopleIds: [pessoaAna],
+    );
+
+    final service = InsightService();
+    final result = await service.calculateWellnessCircle('user-test');
+
+    expect(result, isNotNull);
+    expect(result!.type, InsightType.wellnessCircle);
+    final names = (result.metadata?['names'] as List<dynamic>?)?.cast<String>();
+    expect(names, isNotNull);
+    expect(names!.first, 'Ana');
+  });
+
+  test('InsightService - calculatePeacefulPlaces', () async {
+    final dbHelper = DatabaseHelper();
+    final db = await dbHelper.database;
+
+    await db.insert('users', {
+      'id': 'user-test',
+      'nome': 'Test User',
+      'email': 'test@example.com',
+      'senha': 'password',
+    });
+
+    await db.insert('historia', {
+      'user_id': 'user-test',
+      'titulo': 'Praia 1',
+      'data': DateTime.now().toIso8601String(),
+      'descricao': 'Dia tranquilo',
+      'humor': 5,
+      'energia': 3,
+      'local': 'Praia',
+    });
+    await db.insert('historia', {
+      'user_id': 'user-test',
+      'titulo': 'Praia 2',
+      'data': DateTime.now().toIso8601String(),
+      'descricao': 'Muito bem',
+      'humor': 4,
+      'energia': 2,
+      'local': 'Praia',
+    });
+    await db.insert('historia', {
+      'user_id': 'user-test',
+      'titulo': 'Praia 3',
+      'data': DateTime.now().toIso8601String(),
+      'descricao': 'Calmo',
+      'humor': 5,
+      'energia': 2,
+      'local': 'Praia',
+    });
+
+    final service = InsightService();
+    final result = await service.calculatePeacefulPlaces('user-test');
+
+    expect(result, isNotNull);
+    expect(result!.type, InsightType.peacefulPlaces);
+    final places = (result.metadata?['places'] as List<dynamic>?)
+        ?.cast<String>();
+    expect(places, isNotNull);
+    expect(places!.first, 'Praia');
+  });
+
+  test('InsightService - calculateBreatheDeep', () async {
+    final dbHelper = DatabaseHelper();
+    final db = await dbHelper.database;
+
+    await db.insert('users', {
+      'id': 'user-test',
+      'nome': 'Test User',
+      'email': 'test@example.com',
+      'senha': 'password',
+    });
+
+    await db.insert('historia', {
+      'user_id': 'user-test',
+      'titulo': 'Casa 1',
+      'data': DateTime.now().toIso8601String(),
+      'descricao': 'Pesado',
+      'humor': 1,
+      'energia': 1,
+      'local': 'Casa',
+    });
+    await db.insert('historia', {
+      'user_id': 'user-test',
+      'titulo': 'Casa 2',
+      'data': DateTime.now().toIso8601String(),
+      'descricao': 'Cansado',
+      'humor': 2,
+      'energia': 1,
+      'local': 'Casa',
+    });
+    await db.insert('historia', {
+      'user_id': 'user-test',
+      'titulo': 'Casa 3',
+      'data': DateTime.now().toIso8601String(),
+      'descricao': 'Baixa',
+      'humor': 1,
+      'energia': 1,
+      'local': 'Casa',
+    });
+
+    final service = InsightService();
+    final result = await service.calculateBreatheDeep('user-test');
+
+    expect(result, isNotNull);
+    expect(result!.type, InsightType.breatheDeep);
+    final places = (result.metadata?['places'] as List<dynamic>?)
+        ?.cast<String>();
+    expect(places, isNotNull);
+    expect(places!.first, 'Casa');
   });
 }

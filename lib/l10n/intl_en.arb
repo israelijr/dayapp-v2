@@ -1667,6 +1667,45 @@
       }
     }
   },
+  "insightWellnessCircleTitle": "Wellness Circle",
+  "@insightWellnessCircleTitle": {
+    "description": "Title of the premium insight about people present on radiant days"
+  },
+  "insightWellnessCircleDescription": "People who are present on your most radiant days: {names}.",
+  "@insightWellnessCircleDescription": {
+    "description": "Description of the premium wellness circle insight",
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "insightPeacefulPlacesTitle": "Peaceful Places",
+  "@insightPeacefulPlacesTitle": {
+    "description": "Title of the premium insight about places with positive mood"
+  },
+  "insightPeacefulPlacesDescription": "Where your mood stays more positive: {places}.",
+  "@insightPeacefulPlacesDescription": {
+    "description": "Description of the premium peaceful places insight",
+    "placeholders": {
+      "places": {
+        "type": "String"
+      }
+    }
+  },
+  "insightBreatheDeepTitle": "Take a Deep Breath",
+  "@insightBreatheDeepTitle": {
+    "description": "Title of the premium insight about low mood and energy"
+  },
+  "insightBreatheDeepDescription": "Where your energy and mood are low: {places}.",
+  "@insightBreatheDeepDescription": {
+    "description": "Description of the premium take a deep breath insight",
+    "placeholders": {
+      "places": {
+        "type": "String"
+      }
+    }
+  },
   "insightWritingLengthTitle": "Deep Reflections",
   "@insightWritingLengthTitle": {
     "description": "Title of the insight encouraging detailed writing"

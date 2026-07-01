@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,6 +36,7 @@ class _GroupsScreenState extends State<GroupsScreen>
 
   List<Grupo> _grupos = [];
   Map<String, int> _grupoCounts = {};
+  int _archivedCount = 0;
   List<CapituloResumo> _capitulos = [];
   List<CapituloSugestao> _sugestoes = const [];
   bool _isLoading = true;
@@ -107,6 +110,9 @@ class _GroupsScreenState extends State<GroupsScreen>
           }
         }
 
+        // Count archived stories for display in the Archived tile
+        final archived = await grupoHelper.countArquivadas(userId);
+
         if (!mounted) return;
         gruposComHistorias.sort(
           (a, b) => a.nome.toLowerCase().compareTo(b.nome.toLowerCase()),
@@ -116,6 +122,7 @@ class _GroupsScreenState extends State<GroupsScreen>
           _grupoCounts = counts;
           _capitulos = capitulos;
           _sugestoes = sugestoes;
+          _archivedCount = archived;
         });
       }
     } finally {
@@ -242,60 +249,78 @@ class _GroupsScreenState extends State<GroupsScreen>
                   builder: (_) => const ArchivedStoriesScreen(),
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 140,
-                    height: 140,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.secondaryContainer.withValues(alpha: 0.24),
-                      border: Border.all(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.secondary.withValues(alpha: 0.18),
-                        width: 1.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withValues(alpha: 0.06),
-                          blurRadius: 18,
-                          offset: const Offset(0, 10),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final maxH = constraints.maxHeight.isFinite
+                      ? constraints.maxHeight
+                      : MediaQuery.of(context).size.height * 0.3;
+                  final iconSize = min(140.0, maxH * 0.55);
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: iconSize,
+                        height: iconSize,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondaryContainer
+                              .withValues(alpha: 0.24),
+                          border: Border.all(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.secondary.withValues(alpha: 0.18),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.06),
+                              blurRadius: 18,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    child: Icon(
-                      Icons.archive,
-                      size: 42,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    l10n.archivedTitle,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    l10n.archivedTitle,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.archive,
+                          size: max(32.0, iconSize * 0.30),
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Flexible(
+                        child: Text(
+                          l10n.archivedTitle,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Flexible(
+                        child: Text(
+                          '$_archivedCount ${_archivedCount == 1 ? l10n.record : l10n.records}',
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           );
@@ -505,17 +530,7 @@ class _GroupsScreenState extends State<GroupsScreen>
                         ),
                         RefreshIndicator(
                           onRefresh: _handlePullToRefresh,
-                          child: _grupos.isEmpty
-                              ? ListView(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 24,
-                                    horizontal: 16,
-                                  ),
-                                  children: [
-                                    Center(child: Text(l10n.noGroupsFound)),
-                                  ],
-                                )
-                              : _buildGroupsTab(context),
+                          child: _buildGroupsTab(context),
                         ),
                       ],
                     ),

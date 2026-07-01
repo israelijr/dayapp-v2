@@ -1,4 +1,5 @@
 import 'package:dayapp/sharing/story_data.dart';
+import 'package:dayapp/sharing/templates/template_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,7 @@ class MinimalTimelineTemplate extends StatelessWidget {
     final primary = story.images.isNotEmpty ? story.images.first : null;
     final colorScheme = Theme.of(context).colorScheme;
     final dateLabel = DateFormat.yMMMMd(story.localeName).format(story.date);
+    final metadataLine = storyMetadataLine(story);
 
     return ColoredBox(
       color: colorScheme.surface,
@@ -101,6 +103,28 @@ class MinimalTimelineTemplate extends StatelessWidget {
                       .toList(),
                 ),
                 const SizedBox(height: 32),
+                Text(
+                  dateLabel,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                if (metadataLine.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    metadataLine,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 12),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
