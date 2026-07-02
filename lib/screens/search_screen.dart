@@ -16,6 +16,7 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/emoji_selection_modal.dart';
 import '../widgets/story_card.dart';
 import 'edit_historia_screen.dart';
+import 'group_selection_screen.dart';
 
 /// Enum para os tipos de pesquisa disponíveis
 enum SearchType {
@@ -222,9 +223,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 scrolledUnderElevation: 0,
                 title: Text(
                   l10n.search,
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 20,
-                  ),
+                  style: GoogleFonts.plusJakartaSans(fontSize: 20),
                 ),
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(48),
@@ -672,7 +671,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     displayText,
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: dateRangeSelected ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: dateRangeSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                       color: dateRangeSelected
                           ? Theme.of(context).colorScheme.onPrimaryContainer
                           : Theme.of(context).colorScheme.onSurfaceVariant,
@@ -809,7 +810,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   return Icon(
                     Icons.search,
                     size: 64,
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.4),
                   );
                 },
               ),
@@ -855,7 +858,9 @@ class _SearchScreenState extends State<SearchScreen> {
             return Icon(
               Icons.search_off_outlined,
               size: 64,
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.4),
             );
           },
         ),
@@ -929,8 +934,6 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-
-
   /// Atualiza campos de uma história no banco
   Future<void> _updateHistoriaFields(
     Historia historia,
@@ -975,7 +978,65 @@ class _SearchScreenState extends State<SearchScreen> {
     Provider.of<RefreshProvider>(context, listen: false).refresh();
   }
 
+  Future<void> _archiveWithUndo(Historia historia) async {
+    final previousGrupo = historia.grupo;
+    await _historiaRepository.archiveHistoria(historia);
 
+    if (!mounted) return;
+
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    final controller = messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+        content: Text(l10n.storyArchived),
+        action: SnackBarAction(
+          label: l10n.undo,
+          onPressed: () async {
+            await _updateHistoriaFields(historia, {
+              'arquivado': null,
+              'grupo': previousGrupo,
+            });
+            if (!mounted) return;
+            await _performSearch();
+          },
+        ),
+      ),
+    );
+
+    await _performSearch();
+    Future.delayed(const Duration(seconds: 5), controller.close);
+  }
+
+  Future<void> _groupStory(Historia historia) async {
+    final selectedGroup = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
+    );
+
+    if (selectedGroup == null) {
+      return;
+    }
+
+    await _updateHistoriaFields(historia, {'grupo': selectedGroup});
+
+    if (!mounted) return;
+    await _performSearch();
+  }
+
+  Future<void> _ungroupStory(Historia historia) async {
+    await _updateHistoriaFields(historia, {'grupo': null});
+    if (!mounted) return;
+    await _performSearch();
+  }
+
+  Future<void> _unarchiveStory(Historia historia) async {
+    await _updateHistoriaFields(historia, {'arquivado': null});
+    if (!mounted) return;
+    await _performSearch();
+  }
 
   String? _convertLegacyEmoticon(String emoticon) {
     switch (emoticon) {
@@ -1053,6 +1114,26 @@ class _SearchScreenState extends State<SearchScreen> {
 
     if (action == StoryPreviewAction.delete) {
       await _deleteHistoria(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.group) {
+      await _groupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.ungroup) {
+      await _ungroupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.archive) {
+      await _archiveWithUndo(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.unarchive) {
+      await _unarchiveStory(historia);
     }
   }
 

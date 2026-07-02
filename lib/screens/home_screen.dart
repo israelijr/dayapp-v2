@@ -8,9 +8,12 @@ import 'package:dayapp/widgets/home_bottom_navigation.dart';
 import 'package:dayapp/widgets/home_drawer.dart';
 import 'package:dayapp/widgets/home_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'chapters_screen.dart';
+import 'create_group_screen.dart';
 import 'create_historia_screen.dart';
+import '../providers/refresh_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -114,8 +117,22 @@ class _HomeScreenState extends State<HomeScreen> {
           onCreateChapter: () {
             openCreateChapterScreen(context);
           },
+          onCreateGroup: () async {
+            final didCreate = await Navigator.push<bool>(
+              context,
+              MaterialPageRoute(
+                fullscreenDialog: true,
+                builder: (_) => const CreateGroupScreen(),
+              ),
+            );
+
+            if (didCreate == true && context.mounted) {
+              context.read<RefreshProvider>().refresh();
+            }
+          },
           newStoryLabel: l10n.newStory,
           chapterCreateTitle: l10n.chapterCreateTitle,
+          newGroupLabel: l10n.newGroup,
         ),
         bottomNavigationBar: HomeBottomNavigation(
           selectedIndex: _selectedIndex,

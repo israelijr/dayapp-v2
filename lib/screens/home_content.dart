@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +17,6 @@ import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
 import '../services/thumbnail_service.dart';
 import '../theme/animation_durations.dart';
-import '../theme/m3_expressive_theme.dart';
 import '../widgets/compact_historia_card.dart';
 import '../widgets/insight_card.dart';
 import '../widgets/story_card.dart';
@@ -398,7 +396,51 @@ class _HomeContentState extends State<HomeContent> {
 
     if (action == StoryPreviewAction.delete) {
       await _deleteHistoria(historia);
+      return;
     }
+
+    if (action == StoryPreviewAction.group) {
+      await _groupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.ungroup) {
+      await _ungroupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.archive) {
+      await _archiveWithUndo(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.unarchive) {
+      await _unarchiveStory(historia);
+    }
+  }
+
+  Future<void> _groupStory(Historia historia) async {
+    final navigator = Navigator.of(context);
+    final storiesProvider = context.read<HomeStoriesProvider>();
+    final selectedGroup = await navigator.push<String>(
+      MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
+    );
+    if (selectedGroup != null) {
+      await storiesProvider.updateStory(
+        historia,
+        updates: {'grupo': selectedGroup},
+      );
+    }
+  }
+
+  Future<void> _ungroupStory(Historia historia) async {
+    final storiesProvider = context.read<HomeStoriesProvider>();
+    await storiesProvider.updateStory(historia, updates: {'grupo': null});
+  }
+
+  Future<void> _unarchiveStory(Historia historia) async {
+    final storiesProvider = context.read<HomeStoriesProvider>();
+    await storiesProvider.updateStory(historia, updates: {'arquivado': null});
   }
 
   Future<void> _warmupStoryPreviewMedia(Historia historia) async {
@@ -448,134 +490,40 @@ class _HomeContentState extends State<HomeContent> {
   }
 
   Widget _buildCardView(Historia historia) {
-    return Slidable(
-      startActionPane: ActionPane(
-        motion: const BehindMotion(),
-        children: [
-          SlidableAction(
-            onPressed: (context) async {
-              await _archiveWithUndo(historia);
-            },
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            icon: Icons.archive,
-            label: AppLocalizations.of(context)!.archiveLabel,
-          ),
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const BehindMotion(),
-        children: [
-          SlidableAction(
-            onPressed: (context) async {
-              final navigator = Navigator.of(context);
-              final storiesProvider = context.read<HomeStoriesProvider>();
-              final selectedGroup = await navigator.push<String>(
-                MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
-              );
-              if (selectedGroup != null) {
-                await storiesProvider.updateStory(
-                  historia,
-                  updates: {'grupo': selectedGroup},
-                );
-              }
-            },
-            backgroundColor: AppColors.emoticonGreen,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            icon: Icons.group,
-            label: AppLocalizations.of(context)!.group,
-          ),
-        ],
-      ),
-      child: StoryCard(
+    return StoryCard(
+      historia: historia,
+      heroTag: _storyHeroTag(historia),
+      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+      convertLegacyEmoticon: _convertLegacyEmoticon,
+      stateLabel: historia.grupo?.isNotEmpty == true
+          ? historia.grupo
+          : historia.arquivado != null
+          ? AppLocalizations.of(context)!.archivedStateLabel
+          : null,
+      onPreview: () => _openStoryPreview(historia),
+      onDoubleTap: () => _openStoryPreview(historia),
+    );
+  }
+
+  Widget _buildIconView(Historia historia) {
+    return Hero(
+      tag: _storyHeroTag(historia),
+      createRectTween: (begin, end) =>
+          MaterialRectArcTween(begin: begin, end: end),
+      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+      placeholderBuilder: (context, size, child) =>
+          SizedBox(width: size.width, height: size.height),
+      child: CompactHistoriaCard(
         historia: historia,
-        heroTag: _storyHeroTag(historia),
-        flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
-        convertLegacyEmoticon: _convertLegacyEmoticon,
+        localeName: AppLocalizations.of(context)!.localeName,
         stateLabel: historia.grupo?.isNotEmpty == true
             ? historia.grupo
             : historia.arquivado != null
             ? AppLocalizations.of(context)!.archivedStateLabel
             : null,
-        onPreview: () => _openStoryPreview(historia),
+        trailing: _buildExpandFab(historia),
+        overlayTrailing: true,
         onDoubleTap: () => _openStoryPreview(historia),
-      ),
-    );
-  }
-
-  Widget _buildIconView(Historia historia) {
-    return Dismissible(
-      key: Key('icon_${historia.id}'),
-      direction: DismissDirection.horizontal,
-      background: Container(
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.only(left: 20),
-        color: Theme.of(context).colorScheme.primary,
-        child: Text(
-          AppLocalizations.of(context)!.archiveLabel,
-          style: GoogleFonts.plusJakartaSans(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.3,
-          ),
-        ),
-      ),
-      secondaryBackground: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        color: AppColors.emoticonGreen,
-        child: Text(
-          AppLocalizations.of(context)!.group,
-          style: GoogleFonts.plusJakartaSans(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.3,
-          ),
-        ),
-      ),
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.startToEnd) {
-          await _archiveWithUndo(historia);
-          return true;
-        } else if (direction == DismissDirection.endToStart) {
-          final navigator = Navigator.of(context);
-          final storiesProvider = context.read<HomeStoriesProvider>();
-          final selectedGroup = await navigator.push<String>(
-            MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
-          );
-          if (selectedGroup != null) {
-            await storiesProvider.updateStory(
-              historia,
-              updates: {'grupo': selectedGroup},
-            );
-          }
-        }
-        return false;
-      },
-      onDismissed: (direction) {
-        // Já tratado no confirmDismiss
-      },
-      child: Hero(
-        tag: _storyHeroTag(historia),
-        createRectTween: (begin, end) =>
-            MaterialRectArcTween(begin: begin, end: end),
-        flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
-        placeholderBuilder: (context, size, child) =>
-            SizedBox(width: size.width, height: size.height),
-        child: CompactHistoriaCard(
-          historia: historia,
-          localeName: AppLocalizations.of(context)!.localeName,
-          stateLabel: historia.grupo?.isNotEmpty == true
-              ? historia.grupo
-              : historia.arquivado != null
-              ? AppLocalizations.of(context)!.archivedStateLabel
-              : null,
-          trailing: _buildExpandFab(historia),
-          overlayTrailing: true,
-          onDoubleTap: () => _openStoryPreview(historia),
-        ),
       ),
     );
   }
@@ -1132,6 +1080,17 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                                 ),
                               ),
                             ],
+                          ),
+                        );
+                      }
+
+                      if (item is Map && item['type'] == 'loading') {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Center(
+                            child: widget.isLoadingMore
+                                ? const CircularProgressIndicator()
+                                : const SizedBox.shrink(),
                           ),
                         );
                       }

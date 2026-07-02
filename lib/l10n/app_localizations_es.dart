@@ -1785,6 +1785,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get archivedStateLabel => 'Archivado';
 
   @override
+  String get archivedStoryPrefixLabel => 'Archivada';
+
+  @override
   String get archiveSubtitle => 'Ocultar de la pantalla principal';
 
   @override
@@ -2406,6 +2409,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get chapterMinimumEntries => 'Mínimo: 1 historia por capítulo.';
+
+  @override
+  String get groupSelectStories =>
+      'Selecciona al menos 1 historia para este grupo';
+
+  @override
+  String get groupMinimumStories => 'Mínimo: 1 historia por grupo.';
 
   @override
   String chapterPeriod(String start, String end) {

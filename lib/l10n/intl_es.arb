@@ -782,6 +782,7 @@
   "discardChangesTitle": "¿Descartar cambios?",
   "discardChangesPrompt": "Tiene cambios sin guardar. ¿Salir sin guardar?",
   "archivedStateLabel": "Archivado",
+  "archivedStoryPrefixLabel": "Archivada",
   "archiveSubtitle": "Ocultar de la pantalla principal",
   "@appTitle": {
     "description": "Label for appTitle",
@@ -1922,6 +1923,14 @@
   "chapterMinimumEntries": "Mínimo: 1 historia por capítulo.",
   "@chapterMinimumEntries": {
     "description": "Mensaje de validación del mínimo de historias"
+  },
+  "groupSelectStories": "Selecciona al menos 1 historia para este grupo",
+  "@groupSelectStories": {
+    "description": "Etiqueta para seleccionar historias para componer un grupo"
+  },
+  "groupMinimumStories": "Mínimo: 1 historia por grupo.",
+  "@groupMinimumStories": {
+    "description": "Mensaje de validación del mínimo de historias en un grupo"
   },
   "chapterPeriod": "Historias de {start} - {end}",
   "@chapterPeriod": {

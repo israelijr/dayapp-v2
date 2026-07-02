@@ -38,11 +38,10 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
     super.dispose();
   }
 
-  Future<void> _showGroupDialog({Grupo? grupo}) async {
+  Future<void> _showGroupDialog({required Grupo grupo}) async {
     final provider = _groupManagementProvider;
-    final isEditing = grupo != null;
-    final nameController = TextEditingController(text: grupo?.nome);
-    String? selectedEmoticon = grupo?.emoticon;
+    final nameController = TextEditingController(text: grupo.nome);
+    String? selectedEmoticon = grupo.emoticon;
     String? selectedEmojiTranslation;
 
     await showDialog(
@@ -50,11 +49,7 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
       builder: (context) => StatefulBuilder(
         builder: (dialogContext, setStateDialog) {
           return AlertDialog(
-            title: Text(
-              isEditing
-                  ? AppLocalizations.of(context)!.editGroup
-                  : AppLocalizations.of(context)!.newGroup,
-            ),
+            title: Text(AppLocalizations.of(context)!.editGroup),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -122,55 +117,42 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                   final locale = Localizations.localeOf(context).languageCode;
 
                   try {
-                    if (isEditing) {
-                      final currentGrupo = grupo;
-                      final savedGrupo = Grupo(
-                        id: currentGrupo.id,
-                        userId: userId,
-                        nome: name,
-                        emoticon: selectedEmoticon,
-                        dataCriacao: currentGrupo.dataCriacao,
-                      );
+                    final savedGrupo = Grupo(
+                      id: grupo.id,
+                      userId: userId,
+                      nome: name,
+                      emoticon: selectedEmoticon,
+                      dataCriacao: grupo.dataCriacao,
+                    );
 
-                      await provider.saveGrupo(
-                        savedGrupo,
-                        oldName: currentGrupo.nome,
-                      );
-                    } else {
-                      final savedGrupo = Grupo(
-                        userId: userId,
-                        nome: name,
-                        emoticon: selectedEmoticon,
-                        dataCriacao: DateTime.now(),
-                      );
-
-                      await provider.saveGrupo(savedGrupo);
-                    }
+                    await provider.saveGrupo(savedGrupo, oldName: grupo.nome);
 
                     if (!mounted) return;
                     navigator.pop();
                   } catch (e) {
-                    debugPrint('GroupsMaintenanceScreen: erro ao salvar grupo: $e');
+                    debugPrint(
+                      'GroupsMaintenanceScreen: erro ao salvar grupo: $e',
+                    );
                     if (!mounted) return;
-                    
+
                     String errorMsg;
                     switch (locale) {
                       case 'pt':
                         errorMsg = 'Erro ao salvar grupo. Tente novamente.';
                         break;
                       case 'es':
-                        errorMsg = 'Error al guardar el grupo. Tente nuevamente.';
+                        errorMsg =
+                            'Error al guardar el grupo. Tente nuevamente.';
                         break;
                       case 'fr':
-                        errorMsg = 'Erreur lors de l\'enregistrement du groupe. Réessayez.';
+                        errorMsg =
+                            'Erreur lors de l\'enregistrement du groupe. Réessayez.';
                         break;
                       default:
                         errorMsg = 'Error saving group. Please try again.';
                     }
-                    
-                    messenger.showSnackBar(
-                      SnackBar(content: Text(errorMsg)),
-                    );
+
+                    messenger.showSnackBar(SnackBar(content: Text(errorMsg)));
                   }
                 },
                 child: Text(AppLocalizations.of(context)!.save),
@@ -354,7 +336,12 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                             ),
                           ),
                           subtitle: Text(
-                            AppLocalizations.of(context)!.createdOn(grupo.dataCriacao?.toLocal().toString().split(' ')[0] ?? ''),
+                            AppLocalizations.of(context)!.createdOn(
+                              grupo.dataCriacao?.toLocal().toString().split(
+                                    ' ',
+                                  )[0] ??
+                                  '',
+                            ),
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                                   color: Theme.of(
@@ -386,10 +373,6 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                       );
                     },
                   ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => _showGroupDialog(),
-              child: const Icon(Icons.add),
-            ),
           );
         },
       ),

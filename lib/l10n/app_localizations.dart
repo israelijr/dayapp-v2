@@ -3267,6 +3267,12 @@ abstract class AppLocalizations {
   /// **'Archived'**
   String get archivedStateLabel;
 
+  /// No description provided for @archivedStoryPrefixLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get archivedStoryPrefixLabel;
+
   /// No description provided for @archiveSubtitle.
   ///
   /// In en, this message translates to:
@@ -4319,6 +4325,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Minimum: 1 story per chapter.'**
   String get chapterMinimumEntries;
+
+  /// Label for selecting stories to compose a group
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least 1 story for this group'**
+  String get groupSelectStories;
+
+  /// Validation message for minimum stories in a group
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum: 1 story per group.'**
+  String get groupMinimumStories;
 
   /// Period label for chapter
   ///

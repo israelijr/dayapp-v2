@@ -944,6 +944,7 @@
   "discardChangesTitle": "Discard changes?",
   "discardChangesPrompt": "You have unsaved changes. Leave without saving?",
   "archivedStateLabel": "Archived",
+  "archivedStoryPrefixLabel": "Archived",
   "archiveSubtitle": "Hide from home screen",
   "@appTitle": {
     "description": "Label for appTitle",
@@ -2218,6 +2219,14 @@
   "chapterMinimumEntries": "Minimum: 1 story per chapter.",
   "@chapterMinimumEntries": {
     "description": "Validation message for minimum stories in a chapter"
+  },
+  "groupSelectStories": "Select at least 1 story for this group",
+  "@groupSelectStories": {
+    "description": "Label for selecting stories to compose a group"
+  },
+  "groupMinimumStories": "Minimum: 1 story per group.",
+  "@groupMinimumStories": {
+    "description": "Validation message for minimum stories in a group"
   },
   "chapterPeriod": "Stories from {start} - {end}",
   "@chapterPeriod": {

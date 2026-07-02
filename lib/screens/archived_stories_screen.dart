@@ -121,12 +121,8 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(
-          AppLocalizations.of(context)!.deleteStoryTitle,
-        ),
-        content: Text(
-          AppLocalizations.of(context)!.deleteStoryConfirm,
-        ),
+        title: Text(AppLocalizations.of(context)!.deleteStoryTitle),
+        content: Text(AppLocalizations.of(context)!.deleteStoryConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -153,11 +149,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
       refreshProvider.refresh();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.movedToTrash,
-          ),
-        ),
+        SnackBar(content: Text(AppLocalizations.of(context)!.movedToTrash)),
       );
     }
   }
@@ -173,6 +165,33 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
       listen: false,
     );
     refreshProvider.refresh();
+  }
+
+  Future<void> _groupStory(Historia historia) async {
+    final selectedGroup = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
+    );
+
+    if (selectedGroup == null) {
+      return;
+    }
+
+    await _updateHistoria(
+      historia,
+      updates: {'grupo': selectedGroup, 'arquivado': null, 'tag': null},
+    );
+  }
+
+  Future<void> _unarchiveStory(Historia historia) async {
+    await _updateHistoria(
+      historia,
+      updates: {'arquivado': null, 'tag': null, 'grupo': null},
+    );
+  }
+
+  Future<void> _ungroupStory(Historia historia) async {
+    await _updateHistoria(historia, updates: {'grupo': null});
   }
 
   Widget _buildCardView(Historia historia) {
@@ -251,21 +270,21 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
               itemBuilder: (context) => [
                 PopupMenuItem(
                   value: 'edit',
-                  child: Text(
-                    AppLocalizations.of(context)!.editDoubleTapHint,
-                  ),
+                  child: Text(AppLocalizations.of(context)!.editDoubleTapHint),
                 ),
                 PopupMenuItem(
                   value: 'delete',
-                  child: Text(
-                    AppLocalizations.of(context)!.deleteLabel,
-                  ),
+                  child: Text(AppLocalizations.of(context)!.deleteLabel),
                 ),
               ],
             ),
           ],
         ),
-        stateLabel: AppLocalizations.of(context)?.archivedTitle,
+        stateLabel: historia.grupo?.isNotEmpty == true
+            ? historia.grupo
+            : historia.arquivado != null
+            ? AppLocalizations.of(context)!.archivedStateLabel
+            : null,
       ),
     );
   }
@@ -313,6 +332,21 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
 
     if (action == StoryPreviewAction.delete) {
       await _deleteHistoria(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.group) {
+      await _groupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.ungroup) {
+      await _ungroupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.unarchive) {
+      await _unarchiveStory(historia);
     }
   }
 
@@ -460,9 +494,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
               ),
               PopupMenuItem(
                 value: 'delete',
-                child: Text(
-                  AppLocalizations.of(context)!.deleteLabel,
-                ),
+                child: Text(AppLocalizations.of(context)!.deleteLabel),
               ),
             ],
           ),
@@ -480,9 +512,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: Text(
-                        AppLocalizations.of(context)!.close,
-                      ),
+                      child: Text(AppLocalizations.of(context)!.close),
                     ),
                   ],
                 );
@@ -503,10 +533,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
           AppLocalizations.of(context)!.archivedTitle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 24,
-            height: 1.3,
-          ),
+          style: GoogleFonts.plusJakartaSans(fontSize: 24, height: 1.3),
         ),
         actions: [
           IconButton(
@@ -584,9 +611,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
             });
           },
           icon: const Icon(Icons.add),
-          label: Text(
-            AppLocalizations.of(context)!.newStory,
-          ),
+          label: Text(AppLocalizations.of(context)!.newStory),
         ),
       ),
     );

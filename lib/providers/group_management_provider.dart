@@ -70,6 +70,53 @@ class GroupManagementProvider with ChangeNotifier {
     await loadGrupos();
   }
 
+  Future<void> createGrupoWithStories({
+    required String groupName,
+    String? emoticon,
+    required List<int> storyIds,
+  }) async {
+    final userId = _authProvider.user?.id;
+    if (userId == null) {
+      throw StateError('Usuário não autenticado');
+    }
+    if (groupName.trim().isEmpty) {
+      throw StateError('Nome do grupo inválido');
+    }
+    if (storyIds.isEmpty) {
+      throw StateError('Selecione ao menos uma história');
+    }
+
+    final normalizedName = groupName.trim();
+    final exists = await _repository.groupNameExists(
+      userId: userId,
+      name: normalizedName,
+    );
+    if (exists) {
+      throw StateError('GROUP_ALREADY_EXISTS');
+    }
+
+    final groupId = await _repository.insertGrupo(
+      Grupo(
+        userId: userId,
+        nome: normalizedName,
+        emoticon: emoticon,
+        dataCriacao: DateTime.now(),
+      ),
+    );
+
+    if (groupId <= 0) {
+      throw StateError('Falha ao criar grupo');
+    }
+
+    await _repository.assignStoriesToGroup(
+      userId: userId,
+      groupName: normalizedName,
+      storyIds: storyIds,
+    );
+
+    await loadGrupos();
+  }
+
   Future<int> countHistoriasInGroup(String groupName) async {
     final userId = _authProvider.user?.id;
     if (userId == null) {

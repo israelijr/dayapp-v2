@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'edit_historia_screen.dart';
+import 'group_selection_screen.dart';
 
 class CalendarViewScreen extends StatelessWidget {
   const CalendarViewScreen({super.key});
@@ -136,6 +137,76 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
     }
   }
 
+  Future<void> _archiveWithUndo(Historia historia) async {
+    final previousGrupo = historia.grupo;
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+
+    await HistoriaRepository().archiveHistoria(historia);
+
+    if (!mounted) return;
+
+    await context.read<CalendarStoriesProvider>().loadHistorias();
+
+    messenger.hideCurrentSnackBar();
+    final controller = messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+        content: Text(l10n.storyArchived),
+        action: SnackBarAction(
+          label: l10n.undo,
+          onPressed: () async {
+            await HistoriaRepository().updateHistoria(
+              historia,
+              updates: {'arquivado': null, 'grupo': previousGrupo},
+            );
+            if (!mounted) return;
+            await context.read<CalendarStoriesProvider>().loadHistorias();
+          },
+        ),
+      ),
+    );
+
+    Future.delayed(const Duration(seconds: 5), controller.close);
+  }
+
+  Future<void> _groupStory(Historia historia) async {
+    final selectedGroup = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
+    );
+
+    if (selectedGroup == null) {
+      return;
+    }
+
+    await HistoriaRepository().updateHistoria(
+      historia,
+      updates: {'grupo': selectedGroup},
+    );
+
+    if (!mounted) return;
+    await context.read<CalendarStoriesProvider>().loadHistorias();
+  }
+
+  Future<void> _ungroupStory(Historia historia) async {
+    await HistoriaRepository().updateHistoria(
+      historia,
+      updates: {'grupo': null},
+    );
+    if (!mounted) return;
+    await context.read<CalendarStoriesProvider>().loadHistorias();
+  }
+
+  Future<void> _unarchiveStory(Historia historia) async {
+    await HistoriaRepository().updateHistoria(
+      historia,
+      updates: {'arquivado': null},
+    );
+    if (!mounted) return;
+    await context.read<CalendarStoriesProvider>().loadHistorias();
+  }
+
   Future<void> _openStoryPreview(Historia historia) async {
     try {
       await _warmupStoryPreviewMedia(
@@ -184,6 +255,26 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
 
     if (action == StoryPreviewAction.delete) {
       await _deleteHistoria(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.group) {
+      await _groupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.ungroup) {
+      await _ungroupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.archive) {
+      await _archiveWithUndo(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.unarchive) {
+      await _unarchiveStory(historia);
     }
   }
 
@@ -203,7 +294,9 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
 
       await ThumbnailService().preloadThumbnails(thumbnailsInput);
     } catch (e) {
-      debugPrint('CalendarViewScreen: falha no prewarm de mídia da preview: $e');
+      debugPrint(
+        'CalendarViewScreen: falha no prewarm de mídia da preview: $e',
+      );
     }
   }
 

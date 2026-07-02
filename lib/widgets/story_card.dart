@@ -15,7 +15,24 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 /// Ações possíveis retornadas pelo preview de história.
-enum StoryPreviewAction { close, edit, delete }
+enum StoryPreviewAction {
+  close,
+  edit,
+  delete,
+  group,
+  archive,
+  ungroup,
+  unarchive,
+}
+
+enum _StoryPreviewMenuAction {
+  share,
+  group,
+  switchGroup,
+  ungroup,
+  archive,
+  unarchive,
+}
 
 typedef LegacyEmoticonConverter = String? Function(String emoticon);
 
@@ -432,6 +449,89 @@ class StoryPreviewScreen extends StatelessWidget {
     super.key,
   });
 
+  bool get _hasGroup => (historia.grupo?.trim().isNotEmpty ?? false);
+  bool get _isArchived => historia.arquivado != null;
+
+  PopupMenuItem<_StoryPreviewMenuAction> _menuItem({
+    required _StoryPreviewMenuAction value,
+    required IconData icon,
+    required String label,
+    required bool enabled,
+  }) {
+    return PopupMenuItem<_StoryPreviewMenuAction>(
+      value: value,
+      enabled: enabled,
+      child: Row(
+        children: [
+          Icon(icon, size: 20),
+          const SizedBox(width: 10),
+          Text(label),
+        ],
+      ),
+    );
+  }
+
+  List<PopupMenuItem<_StoryPreviewMenuAction>> _buildMenuItems(
+    AppLocalizations l10n,
+  ) {
+    const actions = <_StoryPreviewMenuAction>[
+      _StoryPreviewMenuAction.share,
+      _StoryPreviewMenuAction.group,
+      _StoryPreviewMenuAction.switchGroup,
+      _StoryPreviewMenuAction.ungroup,
+      _StoryPreviewMenuAction.archive,
+      _StoryPreviewMenuAction.unarchive,
+    ];
+    return actions
+        .map((action) {
+          switch (action) {
+            case _StoryPreviewMenuAction.share:
+              return _menuItem(
+                value: action,
+                icon: Icons.share,
+                label: l10n.share,
+                enabled: true,
+              );
+            case _StoryPreviewMenuAction.group:
+              return _menuItem(
+                value: action,
+                icon: Icons.group,
+                label: 'Agrupar',
+                enabled: !_hasGroup,
+              );
+            case _StoryPreviewMenuAction.switchGroup:
+              return _menuItem(
+                value: action,
+                icon: Icons.swap_horiz,
+                label: 'Trocar Grupo',
+                enabled: _hasGroup,
+              );
+            case _StoryPreviewMenuAction.archive:
+              return _menuItem(
+                value: action,
+                icon: Icons.archive,
+                label: l10n.archiveLabel,
+                enabled: !_isArchived,
+              );
+            case _StoryPreviewMenuAction.ungroup:
+              return _menuItem(
+                value: action,
+                icon: Icons.group_off,
+                label: l10n.ungroup,
+                enabled: _hasGroup,
+              );
+            case _StoryPreviewMenuAction.unarchive:
+              return _menuItem(
+                value: action,
+                icon: Icons.unarchive,
+                label: l10n.unarchive,
+                enabled: _isArchived,
+              );
+          }
+        })
+        .toList(growable: false);
+  }
+
   String _moodNarrative(AppLocalizations l10n) {
     final mood = historia.humor;
     if (mood <= 1) return l10n.storyPreviewMoodVeryDifficultNarrative;
@@ -554,16 +654,29 @@ class StoryPreviewScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         actions: [
-          IconButton(
-            tooltip: l10n.share,
-            icon: const Icon(Icons.share),
-            onPressed: () => _shareStory(context),
-          ),
-          IconButton(
-            tooltip: l10n.close,
-            icon: const Icon(Icons.close),
-            onPressed: () =>
-                Navigator.of(context).pop(StoryPreviewAction.close),
+          PopupMenuButton<_StoryPreviewMenuAction>(
+            icon: const Icon(Icons.settings),
+            onSelected: (_StoryPreviewMenuAction value) {
+              switch (value) {
+                case _StoryPreviewMenuAction.share:
+                  _shareStory(context);
+                  return;
+                case _StoryPreviewMenuAction.group:
+                case _StoryPreviewMenuAction.switchGroup:
+                  Navigator.of(context).pop(StoryPreviewAction.group);
+                  return;
+                case _StoryPreviewMenuAction.ungroup:
+                  Navigator.of(context).pop(StoryPreviewAction.ungroup);
+                  return;
+                case _StoryPreviewMenuAction.archive:
+                  Navigator.of(context).pop(StoryPreviewAction.archive);
+                  return;
+                case _StoryPreviewMenuAction.unarchive:
+                  Navigator.of(context).pop(StoryPreviewAction.unarchive);
+                  return;
+              }
+            },
+            itemBuilder: (menuContext) => _buildMenuItems(l10n),
           ),
         ],
       ),

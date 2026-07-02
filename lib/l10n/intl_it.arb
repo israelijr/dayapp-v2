@@ -874,6 +874,7 @@
   "discardChangesTitle": "Ignorare le modifiche?",
   "discardChangesPrompt": "Hai modifiche non salvate. Uscire senza salvare?",
   "archivedStateLabel": "Archiviato",
+  "archivedStoryPrefixLabel": "Archiviata",
   "archiveSubtitle": "Nascondi dalla schermata principale",
   "chooseEmoji": "Scegli un emoji",
   "@chooseEmoji": {
@@ -1591,6 +1592,14 @@
   "chapterMinimumEntries": "Minimo: 1 storia per capitolo.",
   "@chapterMinimumEntries": {
     "description": "Messaggio di validazione per il numero minimo di storie in un capitolo"
+  },
+  "groupSelectStories": "Seleziona almeno 1 storia per questo gruppo",
+  "@groupSelectStories": {
+    "description": "Etichetta per selezionare le storie per comporre un gruppo"
+  },
+  "groupMinimumStories": "Minimo: 1 storia per gruppo.",
+  "@groupMinimumStories": {
+    "description": "Messaggio di validazione per il numero minimo di storie in un gruppo"
   },
   "chapterPeriod": "Storie dal {start} - {end}",
   "@chapterPeriod": {

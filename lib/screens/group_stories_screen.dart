@@ -19,6 +19,7 @@ import '../theme/animation_durations.dart';
 import '../theme/m3_expressive_theme.dart';
 import 'create_historia_screen.dart';
 import 'edit_historia_screen.dart';
+import 'group_selection_screen.dart';
 
 HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
   return (
@@ -182,6 +183,8 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
   final ScrollController _scrollController = ScrollController();
   late final GroupStoriesProvider _storiesProvider;
 
+  String get _scrollPositionKey => 'group_list_scroll_${widget.grupo.nome}';
+
   @override
   void initState() {
     super.initState();
@@ -214,8 +217,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       context,
       listen: false,
     );
-    final scrollKey = 'group_list_scroll_${widget.grupo.nome}';
-    final savedPosition = scrollProvider.getScrollPosition(scrollKey);
+    final savedPosition = scrollProvider.getScrollPosition(_scrollPositionKey);
     if (_scrollController.hasClients && savedPosition > 0) {
       _scrollController.jumpTo(savedPosition);
     }
@@ -228,9 +230,18 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
         context,
         listen: false,
       );
-      final scrollKey = 'group_list_scroll_${widget.grupo.nome}';
-      scrollProvider.saveScrollPosition(scrollKey, _scrollController.offset);
+      scrollProvider.saveScrollPosition(
+        _scrollPositionKey,
+        _scrollController.offset,
+      );
     }
+  }
+
+  void _restoreScrollPositionAfterPreview() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _restoreScrollPosition();
+    });
   }
 
   @override
@@ -279,7 +290,10 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
   Future<void> _archiveWithUndo(Historia historia) async {
     final previousTag = historia.tag;
     final previousGrupo = historia.grupo;
-    await _storiesProvider.archiveHistoria(historia);
+    await _updateHistoria(
+      historia,
+      updates: {'arquivado': 'sim', 'grupo': null},
+    );
     if (!mounted) return;
 
     final localizations = AppLocalizations.of(context);
@@ -306,6 +320,53 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       ),
     );
     Future.delayed(const Duration(seconds: 5), controller.close);
+  }
+
+  Future<void> _groupStory(Historia historia) async {
+    final selectedGroup = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
+    );
+
+    if (selectedGroup == null) {
+      return;
+    }
+
+    await _updateHistoria(historia, updates: {'grupo': selectedGroup});
+  }
+
+  Future<void> _ungroupStory(Historia historia) async {
+    final ungroupedMsg = AppLocalizations.of(context)!.storyUngrouped;
+    await _storiesProvider.ungroupHistoria(historia);
+    if (!mounted) return;
+    _messengerKey.currentState?.showSnackBar(
+      SnackBar(content: Text(ungroupedMsg)),
+    );
+  }
+
+  Future<bool> _confirmDeleteHistoria() async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.deleteStoryTitle),
+        content: Text(l10n.deleteStoryConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(dialogContext).colorScheme.error,
+            ),
+            child: Text(l10n.deleteLabel),
+          ),
+        ],
+      ),
+    );
+
+    return confirm == true;
   }
 
   Widget _buildCardView(Historia historia) {
@@ -352,6 +413,11 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
         heroTag: _storyHeroTag(historia),
         flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
         convertLegacyEmoticon: _convertLegacyEmoticon,
+        stateLabel: historia.grupo?.isNotEmpty == true
+            ? historia.grupo
+            : historia.arquivado != null
+            ? AppLocalizations.of(context)!.archivedStateLabel
+            : null,
         onPreview: () => _openStoryPreview(historia),
         onDoubleTap: () => _openStoryPreview(historia),
       ),
@@ -419,6 +485,11 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
             localeName:
                 AppLocalizations.of(context)?.localeName ??
                 Localizations.localeOf(context).toString(),
+            stateLabel: historia.grupo?.isNotEmpty == true
+                ? historia.grupo
+                : historia.arquivado != null
+                ? AppLocalizations.of(context)!.archivedStateLabel
+                : null,
             overlayTrailing: true,
             trailing: Material(
               shape: const CircleBorder(),
@@ -488,12 +559,6 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
                     ? AppLocalizations.of(context)!.toggleToIcons
                     : AppLocalizations.of(context)!.toggleToCards,
               ),
-              // delete group
-              IconButton(
-                icon: const Icon(Icons.delete_forever),
-                onPressed: () => _deleteGroup(),
-                tooltip: AppLocalizations.of(context)!.deleteGroupTitle,
-              ),
             ],
           ),
           body: Consumer<GroupStoriesProvider>(
@@ -517,7 +582,9 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
               return AnimatedSwitcher(
                 duration: AppDurations.listSwitch,
                 child: ListView.builder(
-                  key: ValueKey<bool>(_isCardView),
+                  key: PageStorageKey<String>(
+                    '${_scrollPositionKey}_${_isCardView ? 'cards' : 'icons'}',
+                  ),
                   controller: _scrollController,
                   padding: const EdgeInsets.symmetric(
                     vertical: 16,
@@ -545,7 +612,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
                   Navigator.push(
                     context,
                     RouteTransitionHelper.slideUpRotateTransition(
-                      const CreateHistoriaScreen(),
+                      CreateHistoriaScreen(initialGroup: widget.grupo.nome),
                     ),
                   ).then((created) async {
                     if (!mounted) return;
@@ -564,55 +631,12 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
     ); // ChangeNotifierProvider
   }
 
-  Future<void> _deleteGroup() async {
-    final navigator = Navigator.of(context);
-    final localizations = AppLocalizations.of(context)!;
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) {
-        final loc = AppLocalizations.of(ctx)!;
-        return AlertDialog(
-          title: Text(loc.deleteGroupTitle),
-          content: Text(loc.deleteGroupConfirm(widget.grupo.nome)),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: Text(loc.cancel),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: Text(
-                loc.deleteLabel,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirm == true) {
-      try {
-        await _storiesProvider.deleteGroup();
-      } catch (e) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(localizations.errorDeletingStory(e.toString())),
-          ),
-        );
-        return;
-      }
-
-      if (!mounted) return;
-      navigator.pushReplacementNamed('/home');
-    }
-  }
-
   String _storyHeroTag(Historia historia) =>
       'group_story_${historia.id ?? historia.titulo.hashCode}';
 
   Future<void> _openStoryPreview(Historia historia) async {
+    _saveScrollPosition();
+
     try {
       await _warmupStoryPreviewMedia(
         historia,
@@ -638,7 +662,13 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       ),
     );
 
-    if (!mounted || action == null || action == StoryPreviewAction.close) {
+    if (!mounted) {
+      return;
+    }
+
+    _restoreScrollPositionAfterPreview();
+
+    if (action == null || action == StoryPreviewAction.close) {
       return;
     }
 
@@ -656,11 +686,39 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
     }
 
     if (action == StoryPreviewAction.delete) {
+      final confirmed = await _confirmDeleteHistoria();
+      if (!confirmed || !mounted) {
+        return;
+      }
+
       await _storiesProvider.deleteHistoria(historia);
       if (!mounted) return;
+
+      // Mantém o usuário na tela atual de grupo após exclusão via preview.
       _messengerKey.currentState?.showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context)!.movedToTrash)),
       );
+      return;
+    }
+
+    if (action == StoryPreviewAction.group) {
+      await _groupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.ungroup) {
+      await _ungroupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.archive) {
+      await _archiveWithUndo(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.unarchive) {
+      await _updateHistoria(historia, updates: {'arquivado': null});
+      return;
     }
   }
 

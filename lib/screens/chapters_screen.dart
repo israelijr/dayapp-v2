@@ -25,6 +25,7 @@ import '../repositories/capitulo_repository.dart';
 import '../repositories/historia_repository.dart';
 import '../screens/chapter_reader_screen.dart';
 import '../screens/edit_historia_screen.dart';
+import '../screens/group_selection_screen.dart';
 import '../services/capitulo_sugestao_service.dart';
 import '../widgets/compact_historia_card.dart';
 import '../widgets/custom_text_field.dart';
@@ -529,6 +530,11 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                           (entrada) => CompactHistoriaCard(
                             historia: entrada,
                             localeName: l10n.localeName,
+                            stateLabel: entrada.grupo?.isNotEmpty == true
+                                ? entrada.grupo
+                                : entrada.arquivado != null
+                                ? l10n.archivedStateLabel
+                                : null,
                             margin: const EdgeInsets.symmetric(
                               horizontal: 8,
                               vertical: 4,
@@ -2355,6 +2361,87 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
     await _loadChapterData();
   }
 
+  Future<void> _groupStory(Historia historia) async {
+    final selectedGroup = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
+    );
+
+    if (selectedGroup == null) {
+      return;
+    }
+
+    await _historiaRepository.updateHistoria(
+      historia,
+      updates: {'grupo': selectedGroup},
+    );
+
+    if (!mounted) return;
+    _didChange = true;
+    Provider.of<RefreshProvider>(context, listen: false).refresh();
+    await _loadChapterData();
+  }
+
+  Future<void> _archiveWithUndo(Historia historia) async {
+    final previousGrupo = historia.grupo;
+
+    await _historiaRepository.archiveHistoria(historia);
+    if (!mounted) return;
+
+    _didChange = true;
+    Provider.of<RefreshProvider>(context, listen: false).refresh();
+    await _loadChapterData();
+
+    if (!mounted) return;
+
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    final controller = messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+        content: Text(l10n.storyArchived),
+        action: SnackBarAction(
+          label: l10n.undo,
+          onPressed: () async {
+            await _historiaRepository.updateHistoria(
+              historia,
+              updates: {'arquivado': null, 'grupo': previousGrupo},
+            );
+            if (!mounted) return;
+            _didChange = true;
+            Provider.of<RefreshProvider>(context, listen: false).refresh();
+            await _loadChapterData();
+          },
+        ),
+      ),
+    );
+
+    Future.delayed(const Duration(seconds: 5), controller.close);
+  }
+
+  Future<void> _ungroupStory(Historia historia) async {
+    await _historiaRepository.updateHistoria(
+      historia,
+      updates: {'grupo': null},
+    );
+    if (!mounted) return;
+    _didChange = true;
+    Provider.of<RefreshProvider>(context, listen: false).refresh();
+    await _loadChapterData();
+  }
+
+  Future<void> _unarchiveStory(Historia historia) async {
+    await _historiaRepository.updateHistoria(
+      historia,
+      updates: {'arquivado': null},
+    );
+    if (!mounted) return;
+    _didChange = true;
+    Provider.of<RefreshProvider>(context, listen: false).refresh();
+    await _loadChapterData();
+  }
+
   Future<void> _abrirHistoria(Historia historia) async {
     final action = await Navigator.of(context).push<StoryPreviewAction>(
       MaterialPageRoute(
@@ -2391,6 +2478,26 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
 
     if (action == StoryPreviewAction.delete) {
       await _deleteHistoria(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.group) {
+      await _groupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.ungroup) {
+      await _ungroupStory(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.archive) {
+      await _archiveWithUndo(historia);
+      return;
+    }
+
+    if (action == StoryPreviewAction.unarchive) {
+      await _unarchiveStory(historia);
     }
   }
 

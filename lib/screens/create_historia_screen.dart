@@ -83,7 +83,9 @@ class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
 }
 
 class CreateHistoriaScreen extends StatefulWidget {
-  const CreateHistoriaScreen({super.key});
+  final String? initialGroup;
+
+  const CreateHistoriaScreen({super.key, this.initialGroup});
 
   @override
   State<CreateHistoriaScreen> createState() => _CreateHistoriaScreenState();
@@ -365,6 +367,9 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         titulo: _capitalizeText(titleController.text.trim()),
         descricao: plainText.isEmpty ? null : richTextJson,
         emoticon: selectedEmoticon,
+        grupo: (widget.initialGroup?.trim().isNotEmpty ?? false)
+            ? widget.initialGroup!.trim()
+            : null,
         data: selectedDate,
         humor: _selectedMood,
         energia: _selectedEnergy,

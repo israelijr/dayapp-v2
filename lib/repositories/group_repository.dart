@@ -41,6 +41,39 @@ class GroupRepository {
     return _grupoHelper.insertGrupo(grupo);
   }
 
+  Future<bool> groupNameExists({
+    required String userId,
+    required String name,
+  }) async {
+    final existing = await _grupoHelper.getGrupoByNome(userId, name);
+    return existing != null;
+  }
+
+  Future<void> assignStoriesToGroup({
+    required String userId,
+    required String groupName,
+    required List<int> storyIds,
+  }) async {
+    if (storyIds.isEmpty) return;
+
+    final db = await DatabaseHelper().database;
+    final placeholders = List.filled(storyIds.length, '?').join(',');
+    final nowIso = DateTime.now().toIso8601String();
+
+    await db.update(
+      'historia',
+      {
+        'grupo': groupName,
+        'tag': null,
+        'arquivado': null,
+        'data_update': nowIso,
+        'backed_up': 0,
+      },
+      where: 'user_id = ? AND id IN ($placeholders)',
+      whereArgs: [userId, ...storyIds],
+    );
+  }
+
   Future<int> updateGrupoAndRenameHistorias(Grupo grupo, String oldName) async {
     return _grupoHelper.updateGrupoAndRenameHistorias(grupo, oldName);
   }
