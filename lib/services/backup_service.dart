@@ -80,6 +80,42 @@ void backupZipIsolateEntrypoint(Map<String, dynamic> zipConfig) {
   }
 }
 
+/// Conjunto de arquivos que representa um snapshot consistente do SQLite.
+class DatabaseSnapshotBundle {
+  final File dbFile;
+  final File? walFile;
+  final File? shmFile;
+  final bool shouldCleanup;
+
+  DatabaseSnapshotBundle({
+    required this.dbFile,
+    this.walFile,
+    this.shmFile,
+    this.shouldCleanup = true,
+  });
+
+  List<File> get files => [
+    dbFile,
+    if (walFile != null) walFile!,
+    if (shmFile != null) shmFile!,
+  ];
+
+  Future<void> cleanup() async {
+    if (!shouldCleanup) return;
+    for (final file in files) {
+      try {
+        if (await file.exists()) {
+          await file.delete();
+        }
+      } catch (e) {
+        debugPrint(
+          'BackupService: erro ao limpar snapshot temporário ${file.path}: $e',
+        );
+      }
+    }
+  }
+}
+
 /// ServiÃ§o simplificado de backup - apenas arquivo ZIP local
 class BackupService {
   static final BackupService _instance = BackupService._internal();
@@ -97,6 +133,7 @@ class BackupService {
     void Function(String)? onProgress,
     void Function(double?)? onProgressValue,
   }) async {
+    DatabaseSnapshotBundle? dbSnapshot;
     try {
       onProgressValue?.call(0.0);
       onProgress?.call(l10n.backupProgressCreating);
@@ -110,6 +147,8 @@ class BackupService {
       if (!await dbFile.exists()) {
         throw Exception(l10n.errorBackupDbNotFound);
       }
+
+      dbSnapshot = await createConsistentDatabaseSnapshot();
 
       final videosDir = await VideoFileHelper.getVideosDirectory();
       final videoFiles = videosDir
@@ -157,7 +196,9 @@ class BackupService {
         await HistoriaRepository().markAllStoriesBackedUp();
       } catch (e) {
         // Não quebrar o fluxo de backup se a marcação falhar
-        debugPrint('BackupService: erro ao marcar histórias como salvas em backup: $e');
+        debugPrint(
+          'BackupService: erro ao marcar histórias como salvas em backup: $e',
+        );
       }
 
       // 4. Criar arquivo de metadados (único arquivo que requer escrita temporária)
@@ -166,7 +207,7 @@ class BackupService {
           '''
 DayApp Backup
 Data: ${DateTime.now().toIso8601String()}
-Banco de dados: ${dbFile.lengthSync()} bytes
+Banco de dados: ${dbSnapshot.dbFile.lengthSync()} bytes
 Vídeos: ${videoFiles.length} arquivo(s)
 Fotos: ${photoFiles.length} arquivo(s)
 Áudios: ${audioFiles.length} arquivo(s)
@@ -180,7 +221,7 @@ Versão: 2.0.0
           await file.exists() ? await file.length() : 0;
 
       final allFiles = [
-        dbFile,
+        ...dbSnapshot.files,
         ...videoFiles,
         ...photoFiles,
         ...chapterPhotoFiles,
@@ -213,7 +254,18 @@ Versão: 2.0.0
         });
       }
 
-      addEntry(dbFile.path, 'dayapp.db', sizes[sizeIdx++], compress: true);
+      addEntry(
+        dbSnapshot.dbFile.path,
+        'dayapp.db',
+        sizes[sizeIdx++],
+        compress: true,
+      );
+      if (dbSnapshot.walFile != null) {
+        addEntry(dbSnapshot.walFile!.path, 'dayapp.db-wal', sizes[sizeIdx++]);
+      }
+      if (dbSnapshot.shmFile != null) {
+        addEntry(dbSnapshot.shmFile!.path, 'dayapp.db-shm', sizes[sizeIdx++]);
+      }
       for (final f in videoFiles) {
         addEntry(f.path, 'videos/${path.basename(f.path)}', sizes[sizeIdx++]);
       }
@@ -298,14 +350,72 @@ Versão: 2.0.0
         await metadataFile.delete();
       } catch (e) {
         // Silencioso — arquivo temporário, falha não é crítica
-        debugPrint('BackupService: erro ao deletar arquivo temporário de metadados de backup: $e');
+        debugPrint(
+          'BackupService: erro ao deletar arquivo temporário de metadados de backup: $e',
+        );
       }
 
       onProgress?.call(l10n.backupProgressSuccess);
       return zipPath;
     } catch (e) {
       rethrow;
+    } finally {
+      await dbSnapshot?.cleanup();
     }
+  }
+
+  /// Gera um snapshot consistente do banco e inclui WAL/SHM no fallback.
+  Future<DatabaseSnapshotBundle> createConsistentDatabaseSnapshot() async {
+    final db = await DatabaseHelper().database;
+    final tempDir = await getTemporaryDirectory();
+    final snapshotPath = path.join(
+      tempDir.path,
+      'dayapp_snapshot_${DateTime.now().millisecondsSinceEpoch}.db',
+    );
+
+    try {
+      final escapedSnapshotPath = snapshotPath.replaceAll("'", "''");
+      await db.execute("VACUUM INTO '$escapedSnapshotPath'");
+      return DatabaseSnapshotBundle(dbFile: File(snapshotPath));
+    } catch (e) {
+      debugPrint(
+        'BackupService: VACUUM INTO falhou, usando fallback com WAL/SHM: $e',
+      );
+
+      final dbPath = await getDatabasesPath();
+      final sourceDb = File(path.join(dbPath, 'dayapp.db'));
+      final sourceWal = File('${sourceDb.path}-wal');
+      final sourceShm = File('${sourceDb.path}-shm');
+
+      if (!await sourceDb.exists()) {
+        throw Exception('Arquivo de banco não encontrado para snapshot.');
+      }
+
+      final copiedDb = await sourceDb.copy(snapshotPath);
+
+      File? copiedWal;
+      File? copiedShm;
+
+      if (await sourceWal.exists()) {
+        copiedWal = await sourceWal.copy('$snapshotPath-wal');
+      }
+      if (await sourceShm.exists()) {
+        copiedShm = await sourceShm.copy('$snapshotPath-shm');
+      }
+
+      return DatabaseSnapshotBundle(
+        dbFile: copiedDb,
+        walFile: copiedWal,
+        shmFile: copiedShm,
+      );
+    }
+  }
+
+  /// Gera um snapshot consistente do banco SQLite, incluindo dados pendentes
+  /// no WAL, para evitar perda parcial de dados no backup.
+  Future<File> createConsistentDatabaseSnapshotFile() async {
+    final bundle = await createConsistentDatabaseSnapshot();
+    return bundle.dbFile;
   }
 
   /// Compartilha o arquivo de backup (para salvar no OneDrive, Google Drive, etc)
@@ -333,7 +443,7 @@ Versão: 2.0.0
         subject: l10n.backupShareSubject,
         text: l10n.backupShareText,
       );
-      
+
       return zipPath;
     } catch (e) {
       rethrow;
@@ -471,6 +581,8 @@ Versão: 2.0.0
 
       // Coletar arquivos restauráveis para calcular um progresso calibrado.
       final restoredDb = findFile(extractDir, 'dayapp.db');
+      final restoredDbWal = findFile(extractDir, 'dayapp.db-wal');
+      final restoredDbShm = findFile(extractDir, 'dayapp.db-shm');
 
       final videosRestoreDir = findDirectory(extractDir, 'videos');
       final restoredVideos =
@@ -520,6 +632,14 @@ Versão: 2.0.0
       final restoredDbBytes = (restoredDb != null && await restoredDb.exists())
           ? await restoredDb.length()
           : 0;
+      final restoredDbWalBytes =
+          (restoredDbWal != null && await restoredDbWal.exists())
+          ? await restoredDbWal.length()
+          : 0;
+      final restoredDbShmBytes =
+          (restoredDbShm != null && await restoredDbShm.exists())
+          ? await restoredDbShm.length()
+          : 0;
       final restoredVideosBytes = await calculateFilesTotalBytes(
         restoredVideos,
       );
@@ -536,6 +656,8 @@ Versão: 2.0.0
       final restoreCopyWorkBytes =
           currentDbBytes +
           restoredDbBytes +
+          restoredDbWalBytes +
+          restoredDbShmBytes +
           restoredVideosBytes +
           restoredPhotosBytes +
           restoredAudiosBytes +
@@ -591,6 +713,18 @@ Versão: 2.0.0
         onProgress?.call(l10n.restoreProgressCopyingRestoredDb);
         await restoredDb.copy(currentDb.path);
         completedWorkBytes += restoredDbBytes;
+
+        // Se o backup contiver WAL/SHM, restaurar também para preservar
+        // transações recentes ainda não incorporadas ao dayapp.db.
+        if (restoredDbWal != null && await restoredDbWal.exists()) {
+          await restoredDbWal.copy('$dbFullPath-wal');
+          completedWorkBytes += restoredDbWalBytes;
+        }
+        if (restoredDbShm != null && await restoredDbShm.exists()) {
+          await restoredDbShm.copy('$dbFullPath-shm');
+          completedWorkBytes += restoredDbShmBytes;
+        }
+
         reportOverallProgress(
           completedWorkBytes: completedWorkBytes,
           totalWorkBytes: totalWorkBytes,
@@ -922,19 +1056,84 @@ Versão: 2.0.0
     final lang = locale.split('_').first.toLowerCase();
     String mmm;
     if (lang == 'pt') {
-      const meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+      const meses = [
+        'jan',
+        'fev',
+        'mar',
+        'abr',
+        'mai',
+        'jun',
+        'jul',
+        'ago',
+        'set',
+        'out',
+        'nov',
+        'dez',
+      ];
       mmm = meses[dateTime.month - 1];
     } else if (lang == 'es') {
-      const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+      const meses = [
+        'ene',
+        'feb',
+        'mar',
+        'abr',
+        'may',
+        'jun',
+        'jul',
+        'ago',
+        'sep',
+        'oct',
+        'nov',
+        'dic',
+      ];
       mmm = meses[dateTime.month - 1];
     } else if (lang == 'fr') {
-      const meses = ['jan', 'fev', 'mar', 'avr', 'mai', 'jun', 'jul', 'aou', 'sep', 'oct', 'nov', 'dec'];
+      const meses = [
+        'jan',
+        'fev',
+        'mar',
+        'avr',
+        'mai',
+        'jun',
+        'jul',
+        'aou',
+        'sep',
+        'oct',
+        'nov',
+        'dec',
+      ];
       mmm = meses[dateTime.month - 1];
     } else if (lang == 'it') {
-      const meses = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
+      const meses = [
+        'gen',
+        'feb',
+        'mar',
+        'apr',
+        'mag',
+        'giu',
+        'lug',
+        'ago',
+        'set',
+        'ott',
+        'nov',
+        'dic',
+      ];
       mmm = meses[dateTime.month - 1];
     } else {
-      const meses = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+      const meses = [
+        'jan',
+        'feb',
+        'mar',
+        'apr',
+        'may',
+        'jun',
+        'jul',
+        'aug',
+        'sep',
+        'oct',
+        'nov',
+        'dec',
+      ];
       mmm = meses[dateTime.month - 1];
     }
     return '$dd$mmm';

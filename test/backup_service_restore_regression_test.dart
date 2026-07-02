@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:archive/archive_io.dart';
 import 'package:dayapp/db/database_helper.dart';
+import 'package:dayapp/db/pessoa_helper.dart';
 import 'package:dayapp/l10n/app_localizations_en.dart';
+import 'package:dayapp/models/pessoa.dart';
+import 'package:dayapp/repositories/historia_repository.dart';
 import 'package:dayapp/services/backup_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
@@ -256,4 +259,262 @@ void main() {
 
     await restoredDb.close();
   });
+
+  test('backup/restore preserva local e pessoas com WAL ativo', () async {
+    final db = await DatabaseHelper().database;
+    await db.execute('PRAGMA journal_mode = WAL;');
+
+    await db.insert('users', {
+      'id': 'user-wal',
+      'nome': 'Usuario WAL',
+      'email': 'wal@example.com',
+      'senha': 'segredo',
+      'dt_nascimento': null,
+      'foto_perfil': null,
+    });
+
+    final pessoaAna = await PessoaHelper().getOrCreatePessoa('user-wal', 'Ana');
+    final pessoaBeto = await PessoaHelper().getOrCreatePessoa(
+      'user-wal',
+      'Beto',
+    );
+
+    final historiaId = await HistoriaRepository().createHistoria(
+      userId: 'user-wal',
+      titulo: 'Historia com local e pessoas',
+      data: DateTime(2026, 7, 1, 10),
+      humor: 4,
+      energia: 3,
+      descricao: 'Teste de backup WAL',
+      local: 'Praia de Copacabana',
+      pessoas: [pessoaAna, pessoaBeto],
+    );
+
+    final service = BackupService();
+    final backupPath = await service.createBackupZipFile(
+      l10n: AppLocalizationsEn('en'),
+    );
+
+    await db.update(
+      'historia',
+      {'local': null},
+      where: 'id = ?',
+      whereArgs: [historiaId],
+    );
+    await PessoaHelper().setPessoasForHistoria(
+      historiaId,
+      const <Pessoa>[],
+      null,
+    );
+
+    await service.restoreFromZipFile(
+      backupPath,
+      l10n: AppLocalizationsEn('en'),
+    );
+
+    final restoredDb = await DatabaseHelper().database;
+    final restoredRows = await restoredDb.query(
+      'historia',
+      columns: ['local'],
+      where: 'id = ?',
+      whereArgs: [historiaId],
+    );
+
+    expect(restoredRows, hasLength(1));
+    expect(restoredRows.first['local'], 'Praia de Copacabana');
+
+    final restoredPeople = await PessoaHelper().getPessoasByHistoria(
+      historiaId,
+    );
+    expect(restoredPeople, hasLength(2));
+    expect(restoredPeople.any((p) => p.nome == 'Ana'), isTrue);
+    expect(restoredPeople.any((p) => p.nome == 'Beto'), isTrue);
+  });
+
+  test(
+    'restore aplica dayapp.db-wal do zip e preserva pessoas/local',
+    () async {
+      final sourceDbPath = p.join(tempRoot.path, 'source_wal_bundle.db');
+      final sourceDb = await databaseFactoryFfi.openDatabase(sourceDbPath);
+
+      await sourceDb.execute('PRAGMA journal_mode = WAL;');
+      await sourceDb.execute('PRAGMA wal_autocheckpoint = 0;');
+      await sourceDb.execute('''
+      CREATE TABLE users (
+        id TEXT PRIMARY KEY,
+        nome TEXT NOT NULL,
+        email TEXT NOT NULL,
+        senha TEXT NOT NULL,
+        foto_perfil TEXT
+      );
+    ''');
+      await sourceDb.execute('''
+      CREATE TABLE historia (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        assunto TEXT,
+        titulo TEXT NOT NULL,
+        data TIMESTAMP NOT NULL,
+        tag TEXT,
+        grupo TEXT,
+        arquivado TEXT,
+        excluido TEXT,
+        data_exclusao TIMESTAMP,
+        descricao TEXT,
+        sentimento TEXT,
+        emoticon TEXT,
+        data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        data_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        foto_historia TEXT,
+        backed_up INTEGER DEFAULT 0,
+        humor INTEGER DEFAULT 3,
+        energia INTEGER DEFAULT 2,
+        local TEXT
+      );
+    ''');
+      await sourceDb.execute('''
+      CREATE TABLE pessoas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        nome TEXT NOT NULL,
+        slug TEXT NOT NULL,
+        UNIQUE(user_id, slug)
+      );
+    ''');
+      await sourceDb.execute('''
+      CREATE TABLE historia_pessoas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        historia_id INTEGER NOT NULL,
+        pessoa_id INTEGER NOT NULL,
+        UNIQUE(historia_id, pessoa_id)
+      );
+    ''');
+      await sourceDb.execute('''
+      CREATE TABLE historia_fotos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        historia_id INTEGER NOT NULL,
+        foto_path TEXT NOT NULL,
+        legenda TEXT
+      );
+    ''');
+      await sourceDb.execute('''
+      CREATE TABLE historia_audios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        historia_id INTEGER NOT NULL,
+        audio_path TEXT NOT NULL,
+        legenda TEXT,
+        duracao INTEGER
+      );
+    ''');
+      await sourceDb.execute('''
+      CREATE TABLE historia_videos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        historia_id INTEGER NOT NULL,
+        video_path TEXT NOT NULL,
+        legenda TEXT,
+        duracao INTEGER,
+        thumbnail_path TEXT
+      );
+    ''');
+
+      await sourceDb.insert('users', {
+        'id': 'user-wal-zip',
+        'nome': 'Usuario Zip',
+        'email': 'zip@example.com',
+        'senha': 'segredo',
+        'foto_perfil': null,
+      });
+
+      final storyId = await sourceDb.insert('historia', {
+        'user_id': 'user-wal-zip',
+        'titulo': 'Historia com dados no WAL',
+        'data': '2026-07-02T10:00:00.000',
+        'descricao': 'Dados sensíveis ao WAL',
+        'humor': 4,
+        'energia': 3,
+        'local': 'Praia do Leme',
+        'backed_up': 1,
+      });
+
+      final pessoaAnaId = await sourceDb.insert('pessoas', {
+        'user_id': 'user-wal-zip',
+        'nome': 'Ana',
+        'slug': 'ana',
+      });
+      final pessoaBetoId = await sourceDb.insert('pessoas', {
+        'user_id': 'user-wal-zip',
+        'nome': 'Beto',
+        'slug': 'beto',
+      });
+
+      await sourceDb.insert('historia_pessoas', {
+        'historia_id': storyId,
+        'pessoa_id': pessoaAnaId,
+      });
+      await sourceDb.insert('historia_pessoas', {
+        'historia_id': storyId,
+        'pessoa_id': pessoaBetoId,
+      });
+
+      await sourceDb.execute('PRAGMA user_version = 3;');
+
+      final dbFile = File(sourceDbPath);
+      final walFile = File('$sourceDbPath-wal');
+      final shmFile = File('$sourceDbPath-shm');
+
+      expect(await dbFile.exists(), isTrue);
+
+      // Captura os bytes enquanto a conexão ainda está aberta para evitar que
+      // o close faça checkpoint e remova/trunque o WAL antes da leitura.
+      final dbBytes = await dbFile.readAsBytes();
+      final walExistsBeforeClose = await walFile.exists();
+      expect(walExistsBeforeClose, isTrue);
+      final walBytes = await walFile.readAsBytes();
+      final shmBytes = await shmFile.exists()
+          ? await shmFile.readAsBytes()
+          : null;
+
+      await sourceDb.close();
+
+      final zipPath = p.join(tempRoot.path, 'wal_bundle_backup.zip');
+      final archive = Archive()
+        ..addFile(ArchiveFile('dayapp.db', dbBytes.length, dbBytes))
+        ..addFile(ArchiveFile('dayapp.db-wal', walBytes.length, walBytes));
+
+      if (shmBytes != null) {
+        archive.addFile(
+          ArchiveFile('dayapp.db-shm', shmBytes.length, shmBytes),
+        );
+      }
+
+      final zipBytes = ZipEncoder().encode(archive);
+      await File(zipPath).writeAsBytes(zipBytes);
+
+      final service = BackupService();
+      await service.restoreFromZipFile(zipPath, l10n: AppLocalizationsEn('en'));
+
+      final restoredDb = await DatabaseHelper().database;
+      final restoredStory = await restoredDb.query(
+        'historia',
+        columns: ['local'],
+        where: 'id = ?',
+        whereArgs: [storyId],
+      );
+      expect(restoredStory, hasLength(1));
+      expect(restoredStory.first['local'], 'Praia do Leme');
+
+      final rows = await restoredDb.rawQuery(
+        '''
+      SELECT p.nome
+      FROM historia_pessoas hp
+      JOIN pessoas p ON p.id = hp.pessoa_id
+      WHERE hp.historia_id = ?
+      ORDER BY p.nome ASC
+      ''',
+        [storyId],
+      );
+      final names = rows.map((r) => r['nome'] as String).toList();
+      expect(names, ['Ana', 'Beto']);
+    },
+  );
 }

@@ -132,7 +132,9 @@ class IncrementalBackupService {
       await File(tempZipPath).delete();
     } catch (e) {
       // Limpeza opcional — não crítico
-      debugPrint('IncrementalBackupService: erro ao remover ZIP temporário base: $e');
+      debugPrint(
+        'IncrementalBackupService: erro ao remover ZIP temporário base: $e',
+      );
     }
 
     onProgressValue?.call(1.0);
@@ -179,6 +181,8 @@ class IncrementalBackupService {
       throw Exception(l10n.errorBackupDbNotFound);
     }
 
+    final dbSnapshot = await _backupService.createConsistentDatabaseSnapshot();
+
     final media = await _collectAllMediaFiles();
     final entries = <Map<String, dynamic>>[];
     var totalBytes = 0;
@@ -202,7 +206,13 @@ class IncrementalBackupService {
     }
 
     // Sempre inclui DB
-    await addEntry(dbFile.path, 'dayapp.db', compress: true);
+    await addEntry(dbSnapshot.dbFile.path, 'dayapp.db', compress: true);
+    if (dbSnapshot.walFile != null) {
+      await addEntry(dbSnapshot.walFile!.path, 'dayapp.db-wal');
+    }
+    if (dbSnapshot.shmFile != null) {
+      await addEntry(dbSnapshot.shmFile!.path, 'dayapp.db-shm');
+    }
 
     // Inclui mídias novas ou modificadas desde o manifesto
     Future<void> checkAndAdd(File f, String archivePath) async {
@@ -263,8 +273,12 @@ class IncrementalBackupService {
       await tempZipFile.delete();
     } catch (e) {
       // Limpeza opcional
-      debugPrint('IncrementalBackupService: erro ao remover ZIP temporário diff: $e');
+      debugPrint(
+        'IncrementalBackupService: erro ao remover ZIP temporário diff: $e',
+      );
     }
+
+    await dbSnapshot.cleanup();
 
     onProgressValue?.call(1.0);
   }
@@ -385,7 +399,9 @@ class IncrementalBackupService {
       await File(baseTempPath).delete();
     } catch (e) {
       // Limpeza opcional de temporário — não deve interromper a restauração.
-      debugPrint('IncrementalBackupService: erro ao remover restore_base.zip: $e');
+      debugPrint(
+        'IncrementalBackupService: erro ao remover restore_base.zip: $e',
+      );
     }
 
     // Aplica diff (se existir)
@@ -407,7 +423,9 @@ class IncrementalBackupService {
         await File(diffTempPath).delete();
       } catch (e) {
         // Limpeza opcional de temporário — não deve interromper a restauração.
-        debugPrint('IncrementalBackupService: erro ao remover restore_diff.zip: $e');
+        debugPrint(
+          'IncrementalBackupService: erro ao remover restore_diff.zip: $e',
+        );
       }
     }
 
@@ -466,7 +484,9 @@ class IncrementalBackupService {
     try {
       return jsonDecode(await file.readAsString()) as Map<String, dynamic>;
     } catch (e) {
-      debugPrint('IncrementalBackupService: erro ao ler manifesto de backup: $e');
+      debugPrint(
+        'IncrementalBackupService: erro ao ler manifesto de backup: $e',
+      );
       return null;
     }
   }
