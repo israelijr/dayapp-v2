@@ -261,6 +261,7 @@ class _PessoasInputWidgetState extends State<PessoasInputWidget> {
         TextField(
           controller: _textController,
           focusNode: _focusNode,
+          selectAllOnFocus: false,
           decoration: InputDecoration(
             labelText: loc.pessoasLabel,
             helperText: loc.pessoasHint,
