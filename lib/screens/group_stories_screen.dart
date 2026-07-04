@@ -4,7 +4,6 @@ import 'package:dayapp/widgets/compact_historia_card.dart';
 import 'package:dayapp/widgets/pulse_animation.dart';
 import 'package:dayapp/widgets/story_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -376,145 +375,58 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
   }
 
   Widget _buildCardView(Historia historia) {
-    return Slidable(
-      startActionPane: ActionPane(
-        motion: const BehindMotion(),
-        children: [
-          SlidableAction(
-            onPressed: (context) async {
-              await _archiveWithUndo(historia);
-            },
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            icon: Icons.archive,
-            label: AppLocalizations.of(context)?.archiveLabel ?? 'Arquivar',
-          ),
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const BehindMotion(),
-        children: [
-          SlidableAction(
-            onPressed: (slidableContext) async {
-              final ungroupedMsg = AppLocalizations.of(
-                slidableContext,
-              )!.storyUngrouped;
-              await slidableContext
-                  .read<GroupStoriesProvider>()
-                  .ungroupHistoria(historia);
-              if (!mounted) return;
-              _messengerKey.currentState?.showSnackBar(
-                SnackBar(content: Text(ungroupedMsg)),
-              );
-            },
-            backgroundColor: AppColors.emoticonGreen,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            icon: Icons.group_off,
-            label: AppLocalizations.of(context)?.ungroup ?? 'Desagrupar',
-          ),
-        ],
-      ),
-      child: StoryCard(
-        historia: historia,
-        heroTag: _storyHeroTag(historia),
-        flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
-        convertLegacyEmoticon: _convertLegacyEmoticon,
-        stateLabel: historia.grupo?.isNotEmpty == true
-            ? historia.grupo
-            : historia.arquivado != null
-            ? AppLocalizations.of(context)!.archivedStateLabel
-            : null,
-        onPreview: () => _openStoryPreview(historia),
-        onDoubleTap: () => _openStoryPreview(historia),
-      ),
+    return StoryCard(
+      historia: historia,
+      heroTag: _storyHeroTag(historia),
+      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+      convertLegacyEmoticon: _convertLegacyEmoticon,
+      stateLabel: historia.grupo?.isNotEmpty == true
+          ? historia.grupo
+          : historia.arquivado != null
+          ? AppLocalizations.of(context)!.archivedStateLabel
+          : null,
+      onPreview: () => _openStoryPreview(historia),
+      onDoubleTap: () => _openStoryPreview(historia),
     );
   }
 
   Widget _buildIconView(Historia historia) {
-    return Dismissible(
-      key: Key('icon_${historia.id}'),
-      direction: DismissDirection.horizontal,
-      background: Container(
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.only(left: 20),
-        color: Theme.of(context).colorScheme.primary,
-        child: Text(
-          AppLocalizations.of(context)?.archiveLabel ?? 'Arquivar',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      secondaryBackground: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        color: AppColors.emoticonGreen,
-        child: Text(
-          AppLocalizations.of(context)?.ungroup ?? 'Desagrupar',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.startToEnd) {
-          await _archiveWithUndo(historia);
-          return true;
-        } else if (direction == DismissDirection.endToStart) {
-          final ungroupedMsg = AppLocalizations.of(context)!.storyUngrouped;
-          await context.read<GroupStoriesProvider>().ungroupHistoria(historia);
-          if (!mounted) return false;
-          _messengerKey.currentState?.showSnackBar(
-            SnackBar(content: Text(ungroupedMsg)),
-          );
-          return true;
-        }
-        return false;
-      },
-      onDismissed: (direction) {
-        // Já tratado no confirmDismiss
-      },
-      child: Hero(
-        tag: _storyHeroTag(historia),
-        createRectTween: (begin, end) =>
-            MaterialRectArcTween(begin: begin, end: end),
-        placeholderBuilder: (context, size, child) =>
-            SizedBox(width: size.width, height: size.height),
-        child: Material(
-          color: Colors.transparent,
-          child: CompactHistoriaCard(
-            historia: historia,
-            localeName:
-                AppLocalizations.of(context)?.localeName ??
-                Localizations.localeOf(context).toString(),
-            stateLabel: historia.grupo?.isNotEmpty == true
-                ? historia.grupo
-                : historia.arquivado != null
-                ? AppLocalizations.of(context)!.archivedStateLabel
-                : null,
-            overlayTrailing: true,
-            trailing: Material(
-              shape: const CircleBorder(),
-              color: Theme.of(context).colorScheme.primary,
-              child: InkWell(
-                customBorder: const CircleBorder(),
-                onTap: () => _openStoryPreview(historia),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Icon(
-                    Icons.open_in_full,
-                    size: 18,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+    return Hero(
+      tag: _storyHeroTag(historia),
+      createRectTween: (begin, end) =>
+          MaterialRectArcTween(begin: begin, end: end),
+      placeholderBuilder: (context, size, child) =>
+          SizedBox(width: size.width, height: size.height),
+      child: Material(
+        color: Colors.transparent,
+        child: CompactHistoriaCard(
+          historia: historia,
+          localeName:
+              AppLocalizations.of(context)?.localeName ??
+              Localizations.localeOf(context).toString(),
+          stateLabel: historia.grupo?.isNotEmpty == true
+              ? historia.grupo
+              : historia.arquivado != null
+              ? AppLocalizations.of(context)!.archivedStateLabel
+              : null,
+          overlayTrailing: true,
+          trailing: Material(
+            shape: const CircleBorder(),
+            color: Theme.of(context).colorScheme.primary,
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () => _openStoryPreview(historia),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Icon(
+                  Icons.open_in_full,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
             ),
-            onDoubleTap: () => _openStoryPreview(historia),
           ),
+          onDoubleTap: () => _openStoryPreview(historia),
         ),
       ),
     );

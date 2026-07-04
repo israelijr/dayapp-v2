@@ -2,7 +2,6 @@ import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/widgets/story_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -195,97 +194,58 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
   }
 
   Widget _buildCardView(Historia historia) {
-    return Slidable(
-      startActionPane: ActionPane(
-        motion: const BehindMotion(),
+    return StoryCard(
+      historia: historia,
+      convertLegacyEmoticon: _convertLegacyEmoticon,
+      onPreview: () => _openStoryPreview(historia),
+      onDoubleTap: () => _openStoryPreview(historia),
+      footer: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SlidableAction(
-            onPressed: (context) async {
-              await _updateHistoria(historia, updates: {'arquivado': null});
-            },
-            backgroundColor: AppColors.emoticonGreen,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            icon: Icons.restore,
-            label: AppLocalizations.of(context)!.unarchive,
-          ),
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const BehindMotion(),
-        children: [
-          SlidableAction(
-            onPressed: (context) async {
-              final selectedGroup = await Navigator.push<String>(
-                context,
-                MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
-              );
-              if (selectedGroup != null) {
-                await _updateHistoria(
-                  historia,
-                  updates: {'grupo': selectedGroup, 'arquivado': null},
+          PopupMenuButton<String>(
+            icon: Icon(
+              Icons.more_horiz,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            onSelected: (value) async {
+              if (value == 'edit') {
+                final refreshProvider = Provider.of<RefreshProvider>(
+                  context,
+                  listen: false,
                 );
+                Navigator.push(
+                  context,
+                  RouteTransitionHelper.slideUpRotateTransition(
+                    EditHistoriaScreen(historia: historia),
+                  ),
+                ).then((updated) {
+                  if (!mounted) return;
+                  if (updated == true) {
+                    refreshProvider.refresh();
+                  }
+                });
+              } else if (value == 'delete') {
+                await _deleteHistoria(historia);
               }
             },
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            icon: Icons.group,
-            label: AppLocalizations.of(context)!.group,
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'edit',
+                child: Text(AppLocalizations.of(context)!.editDoubleTapHint),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Text(AppLocalizations.of(context)!.deleteLabel),
+              ),
+            ],
           ),
         ],
       ),
-      child: StoryCard(
-        historia: historia,
-        convertLegacyEmoticon: _convertLegacyEmoticon,
-        onPreview: () => _openStoryPreview(historia),
-        onDoubleTap: () => _openStoryPreview(historia),
-        footer: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            PopupMenuButton<String>(
-              icon: Icon(
-                Icons.more_horiz,
-                color: Theme.of(context).iconTheme.color,
-              ),
-              onSelected: (value) async {
-                if (value == 'edit') {
-                  final refreshProvider = Provider.of<RefreshProvider>(
-                    context,
-                    listen: false,
-                  );
-                  Navigator.push(
-                    context,
-                    RouteTransitionHelper.slideUpRotateTransition(
-                      EditHistoriaScreen(historia: historia),
-                    ),
-                  ).then((updated) {
-                    if (!mounted) return;
-                    if (updated == true) {
-                      refreshProvider.refresh();
-                    }
-                  });
-                } else if (value == 'delete') {
-                  await _deleteHistoria(historia);
-                }
-              },
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: 'edit',
-                  child: Text(AppLocalizations.of(context)!.editDoubleTapHint),
-                ),
-                PopupMenuItem(
-                  value: 'delete',
-                  child: Text(AppLocalizations.of(context)!.deleteLabel),
-                ),
-              ],
-            ),
-          ],
-        ),
-        stateLabel: historia.grupo?.isNotEmpty == true
-            ? historia.grupo
-            : historia.arquivado != null
-            ? AppLocalizations.of(context)!.archivedStateLabel
-            : null,
-      ),
+      stateLabel: historia.grupo?.isNotEmpty == true
+          ? historia.grupo
+          : historia.arquivado != null
+          ? AppLocalizations.of(context)!.archivedStateLabel
+          : null,
     );
   }
 
@@ -357,169 +317,110 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
   }
 
   Widget _buildIconView(Historia historia) {
-    return Dismissible(
-      key: Key('icon_${historia.id}'),
-      direction: DismissDirection.horizontal,
-      background: Container(
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.only(left: 20),
-        color: AppColors.emoticonGreen,
-        child: Text(
-          AppLocalizations.of(context)!.unarchive,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      elevation: 1,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        leading: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(8),
           ),
-        ),
-      ),
-      secondaryBackground: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        color: Theme.of(context).colorScheme.primary,
-        child: Text(
-          AppLocalizations.of(context)!.group,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.startToEnd) {
-          await _updateHistoria(
-            historia,
-            updates: {'arquivado': null, 'tag': null, 'grupo': null},
-          );
-          return true; // Remove o item da lista visualmente
-        } else if (direction == DismissDirection.endToStart) {
-          final selectedGroup = await Navigator.push<String>(
-            context,
-            MaterialPageRoute(builder: (_) => const GroupSelectionScreen()),
-          );
-          if (selectedGroup != null) {
-            await _updateHistoria(
-              historia,
-              updates: {'grupo': selectedGroup, 'arquivado': null, 'tag': null},
-            );
-            return true; // Remove o item da lista visualmente
-          }
-        }
-        return false;
-      },
-      onDismissed: (direction) {
-        // Já tratado no confirmDismiss
-      },
-      child: Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: ListTile(
-          leading: Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Builder(
-                builder: (context) {
-                  if (historia.emoticon != null &&
-                      historia.emoticon!.isNotEmpty) {
-                    final converted = _convertLegacyEmoticon(
-                      historia.emoticon!,
-                    );
-                    final display = converted ?? historia.emoticon!;
-                    return Text(
-                      display,
-                      style: const TextStyle(fontSize: 20, height: 1),
-                    );
-                  }
-                  return Icon(
-                    Icons.image,
-                    color: Theme.of(context).iconTheme.color,
-                    size: 26,
+          child: Center(
+            child: Builder(
+              builder: (context) {
+                if (historia.emoticon != null &&
+                    historia.emoticon!.isNotEmpty) {
+                  final converted = _convertLegacyEmoticon(historia.emoticon!);
+                  final display = converted ?? historia.emoticon!;
+                  return Text(
+                    display,
+                    style: const TextStyle(fontSize: 20, height: 1),
                   );
-                },
-              ),
-            ),
-          ),
-          title: Text(
-            historia.titulo,
-            style: GoogleFonts.plusJakartaSans(
-              fontSize: 16,
-              color: Theme.of(context).textTheme.titleMedium?.color,
-              height: 1.25,
-            ),
-          ),
-          subtitle: Text(
-            DateFormat('dd/MM/yyyy', 'pt_BR').format(historia.data),
-            style: GoogleFonts.plusJakartaSans(
-              fontSize: 12,
-              color: Theme.of(context).textTheme.bodySmall?.color,
-            ),
-          ),
-          trailing: PopupMenuButton<String>(
-            icon: Icon(
-              Icons.more_horiz,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            onSelected: (value) async {
-              if (value == 'edit') {
-                Navigator.push(
-                  context,
-                  RouteTransitionHelper.slideUpRotateTransition(
-                    EditHistoriaScreen(historia: historia),
-                  ),
-                ).then((updated) {
-                  if (!mounted) return;
-                  if (updated == true) {
-                    final refreshProvider = Provider.of<RefreshProvider>(
-                      context,
-                      listen: false,
-                    );
-                    refreshProvider.refresh();
-                  }
-                });
-              } else if (value == 'delete') {
-                await _deleteHistoria(historia);
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'edit',
-                child: Text(AppLocalizations.of(context)!.edit),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Text(AppLocalizations.of(context)!.deleteLabel),
-              ),
-            ],
-          ),
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  content: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: SingleChildScrollView(
-                      child: _buildCardView(historia),
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(AppLocalizations.of(context)!.close),
-                    ),
-                  ],
+                }
+                return Icon(
+                  Icons.image,
+                  color: Theme.of(context).iconTheme.color,
+                  size: 26,
                 );
               },
-            );
-          },
+            ),
+          ),
         ),
+        title: Text(
+          historia.titulo,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 16,
+            color: Theme.of(context).textTheme.titleMedium?.color,
+            height: 1.25,
+          ),
+        ),
+        subtitle: Text(
+          DateFormat('dd/MM/yyyy', 'pt_BR').format(historia.data),
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 12,
+            color: Theme.of(context).textTheme.bodySmall?.color,
+          ),
+        ),
+        trailing: PopupMenuButton<String>(
+          icon: Icon(
+            Icons.more_horiz,
+            color: Theme.of(context).iconTheme.color,
+          ),
+          onSelected: (value) async {
+            if (value == 'edit') {
+              Navigator.push(
+                context,
+                RouteTransitionHelper.slideUpRotateTransition(
+                  EditHistoriaScreen(historia: historia),
+                ),
+              ).then((updated) {
+                if (!mounted) return;
+                if (updated == true) {
+                  final refreshProvider = Provider.of<RefreshProvider>(
+                    context,
+                    listen: false,
+                  );
+                  refreshProvider.refresh();
+                }
+              });
+            } else if (value == 'delete') {
+              await _deleteHistoria(historia);
+            }
+          },
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: 'edit',
+              child: Text(AppLocalizations.of(context)!.edit),
+            ),
+            PopupMenuItem(
+              value: 'delete',
+              child: Text(AppLocalizations.of(context)!.deleteLabel),
+            ),
+          ],
+        ),
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: SingleChildScrollView(child: _buildCardView(historia)),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(AppLocalizations.of(context)!.close),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }
