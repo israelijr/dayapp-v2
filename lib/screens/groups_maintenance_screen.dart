@@ -6,11 +6,11 @@ import 'package:provider/provider.dart';
 import '../models/grupo.dart';
 import '../providers/auth_provider.dart';
 import '../providers/group_management_provider.dart';
+import '../providers/refresh_provider.dart';
 import '../repositories/group_repository.dart';
 import '../services/emoji_service.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/emoji_selection_modal.dart';
-import 'archived_stories_screen.dart';
 
 class GroupsMaintenanceScreen extends StatefulWidget {
   const GroupsMaintenanceScreen({super.key});
@@ -79,10 +79,12 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                         shape: BoxShape.circle,
                       ),
                       alignment: Alignment.center,
-                      child: Text(
-                        selectedEmoticon ?? '😀',
-                        style: const TextStyle(fontSize: 32),
-                      ),
+                      child: selectedEmoticon == null
+                          ? const SizedBox.shrink()
+                          : Text(
+                              selectedEmoticon!,
+                              style: const TextStyle(fontSize: 32),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -109,11 +111,21 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                 onPressed: () async {
                   final name = nameController.text.trim();
                   if (name.isEmpty) return;
+                  if (selectedEmoticon == null) {
+                    final messenger = ScaffoldMessenger.of(context);
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!.chooseIcon),
+                      ),
+                    );
+                    return;
+                  }
 
                   final userId = provider.userId;
                   if (userId == null) return;
                   final navigator = Navigator.of(context);
                   final messenger = ScaffoldMessenger.of(context);
+                  final refreshProvider = context.read<RefreshProvider>();
                   final locale = Localizations.localeOf(context).languageCode;
 
                   try {
@@ -128,6 +140,7 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                     await provider.saveGrupo(savedGrupo, oldName: grupo.nome);
 
                     if (!mounted) return;
+                    refreshProvider.refresh();
                     navigator.pop();
                   } catch (e) {
                     debugPrint(
@@ -192,13 +205,15 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
     if (confirm == true) {
       if (!mounted) return;
       await provider.deleteGrupo(grupo);
+      if (!mounted) return;
+      context.read<RefreshProvider>().refresh();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<GroupManagementProvider>(
-      create: (_) => _groupManagementProvider,
+    return ChangeNotifierProvider<GroupManagementProvider>.value(
+      value: _groupManagementProvider,
       child: Consumer<GroupManagementProvider>(
         builder: (context, provider, child) {
           final grupos = provider.grupos;
@@ -214,74 +229,74 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                       vertical: 16,
                       horizontal: 12,
                     ),
-                    itemCount: grupos.length + 1,
+                    itemCount: grupos.length, // + 1,
                     itemBuilder: (context, index) {
                       if (index == grupos.length) {
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.surfaceContainerLowest,
-                          elevation: 3,
-                          shadowColor: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withValues(alpha: 0.08),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outlineVariant
-                                  .withValues(alpha: 0.18),
-                            ),
-                          ),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 16,
-                            ),
-                            leading: Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.surfaceContainerHigh,
-                                shape: BoxShape.circle,
-                              ),
-                              alignment: Alignment.center,
-                              child: Icon(
-                                Icons.archive,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                            title: Text(
-                              AppLocalizations.of(context)!.archivedTitle,
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                  ),
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 18,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const ArchivedStoriesScreen(),
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        // return Card(
+                        //   margin: const EdgeInsets.only(bottom: 12),
+                        //   color: Theme.of(
+                        //     context,
+                        //   ).colorScheme.surfaceContainerLowest,
+                        //   elevation: 3,
+                        //   shadowColor: Theme.of(
+                        //     context,
+                        //   ).colorScheme.onSurface.withValues(alpha: 0.08),
+                        //   shape: RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.circular(16),
+                        //     side: BorderSide(
+                        //       color: Theme.of(context)
+                        //           .colorScheme
+                        //           .outlineVariant
+                        //           .withValues(alpha: 0.18),
+                        //     ),
+                        //   ),
+                        //   child: ListTile(
+                        //     contentPadding: const EdgeInsets.symmetric(
+                        //       horizontal: 18,
+                        //       vertical: 16,
+                        //     ),
+                        //     leading: Container(
+                        //       width: 44,
+                        //       height: 44,
+                        //       decoration: BoxDecoration(
+                        //         color: Theme.of(
+                        //           context,
+                        //         ).colorScheme.surfaceContainerHigh,
+                        //         shape: BoxShape.circle,
+                        //       ),
+                        //       alignment: Alignment.center,
+                        //       child: Icon(
+                        //         Icons.archive,
+                        //         color: Theme.of(context).colorScheme.primary,
+                        //       ),
+                        //     ),
+                        //     title: Text(
+                        //       AppLocalizations.of(context)!.archivedTitle,
+                        //       style: Theme.of(context).textTheme.titleMedium
+                        //           ?.copyWith(
+                        //             fontWeight: FontWeight.w600,
+                        //             color: Theme.of(
+                        //               context,
+                        //             ).colorScheme.onSurface,
+                        //           ),
+                        //     ),
+                        //     trailing: Icon(
+                        //       Icons.arrow_forward_ios,
+                        //       size: 18,
+                        //       color: Theme.of(
+                        //         context,
+                        //       ).colorScheme.onSurfaceVariant,
+                        //     ),
+                        //     onTap: () {
+                        //       Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //           builder: (_) => const ArchivedStoriesScreen(),
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
+                        // );
                       }
 
                       final grupo = grupos[index];

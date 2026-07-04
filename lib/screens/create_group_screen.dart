@@ -140,6 +140,13 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
       return;
     }
 
+    if (_selectedEmoticon == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.chooseIcon)));
+      return;
+    }
+
     setState(() => _isSaving = true);
 
     try {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 class CustomTextField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
@@ -27,6 +26,8 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? helperStyle;
   final bool showBorder;
   final bool filled;
+  final bool autocorrect;
+  final bool enableSuggestions;
 
   const CustomTextField({
     required this.label,
@@ -54,6 +55,8 @@ class CustomTextField extends StatelessWidget {
     this.helperStyle,
     this.showBorder = true,
     this.filled = true,
+    this.autocorrect = true,
+    this.enableSuggestions = true,
   });
 
   @override
@@ -63,6 +66,8 @@ class CustomTextField extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final effectiveMinLines = obscureText ? 1 : minLines;
     final effectiveMaxLines = obscureText ? 1 : maxLines;
+    final effectiveAutocorrect = obscureText ? false : autocorrect;
+    final effectiveEnableSuggestions = obscureText ? false : enableSuggestions;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
@@ -71,7 +76,14 @@ class CustomTextField extends StatelessWidget {
         keyboardType: keyboardType,
         enabled: enabled,
         maxLength: maxLength,
-        selectAllOnFocus: false,
+        autocorrect: effectiveAutocorrect,
+        enableSuggestions: effectiveEnableSuggestions,
+        smartDashesType: obscureText
+            ? SmartDashesType.disabled
+            : SmartDashesType.enabled,
+        smartQuotesType: obscureText
+            ? SmartQuotesType.disabled
+            : SmartQuotesType.enabled,
         inputFormatters: inputFormatters,
         textCapitalization: textCapitalization,
         style: style ?? TextStyle(color: colorScheme.onSurface),
@@ -98,18 +110,24 @@ class CustomTextField extends StatelessWidget {
               ? colorScheme.surfaceContainerHighest
               : Colors.white,
           contentPadding: contentPadding,
-          border: showBorder ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: colorScheme.outlineVariant),
-          ) : InputBorder.none,
-          enabledBorder: showBorder ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: colorScheme.outlineVariant),
-          ) : InputBorder.none,
-          focusedBorder: showBorder ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: colorScheme.primary, width: 2),
-          ) : InputBorder.none,
+          border: showBorder
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.outlineVariant),
+                )
+              : InputBorder.none,
+          enabledBorder: showBorder
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.outlineVariant),
+                )
+              : InputBorder.none,
+          focusedBorder: showBorder
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                )
+              : InputBorder.none,
         ),
       ),
     );

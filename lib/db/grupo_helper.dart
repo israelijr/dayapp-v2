@@ -109,6 +109,16 @@ class GrupoHelper {
     return sqflite_lib.Sqflite.firstIntValue(result) ?? 0;
   }
 
+  /// Conta o número de histórias não agrupadas (grupo nulo), não arquivadas e não excluídas
+  Future<int> countUngroupedHistorias(String userId) async {
+    final db = await DatabaseHelper().database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM historia WHERE user_id = ? AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL',
+      [userId],
+    );
+    return sqflite_lib.Sqflite.firstIntValue(result) ?? 0;
+  }
+
   /// Conta o número de histórias arquivadas (não excluídas)
   Future<int> countArquivadas(String userId) async {
     final db = await DatabaseHelper().database;

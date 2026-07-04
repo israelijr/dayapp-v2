@@ -99,7 +99,6 @@ class _LocalInputWidgetState extends State<LocalInputWidget> {
         TextField(
           controller: widget.controller,
           focusNode: _focusNode,
-          selectAllOnFocus: false,
           decoration: InputDecoration(
             labelText: loc.localLabel,
             helperText: loc.localHint,

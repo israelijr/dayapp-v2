@@ -46,6 +46,10 @@ class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
     }
 
     final capitalized = capitalizeText(newValue.text);
+    if (capitalized == newValue.text) {
+      return newValue;
+    }
+
     return newValue.copyWith(text: capitalized, selection: newValue.selection);
   }
 }

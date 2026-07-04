@@ -94,11 +94,7 @@ class DatabaseSnapshotBundle {
     this.shouldCleanup = true,
   });
 
-  List<File> get files => [
-    dbFile,
-    if (walFile != null) walFile!,
-    if (shmFile != null) shmFile!,
-  ];
+  List<File> get files => [dbFile, ?walFile, ?shmFile];
 
   Future<void> cleanup() async {
     if (!shouldCleanup) return;

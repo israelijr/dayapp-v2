@@ -277,9 +277,8 @@ class _LockScreenState extends State<LockScreen> {
                       // Título
                       Text(
                         loc.unlockTitle,
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontSize: isSmallScreen ? 20 : null,
-                        ),
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(fontSize: isSmallScreen ? 20 : null),
                       ),
                       SizedBox(height: isSmallScreen ? 4 : 8),
 
@@ -336,7 +335,10 @@ class _LockScreenState extends State<LockScreen> {
                           SizedBox(height: isSmallScreen ? 20 : 40),
 
                           // Teclado numérico
-                          _buildNumericKeypad(keyboardButtonSize, keypadPadding),
+                          _buildNumericKeypad(
+                            keyboardButtonSize,
+                            keypadPadding,
+                          ),
 
                           SizedBox(height: isSmallScreen ? 12 : 24),
                         ],
@@ -480,6 +482,10 @@ class _LockScreenState extends State<LockScreen> {
         children: [
           TextField(
             controller: _emailController,
+            autocorrect: false,
+            enableSuggestions: false,
+            smartDashesType: SmartDashesType.disabled,
+            smartQuotesType: SmartQuotesType.disabled,
             decoration: InputDecoration(
               labelText: AppLocalizations.of(context)!.email,
               border: const OutlineInputBorder(),
@@ -492,6 +498,10 @@ class _LockScreenState extends State<LockScreen> {
           const SizedBox(height: 16),
           TextField(
             controller: _passwordController,
+            autocorrect: false,
+            enableSuggestions: false,
+            smartDashesType: SmartDashesType.disabled,
+            smartQuotesType: SmartQuotesType.disabled,
             decoration: InputDecoration(
               labelText: AppLocalizations.of(context)!.password,
               border: const OutlineInputBorder(),
@@ -588,12 +598,19 @@ class _LockScreenState extends State<LockScreen> {
     );
   }
 
-  Widget _buildKeypadRow(List<String> numbers, double buttonSize, double padding) {
+  Widget _buildKeypadRow(
+    List<String> numbers,
+    double buttonSize,
+    double padding,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: numbers.map((number) {
         if (number.isEmpty) {
-          return SizedBox(width: buttonSize + padding * 2, height: buttonSize + padding * 2);
+          return SizedBox(
+            width: buttonSize + padding * 2,
+            height: buttonSize + padding * 2,
+          );
         }
 
         return _buildKeypadButton(number, buttonSize, padding);
@@ -633,8 +650,10 @@ class _LockScreenState extends State<LockScreen> {
               shape: BoxShape.circle,
               color: isOk
                   ? (isEnabled
-                      ? Theme.of(context).colorScheme.primary
-                      : (isDark ? Colors.grey.shade800 : Colors.grey.shade200))
+                        ? Theme.of(context).colorScheme.primary
+                        : (isDark
+                              ? Colors.grey.shade800
+                              : Colors.grey.shade200))
                   : null,
             ),
             child: Center(
@@ -646,7 +665,11 @@ class _LockScreenState extends State<LockScreen> {
     );
   }
 
-  Widget _buildKeypadButtonContent(String value, bool isEnabled, double buttonSize) {
+  Widget _buildKeypadButtonContent(
+    String value,
+    bool isEnabled,
+    double buttonSize,
+  ) {
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
     final isDark = theme.brightness == Brightness.dark;

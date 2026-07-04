@@ -9,6 +9,7 @@ class GroupStoriesProvider with ChangeNotifier {
   final AuthProvider _authProvider;
   final int grupoId;
   final String groupName;
+  final bool isUngroupedGroup;
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -19,6 +20,7 @@ class GroupStoriesProvider with ChangeNotifier {
     required AuthProvider authProvider,
     required this.grupoId,
     required this.groupName,
+    this.isUngroupedGroup = false,
   }) : _repository = repository,
        _authProvider = authProvider;
 
@@ -37,10 +39,12 @@ class GroupStoriesProvider with ChangeNotifier {
         return;
       }
 
-      _historias = await _repository.fetchStoriesByGroup(
-        userId: userId,
-        groupName: groupName,
-      );
+      _historias = isUngroupedGroup
+          ? await _repository.fetchUngroupedStories(userId: userId)
+          : await _repository.fetchStoriesByGroup(
+              userId: userId,
+              groupName: groupName,
+            );
     } catch (e) {
       _errorMessage = e.toString();
       _historias = [];

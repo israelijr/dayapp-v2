@@ -72,8 +72,8 @@ class GroupManagementProvider with ChangeNotifier {
 
   Future<void> createGrupoWithStories({
     required String groupName,
-    String? emoticon,
     required List<int> storyIds,
+    String? emoticon,
   }) async {
     final userId = _authProvider.user?.id;
     if (userId == null) {

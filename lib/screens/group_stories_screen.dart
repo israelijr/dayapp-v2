@@ -164,8 +164,13 @@ HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
 
 class GroupStoriesScreen extends StatefulWidget {
   final Grupo grupo;
+  final bool isUngroupedGroup;
 
-  const GroupStoriesScreen({required this.grupo, super.key});
+  const GroupStoriesScreen({
+    required this.grupo,
+    this.isUngroupedGroup = false,
+    super.key,
+  });
 
   @override
   State<GroupStoriesScreen> createState() => _GroupStoriesScreenState();
@@ -193,6 +198,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
       authProvider: context.read<AuthProvider>(),
       grupoId: widget.grupo.id ?? 0,
       groupName: widget.grupo.nome,
+      isUngroupedGroup: widget.isUngroupedGroup,
     )..loadStories();
 
     // Restaura posição do scroll ao abrir a tela

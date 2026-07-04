@@ -29,12 +29,28 @@ class GroupRepository {
     return result.map((map) => Historia.fromMap(map)).toList(growable: false);
   }
 
+  Future<List<Historia>> fetchUngroupedStories({required String userId}) async {
+    final db = await DatabaseHelper().database;
+    final result = await db.query(
+      'historia',
+      where:
+          'user_id = ? AND grupo IS NULL AND arquivado IS NULL AND excluido IS NULL',
+      whereArgs: [userId],
+      orderBy: 'data DESC',
+    );
+    return result.map((map) => Historia.fromMap(map)).toList(growable: false);
+  }
+
   Future<List<Grupo>> fetchGroupsByUser(String userId) async {
     return _grupoHelper.getGruposByUser(userId);
   }
 
   Future<int> countHistoriasInGroup(String userId, String groupName) async {
     return _grupoHelper.countHistoriasInGrupo(userId, groupName);
+  }
+
+  Future<int> countUngroupedHistorias(String userId) async {
+    return _grupoHelper.countUngroupedHistorias(userId);
   }
 
   Future<int> insertGrupo(Grupo grupo) async {

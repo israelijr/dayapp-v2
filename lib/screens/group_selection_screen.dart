@@ -42,6 +42,13 @@ class _GroupSelectionScreenState extends State<GroupSelectionScreen> {
       return;
     }
 
+    if (_selectedEmoticon == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.chooseIcon)),
+      );
+      return;
+    }
+
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final userId = auth.user?.id;
     if (userId == null) return;
@@ -161,10 +168,12 @@ class _GroupSelectionScreenState extends State<GroupSelectionScreen> {
                             shape: BoxShape.circle,
                           ),
                           alignment: Alignment.center,
-                          child: Text(
-                            _selectedEmoticon ?? '😀',
-                            style: const TextStyle(fontSize: 28),
-                          ),
+                          child: _selectedEmoticon == null
+                              ? const SizedBox.shrink()
+                              : Text(
+                                  _selectedEmoticon!,
+                                  style: const TextStyle(fontSize: 28),
+                                ),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -193,7 +202,9 @@ class _GroupSelectionScreenState extends State<GroupSelectionScreen> {
                     width: double.infinity,
                     child: FilledButton(
                       onPressed: _createNewGroup,
-                      child: Text(AppLocalizations.of(context)!.createAndSelect),
+                      child: Text(
+                        AppLocalizations.of(context)!.createAndSelect,
+                      ),
                     ),
                   ),
                 ],

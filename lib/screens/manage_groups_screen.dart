@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/grupo.dart';
 import '../providers/auth_provider.dart';
 import '../providers/group_management_provider.dart';
+import '../providers/refresh_provider.dart';
 import '../repositories/group_repository.dart';
 import '../theme/m3_expressive_theme.dart';
 
@@ -72,6 +73,7 @@ class _ManageGroupsScreenState extends State<ManageGroupsScreen> {
     if (confirmDelete) {
       await provider.deleteGrupo(grupo);
       if (!mounted) return;
+      context.read<RefreshProvider>().refresh();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.groupDeletedSuccess),
@@ -82,8 +84,8 @@ class _ManageGroupsScreenState extends State<ManageGroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<GroupManagementProvider>(
-      create: (_) => _groupManagementProvider,
+    return ChangeNotifierProvider<GroupManagementProvider>.value(
+      value: _groupManagementProvider,
       child: Consumer<GroupManagementProvider>(
         builder: (context, provider, child) {
           final grupos = provider.grupos;

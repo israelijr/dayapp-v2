@@ -30,6 +30,8 @@ class GroupsScreen extends StatefulWidget {
 
 class _GroupsScreenState extends State<GroupsScreen>
     with TickerProviderStateMixin {
+  static const String _ungroupedGroupName = 'Não Agrupadas';
+
   final CapituloHelper _capituloHelper = CapituloHelper();
   final CapituloSugestaoService _sugestaoService = CapituloSugestaoService();
   late final TabController _tabController;
@@ -99,7 +101,18 @@ class _GroupsScreenState extends State<GroupsScreen>
         final gruposComHistorias = <Grupo>[];
         final counts = <String, int>{};
 
+        final ungroupedCount = await grupoHelper.countUngroupedHistorias(
+          userId,
+        );
+        counts[_ungroupedGroupName] = ungroupedCount;
+        gruposComHistorias.add(
+          Grupo(userId: userId, nome: _ungroupedGroupName, emoticon: '📁'),
+        );
+
         for (final grupo in todosGrupos) {
+          if (grupo.nome == _ungroupedGroupName) {
+            continue;
+          }
           final count = await grupoHelper.countHistoriasInGrupo(
             userId,
             grupo.nome,
@@ -117,6 +130,11 @@ class _GroupsScreenState extends State<GroupsScreen>
         gruposComHistorias.sort(
           (a, b) => a.nome.toLowerCase().compareTo(b.nome.toLowerCase()),
         );
+        gruposComHistorias.sort((a, b) {
+          if (a.nome == _ungroupedGroupName) return -1;
+          if (b.nome == _ungroupedGroupName) return 1;
+          return a.nome.toLowerCase().compareTo(b.nome.toLowerCase());
+        });
         setState(() {
           _grupos = gruposComHistorias;
           _grupoCounts = counts;
@@ -328,12 +346,18 @@ class _GroupsScreenState extends State<GroupsScreen>
 
         final grupo = _grupos[index];
         final count = _grupoCounts[grupo.nome] ?? 0;
+        final isUngroupedGroup = grupo.nome == _ungroupedGroupName;
 
         return Material(
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(28),
-            onTap: () => _navigateAndRefresh(GroupStoriesScreen(grupo: grupo)),
+            onTap: () => _navigateAndRefresh(
+              GroupStoriesScreen(
+                grupo: grupo,
+                isUngroupedGroup: isUngroupedGroup,
+              ),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
