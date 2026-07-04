@@ -124,7 +124,10 @@ class _PessoasInputWidgetState extends State<PessoasInputWidget> {
       return;
     }
 
-    final pessoa = await PessoaHelper().getOrCreatePessoa(widget.userId, trimmed);
+    final pessoa = await PessoaHelper().getOrCreatePessoa(
+      widget.userId,
+      trimmed,
+    );
     if (mounted) {
       setState(() {
         _selectedPessoas.add(pessoa);
@@ -153,7 +156,9 @@ class _PessoasInputWidgetState extends State<PessoasInputWidget> {
   /// Remove uma pessoa dos chips selecionados
   void _removePessoa(Pessoa pessoa) {
     setState(() {
-      _selectedPessoas.removeWhere((p) => p.id == pessoa.id || p.slug == pessoa.slug);
+      _selectedPessoas.removeWhere(
+        (p) => p.id == pessoa.id || p.slug == pessoa.slug,
+      );
     });
     widget.onPessoasChanged(List.from(_selectedPessoas));
   }
