@@ -539,7 +539,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
                   });
                 },
                 icon: const Icon(Icons.add),
-                label: Text('${AppLocalizations.of(context)!.newStory} Aqui'),
+                label: Text(AppLocalizations.of(context)!.newStoryHere),
               ),
             ),
           ),

@@ -819,6 +819,7 @@
   "exportPdf": "Esporta PDF",
   "close": "Chiudi",
   "newStory": "Nuova storia",
+  "newStoryHere": "Nuova storia qui",
   "noArchivedStories": "Nessuna storia archiviata.",
   "edit": "Modifica",
   "previewTitle": "Anteprima - {title}",

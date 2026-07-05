@@ -727,6 +727,7 @@
   "exportPdf": "Exportar PDF",
   "close": "Cerrar",
   "newStory": "Nueva historia",
+  "newStoryHere": "Nueva historia aquí",
   "noArchivedStories": "No hay historias archivadas.",
   "edit": "Editar",
   "previewTitle": "Previsualización - {title}",
@@ -1208,6 +1209,10 @@
   },
   "@newStory": {
     "description": "Label for newStory",
+    "type": "text"
+  },
+  "@newStoryHere": {
+    "description": "Label for newStoryHere",
     "type": "text"
   },
   "@noArchivedStories": {

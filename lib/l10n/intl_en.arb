@@ -890,6 +890,7 @@
   "exportPdf": "Export PDF",
   "close": "Close",
   "newStory": "New Story",
+  "newStoryHere": "New Story Here",
   "noArchivedStories": "No archived stories.",
   "edit": "Edit",
   "previewTitle": "Preview - {title}",
@@ -1376,6 +1377,10 @@
   },
   "@newStory": {
     "description": "Label for newStory",
+    "type": "text"
+  },
+  "@newStoryHere": {
+    "description": "Label for newStoryHere",
     "type": "text"
   },
   "@noArchivedStories": {
