@@ -22,6 +22,8 @@ class CreateGroupScreen extends StatefulWidget {
 }
 
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
+  static const int _maxGroupNameLength = 15;
+
   final TextEditingController _nameController = TextEditingController();
   final CapituloRepository _capituloRepository = CapituloRepository();
   final Set<int> _selectedStoryIds = <int>{};
@@ -133,6 +135,13 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
       return;
     }
 
+    if (groupName.length > _maxGroupNameLength) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.groupNameTooLong)));
+      return;
+    }
+
     if (_selectedStoryIds.isEmpty) {
       ScaffoldMessenger.of(
         context,
@@ -217,6 +226,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                           child: CustomTextField(
                             controller: _nameController,
                             label: l10n.groupNameLabel,
+                            maxLength: _maxGroupNameLength,
+                            helperText: l10n.groupNameMaxLengthHint,
                             textCapitalization: TextCapitalization.sentences,
                           ),
                         ),

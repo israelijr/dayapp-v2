@@ -876,6 +876,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get groupNameLabel => 'Group Name';
 
   @override
+  String get groupNameMaxLengthHint => 'Maximum 15 characters.';
+
+  @override
+  String get groupNameTooLong => 'Group name must be at most 15 characters.';
+
+  @override
   String get createAndSelect => 'Create and Select';
 
   @override

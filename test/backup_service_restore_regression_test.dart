@@ -295,6 +295,13 @@ void main() {
       l10n: AppLocalizationsEn('en'),
     );
 
+    expect(
+      p.basename(backupPath),
+      matches(
+        RegExp(r'^dayapp_backup_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.zip$'),
+      ),
+    );
+
     await db.update(
       'historia',
       {'local': null},
@@ -329,6 +336,19 @@ void main() {
     expect(restoredPeople, hasLength(2));
     expect(restoredPeople.any((p) => p.nome == 'Ana'), isTrue);
     expect(restoredPeople.any((p) => p.nome == 'Beto'), isTrue);
+  });
+
+  test('backup filename validator accepts new and legacy formats', () {
+    final service = BackupService();
+
+    expect(
+      service.isValidBackupFileName('dayapp_backup_2026-07-04_22-35-18.zip'),
+      isTrue,
+    );
+    expect(service.isValidBackupFileName('dayapp_backup_123456.zip'), isTrue);
+    expect(service.isValidBackupFileName('dayapp_250704_123.zip'), isTrue);
+    expect(service.isValidBackupFileName('dayapp_04jul_123.zip'), isTrue);
+    expect(service.isValidBackupFileName('invalid.zip'), isFalse);
   });
 
   test(

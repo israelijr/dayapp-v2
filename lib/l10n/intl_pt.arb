@@ -355,6 +355,8 @@
   "existingGroups": "Grupos Existentes",
   "createNewGroup": "Criar Novo Grupo",
   "groupNameLabel": "Nome do Grupo",
+  "groupNameMaxLengthHint": "Máximo de 15 caracteres.",
+  "groupNameTooLong": "O nome do grupo deve ter no máximo 15 caracteres.",
   "createAndSelect": "Criar e Selecionar",
   "manageBackups": "Gerenciar Backup",
   "createAndShareBackup": "Criar e Compartilhar Backup",

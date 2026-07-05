@@ -21,6 +21,8 @@ class GroupsMaintenanceScreen extends StatefulWidget {
 }
 
 class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
+  static const int _maxGroupNameLength = 15;
+
   late final GroupManagementProvider _groupManagementProvider;
 
   @override
@@ -97,6 +99,10 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                   CustomTextField(
                     controller: nameController,
                     label: AppLocalizations.of(context)!.groupNameLabel,
+                    maxLength: _maxGroupNameLength,
+                    helperText: AppLocalizations.of(
+                      context,
+                    )!.groupNameMaxLengthHint,
                     textCapitalization: TextCapitalization.sentences,
                   ),
                 ],
@@ -111,6 +117,17 @@ class _GroupsMaintenanceScreenState extends State<GroupsMaintenanceScreen> {
                 onPressed: () async {
                   final name = nameController.text.trim();
                   if (name.isEmpty) return;
+                  if (name.length > _maxGroupNameLength) {
+                    final messenger = ScaffoldMessenger.of(context);
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          AppLocalizations.of(context)!.groupNameTooLong,
+                        ),
+                      ),
+                    );
+                    return;
+                  }
                   if (selectedEmoticon == null) {
                     final messenger = ScaffoldMessenger.of(context);
                     messenger.showSnackBar(

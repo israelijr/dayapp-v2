@@ -272,7 +272,7 @@ class _GroupsScreenState extends State<GroupsScreen>
                   final maxH = constraints.maxHeight.isFinite
                       ? constraints.maxHeight
                       : MediaQuery.of(context).size.height * 0.3;
-                  final iconSize = min(140.0, maxH * 0.55);
+                  final iconSize = min(112.0, maxH * 0.44);
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -358,64 +358,80 @@ class _GroupsScreenState extends State<GroupsScreen>
                 isUngroupedGroup: isUngroupedGroup,
               ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 140,
-                  height: 140,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primaryContainer.withValues(alpha: 0.24),
-                    border: Border.all(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.18),
-                      width: 1.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final maxH = constraints.maxHeight.isFinite
+                    ? constraints.maxHeight
+                    : MediaQuery.of(context).size.height * 0.3;
+                final iconSize = min(112.0, maxH * 0.44);
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: iconSize,
+                      height: iconSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
                         color: Theme.of(
                           context,
-                        ).colorScheme.onSurface.withValues(alpha: 0.06),
-                        blurRadius: 18,
-                        offset: const Offset(0, 10),
+                        ).colorScheme.primaryContainer.withValues(alpha: 0.24),
+                        border: Border.all(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.18),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.06),
+                            blurRadius: 18,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    grupo.emoticon ?? '📁',
-                    style: TextStyle(
-                      fontSize: 42,
-                      color: Theme.of(context).colorScheme.primary,
+                      alignment: Alignment.center,
+                      child: Text(
+                        grupo.emoticon ?? '📁',
+                        style: TextStyle(
+                          fontSize: max(30.0, iconSize * 0.30),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  grupo.nome,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color:
-                        Theme.of(context).appBarTheme.foregroundColor ??
-                        Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  '$count ${count == 1 ? l10n.record : l10n.records}',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
+                    const SizedBox(height: 8),
+                    Flexible(
+                      child: Text(
+                        grupo.nome,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).appBarTheme.foregroundColor ??
+                                  Theme.of(context).colorScheme.primary,
+                            ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Flexible(
+                      child: Text(
+                        '$count ${count == 1 ? l10n.record : l10n.records}',
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         );

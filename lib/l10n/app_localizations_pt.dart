@@ -882,6 +882,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get groupNameLabel => 'Nome do Grupo';
 
   @override
+  String get groupNameMaxLengthHint => 'Máximo de 15 caracteres.';
+
+  @override
+  String get groupNameTooLong =>
+      'O nome do grupo deve ter no máximo 15 caracteres.';
+
+  @override
   String get createAndSelect => 'Criar e Selecionar';
 
   @override
@@ -2996,6 +3003,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get aboutScreenFeatureSecureBackupDescription =>
       'Projeta seus dados com backups regulares.';
+
+  @override
+  String get groupNameMaxLengthHint => 'Máximo de 15 caracteres.';
+
+  @override
+  String get groupNameTooLong =>
+      'O nome do grupo deve ter no máximo 15 caracteres.';
 
   @override
   String get backupZipExplanation =>

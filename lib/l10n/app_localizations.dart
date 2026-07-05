@@ -1737,6 +1737,18 @@ abstract class AppLocalizations {
   /// **'Group Name'**
   String get groupNameLabel;
 
+  /// No description provided for @groupNameMaxLengthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum 15 characters.'**
+  String get groupNameMaxLengthHint;
+
+  /// No description provided for @groupNameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name must be at most 15 characters.'**
+  String get groupNameTooLong;
+
   /// No description provided for @createAndSelect.
   ///
   /// In en, this message translates to:

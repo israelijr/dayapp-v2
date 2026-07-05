@@ -5,6 +5,8 @@ import '../providers/auth_provider.dart';
 import '../repositories/group_repository.dart';
 
 class GroupManagementProvider with ChangeNotifier {
+  static const int _maxGroupNameLength = 15;
+
   final GroupRepository _repository;
   final AuthProvider _authProvider;
 
@@ -49,14 +51,25 @@ class GroupManagementProvider with ChangeNotifier {
       throw StateError('Usuário não autenticado');
     }
 
+    final normalizedName = grupo.nome.trim();
+    if (normalizedName.isEmpty || normalizedName.length > _maxGroupNameLength) {
+      throw StateError('GROUP_NAME_TOO_LONG');
+    }
+
     final grupoToSave = grupo.id == null
         ? Grupo(
             userId: userId,
-            nome: grupo.nome,
+            nome: normalizedName,
             emoticon: grupo.emoticon,
             dataCriacao: grupo.dataCriacao,
           )
-        : grupo;
+        : Grupo(
+            id: grupo.id,
+            userId: grupo.userId,
+            nome: normalizedName,
+            emoticon: grupo.emoticon,
+            dataCriacao: grupo.dataCriacao,
+          );
 
     if (grupo.id == null) {
       await _repository.insertGrupo(grupoToSave);
@@ -87,6 +100,10 @@ class GroupManagementProvider with ChangeNotifier {
     }
 
     final normalizedName = groupName.trim();
+    if (normalizedName.length > _maxGroupNameLength) {
+      throw StateError('GROUP_NAME_TOO_LONG');
+    }
+
     final exists = await _repository.groupNameExists(
       userId: userId,
       name: normalizedName,
