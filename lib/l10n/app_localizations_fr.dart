@@ -946,6 +946,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Sélectionnez un fichier de sauvegarde (ZIP) précédemment créé pour restaurer toutes vos données.';
 
   @override
+  String lastBackupLabel(String fileName) {
+    return 'Dernière sauvegarde : $fileName';
+  }
+
+  @override
   String get backupShareSubject => 'Sauvegarde DayApp';
 
   @override

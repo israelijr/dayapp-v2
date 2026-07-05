@@ -374,6 +374,15 @@
   },
   "restoreSectionTitle": "Restaurar Backup",
   "restoreSectionDescription": "Selecione um arquivo de backup (ZIP) anteriormente criado para restaurar todos os seus dados.",
+  "lastBackupLabel": "Último backup: {fileName}",
+  "@lastBackupLabel": {
+    "description": "Rótulo mostrando o nome do último arquivo de backup",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
   "backupShareSubject": "Backup DayApp",
   "@backupShareSubject": {
     "description": "Assunto usado ao compartilhar um arquivo de backup manual"

@@ -298,7 +298,7 @@ void main() {
     expect(
       p.basename(backupPath),
       matches(
-        RegExp(r'^dayapp_backup_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.zip$'),
+        RegExp(r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_DayApp_bkp\.zip$'),
       ),
     );
 
@@ -343,6 +343,10 @@ void main() {
 
     expect(
       service.isValidBackupFileName('dayapp_backup_2026-07-04_22-35-18.zip'),
+      isTrue,
+    );
+    expect(
+      service.isValidBackupFileName('2026-07-04_22-35-18_DayApp_bkp.zip'),
       isTrue,
     );
     expect(service.isValidBackupFileName('dayapp_backup_123456.zip'), isTrue);

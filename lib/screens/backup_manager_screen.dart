@@ -28,6 +28,22 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
   double? _progressValue;
   bool _statusIsError = false; // nova flag para colorir card de status
   bool _statusIsSuccess = false;
+  String? _lastBackupFileName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLastBackup();
+  }
+
+  Future<void> _loadLastBackup() async {
+    final fileName = await _backupService.getLastBackupFileName();
+    if (mounted) {
+      setState(() {
+        _lastBackupFileName = fileName;
+      });
+    }
+  }
 
   bool get _isLinuxDesktop =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.linux;
@@ -233,6 +249,21 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
                                     ),
                                   ),
                                 ),
+                                if (_lastBackupFileName != null) ...[
+                                  const SizedBox(height: 8),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      loc.lastBackupLabel(_lastBackupFileName!),
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
                               ],
                             ),
                           ),
@@ -434,6 +465,8 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
 
       debugPrint('BACKUP: Compartilhamento concluído');
 
+      await _backupService.saveLastBackupFileName(fileName);
+
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -441,6 +474,7 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           _progressValue = null;
           _statusIsError = false;
           _statusIsSuccess = true;
+          _lastBackupFileName = fileName;
         });
         Provider.of<RefreshProvider>(context, listen: false).refresh();
       }
@@ -616,6 +650,8 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           return;
         }
 
+        await _backupService.saveLastBackupFileName(fileName);
+
         // Notificar provider para atualizar todas as telas
         Provider.of<RefreshProvider>(context, listen: false).refresh();
 
@@ -629,6 +665,7 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           _progressValue = null;
           _statusIsError = false;
           _statusIsSuccess = true;
+          _lastBackupFileName = fileName;
         });
 
         // Mostrar diálogo de sucesso

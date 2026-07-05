@@ -519,10 +519,9 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
               );
             },
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(bottom: 12, right: 12),
             child: PulseAnimation(
               scaleTarget: 1.06,
               child: FloatingActionButton.extended(
@@ -540,7 +539,7 @@ class _GroupStoriesScreenState extends State<GroupStoriesScreen> {
                   });
                 },
                 icon: const Icon(Icons.add),
-                label: Text(AppLocalizations.of(context)!.newStory),
+                label: Text('${AppLocalizations.of(context)!.newStory} Aqui'),
               ),
             ),
           ),

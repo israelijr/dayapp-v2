@@ -472,7 +472,6 @@ class DatabaseHelper {
       await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulos_user_data ON capitulos(user_id, data_inicio, data_fim);');
       await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_capitulo ON capitulo_entradas(capitulo_id);');
       await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_entrada ON capitulo_entradas(entrada_id);');
-      await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_ordem ON capitulo_entradas(capitulo_id, display_order);');
       await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulo_sugestoes_user ON capitulo_sugestoes_ignoradas(user_id);');
 
       // Tabela de insights (v18)
@@ -497,12 +496,14 @@ class DatabaseHelper {
       // Verificar colunas extras nas outras tabelas
       // 1. capitulo_entradas: display_order
       try {
-        final ceCols = await db.rawQuery('PRAGMA table_info(capitulo_entradas)');
-        final ceExisting = ceCols.map((c) => c['name'] as String).toSet();
-        if (!ceExisting.contains('display_order')) {
-          await db.execute('ALTER TABLE capitulo_entradas ADD COLUMN display_order INTEGER;');
-          debugPrint('DatabaseHelper: coluna display_order adicionada via Self-Healing.');
-        }
+         final ceCols = await db.rawQuery('PRAGMA table_info(capitulo_entradas)');
+         final ceExisting = ceCols.map((c) => c['name'] as String).toSet();
+         if (!ceExisting.contains('display_order')) {
+           await db.execute('ALTER TABLE capitulo_entradas ADD COLUMN display_order INTEGER;');
+           await db.execute('UPDATE capitulo_entradas SET display_order = 1;');
+           debugPrint('DatabaseHelper: coluna display_order adicionada via Self-Healing.');
+         }
+         await db.execute('CREATE INDEX IF NOT EXISTS idx_capitulo_entradas_ordem ON capitulo_entradas(capitulo_id, display_order);');
       } catch (e) {
         debugPrint('DatabaseHelper: erro ao garantir display_order em capitulo_entradas: $e');
       }

@@ -617,7 +617,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -654,6 +654,25 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                               },
                             ),
                         ],
+                      ),
+                      Builder(
+                        builder: (context) {
+                          final List<String> parts = [];
+                          if (widget.initialGroup != null && widget.initialGroup!.trim().isNotEmpty) {
+                            parts.add(widget.initialGroup!.trim());
+                          }
+                          if (parts.isEmpty) return const SizedBox.shrink();
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              parts.join(' • '),
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: labelColor.withValues(alpha: 0.8),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 16),
                       // Title

@@ -823,7 +823,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -860,6 +860,28 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
                               },
                             ),
                         ],
+                      ),
+                      Builder(
+                        builder: (context) {
+                          final List<String> parts = [];
+                          if (widget.historia.grupo != null && widget.historia.grupo!.trim().isNotEmpty) {
+                            parts.add(widget.historia.grupo!.trim());
+                          }
+                          if (widget.historia.arquivado != null) {
+                            parts.add(loc.archivedStoryPrefixLabel);
+                          }
+                          if (parts.isEmpty) return const SizedBox.shrink();
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              parts.join(' • '),
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 16),
 

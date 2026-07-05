@@ -487,6 +487,15 @@
   },
   "restoreSectionTitle": "Restaurer la sauvegarde",
   "restoreSectionDescription": "Sélectionnez un fichier de sauvegarde (ZIP) précédemment créé pour restaurer toutes vos données.",
+  "lastBackupLabel": "Dernière sauvegarde : {fileName}",
+  "@lastBackupLabel": {
+    "description": "Étiquette affichant le nom du dernier fichier de sauvegarde",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
   "backupShareSubject": "Sauvegarde DayApp",
   "@backupShareSubject": {
     "description": "Sujet lors du partage d'un fichier de sauvegarde"

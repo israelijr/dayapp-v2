@@ -1833,6 +1833,12 @@ abstract class AppLocalizations {
   /// **'Select a backup file (ZIP) previously created to restore all your data.'**
   String get restoreSectionDescription;
 
+  /// Label showing the filename of the last backup
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup: {fileName}'**
+  String lastBackupLabel(String fileName);
+
   /// Subject used when sharing a manual backup file
   ///
   /// In en, this message translates to:

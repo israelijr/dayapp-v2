@@ -942,6 +942,11 @@ class AppLocalizationsEs extends AppLocalizations {
       'Selecciona un archivo de copia de seguridad (ZIP) creado previamente para restaurar todos tus datos.';
 
   @override
+  String lastBackupLabel(String fileName) {
+    return 'Última copia de seguridad: $fileName';
+  }
+
+  @override
   String get backupShareSubject => 'Copia de seguridad de DayApp';
 
   @override

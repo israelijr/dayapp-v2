@@ -390,6 +390,15 @@
   },
   "restoreSectionTitle": "Restaurar copia de seguridad",
   "restoreSectionDescription": "Selecciona un archivo de copia de seguridad (ZIP) creado previamente para restaurar todos tus datos.",
+  "lastBackupLabel": "Última copia de seguridad: {fileName}",
+  "@lastBackupLabel": {
+    "description": "Etiqueta que muestra el nombre del último archivo de copia de seguridad",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
   "backupShareSubject": "Copia de seguridad de DayApp",
   "@backupShareSubject": {
     "description": "Asunto usado al compartir un archivo de copia manual"

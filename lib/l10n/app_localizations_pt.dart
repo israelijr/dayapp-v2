@@ -936,6 +936,11 @@ class AppLocalizationsPt extends AppLocalizations {
       'Selecione um arquivo de backup (ZIP) anteriormente criado para restaurar todos os seus dados.';
 
   @override
+  String lastBackupLabel(String fileName) {
+    return 'Último backup: $fileName';
+  }
+
+  @override
   String get backupShareSubject => 'Backup DayApp';
 
   @override
@@ -3018,6 +3023,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get backupLinuxExplanation =>
       'Escolha uma pasta e o backup ZIP será salvo diretamente nela.';
+
+  @override
+  String lastBackupLabel(String fileName) {
+    return 'Último backup: $fileName';
+  }
 
   @override
   String get helpHomeItemDesc =>

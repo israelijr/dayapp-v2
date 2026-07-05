@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../db/database_helper.dart';
@@ -289,7 +290,7 @@ Versão: 2.0.0
       onProgress?.call(l10n.backupProgressCompressing);
       final now = DateTime.now();
       final backupStamp = _formatBackupTimestamp(now);
-      final zipPath = path.join(tempDir.path, 'dayapp_backup_$backupStamp.zip');
+      final zipPath = path.join(tempDir.path, '${backupStamp}_DayApp_bkp.zip');
 
       final receivePort = ReceivePort();
       final isolate = await Isolate.spawn(backupZipIsolateEntrypoint, {
@@ -1043,11 +1044,15 @@ Versão: 2.0.0
     final regExpNewFormat = RegExp(
       r'^dayapp_backup_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}$',
     );
+    final regExpNewFormat2 = RegExp(
+      r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_DayApp_bkp$',
+    );
 
     return regExpCompat1.hasMatch(baseName) ||
         regExpCompat2.hasMatch(baseName) ||
         regExpNew.hasMatch(baseName) ||
-        regExpNewFormat.hasMatch(baseName);
+        regExpNewFormat.hasMatch(baseName) ||
+        regExpNewFormat2.hasMatch(baseName);
   }
 
   String _formatBackupTimestamp(DateTime dateTime) {
@@ -1058,5 +1063,15 @@ Versão: 2.0.0
     final minute = dateTime.minute.toString().padLeft(2, '0');
     final second = dateTime.second.toString().padLeft(2, '0');
     return '$year-$month-${day}_$hour-$minute-$second';
+  }
+
+  Future<void> saveLastBackupFileName(String fileName) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('last_backup_file_name', fileName);
+  }
+
+  Future<String?> getLastBackupFileName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('last_backup_file_name');
   }
 }

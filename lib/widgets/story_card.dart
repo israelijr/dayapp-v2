@@ -747,17 +747,29 @@ class StoryPreviewScreen extends StatelessWidget {
                               historia.emoticon!.isNotEmpty)
                             const SizedBox(width: 8),
                           Expanded(
-                            child: Text(
-                              DateFormat(
-                                'dd/MM/yyyy HH:mm',
-                                localeName,
-                              ).format(historia.data),
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0.3,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
+                            child: Builder(
+                              builder: (context) {
+                                final List<String> parts = [];
+                                if (historia.grupo != null && historia.grupo!.trim().isNotEmpty) {
+                                  parts.add(historia.grupo!.trim());
+                                }
+                                if (_isArchived) {
+                                  parts.add(l10n.archivedStoryPrefixLabel);
+                                }
+                                final prefix = parts.isNotEmpty ? '${parts.join(' • ')} • ' : '';
+                                return Text(
+                                  '$prefix${DateFormat(
+                                    'dd/MM/yyyy HH:mm',
+                                    localeName,
+                                  ).format(historia.data)}',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 0.3,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ],

@@ -1,5 +1,14 @@
 {
   "@@locale": "pt_BR",
+  "lastBackupLabel": "Último backup: {fileName}",
+  "@lastBackupLabel": {
+    "description": "Rótulo mostrando o nome do último arquivo de backup",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
   "lastAutoBackup": "Último backup automático",
   "backupOnLogout": "Backup ao sair",
   "backupLinuxExplanation": "Escolha uma pasta e o backup ZIP será salvo diretamente nela.",

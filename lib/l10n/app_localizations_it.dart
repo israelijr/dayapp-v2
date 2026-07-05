@@ -943,6 +943,11 @@ class AppLocalizationsIt extends AppLocalizations {
       'Seleziona un file di backup (ZIP) precedentemente creato per ripristinare tutti i tuoi dati.';
 
   @override
+  String lastBackupLabel(String fileName) {
+    return 'Ultimo backup: $fileName';
+  }
+
+  @override
   String get backupShareSubject => 'Backup DayApp';
 
   @override

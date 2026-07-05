@@ -491,6 +491,16 @@
   },
   "restoreSectionTitle": "Restore Backup",
   "restoreSectionDescription": "Select a backup file (ZIP) previously created to restore all your data.",
+  "lastBackupLabel": "Last backup: {fileName}",
+  "@lastBackupLabel": {
+    "description": "Label showing the filename of the last backup",
+    "placeholders": {
+      "fileName": {
+        "type": "String",
+        "example": "2026-07-05_20-18-42_DayApp_bkp.zip"
+      }
+    }
+  },
   "backupShareSubject": "DayApp Backup",
   "@backupShareSubject": {
     "description": "Subject used when sharing a manual backup file"
