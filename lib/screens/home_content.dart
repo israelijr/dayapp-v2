@@ -16,11 +16,13 @@ import '../providers/home_stories_provider.dart';
 import '../providers/insight_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
+import '../providers/stats_provider.dart';
 import '../services/thumbnail_service.dart';
 import '../theme/animation_durations.dart';
 import '../widgets/compact_historia_card.dart';
 import '../widgets/insight_card.dart';
 import '../widgets/mood_energy_chart_card.dart';
+import '../widgets/stats_chart_card.dart';
 import '../widgets/story_card.dart';
 import '../widgets/user_profile_avatar.dart';
 import 'create_historia_screen.dart';
@@ -590,6 +592,10 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             context,
             listen: false,
           ).loadInsights(userId);
+          Provider.of<StatsProvider>(
+            context,
+            listen: false,
+          ).loadStats();
         }
         // Restaura posição do scroll após dados serem carregados
         if (!mounted) return;
@@ -667,12 +673,16 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
           final storiesProvider = context.read<HomeStoriesProvider>();
           final authProvider = context.read<AuthProvider>();
           final insightProvider = context.read<InsightProvider>();
+          final statsProvider = context.read<StatsProvider>();
 
           await storiesProvider.refreshStories(forceRefresh: true);
 
           final userId = authProvider.user?.id ?? '';
           if (userId.isNotEmpty) {
-            await insightProvider.refresh(userId);
+            await Future.wait([
+              insightProvider.refresh(userId),
+              statsProvider.loadStats(),
+            ]);
           }
         },
         child: Consumer<InsightProvider>(
@@ -847,7 +857,8 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             final recentChartStories = storiesProvider.recentChartStories;
             final bool showChart = recentChartStories.length >= 2;
             final int chartItemCount = showChart ? 1 : 0;
-            final headerCount = 1 + chartItemCount + insights.length;
+            const int statsItemCount = 1;
+            final headerCount = 1 + statsItemCount + chartItemCount + insights.length;
 
             /// Constrói um InsightCard com todos os callbacks configurados.
             Widget buildInsightCard(Insight insight) {
@@ -929,12 +940,16 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                       return greetingBanner();
                     }
 
-                    if (showChart && index == 1) {
+                    if (index == 1) {
+                      return const StatsChartCard();
+                    }
+
+                    if (showChart && index == 2) {
                       return MoodEnergyChartCard(stories: recentChartStories);
                     }
 
                     if (index < headerCount) {
-                      final insightIndex = index - 1 - chartItemCount;
+                      final insightIndex = index - 2 - chartItemCount;
                       return buildInsightCard(insights[insightIndex]);
                     }
 

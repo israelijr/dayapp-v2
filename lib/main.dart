@@ -29,7 +29,10 @@ import 'providers/premium_provider.dart';
 import 'providers/refresh_provider.dart';
 import 'providers/scroll_position_provider.dart';
 import 'providers/theme_provider.dart';
+import 'providers/stats_provider.dart';
 import 'repositories/historia_repository.dart';
+import 'repositories/capitulo_repository.dart';
+import 'repositories/group_repository.dart';
 import 'screens/about_screen.dart';
 import 'screens/backup_manager_screen.dart';
 import 'screens/calendar_view_screen.dart';
@@ -555,6 +558,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             repository: HistoriaRepository(),
             authProvider: context.read<AuthProvider>(),
             refreshProvider: context.read<RefreshProvider>(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => StatsProvider(
+            historiaRepository: HistoriaRepository(),
+            capituloRepository: CapituloRepository(),
+            groupRepository: GroupRepository(),
+            authProvider: context.read<AuthProvider>(),
           ),
         ),
         // Provider para insights automáticos do feed da Home

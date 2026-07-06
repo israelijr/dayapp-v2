@@ -1,6 +1,19 @@
 {
   "@@locale": "en",
   "appTitle": "DayApp",
+  "howMuchWeHaveDoneTogether": "How much we have done together",
+  "chaptersLabel": "Chapters",
+  "groupsLabel": "Groups",
+  "storiesThisWeek": "Stories written this week: {count}",
+  "@storiesThisWeek": {
+    "description": "Text displayed when clicking the statistics chart",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tapChartToSeeWeekly": "Tap the chart to see this week's progress",
   "moodEnergyChartTitle": "Your Recent Journey",
   "moodEnergyChartSubtitle": "Last 7 days with records",
   "moodEnergyChartTooltip": "Day {date}: Mood {mood} / Energy {energy}",

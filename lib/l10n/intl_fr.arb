@@ -1,6 +1,19 @@
 {
   "@@locale": "fr",
   "appTitle": "DayApp",
+  "howMuchWeHaveDoneTogether": "Tout ce que nous avons fait ensemble",
+  "chaptersLabel": "Chapitres",
+  "groupsLabel": "Groupes",
+  "storiesThisWeek": "Histoires racontées cette semaine: {count}",
+  "@storiesThisWeek": {
+    "description": "Texte affiché lors d'un clic sur le graphique des statistiques",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tapChartToSeeWeekly": "Appuyez sur le graphique pour voir la semaine",
   "moodEnergyChartTitle": "Votre Voyage Récent",
   "moodEnergyChartSubtitle": "7 derniers jours avec enregistrements",
   "moodEnergyChartTooltip": "Jour {date} : Humeur {mood} / Énergie {energy}",

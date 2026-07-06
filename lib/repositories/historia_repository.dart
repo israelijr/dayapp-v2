@@ -553,5 +553,20 @@ class HistoriaRepository {
     // Retorna na ordem cronológica (do mais antigo ao mais recente)
     return recentStories.reversed.toList();
   }
+
+  Future<int> countStoriesThisWeek(String userId) async {
+    final db = await DatabaseHelper().database;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    // Começo da semana (segunda-feira)
+    final daysToSubtract = today.weekday - 1;
+    final startOfWeek = today.subtract(Duration(days: daysToSubtract));
+
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS cnt FROM $_table WHERE user_id = ? AND excluido IS NULL AND data >= ?',
+      [userId, startOfWeek.toIso8601String()],
+    );
+    return (result.first['cnt'] ?? 0) as int;
+  }
 }
 

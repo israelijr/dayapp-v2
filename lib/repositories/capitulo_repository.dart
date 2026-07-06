@@ -415,4 +415,13 @@ class CapituloRepository {
 
     return photosByStoryId;
   }
+
+  Future<int> countCapitulos(String userId) async {
+    final db = await DatabaseHelper().database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS cnt FROM capitulos WHERE user_id = ?',
+      [userId],
+    );
+    return (result.first['cnt'] ?? 0) as int;
+  }
 }

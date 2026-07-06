@@ -132,4 +132,13 @@ class GroupRepository {
   Future<void> archiveHistoria(Historia historia) async {
     await _historiaRepository.archiveHistoria(historia);
   }
+
+  Future<int> countGrupos(String userId) async {
+    final db = await DatabaseHelper().database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS cnt FROM grupos WHERE user_id = ?',
+      [userId],
+    );
+    return (result.first['cnt'] ?? 0) as int;
+  }
 }

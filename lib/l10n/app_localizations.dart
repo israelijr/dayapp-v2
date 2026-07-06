@@ -111,6 +111,36 @@ abstract class AppLocalizations {
   /// **'DayApp'**
   String get appTitle;
 
+  /// No description provided for @howMuchWeHaveDoneTogether.
+  ///
+  /// In en, this message translates to:
+  /// **'How much we have done together'**
+  String get howMuchWeHaveDoneTogether;
+
+  /// No description provided for @chaptersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapters'**
+  String get chaptersLabel;
+
+  /// No description provided for @groupsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get groupsLabel;
+
+  /// Text displayed when clicking the statistics chart
+  ///
+  /// In en, this message translates to:
+  /// **'Stories written this week: {count}'**
+  String storiesThisWeek(int count);
+
+  /// No description provided for @tapChartToSeeWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the chart to see this week\'s progress'**
+  String get tapChartToSeeWeekly;
+
   /// No description provided for @moodEnergyChartTitle.
   ///
   /// In en, this message translates to:

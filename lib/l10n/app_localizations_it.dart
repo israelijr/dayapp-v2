@@ -12,6 +12,23 @@ class AppLocalizationsIt extends AppLocalizations {
   String get appTitle => 'DayApp';
 
   @override
+  String get howMuchWeHaveDoneTogether => 'Quanto abbiamo fatto insieme';
+
+  @override
+  String get chaptersLabel => 'Capitoli';
+
+  @override
+  String get groupsLabel => 'Gruppi';
+
+  @override
+  String storiesThisWeek(int count) {
+    return 'Storie raccontate questa settimana: $count';
+  }
+
+  @override
+  String get tapChartToSeeWeekly => 'Tocca il grafico per vedere la settimana';
+
+  @override
   String get moodEnergyChartTitle => 'Il tuo Viaggio Recente';
 
   @override

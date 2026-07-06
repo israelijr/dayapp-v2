@@ -77,7 +77,7 @@ class MoodEnergyChartCard extends StatelessWidget {
                     loc.moodEnergyChartTitle,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                       color: theme.colorScheme.onSurface,
                     ),
                   ),
