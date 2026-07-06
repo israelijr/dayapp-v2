@@ -64,7 +64,7 @@ class InsightCard extends StatelessWidget {
         searchQuery.isNotEmpty;
 
     final cardColor = colorScheme.surface.withValues(alpha: 0.88);
-    final periodLabel = _resolvePeriodLabel(l10n);
+    final periodLabel = _resolvePeriodLabel(l10n, Localizations.localeOf(context).toString());
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -594,13 +594,13 @@ class InsightCard extends StatelessWidget {
     return l10n.insightBreatheDeepDescription(joined);
   }
 
-  String? _resolvePeriodLabel(AppLocalizations l10n) {
+  String? _resolvePeriodLabel(AppLocalizations l10n, String locale) {
     if (insight.type == InsightType.energyChart) {
       final today = DateTime.now();
       final start = today.subtract(const Duration(days: 6));
       return l10n.chapterPeriod(
-        DateFormat('dd/MM').format(start),
-        DateFormat('dd/MM').format(today),
+        DateFormat.Md(locale).format(start),
+        DateFormat.Md(locale).format(today),
       );
     }
     return null;

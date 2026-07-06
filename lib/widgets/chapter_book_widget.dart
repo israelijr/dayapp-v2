@@ -23,7 +23,7 @@ class ChapterBookWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final dateStr = dataUpdate != null
-        ? DateFormat('dd/MM/yyyy').format(dataUpdate!)
+        ? DateFormat.yMd(Localizations.localeOf(context).toString()).format(dataUpdate!)
         : '--/--/----';
 
     return Container(

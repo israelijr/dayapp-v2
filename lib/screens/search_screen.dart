@@ -193,7 +193,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final Map<String, List<Historia>> grouped = {};
 
     for (final historia in historias) {
-      final dateKey = DateFormat('dd/MM/yyyy', 'pt_BR').format(historia.data);
+      final dateKey = DateFormat('yyyy-MM-dd').format(historia.data);
       if (!grouped.containsKey(dateKey)) {
         grouped[dateKey] = [];
       }
@@ -604,8 +604,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
     String displayText = l10n.selectDateRange;
     if (dateRangeSelected) {
-      final startStr = DateFormat('dd/MM/yyyy', 'pt_BR').format(_startDate!);
-      final endStr = DateFormat('dd/MM/yyyy', 'pt_BR').format(_endDate!);
+      final startStr = DateFormat.yMd(Localizations.localeOf(context).toString()).format(_startDate!);
+      final endStr = DateFormat.yMd(Localizations.localeOf(context).toString()).format(_endDate!);
       displayText = '$startStr - $endStr';
     }
 
@@ -764,8 +764,8 @@ class _SearchScreenState extends State<SearchScreen> {
     final groupedResults = _groupByDate(_searchResults);
     final sortedDates = groupedResults.keys.toList()
       ..sort((a, b) {
-        final dateA = DateFormat('dd/MM/yyyy', 'pt_BR').parse(a);
-        final dateB = DateFormat('dd/MM/yyyy', 'pt_BR').parse(b);
+        final dateA = DateFormat('yyyy-MM-dd').parse(a);
+        final dateB = DateFormat('yyyy-MM-dd').parse(b);
         return dateB.compareTo(dateA);
       });
 
@@ -871,7 +871,7 @@ class _SearchScreenState extends State<SearchScreen> {
   /// Cabeçalho da data (agrupador)
   Widget _buildDateHeader(String dateKey, int count) {
     // Formata a data de forma amigável
-    final date = DateFormat('dd/MM/yyyy', 'pt_BR').parse(dateKey);
+    final date = DateFormat('yyyy-MM-dd').parse(dateKey);
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(const Duration(days: 1));
@@ -884,7 +884,7 @@ class _SearchScreenState extends State<SearchScreen> {
     } else if (parsedDate == yesterday) {
       displayDate = l10n.yesterday;
     } else {
-      displayDate = DateFormat("EEEE, d 'de' MMMM", 'pt_BR').format(date);
+      displayDate = DateFormat.MMMMEEEEd(Localizations.localeOf(context).toString()).format(date);
       // Capitaliza primeira letra
       displayDate = displayDate[0].toUpperCase() + displayDate.substring(1);
     }
@@ -1085,7 +1085,7 @@ class _SearchScreenState extends State<SearchScreen> {
           localeName: AppLocalizations.of(context)!.localeName,
           convertLegacyEmoticon: _convertLegacyEmoticon,
           heroTag: heroTag,
-          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia, Localizations.localeOf(context).toString()),
           showEditDelete: true,
           showMoodNotes: true,
           showBottomActions: true,
@@ -1169,7 +1169,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return StoryCard(
       historia: historia,
       heroTag: _storyHeroTag(historia),
-      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia, Localizations.localeOf(context).toString()),
       convertLegacyEmoticon: _convertLegacyEmoticon,
       stateLabel: historia.grupo?.isNotEmpty == true
           ? historia.grupo
@@ -1182,7 +1182,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 }
 
-HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
+HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia, String localeName) {
   return (
     BuildContext flightContext,
     Animation<double> animation,
@@ -1191,10 +1191,7 @@ HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
     BuildContext toHeroContext,
   ) {
     final colorScheme = Theme.of(toHeroContext).colorScheme;
-    final dateText = DateFormat(
-      'dd/MM/yyyy HH:mm',
-      'pt_BR',
-    ).format(historia.data);
+    final dateText = DateFormat.yMd(localeName).add_Hm().format(historia.data);
     final easedAnimation = CurvedAnimation(
       parent: animation,
       curve: Curves.easeOutCubic,

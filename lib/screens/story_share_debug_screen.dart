@@ -20,7 +20,7 @@ class _StoryShareDebugScreenState extends State<StoryShareDebugScreen> {
   String? _savedPath;
   bool _isSaving = false;
 
-  StoryData _buildSampleStory() {
+  StoryData _buildSampleStory(String localeName) {
     return StoryData(
       title: 'Praia de Verão',
       subtitle: 'Lembrança de fim de tarde',
@@ -28,7 +28,7 @@ class _StoryShareDebugScreenState extends State<StoryShareDebugScreen> {
           'Um dia leve com sol, amigos e mar. A brisa suave trouxe risos e memórias.',
       emoticon: '🏖️',
       date: DateTime(2026, 5, 29, 18, 30),
-      localeName: 'pt_BR',
+      localeName: localeName,
       mood: 4,
       energy: 3,
       tags: const ['férias', 'amizade'],
@@ -65,7 +65,7 @@ class _StoryShareDebugScreenState extends State<StoryShareDebugScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final storyData = _buildSampleStory();
+    final storyData = _buildSampleStory(l10n.localeName);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.preview)),

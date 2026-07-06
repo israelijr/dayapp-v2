@@ -301,10 +301,7 @@ class StoryCard extends StatelessWidget {
                                   ],
                                   Expanded(
                                     child: Text(
-                                      DateFormat(
-                                        'dd/MM/yyyy HH:mm',
-                                        'pt_BR',
-                                      ).format(historia.data),
+                                      DateFormat.yMd(Localizations.localeOf(context).toString()).add_Hm().format(historia.data),
                                       style: GoogleFonts.plusJakartaSans(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w500,
@@ -758,10 +755,7 @@ class StoryPreviewScreen extends StatelessWidget {
                                 }
                                 final prefix = parts.isNotEmpty ? '${parts.join(' • ')} • ' : '';
                                 return Text(
-                                  '$prefix${DateFormat(
-                                    'dd/MM/yyyy HH:mm',
-                                    localeName,
-                                  ).format(historia.data)}',
+                                  '$prefix${DateFormat.yMd(localeName).add_Hm().format(historia.data)}',
                                   style: GoogleFonts.plusJakartaSans(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w500,

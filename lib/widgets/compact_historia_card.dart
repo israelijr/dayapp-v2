@@ -325,10 +325,7 @@ class _CompactHistoriaCardState extends State<CompactHistoriaCard> {
                                 const SizedBox(width: 8),
                               ],
                               Text(
-                                DateFormat(
-                                  'dd/MM/yyyy',
-                                  localeName,
-                                ).format(historia.data),
+                                DateFormat.yMd(localeName).format(historia.data),
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w500,

@@ -49,7 +49,7 @@ class StoryData {
   factory StoryData.fromHistoria(
     Historia historia,
     List<Uint8List> images, {
-    String localeName = 'pt_BR',
+    String localeName = 'en_US',
     List<StoryPerson> people = const [],
     String? location,
   }) {

@@ -227,7 +227,7 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
           localeName: AppLocalizations.of(context)!.localeName,
           convertLegacyEmoticon: _convertLegacyEmoticon,
           heroTag: heroTag,
-          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia, Localizations.localeOf(context).toString()),
           showEditDelete: true,
           showMoodNotes: true,
           showBottomActions: true,
@@ -311,7 +311,10 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
     return StoryCard(
       historia: historia,
       heroTag: _storyHeroTag(historia),
-      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(
+        historia,
+        Localizations.localeOf(context).toString(),
+      ),
       convertLegacyEmoticon: _convertLegacyEmoticon,
       stateLabel: historia.grupo?.isNotEmpty == true
           ? historia.grupo
@@ -440,7 +443,7 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
   }
 }
 
-HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
+HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia, String localeName) {
   return (
     BuildContext flightContext,
     Animation<double> animation,
@@ -449,10 +452,7 @@ HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
     BuildContext toHeroContext,
   ) {
     final colorScheme = Theme.of(toHeroContext).colorScheme;
-    final dateText = DateFormat(
-      'dd/MM/yyyy HH:mm',
-      'pt_BR',
-    ).format(historia.data);
+    final dateText = DateFormat.yMd(localeName).add_Hm().format(historia.data);
     final easedAnimation = CurvedAnimation(
       parent: animation,
       curve: Curves.easeOutCubic,

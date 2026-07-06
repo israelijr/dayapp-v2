@@ -24,7 +24,7 @@ import 'edit_historia_screen.dart';
 import 'group_selection_screen.dart';
 import 'search_screen.dart';
 
-HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
+HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia, String localeName) {
   return (
     BuildContext flightContext,
     Animation<double> animation,
@@ -33,10 +33,7 @@ HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia) {
     BuildContext toHeroContext,
   ) {
     final colorScheme = Theme.of(toHeroContext).colorScheme;
-    final dateText = DateFormat(
-      'dd/MM/yyyy HH:mm',
-      'pt_BR',
-    ).format(historia.data);
+    final dateText = DateFormat.yMd(localeName).add_Hm().format(historia.data);
     final easedAnimation = CurvedAnimation(
       parent: animation,
       curve: Curves.easeOutCubic,
@@ -368,7 +365,7 @@ class _HomeContentState extends State<HomeContent> {
           localeName: AppLocalizations.of(context)!.localeName,
           convertLegacyEmoticon: _convertLegacyEmoticon,
           heroTag: heroTag,
-          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+          flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia, Localizations.localeOf(context).toString()),
           showEditDelete: true,
           showMoodNotes: true,
           showBottomActions: true,
@@ -493,7 +490,7 @@ class _HomeContentState extends State<HomeContent> {
     return StoryCard(
       historia: historia,
       heroTag: _storyHeroTag(historia),
-      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia, Localizations.localeOf(context).toString()),
       convertLegacyEmoticon: _convertLegacyEmoticon,
       stateLabel: historia.grupo?.isNotEmpty == true
           ? historia.grupo
@@ -510,7 +507,7 @@ class _HomeContentState extends State<HomeContent> {
       tag: _storyHeroTag(historia),
       createRectTween: (begin, end) =>
           MaterialRectArcTween(begin: begin, end: end),
-      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia),
+      flightShuttleBuilder: _storyHeroFlightShuttleBuilder(historia, Localizations.localeOf(context).toString()),
       placeholderBuilder: (context, size, child) =>
           SizedBox(width: size.width, height: size.height),
       child: CompactHistoriaCard(
@@ -868,17 +865,17 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             if (storiesCount == 0) {
               // placeholder de lista vazia
             } else if (widget.showAllStories) {
-              // Agrupar por data (dd/MM/yyyy)
+              // Agrupar por data (yyyy-MM-dd)
               final Map<String, List<Historia>> grouped = {};
               for (final h in widget.historias) {
-                final key = DateFormat('dd/MM/yyyy', 'pt_BR').format(h.data);
+                final key = DateFormat('yyyy-MM-dd').format(h.data);
                 grouped.putIfAbsent(key, () => []).add(h);
               }
 
               final sortedDates = grouped.keys.toList()
                 ..sort((a, b) {
-                  final dateA = DateFormat('dd/MM/yyyy', 'pt_BR').parse(a);
-                  final dateB = DateFormat('dd/MM/yyyy', 'pt_BR').parse(b);
+                  final dateA = DateFormat('yyyy-MM-dd').parse(a);
+                  final dateB = DateFormat('yyyy-MM-dd').parse(b);
                   return dateB.compareTo(dateA);
                 });
 
@@ -996,8 +993,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                         // Reuse header style from SearchScreen
                         final l10n = AppLocalizations.of(context)!;
                         final date = DateFormat(
-                          'dd/MM/yyyy',
-                          'pt_BR',
+                          'yyyy-MM-dd',
                         ).parse(dateKey);
                         final now = DateTime.now();
                         final today = DateTime(now.year, now.month, now.day);
@@ -1016,9 +1012,8 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                         } else if (parsedDate == yesterday) {
                           displayDate = l10n.yesterday;
                         } else {
-                          displayDate = DateFormat(
-                            "EEEE, d 'de' MMMM",
-                            'pt_BR',
+                          displayDate = DateFormat.MMMMEEEEd(
+                            Localizations.localeOf(context).toString(),
                           ).format(date);
                           displayDate =
                               displayDate[0].toUpperCase() +

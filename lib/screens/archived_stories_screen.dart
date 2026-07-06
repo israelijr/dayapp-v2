@@ -360,7 +360,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
           ),
         ),
         subtitle: Text(
-          DateFormat('dd/MM/yyyy', 'pt_BR').format(historia.data),
+          DateFormat.yMd(Localizations.localeOf(context).toString()).format(historia.data),
           style: GoogleFonts.plusJakartaSans(
             fontSize: 12,
             color: Theme.of(context).textTheme.bodySmall?.color,
