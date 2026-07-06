@@ -44,18 +44,6 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
     super.dispose();
   }
 
-  Future<void> _pickEmoticon(BuildContext context, CreateGroupProvider provider) async {
-    final Emoji? result = await showModalBottomSheet<Emoji>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: const Color(0x00000000),
-      builder: (context) => const EmojiSelectionModal(),
-    );
-
-    if (result == null) return;
-    provider.setEmoticon(result.char, result.translation);
-  }
-
   Future<void> _save(BuildContext context, CreateGroupProvider provider) async {
     final l10n = AppLocalizations.of(context)!;
     final groupName = _nameController.text.trim();
@@ -81,11 +69,20 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
       return;
     }
 
-    if (provider.selectedEmoticon == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.chooseIcon)));
-      return;
+    // Abre a janela para selecionar o emoji antes de salvar
+    final Emoji? result = await showModalBottomSheet<Emoji>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: const Color(0x00000000),
+      builder: (context) => const EmojiSelectionModal(),
+    );
+
+    if (!context.mounted) return;
+
+    if (result != null) {
+      provider.setEmoticon(result.char, result.translation);
+    } else {
+      provider.setEmoticon('🚫', '');
     }
 
     try {
@@ -129,79 +126,48 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             body: provider.isLoadingStories
                 ? const Center(child: CircularProgressIndicator())
                 : SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () => _pickEmoticon(context, provider),
-                                child: Container(
-                                  width: 62,
-                                  height: 62,
-                                  decoration: BoxDecoration(
-                                    color: colorScheme.surfaceContainerHigh,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    provider.selectedEmoticon ?? '😀',
-                                    style: const TextStyle(fontSize: 30),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: CustomTextField(
-                                  controller: _nameController,
-                                  label: l10n.groupNameLabel,
-                                  maxLength: _maxGroupNameLength,
-                                  helperText: l10n.groupNameMaxLengthHint,
-                                  textCapitalization: TextCapitalization.sentences,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            provider.selectedEmojiTranslation ?? l10n.chooseIcon,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextField(
+                              controller: _nameController,
+                              label: l10n.groupNameLabel,
+                              maxLength: _maxGroupNameLength,
+                              helperText: l10n.groupNameMaxLengthHint,
+                              textCapitalization: TextCapitalization.sentences,
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            l10n.groupSelectStories,
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: colorScheme.onSurface,
+                            const SizedBox(height: 16),
+                            Text(
+                              l10n.groupSelectStories,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurface,
+                              ),
                             ),
-                          ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: const _GroupStoriesChecklist(),
+                            const SizedBox(height: 8),
+                            const _GroupStoriesChecklist(),
+                          ],
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
+                  ),
             bottomNavigationBar: SafeArea(
               top: false,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: FilledButton.icon(
+                child: FilledButton(
                   onPressed: provider.isSaving ? null : () => _save(context, provider),
-                  icon: provider.isSaving
+                  child: provider.isSaving
                       ? const SizedBox(
                           width: 18,
                           height: 18,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Icon(Icons.group_add_outlined),
-                  label: Text(l10n.createAndSelect),
+                      : Text(l10n.save),
                 ),
               ),
             ),
@@ -237,6 +203,7 @@ class _GroupStoriesChecklistState extends State<_GroupStoriesChecklist> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         TextField(
           controller: _searchController,
@@ -249,42 +216,42 @@ class _GroupStoriesChecklistState extends State<_GroupStoriesChecklist> {
           onChanged: provider.setSearchQuery,
         ),
         const SizedBox(height: 8),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).colorScheme.outlineVariant,
-              ),
-              borderRadius: BorderRadius.circular(12),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outlineVariant,
             ),
-            child: ListView.builder(
-              itemCount: filteredStories.length,
-              itemBuilder: (context, index) {
-                final story = filteredStories[index];
-                final id = story.id;
-                if (id == null) return const SizedBox.shrink();
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: filteredStories.length,
+            itemBuilder: (context, index) {
+              final story = filteredStories[index];
+              final id = story.id;
+              if (id == null) return const SizedBox.shrink();
 
-                return CheckboxListTile(
-                  value: provider.selectedStoryIds.contains(id),
-                  onChanged: (value) {
-                    if (value != null) {
-                      provider.toggleStorySelection(id, value);
-                    }
-                  },
-                  title: Text(story.titulo),
-                  subtitle: Text(() {
-                    final dateText = DateFormat(
-                      'dd/MM/yyyy',
-                      l10n.localeName,
-                    ).format(story.data);
-                    final isArchived = story.arquivado == 'sim';
-                    return isArchived
-                        ? '${l10n.archivedStoryPrefixLabel} • $dateText'
-                        : dateText;
-                  }()),
-                );
-              },
-            ),
+              return CheckboxListTile(
+                value: provider.selectedStoryIds.contains(id),
+                onChanged: (value) {
+                  if (value != null) {
+                    provider.toggleStorySelection(id, value);
+                  }
+                },
+                title: Text(story.titulo),
+                subtitle: Text(() {
+                  final dateText = DateFormat(
+                    'dd/MM/yyyy',
+                    l10n.localeName,
+                  ).format(story.data);
+                  final isArchived = story.arquivado == 'sim';
+                  return isArchived
+                      ? '${l10n.archivedStoryPrefixLabel} • $dateText'
+                      : dateText;
+                }()),
+              );
+            },
           ),
         ),
         if (filteredStories.isEmpty) ...[

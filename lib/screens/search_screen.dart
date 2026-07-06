@@ -263,6 +263,28 @@ class _SearchScreenState extends State<SearchScreen> {
                 minHeightTarget,
                 maxHeightTarget,
               );
+              if (availableHeight < 250) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      if (!widget.showAppBar) ...[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: _buildSearchTypeSelector(),
+                          ),
+                        ),
+                        const Divider(height: 1),
+                      ],
+                      _buildSearchFilters(),
+                      const Divider(height: 1),
+                      _buildResults(shrinkWrap: true),
+                    ],
+                  ),
+                );
+              }
+
               return Column(
                 children: [
                   if (!widget.showAppBar) ...[
@@ -720,7 +742,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   // Constrói a área de resultados
-  Widget _buildResults() {
+  Widget _buildResults({bool shrinkWrap = false}) {
     if (_isSearching) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -743,6 +765,8 @@ class _SearchScreenState extends State<SearchScreen> {
         ..sort((a, b) => b.data.compareTo(a.data));
 
       return GridView.builder(
+        shrinkWrap: shrinkWrap,
+        physics: shrinkWrap ? const NeverScrollableScrollPhysics() : null,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: MediaQuery.sizeOf(context).width ~/ 360 == 0
@@ -770,6 +794,8 @@ class _SearchScreenState extends State<SearchScreen> {
       });
 
     return ListView.builder(
+      shrinkWrap: shrinkWrap,
+      physics: shrinkWrap ? const NeverScrollableScrollPhysics() : null,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       itemCount: sortedDates.length,
       itemBuilder: (context, index) {
