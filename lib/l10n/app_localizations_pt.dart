@@ -3018,6 +3018,24 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get viewAllStoriesLabel => 'Ver todas histórias';
+
+  @override
+  String get continuaLabel => 'Continua';
+
+  @override
+  String get continuaQuestion => 'Essa história continua?';
+
+  @override
+  String get continuaNo => 'Não';
+
+  @override
+  String get continuaDontKnow => 'Não sei';
+
+  @override
+  String get continuaMaybe => 'Talvez';
+
+  @override
+  String get continuaYes => 'Sim';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3245,4 +3263,22 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get backupFailedTitle => 'Falha no Backup';
+
+  @override
+  String get continuaLabel => 'Continua';
+
+  @override
+  String get continuaQuestion => 'Essa história continua?';
+
+  @override
+  String get continuaNo => 'Não';
+
+  @override
+  String get continuaDontKnow => 'Não sei';
+
+  @override
+  String get continuaMaybe => 'Talvez';
+
+  @override
+  String get continuaYes => 'Sim';
 }

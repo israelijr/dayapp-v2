@@ -545,6 +545,14 @@ class StoryPreviewScreen extends StatelessWidget {
     return l10n.storyPreviewEnergyHighNarrative;
   }
 
+  String _continuaNarrative(AppLocalizations l10n) {
+    final cont = historia.continua;
+    if (cont == 1) return '${l10n.continuaLabel}: ${l10n.continuaNo}';
+    if (cont == 2) return '${l10n.continuaLabel}: ${l10n.continuaDontKnow}';
+    if (cont == 3) return '${l10n.continuaLabel}: ${l10n.continuaMaybe}';
+    return '${l10n.continuaLabel}: ${l10n.continuaYes}';
+  }
+
   Widget _buildPreviewLocationAndPeople(ColorScheme colorScheme) {
     final location = historia.local?.trim();
     final hasLocation = location != null && location.isNotEmpty;
@@ -806,6 +814,18 @@ class StoryPreviewScreen extends StatelessWidget {
                               const SizedBox(height: 4),
                               Text(
                                 _energyNarrative(l10n),
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 12.5,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.italic,
+                                  height: 1.5,
+                                  color: colorScheme.onSurfaceVariant
+                                      .withValues(alpha: 0.78),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                _continuaNarrative(l10n),
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 12.5,
                                   fontWeight: FontWeight.w400,

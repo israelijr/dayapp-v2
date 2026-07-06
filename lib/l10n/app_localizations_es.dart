@@ -3032,4 +3032,22 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get viewAllStoriesLabel => 'Ver todas las historias';
+
+  @override
+  String get continuaLabel => 'Continúa';
+
+  @override
+  String get continuaQuestion => '¿Esta historia continúa?';
+
+  @override
+  String get continuaNo => 'No';
+
+  @override
+  String get continuaDontKnow => 'No lo sé';
+
+  @override
+  String get continuaMaybe => 'Quizás';
+
+  @override
+  String get continuaYes => 'Sí';
 }

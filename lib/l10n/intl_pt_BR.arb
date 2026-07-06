@@ -212,5 +212,29 @@
   "backupFailedMessage": "Ocorreu um erro ao criar o backup. Deseja tentar novamente?",
   "@backupFailedMessage": {
     "description": "Message of the dialog when the backup creation operation fails"
+  },
+  "continuaLabel": "Continua",
+  "@continuaLabel": {
+    "type": "text"
+  },
+  "continuaQuestion": "Essa história continua?",
+  "@continuaQuestion": {
+    "type": "text"
+  },
+  "continuaNo": "Não",
+  "@continuaNo": {
+    "type": "text"
+  },
+  "continuaDontKnow": "Não sei",
+  "@continuaDontKnow": {
+    "type": "text"
+  },
+  "continuaMaybe": "Talvez",
+  "@continuaMaybe": {
+    "type": "text"
+  },
+  "continuaYes": "Sim",
+  "@continuaYes": {
+    "type": "text"
   }
 }

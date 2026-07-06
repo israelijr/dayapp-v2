@@ -2604,5 +2604,29 @@
   "viewAllStoriesLabel": "Ver todas las historias",
   "@viewAllStoriesLabel": {
     "type": "text"
+  },
+  "continuaLabel": "Continúa",
+  "@continuaLabel": {
+    "type": "text"
+  },
+  "continuaQuestion": "¿Esta historia continúa?",
+  "@continuaQuestion": {
+    "type": "text"
+  },
+  "continuaNo": "No",
+  "@continuaNo": {
+    "type": "text"
+  },
+  "continuaDontKnow": "No lo sé",
+  "@continuaDontKnow": {
+    "type": "text"
+  },
+  "continuaMaybe": "Quizás",
+  "@continuaMaybe": {
+    "type": "text"
+  },
+  "continuaYes": "Sí",
+  "@continuaYes": {
+    "type": "text"
   }
 }

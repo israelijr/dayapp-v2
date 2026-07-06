@@ -5399,6 +5399,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View all stories'**
   String get viewAllStoriesLabel;
+
+  /// No description provided for @continuaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continues'**
+  String get continuaLabel;
+
+  /// No description provided for @continuaQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Does this story continue?'**
+  String get continuaQuestion;
+
+  /// No description provided for @continuaNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get continuaNo;
+
+  /// No description provided for @continuaDontKnow.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t know'**
+  String get continuaDontKnow;
+
+  /// No description provided for @continuaMaybe.
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe'**
+  String get continuaMaybe;
+
+  /// No description provided for @continuaYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get continuaYes;
 }
 
 class _AppLocalizationsDelegate

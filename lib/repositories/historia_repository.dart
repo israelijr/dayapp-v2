@@ -291,6 +291,7 @@ class HistoriaRepository {
     required DateTime data,
     required int humor,
     required int energia,
+    required int continua,
     String? descricao,
     String? emoticon,
     String? arquivado,
@@ -318,6 +319,7 @@ class HistoriaRepository {
         'humor': humor,
         'energia': energia,
         'local': local,
+        'continua': continua,
       },
       where: 'id = ?',
       whereArgs: [historia.id],
@@ -369,6 +371,7 @@ class HistoriaRepository {
     required DateTime data,
     required int humor,
     required int energia,
+    int continua = 1,
     String? descricao,
     String? emoticon,
     String? grupo,
@@ -396,6 +399,7 @@ class HistoriaRepository {
       'humor': humor,
       'energia': energia,
       'local': local,
+      'continua': continua,
       'backed_up': 0,
     });
 

@@ -2217,5 +2217,29 @@
   "viewAllStoriesLabel": "Vedi tutte le storie",
   "@viewAllStoriesLabel": {
     "type": "text"
+  },
+  "continuaLabel": "Continua",
+  "@continuaLabel": {
+    "type": "text"
+  },
+  "continuaQuestion": "Questa storia continua?",
+  "@continuaQuestion": {
+    "type": "text"
+  },
+  "continuaNo": "No",
+  "@continuaNo": {
+    "type": "text"
+  },
+  "continuaDontKnow": "Non lo so",
+  "@continuaDontKnow": {
+    "type": "text"
+  },
+  "continuaMaybe": "Forse",
+  "@continuaMaybe": {
+    "type": "text"
+  },
+  "continuaYes": "Sì",
+  "@continuaYes": {
+    "type": "text"
   }
 }

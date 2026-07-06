@@ -2867,5 +2867,29 @@
   "viewAllStoriesLabel": "Ver todas histórias",
   "@viewAllStoriesLabel": {
     "type": "text"
+  },
+  "continuaLabel": "Continua",
+  "@continuaLabel": {
+    "type": "text"
+  },
+  "continuaQuestion": "Essa história continua?",
+  "@continuaQuestion": {
+    "type": "text"
+  },
+  "continuaNo": "Não",
+  "@continuaNo": {
+    "type": "text"
+  },
+  "continuaDontKnow": "Não sei",
+  "@continuaDontKnow": {
+    "type": "text"
+  },
+  "continuaMaybe": "Talvez",
+  "@continuaMaybe": {
+    "type": "text"
+  },
+  "continuaYes": "Sim",
+  "@continuaYes": {
+    "type": "text"
   }
 }

@@ -2937,5 +2937,29 @@
   "viewAllStoriesLabel": "View all stories",
   "@viewAllStoriesLabel": {
     "type": "text"
+  },
+  "continuaLabel": "Continues",
+  "@continuaLabel": {
+    "type": "text"
+  },
+  "continuaQuestion": "Does this story continue?",
+  "@continuaQuestion": {
+    "type": "text"
+  },
+  "continuaNo": "No",
+  "@continuaNo": {
+    "type": "text"
+  },
+  "continuaDontKnow": "Don't know",
+  "@continuaDontKnow": {
+    "type": "text"
+  },
+  "continuaMaybe": "Maybe",
+  "@continuaMaybe": {
+    "type": "text"
+  },
+  "continuaYes": "Yes",
+  "@continuaYes": {
+    "type": "text"
   }
 }

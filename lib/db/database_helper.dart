@@ -28,7 +28,7 @@ class DatabaseHelper {
       final path = p.join(dbPath, 'dayapp.db');
       final db = await openDatabase(
         path,
-        version: 3,
+        version: 4,
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
       );
@@ -73,6 +73,7 @@ class DatabaseHelper {
           humor INTEGER DEFAULT 3,
           energia INTEGER DEFAULT 2,
           local TEXT,
+          continua INTEGER DEFAULT 1,
           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );
       ''');
@@ -365,6 +366,14 @@ class DatabaseHelper {
           debugPrint('DatabaseHelper: erro ao garantir tabelas/indices de pessoas (v3): $e');
         }
       }
+
+      if (oldVersion < 4) {
+        try {
+          await db.execute('ALTER TABLE historia ADD COLUMN continua INTEGER DEFAULT 1;');
+        } catch (e) {
+          debugPrint('DatabaseHelper: erro ao adicionar coluna continua (v4): $e');
+        }
+      }
     } catch (e) {
       rethrow;
     }
@@ -385,6 +394,7 @@ class DatabaseHelper {
         'grupo': 'TEXT',
         'excluido': 'TEXT',
         'data_exclusao': 'TIMESTAMP',
+        'continua': 'INTEGER DEFAULT 1',
       };
 
       for (final entry in requiredColumns.entries) {

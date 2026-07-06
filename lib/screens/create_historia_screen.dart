@@ -31,6 +31,7 @@ import '../widgets/mood_energy_selectors.dart';
 import '../widgets/pessoas_input_widget.dart';
 import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
+import '../widgets/continua_selection_modal.dart';
 
 // Note: This file implements one UI feature requested by the team:
 // 1) Animação de expansão do editor de descrição bottom-to-top ao abrir a tela de edição (_expandDescriptionEditor).
@@ -353,6 +354,18 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
       return null;
     }
 
+    final continuaRes = await showModalBottomSheet<int>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) => const ContinuaSelectionModal(),
+    );
+
+    final continuaValue = continuaRes ?? 1;
+
     setState(() {
       _isLoading = true;
     });
@@ -383,6 +396,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         data: selectedDate,
         humor: _selectedMood,
         energia: _selectedEnergy,
+        continua: continuaValue,
         tags: _selectedTags,
         pessoas: _selectedPessoas,
         local: localController.text.trim().isEmpty

@@ -2996,4 +2996,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewAllStoriesLabel => 'View all stories';
+
+  @override
+  String get continuaLabel => 'Continues';
+
+  @override
+  String get continuaQuestion => 'Does this story continue?';
+
+  @override
+  String get continuaNo => 'No';
+
+  @override
+  String get continuaDontKnow => 'Don\'t know';
+
+  @override
+  String get continuaMaybe => 'Maybe';
+
+  @override
+  String get continuaYes => 'Yes';
 }

@@ -36,6 +36,7 @@ import '../widgets/mood_energy_selectors.dart';
 import '../widgets/pessoas_input_widget.dart';
 import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
+import '../widgets/continua_selection_modal.dart';
 
 class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
   @override
@@ -109,6 +110,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
   String? selectedEmojiTranslation;
   int _selectedMood = 3; // padrão: Neutro
   int _selectedEnergy = 2; // padrão: Normal
+  int _selectedContinua = 1;
 
   // Lista de tags selecionadas (carregadas do banco em initState)
   final HistoriaRepository _historiaRepository = HistoriaRepository();
@@ -142,6 +144,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
   late String? _initialEmoticon;
   late int _initialMood;
   late int _initialEnergy;
+  late int _initialContinua;
 
   bool get _isFormValid {
     if (!_initialized) return false;
@@ -185,6 +188,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
     selectedEmoticon = widget.historia.emoticon;
     _selectedMood = widget.historia.humor;
     _selectedEnergy = widget.historia.energia;
+    _selectedContinua = widget.historia.continua;
 
     // Salva valores iniciais para detectar mudanças
     _initialTitle = widget.historia.titulo;
@@ -193,6 +197,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
     _initialEmoticon = widget.historia.emoticon;
     _initialMood = widget.historia.humor;
     _initialEnergy = widget.historia.energia;
+    _initialContinua = widget.historia.continua;
 
     localController = TextEditingController(text: widget.historia.local);
     _initialLocal = widget.historia.local;
@@ -328,7 +333,8 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
         selectedDate != _initialDate ||
         selectedEmoticon != _initialEmoticon ||
         _selectedMood != _initialMood ||
-        _selectedEnergy != _initialEnergy;
+        _selectedEnergy != _initialEnergy ||
+        _selectedContinua != _initialContinua;
 
     final isValid = _isFormValid;
 
@@ -609,6 +615,7 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
         data: selectedDate,
         humor: _selectedMood,
         energia: _selectedEnergy,
+        continua: _selectedContinua,
         arquivado: widget.historia.arquivado,
         local: localController.text.trim().isEmpty
             ? null
@@ -816,7 +823,38 @@ class _EditHistoriaScreenState extends State<EditHistoriaScreen> {
               color: Theme.of(context).textTheme.titleLarge?.color,
             ),
           ),
-          actions: const [],
+          actions: [
+            IconButton(
+              icon: const Text(
+                '···',
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0,
+                ),
+              ),
+              tooltip: loc.continuaLabel,
+              onPressed: () async {
+                final res = await showModalBottomSheet<int>(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                  ),
+                  builder: (context) => ContinuaSelectionModal(
+                    initialValue: _selectedContinua,
+                  ),
+                );
+                if (res != null && mounted) {
+                  setState(() {
+                    _selectedContinua = res;
+                    _checkForChanges();
+                  });
+                }
+              },
+            ),
+          ],
         ),
         body: SafeArea(
           child: SingleChildScrollView(
