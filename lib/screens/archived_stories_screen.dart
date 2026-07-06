@@ -493,7 +493,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
           );
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 12, right: 12),
         child: PulseAnimation(
