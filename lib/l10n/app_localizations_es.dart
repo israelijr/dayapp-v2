@@ -1660,6 +1660,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get newStory => 'Nueva historia';
 
   @override
+  String get newStoryHere => 'Nueva historia aquí';
+
+  @override
   String get noArchivedStories => 'No hay historias archivadas.';
 
   @override

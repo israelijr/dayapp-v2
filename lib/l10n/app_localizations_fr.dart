@@ -1665,6 +1665,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get newStory => 'Nouvelle histoire';
 
   @override
+  String get newStoryHere => 'Nouvelle histoire ici';
+
+  @override
   String get noArchivedStories => 'Aucune histoire archivée.';
 
   @override

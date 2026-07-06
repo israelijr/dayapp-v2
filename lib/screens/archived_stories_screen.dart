@@ -1,5 +1,6 @@
 import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
+import 'package:dayapp/widgets/pulse_animation.dart';
 import 'package:dayapp/widgets/story_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -494,25 +495,28 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            final refreshProvider = Provider.of<RefreshProvider>(
-              context,
-              listen: false,
-            );
-            Navigator.push(
-              context,
-              RouteTransitionHelper.slideUpRotateTransition(
-                const CreateHistoriaScreen(),
-              ),
-            ).then((created) {
-              if (!mounted) return;
-              refreshProvider.refresh();
-            });
-          },
-          icon: const Icon(Icons.add),
-          label: Text(AppLocalizations.of(context)!.newStory),
+        padding: const EdgeInsets.only(bottom: 12, right: 12),
+        child: PulseAnimation(
+          scaleTarget: 1.06,
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              final refreshProvider = Provider.of<RefreshProvider>(
+                context,
+                listen: false,
+              );
+              Navigator.push(
+                context,
+                RouteTransitionHelper.slideUpRotateTransition(
+                  const CreateHistoriaScreen(),
+                ),
+              ).then((created) {
+                if (!mounted) return;
+                refreshProvider.refresh();
+              });
+            },
+            icon: const Icon(Icons.add),
+            label: Text(AppLocalizations.of(context)!.newStoryHere),
+          ),
         ),
       ),
     );

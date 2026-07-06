@@ -3039,6 +3039,12 @@ abstract class AppLocalizations {
   /// **'New Story'**
   String get newStory;
 
+  /// Label for newStoryHere
+  ///
+  /// In en, this message translates to:
+  /// **'New Story Here'**
+  String get newStoryHere;
+
   /// Label for noArchivedStories
   ///
   /// In en, this message translates to:
