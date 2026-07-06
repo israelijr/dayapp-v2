@@ -9,6 +9,9 @@ class HomeLayoutProvider with ChangeNotifier {
   bool _isCardView = true;
   bool get isCardView => _isCardView;
 
+  bool _isGroupsCardView = true;
+  bool get isGroupsCardView => _isGroupsCardView;
+
   HomeLayoutProvider() {
     _loadLayoutPreference();
   }
@@ -18,6 +21,11 @@ class HomeLayoutProvider with ChangeNotifier {
       final value = await _preferencesService.loadIsCardView();
       if (value != null) {
         _isCardView = value;
+      }
+
+      final groupsValue = await _preferencesService.loadIsGroupsCardView();
+      if (groupsValue != null) {
+        _isGroupsCardView = groupsValue;
       }
     } catch (_) {
       // Não interrompe a UI se a preferência falhar ao carregar.
@@ -31,6 +39,17 @@ class HomeLayoutProvider with ChangeNotifier {
 
     try {
       await _preferencesService.saveIsCardView(_isCardView);
+    } catch (_) {
+      // Falha de persistência não deve quebrar a interface.
+    }
+  }
+
+  Future<void> toggleGroupsCardView() async {
+    _isGroupsCardView = !_isGroupsCardView;
+    notifyListeners();
+
+    try {
+      await _preferencesService.saveIsGroupsCardView(_isGroupsCardView);
     } catch (_) {
       // Falha de persistência não deve quebrar a interface.
     }

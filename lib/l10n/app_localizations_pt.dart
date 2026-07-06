@@ -1023,11 +1023,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get helpHomeSwipeRightDesc =>
-      'Arraste o card para a direita para Arquivar a história. A história é movida para a aba Coleções / Grupos / Arquivados';
+      'Arraste o card para a direita para Arquivar a história. A história é movida para a aba Coleções / Grupos / Arquivadas';
 
   @override
   String get helpHomeSwipeLeftDesc =>
-      'Arraste o card para a esquerda para associar a um Grupo. A história é movida para a aba Coleções / Grupos / Arquivados';
+      'Arraste o card para a esquerda para associar a um Grupo. A história é movida para a aba Coleções / Grupos / Arquivadas';
 
   @override
   String get helpHomeCalendarIconDesc =>
@@ -1622,7 +1622,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get enterGroupName => 'Digite um nome para o grupo';
 
   @override
-  String get archivedTitle => 'Arquivados';
+  String get archivedTitle => 'Arquivadas';
 
   @override
   String get toggleToIcons => 'Alternar para visualização de ícones';
@@ -3038,11 +3038,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get helpHomeSwipeRightDesc =>
-      'Arraste o card para a direita para Arquivar a história. A história é movida para a aba Coleções / Grupos / Arquivados';
+      'Arraste o card para a direita para Arquivar a história. A história é movida para a aba Coleções / Grupos / Arquivadas';
 
   @override
   String get helpHomeSwipeLeftDesc =>
-      'Arraste o card para a esquerda para associar a um Grupo. A história é movida para a aba Coleções / Grupos / Arquivados';
+      'Arraste o card para a esquerda para associar a um Grupo. A história é movida para a aba Coleções / Grupos / Arquivadas';
 
   @override
   String get helpHomeChapterIconDesc =>

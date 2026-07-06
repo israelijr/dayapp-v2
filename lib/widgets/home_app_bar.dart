@@ -156,6 +156,32 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               );
             },
           ),
+        if (selectedIndex == 1 && collectionsTabIndex == 1)
+          Builder(
+            builder: (context) {
+              final isGroupsCardView = layoutProvider.isGroupsCardView;
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: IconButton(
+                  onPressed: layoutProvider.toggleGroupsCardView,
+                  icon: Icon(
+                    isGroupsCardView
+                        ? Icons.grid_view_rounded
+                        : Icons.view_agenda_rounded,
+                    size: 22,
+                  ),
+                  tooltip: isGroupsCardView
+                      ? l10n.toggleToIcons
+                      : l10n.toggleToCards,
+                  splashRadius: 24,
+                  constraints: const BoxConstraints(
+                    minWidth: 38,
+                    minHeight: 38,
+                  ),
+                ),
+              );
+            },
+          ),
         if (selectedIndex == 1 && collectionsTabIndex == 0)
           PopupMenuButton<String>(
             icon: const Icon(Icons.tune_rounded),

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../db/capitulo_helper.dart';
@@ -11,6 +12,7 @@ import '../models/capitulo_sugestao.dart';
 import '../models/grupo.dart';
 import '../providers/auth_provider.dart';
 import '../providers/chapter_filter_provider.dart';
+import '../providers/home_layout_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../services/capitulo_sugestao_service.dart';
@@ -127,12 +129,9 @@ class _GroupsScreenState extends State<GroupsScreen>
         final archived = await grupoHelper.countArquivadas(userId);
 
         if (!mounted) return;
-        gruposComHistorias.sort(
-          (a, b) => a.nome.toLowerCase().compareTo(b.nome.toLowerCase()),
-        );
         gruposComHistorias.sort((a, b) {
-          if (a.nome == _ungroupedGroupName) return -1;
-          if (b.nome == _ungroupedGroupName) return 1;
+          if (a.nome == _ungroupedGroupName) return 1;
+          if (b.nome == _ungroupedGroupName) return -1;
           return a.nome.toLowerCase().compareTo(b.nome.toLowerCase());
         });
         setState(() {
@@ -245,6 +244,125 @@ class _GroupsScreenState extends State<GroupsScreen>
 
   Widget _buildGroupsTab(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isGroupsCardView = context.select<HomeLayoutProvider, bool>(
+      (provider) => provider.isGroupsCardView,
+    );
+
+    if (!isGroupsCardView) {
+      return ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        itemCount: _grupos.length + 1,
+        itemBuilder: (context, index) {
+          if (index == _grupos.length) {
+            return Card(
+              margin: const EdgeInsets.only(bottom: 12),
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                leading: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.secondaryContainer.withValues(alpha: 0.24),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.18),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.archive,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                title: Text(
+                  l10n.archivedTitle,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                subtitle: Text(
+                  '$_archivedCount ${_archivedCount == 1 ? l10n.record : l10n.records}',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ArchivedStoriesScreen()),
+                ),
+              ),
+            );
+          }
+
+          final grupo = _grupos[index];
+          final count = _grupoCounts[grupo.nome] ?? 0;
+          final isUngroupedGroup = grupo.nome == _ungroupedGroupName;
+
+          return Card(
+            margin: const EdgeInsets.only(bottom: 12),
+            color: Theme.of(context).colorScheme.surfaceContainerLowest,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.18),
+              ),
+            ),
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              leading: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.24),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.18),
+                    width: 1.5,
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  grupo.emoticon ?? '📁',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              title: Text(
+                grupo.nome,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).appBarTheme.foregroundColor ??
+                         Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              subtitle: Text(
+                '$count ${count == 1 ? l10n.record : l10n.records}',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              onTap: () => _navigateAndRefresh(
+                GroupStoriesScreen(
+                  grupo: grupo,
+                  isUngroupedGroup: isUngroupedGroup,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
 
     return GridView.builder(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),

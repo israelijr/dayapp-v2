@@ -200,48 +200,6 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
       convertLegacyEmoticon: _convertLegacyEmoticon,
       onPreview: () => _openStoryPreview(historia),
       onDoubleTap: () => _openStoryPreview(historia),
-      footer: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          PopupMenuButton<String>(
-            icon: Icon(
-              Icons.more_horiz,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            onSelected: (value) async {
-              if (value == 'edit') {
-                final refreshProvider = Provider.of<RefreshProvider>(
-                  context,
-                  listen: false,
-                );
-                Navigator.push(
-                  context,
-                  RouteTransitionHelper.slideUpRotateTransition(
-                    EditHistoriaScreen(historia: historia),
-                  ),
-                ).then((updated) {
-                  if (!mounted) return;
-                  if (updated == true) {
-                    refreshProvider.refresh();
-                  }
-                });
-              } else if (value == 'delete') {
-                await _deleteHistoria(historia);
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'edit',
-                child: Text(AppLocalizations.of(context)!.editDoubleTapHint),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Text(AppLocalizations.of(context)!.deleteLabel),
-              ),
-            ],
-          ),
-        ],
-      ),
       stateLabel: historia.grupo?.isNotEmpty == true
           ? historia.grupo
           : historia.arquivado != null
@@ -365,43 +323,6 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
             fontSize: 12,
             color: Theme.of(context).textTheme.bodySmall?.color,
           ),
-        ),
-        trailing: PopupMenuButton<String>(
-          icon: Icon(
-            Icons.more_horiz,
-            color: Theme.of(context).iconTheme.color,
-          ),
-          onSelected: (value) async {
-            if (value == 'edit') {
-              Navigator.push(
-                context,
-                RouteTransitionHelper.slideUpRotateTransition(
-                  EditHistoriaScreen(historia: historia),
-                ),
-              ).then((updated) {
-                if (!mounted) return;
-                if (updated == true) {
-                  final refreshProvider = Provider.of<RefreshProvider>(
-                    context,
-                    listen: false,
-                  );
-                  refreshProvider.refresh();
-                }
-              });
-            } else if (value == 'delete') {
-              await _deleteHistoria(historia);
-            }
-          },
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: 'edit',
-              child: Text(AppLocalizations.of(context)!.edit),
-            ),
-            PopupMenuItem(
-              value: 'delete',
-              child: Text(AppLocalizations.of(context)!.deleteLabel),
-            ),
-          ],
         ),
         onTap: () {
           showDialog(
