@@ -236,9 +236,7 @@ class _HomeContentState extends State<HomeContent> {
         return Consumer<HomeStoriesProvider>(
           builder: (context, storiesProvider, _) {
             return _PaginatedHomeContent(
-              key: ValueKey(
-                '${refreshProvider.refreshCounter}_${storiesProvider.showAllStories}',
-              ),
+              key: ValueKey(refreshProvider.refreshCounter),
               isCardView: _isCardView,
               showAllStories: storiesProvider.showAllStories,
               onToggleShowAllStories: storiesProvider.toggleShowAllStories,
@@ -566,14 +564,31 @@ class _PaginatedHomeContent extends StatefulWidget {
   State<_PaginatedHomeContent> createState() => _PaginatedHomeContentState();
 }
 
-class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
+class _PaginatedHomeContentState extends State<_PaginatedHomeContent>
+    with SingleTickerProviderStateMixin {
   bool _hasRefreshed = false;
   // Chave para identificar a posição do scroll desta tela
   static const String _scrollPositionKey = 'home_list_scroll';
 
+  // Controla a animação de mostrar/ocultar gráficos e insights
+  late final AnimationController _headerAnimController;
+  late final Animation<double> _headerAnimation;
+
   @override
   void initState() {
     super.initState();
+    // Inicia o controller no estado correto sem animar
+    _headerAnimController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+      reverseDuration: const Duration(milliseconds: 500),
+      value: widget.showAllStories ? 0.0 : 1.0,
+    );
+    _headerAnimation = CurvedAnimation(
+      parent: _headerAnimController,
+      curve: Curves.easeInOutCubic,
+      reverseCurve: Curves.easeOutCubic,
+    );
     // Recarrega dados quando a key muda (RefreshProvider foi atualizado)
     // Usa addPostFrameCallback para evitar setState durante build
     // Só executa uma vez por instância do widget
@@ -634,6 +649,25 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
         widget.scrollController.offset,
       );
     }
+  }
+
+  @override
+  void didUpdateWidget(_PaginatedHomeContent old) {
+    super.didUpdateWidget(old);
+    // Anima o cabeçalho quando o toggle muda
+    if (old.showAllStories != widget.showAllStories) {
+      if (widget.showAllStories) {
+        _headerAnimController.reverse(); // colapsa gráficos e insights
+      } else {
+        _headerAnimController.forward(); // expande gráficos e insights
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _headerAnimController.dispose();
+    super.dispose();
   }
 
   @override
@@ -856,9 +890,6 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                 '';
             final recentChartStories = storiesProvider.recentChartStories;
             final bool showChart = recentChartStories.length >= 2;
-            final int chartItemCount = showChart ? 1 : 0;
-            const int statsItemCount = 1;
-            final headerCount = 1 + statsItemCount + chartItemCount + insights.length;
 
             /// Constrói um InsightCard com todos os callbacks configurados.
             Widget buildInsightCard(Insight insight) {
@@ -921,224 +952,199 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             }
 
             final bool showEmptyPlaceholder = widget.showAllStories && storiesCount == 0;
-            final totalBodyItems = showEmptyPlaceholder ? 1 : bodyItems.length;
-            final totalItems = headerCount + totalBodyItems;
 
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                return ListView.builder(
-                  key: ValueKey<bool>(widget.isCardView),
-                  controller: storiesCount > 0 ? widget.scrollController : null,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 12,
-                  ),
-                  itemCount: totalItems,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return greetingBanner();
-                    }
+            // Seção de cabeçalho animada (gráficos + insights) — fica fora do
+            // SliverList para que o AnimationController possa interpolar altura
+            // e opacidade sem depender de preservação de estado do lazy-list.
+            final Widget headerSection = Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (showChart) MoodEnergyChartCard(stories: recentChartStories),
+                  const StatsChartCard(),
+                  ...insights.map(buildInsightCard),
+                ],
+              ),
+            );
 
-                    if (showChart) {
-                      if (index == 1) {
-                        return MoodEnergyChartCard(stories: recentChartStories);
-                      }
-                      if (index == 2) {
-                        return const StatsChartCard();
-                      }
-                    } else {
-                      if (index == 1) {
-                        return const StatsChartCard();
-                      }
-                    }
+            return CustomScrollView(
+              key: ValueKey<bool>(widget.isCardView),
+              controller: storiesCount > 0 ? widget.scrollController : null,
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                // Saudação — sempre visível
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
+                  sliver: SliverToBoxAdapter(child: greetingBanner()),
+                ),
 
-                    if (index < headerCount) {
-                      final insightIndex = index - 2 - chartItemCount;
-                      return buildInsightCard(insights[insightIndex]);
-                    }
-
-                    // Índice no corpo (histórias / mensagem vazia)
-                    final bodyIndex = index - headerCount;
-
-                    // Mensagem de lista vazia quando há insights mas não há histórias
-                    if (showEmptyPlaceholder) {
-                      final shortestSide = MediaQuery.sizeOf(
-                        context,
-                      ).shortestSide;
-                      final imageSize =
-                          (shortestSide * 0.35).clamp(90.0, 140.0) * 1.3;
-
-                      // Calculate remaining height to center it vertically in the remaining space
-                      final double estimatedHeaderHeight =
-                          140.0 + (showChart ? 260.0 : 0.0) + (insights.length * 150.0);
-                      final double remainingHeight =
-                          (constraints.maxHeight - estimatedHeaderHeight - 32.0)
-                              .clamp(280.0, 800.0);
-
-                      return SizedBox(
-                        height: remainingHeight,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(
-                                'assets/image/home_vazia.png',
-                                width: imageSize,
-                                height: imageSize,
-                                fit: BoxFit.contain,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Icon(
-                                    Icons.auto_stories_outlined,
-                                    size: 64,
-                                    color: Theme.of(context).colorScheme.primary
-                                        .withValues(alpha: 0.4),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                AppLocalizations.of(context)!.noStoriesHere,
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
+                // Gráficos + Insights — animados com AnimationController
+                SliverToBoxAdapter(
+                  child: AnimatedBuilder(
+                    animation: _headerAnimation,
+                    builder: (context, child) => ClipRect(
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        heightFactor: _headerAnimation.value,
+                        child: Opacity(
+                          opacity: _headerAnimation.value,
+                          child: child,
                         ),
-                      );
-                    }
-
-                    // Histórias / headers quando showAllStories == true
-                    if (bodyIndex < bodyItems.length) {
-                      final item = bodyItems[bodyIndex];
-                      if (item is Map && item['type'] == 'header') {
-                        final dateKey = item['date'] as String;
-                        final count = item['count'] as int;
-                        // Reuse header style from SearchScreen
-                        final l10n = AppLocalizations.of(context)!;
-                        final date = DateFormat(
-                          'yyyy-MM-dd',
-                        ).parse(dateKey);
-                        final now = DateTime.now();
-                        final today = DateTime(now.year, now.month, now.day);
-                        final yesterday = today.subtract(
-                          const Duration(days: 1),
-                        );
-                        final parsedDate = DateTime(
-                          date.year,
-                          date.month,
-                          date.day,
-                        );
-
-                        String displayDate;
-                        if (parsedDate == today) {
-                          displayDate = l10n.today;
-                        } else if (parsedDate == yesterday) {
-                          displayDate = l10n.yesterday;
-                        } else {
-                          displayDate = DateFormat.MMMMEEEEd(
-                            Localizations.localeOf(context).toString(),
-                          ).format(date);
-                          displayDate =
-                              displayDate[0].toUpperCase() +
-                              displayDate.substring(1);
-                        }
-
-                        return Container(
-                          margin: const EdgeInsets.only(top: 16, bottom: 8),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_today,
-                                size: 18,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onPrimaryContainer,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  displayDate,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onPrimaryContainer,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  '$count',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onPrimary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-
-                      if (item is Map && item['type'] == 'loading') {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Center(
-                            child: widget.isLoadingMore
-                                ? const CircularProgressIndicator()
-                                : const SizedBox.shrink(),
-                          ),
-                        );
-                      }
-
-                      final historia = item as Historia;
-                      return widget.isCardView
-                          ? widget.buildCardView(historia)
-                          : widget.buildIconView(historia);
-                    }
-
-                    // Indicador de carregamento de mais dados
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Center(
-                        child: widget.isLoadingMore
-                            ? const CircularProgressIndicator()
-                            : const SizedBox.shrink(),
                       ),
-                    );
-                  },
-                );
-              },
+                    ),
+                    child: headerSection,
+                  ),
+                ),
+
+                // Histórias ou estado vazio
+                if (showEmptyPlaceholder)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            'assets/image/home_vazia.png',
+                            width: (MediaQuery.sizeOf(context).shortestSide * 0.35)
+                                .clamp(90.0, 140.0) * 1.3,
+                            fit: BoxFit.contain,
+                            errorBuilder: (ctx, e, st) => Icon(
+                              Icons.auto_stories_outlined,
+                              size: 64,
+                              color: Theme.of(context).colorScheme.primary
+                                  .withValues(alpha: 0.4),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            AppLocalizations.of(context)!.noStoriesHere,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, bodyIndex) {
+                          if (bodyIndex >= bodyItems.length) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              child: Center(
+                                child: widget.isLoadingMore
+                                    ? const CircularProgressIndicator()
+                                    : const SizedBox.shrink(),
+                              ),
+                            );
+                          }
+
+                          final item = bodyItems[bodyIndex];
+                          if (item is Map && item['type'] == 'header') {
+                            final dateKey = item['date'] as String;
+                            final count = item['count'] as int;
+                            final l10n = AppLocalizations.of(context)!;
+                            final date = DateFormat('yyyy-MM-dd').parse(dateKey);
+                            final now = DateTime.now();
+                            final today = DateTime(now.year, now.month, now.day);
+                            final yesterday = today.subtract(const Duration(days: 1));
+                            final parsedDate = DateTime(date.year, date.month, date.day);
+
+                            String displayDate;
+                            if (parsedDate == today) {
+                              displayDate = l10n.today;
+                            } else if (parsedDate == yesterday) {
+                              displayDate = l10n.yesterday;
+                            } else {
+                              displayDate = DateFormat.MMMMEEEEd(
+                                Localizations.localeOf(context).toString(),
+                              ).format(date);
+                              displayDate = displayDate[0].toUpperCase() +
+                                  displayDate.substring(1);
+                            }
+
+                            return Container(
+                              margin: const EdgeInsets.only(top: 16, bottom: 8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primaryContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.calendar_today,
+                                    size: 18,
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      displayDate,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      '$count',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).colorScheme.onPrimary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+
+                          if (item is Map && item['type'] == 'loading') {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              child: Center(
+                                child: widget.isLoadingMore
+                                    ? const CircularProgressIndicator()
+                                    : const SizedBox.shrink(),
+                              ),
+                            );
+                          }
+
+                          final historia = item as Historia;
+                          return widget.isCardView
+                              ? widget.buildCardView(historia)
+                              : widget.buildIconView(historia);
+                        },
+                        childCount: bodyItems.length,
+                      ),
+                    ),
+                  ),
+              ],
             );
           },
         ),
@@ -1146,3 +1152,4 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
     );
   }
 }
+
