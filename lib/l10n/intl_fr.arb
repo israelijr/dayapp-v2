@@ -2186,5 +2186,36 @@
   "backupFailedMessage": "Une erreur est survenue lors de la création de la sauvegarde. Voulez-vous réessayer ?",
   "@backupFailedMessage": {
     "description": "Message of the dialog when the backup creation operation fails"
+  },
+  "homeGreetingPhrase": "Bonjour, {name} ! {greeting}.",
+  "@homeGreetingPhrase": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "greeting": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingPhraseNoName": "Bonjour ! {greeting}.",
+  "@homeGreetingPhraseNoName": {
+    "placeholders": {
+      "greeting": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingSubtitle": "\"Comment se passe votre journée ? Enregistrons-la ?\"",
+  "@homeGreetingSubtitle": {
+    "type": "text"
+  },
+  "startNewStoryPlaceholder": "Commencer une nouvelle histoire...",
+  "@startNewStoryPlaceholder": {
+    "type": "text"
+  },
+  "viewAllStoriesLabel": "Voir toutes les histoires",
+  "@viewAllStoriesLabel": {
+    "type": "text"
   }
 }

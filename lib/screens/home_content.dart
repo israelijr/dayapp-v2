@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
 import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
@@ -20,9 +21,13 @@ import '../theme/animation_durations.dart';
 import '../widgets/compact_historia_card.dart';
 import '../widgets/insight_card.dart';
 import '../widgets/story_card.dart';
+import '../widgets/user_profile_avatar.dart';
+import 'create_historia_screen.dart';
 import 'edit_historia_screen.dart';
+import 'edit_profile_screen.dart';
 import 'group_selection_screen.dart';
 import 'search_screen.dart';
+
 
 HeroFlightShuttleBuilder _storyHeroFlightShuttleBuilder(Historia historia, String localeName) {
   return (
@@ -687,140 +692,148 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                   ? l10n.homeGreetingAfternoon
                   : l10n.homeGreetingEvening;
 
-              return Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.18),
-                      Theme.of(context).colorScheme.primaryContainer,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.12),
-                      blurRadius: 22,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // PRIMEIRA LINHA: Texto (com quebra automática) e Logo alinhados ao centro vertical
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            '$greeting${userName.isNotEmpty ? ',\n$userName' : ''}.', // Adicionado \n para forçar a quebra após a vírgula se preferir, ou deixe sem para quebrar apenas se faltar espaço
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 24,
-                              height: 1.2,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onPrimaryContainer,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Container(
-                          width: 76,
-                          height: 76,
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.surfaceContainerHigh,
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: Center(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.asset(
-                                'assets/image/LogoDayApp.png',
-                                width: 74,
-                                height: 74,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
+              final name = userName.isNotEmpty ? userName.split(' ').first : '';
+              final greetingText = name.isNotEmpty
+                  ? l10n.homeGreetingPhrase(name, greeting)
+                  : l10n.homeGreetingPhraseNoName(greeting);
 
-                    // SEGUNDA LINHA: Texto e Elementos do Switch alinhados horizontalmente e verticalmente ao centro
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .spaceBetween, // Empurra o texto para um lado e o switch para o outro
-                      crossAxisAlignment: CrossAxisAlignment
-                          .center, // Alinha verticalmente ao centro da linha
-                      children: [
-                        Expanded(
-                          child: Text(
-                            l10n.homeStoriesSubtitle,
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(34),
+                  child: BackdropFilter(
+                    filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                    child: Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Theme.of(context).colorScheme.primary.withValues(alpha: 0.18),
+                            Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.7),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(34),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.25),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              UserProfileAvatar(
+                                fotoPerfil: user?.fotoPerfil,
+                                radius: 20,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                                  );
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  greetingText,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          Text(
+                            l10n.homeGreetingSubtitle,
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onPrimaryContainer,
+                              fontStyle: FontStyle.italic,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer.withValues(alpha: 0.85),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        // Agrupamento do label do switch + switch
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              AppLocalizations.of(
+                          const SizedBox(height: 18),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
                                 context,
-                              )!.homeShowAllStoriesLabel,
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onPrimaryContainer,
+                                RouteTransitionHelper.slideUpRotateTransition(
+                                  const CreateHistoriaScreen(),
+                                ),
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    '✏️',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      l10n.startNewStoryPlaceholder,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(width: 4),
-                            Transform.scale(
-                              scale: 0.9,
-                              child: Switch.adaptive(
-                                value: widget.showAllStories,
-                                onChanged: widget.onToggleShowAllStories,
-                                activeThumbColor: Theme.of(
-                                  context,
-                                ).colorScheme.primary,
-                                activeTrackColor: Theme.of(
-                                  context,
-                                ).colorScheme.primary.withValues(alpha: 0.28),
-                                inactiveTrackColor: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer
-                                    .withValues(alpha: 0.3),
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                l10n.viewAllStoriesLabel,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Transform.scale(
+                                scale: 0.9,
+                                child: Switch.adaptive(
+                                  value: widget.showAllStories,
+                                  onChanged: widget.onToggleShowAllStories,
+                                  activeThumbColor: Theme.of(context).colorScheme.primary,
+                                  activeTrackColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.28),
+                                  inactiveTrackColor: Theme.of(context).colorScheme.onPrimaryContainer.withValues(alpha: 0.3),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
               );
             }

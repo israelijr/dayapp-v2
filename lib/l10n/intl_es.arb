@@ -2573,5 +2573,36 @@
   "backupFailedMessage": "Ocurrió un error al crear la copia de seguridad. ¿Desea intentarlo de nuevo?",
   "@backupFailedMessage": {
     "description": "Message of the dialog when the backup creation operation fails"
+  },
+  "homeGreetingPhrase": "¡Hola, {name}! {greeting}.",
+  "@homeGreetingPhrase": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "greeting": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingPhraseNoName": "¡Hola! {greeting}.",
+  "@homeGreetingPhraseNoName": {
+    "placeholders": {
+      "greeting": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingSubtitle": "\"¿Cómo está tu día? ¿Vamos a registrar?\"",
+  "@homeGreetingSubtitle": {
+    "type": "text"
+  },
+  "startNewStoryPlaceholder": "Comenzar una nueva historia...",
+  "@startNewStoryPlaceholder": {
+    "type": "text"
+  },
+  "viewAllStoriesLabel": "Ver todas las historias",
+  "@viewAllStoriesLabel": {
+    "type": "text"
   }
 }

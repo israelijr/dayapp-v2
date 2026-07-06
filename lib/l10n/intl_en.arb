@@ -2906,5 +2906,36 @@
   "backupFailedTitle": "Backup Failed",
   "@backupFailedTitle": {
     "description": "Title of the dialog when the backup creation operation fails"
+  },
+  "homeGreetingPhrase": "Hello, {name}! {greeting}.",
+  "@homeGreetingPhrase": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "greeting": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingPhraseNoName": "Hello! {greeting}.",
+  "@homeGreetingPhraseNoName": {
+    "placeholders": {
+      "greeting": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingSubtitle": "\"How is your day? Let's record it?\"",
+  "@homeGreetingSubtitle": {
+    "type": "text"
+  },
+  "startNewStoryPlaceholder": "Start a new story...",
+  "@startNewStoryPlaceholder": {
+    "type": "text"
+  },
+  "viewAllStoriesLabel": "View all stories",
+  "@viewAllStoriesLabel": {
+    "type": "text"
   }
 }

@@ -2186,5 +2186,36 @@
   "backupFailedMessage": "Si è verificato un errore durante la creazione del backup. Vuoi riprovare?",
   "@backupFailedMessage": {
     "description": "Message of the dialog when the backup creation operation fails"
+  },
+  "homeGreetingPhrase": "Ciao, {name}! {greeting}.",
+  "@homeGreetingPhrase": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "greeting": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingPhraseNoName": "Ciao! {greeting}.",
+  "@homeGreetingPhraseNoName": {
+    "placeholders": {
+      "greeting": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingSubtitle": "\"Com'è la tua giornata? Registriamola?\"",
+  "@homeGreetingSubtitle": {
+    "type": "text"
+  },
+  "startNewStoryPlaceholder": "Inizia una nuova storia...",
+  "@startNewStoryPlaceholder": {
+    "type": "text"
+  },
+  "viewAllStoriesLabel": "Vedi tutte le storie",
+  "@viewAllStoriesLabel": {
+    "type": "text"
   }
 }

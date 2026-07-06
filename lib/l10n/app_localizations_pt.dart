@@ -2998,6 +2998,26 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get backupFailedTitle => 'Falha no Backup';
+
+  @override
+  String homeGreetingPhrase(String name, String greeting) {
+    return 'Olá, $name! $greeting.';
+  }
+
+  @override
+  String homeGreetingPhraseNoName(String greeting) {
+    return 'Olá! $greeting.';
+  }
+
+  @override
+  String get homeGreetingSubtitle =>
+      '\"Como está o seu dia? Vamos registrar?\"';
+
+  @override
+  String get startNewStoryPlaceholder => 'Começar uma nova história...';
+
+  @override
+  String get viewAllStoriesLabel => 'Ver todas histórias';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

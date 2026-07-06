@@ -1,4 +1,3 @@
-import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/services/backup_service.dart';
 import 'package:dayapp/widgets/backup_suggestion_dialog.dart';
@@ -13,7 +12,6 @@ import 'package:provider/provider.dart';
 import '../providers/refresh_provider.dart';
 import 'chapters_screen.dart';
 import 'create_group_screen.dart';
-import 'create_historia_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -102,18 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
           collectionsTabIndex: _collectionsTabIndex,
           onCollectionsTabChanged: _handleCollectionsTabChanged,
         ),
-        // Mostra o FAB apenas nas abas Home e, se necessário, na aba Capítulos
+        // Mostra o FAB apenas nas abas de capítulos ou grupos se necessário
         floatingActionButton: HomeFab(
           selectedIndex: _selectedIndex,
           collectionsTabIndex: _collectionsTabIndex,
-          onCreateStory: () {
-            Navigator.push(
-              context,
-              RouteTransitionHelper.slideUpRotateTransition(
-                const CreateHistoriaScreen(),
-              ),
-            );
-          },
           onCreateChapter: () {
             openCreateChapterScreen(context);
           },
@@ -130,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
               context.read<RefreshProvider>().refresh();
             }
           },
-          newStoryLabel: l10n.newStory,
           chapterCreateTitle: l10n.chapterCreateTitle,
           newGroupLabel: l10n.newGroup,
         ),

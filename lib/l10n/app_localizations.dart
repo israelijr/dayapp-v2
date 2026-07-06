@@ -5369,6 +5369,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Backup Failed'**
   String get backupFailedTitle;
+
+  /// No description provided for @homeGreetingPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {name}! {greeting}.'**
+  String homeGreetingPhrase(String name, String greeting);
+
+  /// No description provided for @homeGreetingPhraseNoName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! {greeting}.'**
+  String homeGreetingPhraseNoName(String greeting);
+
+  /// No description provided for @homeGreetingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'\"How is your day? Let\'s record it?\"'**
+  String get homeGreetingSubtitle;
+
+  /// No description provided for @startNewStoryPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new story...'**
+  String get startNewStoryPlaceholder;
+
+  /// No description provided for @viewAllStoriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'View all stories'**
+  String get viewAllStoriesLabel;
 }
 
 class _AppLocalizationsDelegate

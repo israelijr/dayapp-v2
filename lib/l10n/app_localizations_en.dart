@@ -2977,4 +2977,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backupFailedTitle => 'Backup Failed';
+
+  @override
+  String homeGreetingPhrase(String name, String greeting) {
+    return 'Hello, $name! $greeting.';
+  }
+
+  @override
+  String homeGreetingPhraseNoName(String greeting) {
+    return 'Hello! $greeting.';
+  }
+
+  @override
+  String get homeGreetingSubtitle => '\"How is your day? Let\'s record it?\"';
+
+  @override
+  String get startNewStoryPlaceholder => 'Start a new story...';
+
+  @override
+  String get viewAllStoriesLabel => 'View all stories';
 }
