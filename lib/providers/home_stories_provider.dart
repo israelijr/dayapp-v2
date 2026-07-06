@@ -53,6 +53,12 @@ class HomeStoriesProvider with ChangeNotifier {
         return;
       }
 
+      if (!_showAllStories) {
+        _historias.clear();
+        _hasMoreData = false;
+        return;
+      }
+
       final items = await _repository.fetchUserStoriesPaginated(
         userId: _userId,
         showAllStories: _showAllStories,
@@ -88,7 +94,7 @@ class HomeStoriesProvider with ChangeNotifier {
   }
 
   Future<void> loadMoreStories() async {
-    if (_isLoadingMore || !_hasMoreData || _userId.isEmpty) {
+    if (_isLoadingMore || !_hasMoreData || _userId.isEmpty || !_showAllStories) {
       return;
     }
 

@@ -875,9 +875,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             // construímos uma lista plana `bodyItems` contendo cabeçalhos
             // de data e histórias para renderização consistente (igual à tela de busca).
             final List<Object> bodyItems = [];
-            if (storiesCount == 0) {
-              // placeholder de lista vazia
-            } else if (widget.showAllStories) {
+            if (widget.showAllStories && storiesCount > 0) {
               // Agrupar por data (yyyy-MM-dd)
               final Map<String, List<Historia>> grouped = {};
               for (final h in widget.historias) {
@@ -904,13 +902,10 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                 }
               }
               if (widget.hasMoreData) bodyItems.add({'type': 'loading'});
-            } else {
-              // Não agrupar: manter ordem original (simples lista de histórias)
-              bodyItems.addAll(widget.historias);
-              if (widget.hasMoreData) bodyItems.add({'type': 'loading'});
             }
 
-            final totalBodyItems = storiesCount == 0 ? 1 : bodyItems.length;
+            final bool showEmptyPlaceholder = widget.showAllStories && storiesCount == 0;
+            final totalBodyItems = showEmptyPlaceholder ? 1 : bodyItems.length;
             final totalItems = headerCount + totalBodyItems;
 
             return LayoutBuilder(
@@ -938,7 +933,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                     final bodyIndex = index - headerCount;
 
                     // Mensagem de lista vazia quando há insights mas não há histórias
-                    if (storiesCount == 0) {
+                    if (showEmptyPlaceholder) {
                       final shortestSide = MediaQuery.sizeOf(
                         context,
                       ).shortestSide;
@@ -992,13 +987,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                     }
 
                     // Histórias / headers quando showAllStories == true
-                    if (bodyIndex <
-                        (storiesCount == 0 ? 1 : bodyItems.length)) {
-                      if (storiesCount == 0) {
-                        // Shouldn't reach here because handled above, but safeguard
-                        return const SizedBox.shrink();
-                      }
-
+                    if (bodyIndex < bodyItems.length) {
                       final item = bodyItems[bodyIndex];
                       if (item is Map && item['type'] == 'header') {
                         final dateKey = item['date'] as String;
