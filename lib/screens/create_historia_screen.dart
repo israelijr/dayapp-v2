@@ -88,8 +88,13 @@ class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
 
 class CreateHistoriaScreen extends StatefulWidget {
   final String? initialGroup;
+  final bool initialArchived;
 
-  const CreateHistoriaScreen({super.key, this.initialGroup});
+  const CreateHistoriaScreen({
+    super.key,
+    this.initialGroup,
+    this.initialArchived = false,
+  });
 
   @override
   State<CreateHistoriaScreen> createState() => _CreateHistoriaScreenState();
@@ -374,6 +379,7 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         grupo: (widget.initialGroup?.trim().isNotEmpty ?? false)
             ? widget.initialGroup!.trim()
             : null,
+        arquivado: widget.initialArchived ? 'sim' : null,
         data: selectedDate,
         humor: _selectedMood,
         energia: _selectedEnergy,
@@ -424,9 +430,13 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         },
       );
 
-      // Navega para a tela inicial se solicitado
+      // Navega para a tela anterior ou inicial se solicitado
       if (navigateAfterSave) {
-        navigator.pushNamedAndRemoveUntil('/home', (route) => false);
+        if (navigator.canPop()) {
+          navigator.pop(true);
+        } else {
+          navigator.pushNamedAndRemoveUntil('/home', (route) => false);
+        }
       }
 
       return historiaId;
@@ -660,6 +670,9 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
                           final List<String> parts = [];
                           if (widget.initialGroup != null && widget.initialGroup!.trim().isNotEmpty) {
                             parts.add(widget.initialGroup!.trim());
+                          }
+                          if (widget.initialArchived) {
+                            parts.add(loc.archivedStateLabel);
                           }
                           if (parts.isEmpty) return const SizedBox.shrink();
                           return Padding(

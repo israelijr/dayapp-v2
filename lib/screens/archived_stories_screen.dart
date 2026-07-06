@@ -507,7 +507,7 @@ class _ArchivedStoriesScreenState extends State<ArchivedStoriesScreen> {
               Navigator.push(
                 context,
                 RouteTransitionHelper.slideUpRotateTransition(
-                  const CreateHistoriaScreen(),
+                  const CreateHistoriaScreen(initialArchived: true),
                 ),
               ).then((created) {
                 if (!mounted) return;
