@@ -258,7 +258,9 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
                                       style: GoogleFonts.plusJakartaSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w500,
-                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurfaceVariant,
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
@@ -386,13 +388,139 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
     ).push(MaterialPageRoute<void>(builder: (_) => const BackupInfoScreen()));
   }
 
+  // Future<void> _createAndShareBackup() async {
+  //   final loc = AppLocalizations.of(context)!;
+
+  //   // Obter o PinProvider para evitar bloqueio durante compartilhamento
+  //   final pinProvider = Provider.of<PinProvider>(context, listen: false);
+
+  //   // Seta flag ANTES de qualquer operação para evitar bloqueio
+  //   pinProvider.isPickingExternalMedia = true;
+  //   debugPrint('BACKUP: Flag isPickingExternalMedia = true');
+
+  //   setState(() {
+  //     _isLoading = true;
+  //     _statusMessage = loc.backupStarting;
+  //     _progressValue = null;
+  //     _statusIsError = false;
+  //     _statusIsSuccess = false;
+  //   });
+
+  //   try {
+  //     String resultingFilePath;
+  //     if (_isLinuxDesktop) {
+  //       final selectedFolderPath = await FilePicker.getDirectoryPath();
+
+  //       if (selectedFolderPath == null) {
+  //         if (mounted) {
+  //           setState(() {
+  //             _isLoading = false;
+  //             _statusMessage = '';
+  //             _progressValue = null;
+  //             _statusIsError = false;
+  //             _statusIsSuccess = false;
+  //           });
+  //         }
+
+  //         await Future.delayed(const Duration(milliseconds: 500));
+  //         pinProvider.isPickingExternalMedia = false;
+  //         return;
+  //       }
+
+  //       resultingFilePath = await _backupService.saveBackupFileToFolder(
+  //         folderPath: selectedFolderPath,
+  //         onProgress: (message) {
+  //           if (mounted) setState(() => _statusMessage = message);
+  //         },
+  //         onProgressValue: (value) {
+  //           if (mounted) setState(() => _progressValue = value);
+  //         },
+  //         l10n: loc,
+  //       );
+  //     } else {
+  //       resultingFilePath = await _backupService.shareBackupFile(
+  //         onProgress: (message) {
+  //           if (mounted) setState(() => _statusMessage = message);
+  //         },
+  //         onProgressValue: (value) {
+  //           if (mounted) setState(() => _progressValue = value);
+  //         },
+  //         l10n: loc,
+  //       );
+  //     }
+
+  //     if (!mounted) {
+  //       pinProvider.isPickingExternalMedia = false;
+  //       return;
+  //     }
+
+  //     final fileName = resultingFilePath.replaceAll('\\', '/').split('/').last;
+  //     final now = DateTime.now();
+  //     final date = '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
+  //     final time = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+  //     final baseSuccessMessage = _isLinuxDesktop
+  //         ? loc.backupProgressSuccess
+  //         : loc.backupCreatedSuccess;
+
+  //     final successMessage = '$baseSuccessMessage\n\nArquivo: $fileName\nGerado em: $date às $time';
+
+  //     debugPrint('BACKUP: Compartilhamento concluído');
+
+  //     await _backupService.saveLastBackupFileName(fileName);
+
+  //     if (mounted) {
+  //       setState(() {
+  //         _isLoading = false;
+  //         _statusMessage = successMessage;
+  //         _progressValue = null;
+  //         _statusIsError = false;
+  //         _statusIsSuccess = true;
+  //         _lastBackupFileName = fileName;
+  //       });
+  //       Provider.of<RefreshProvider>(context, listen: false).refresh();
+  //     }
+
+  //     // Aguarda um tempo para garantir que todos os eventos de lifecycle foram processados
+  //     // antes de resetar a flag (o share sheet pode disparar múltiplos eventos resumed)
+  //     await Future.delayed(const Duration(milliseconds: 500));
+  //     debugPrint('BACKUP: Resetando flag após delay');
+  //     pinProvider.isPickingExternalMedia = false;
+  //   } catch (e) {
+  //     debugPrint('BACKUP: Erro, resetando flag: $e');
+  //     // Garante reset da flag em caso de erro
+  //     pinProvider.isPickingExternalMedia = false;
+
+  //     if (mounted) {
+  //       setState(() {
+  //         _isLoading = false;
+  //         _statusMessage = loc.backupFailedMessage;
+  //         _progressValue = null;
+  //         _statusIsError = true;
+  //         _statusIsSuccess = false;
+  //       });
+
+  //       final tryAgain = await _showErrorDialog(
+  //         title: loc.backupFailedTitle,
+  //         message: loc.backupFailedMessage,
+  //       );
+  //       if (tryAgain == true) {
+  //         await Future.delayed(const Duration(milliseconds: 300));
+  //         _createAndShareBackup();
+  //       }
+  //     }
+  //   }
+  // }
+
   Future<void> _createAndShareBackup() async {
     final loc = AppLocalizations.of(context)!;
-
-    // Obter o PinProvider para evitar bloqueio durante compartilhamento
     final pinProvider = Provider.of<PinProvider>(context, listen: false);
+    // Captura o RefreshProvider antes do gap assíncrono
+    final refreshProvider = Provider.of<RefreshProvider>(
+      context,
+      listen: false,
+    );
 
-    // Seta flag ANTES de qualquer operação para evitar bloqueio
     pinProvider.isPickingExternalMedia = true;
     debugPrint('BACKUP: Flag isPickingExternalMedia = true');
 
@@ -454,14 +582,17 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
 
       final fileName = resultingFilePath.replaceAll('\\', '/').split('/').last;
       final now = DateTime.now();
-      final date = '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
-      final time = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+      final date =
+          '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
+      final time =
+          '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
 
       final baseSuccessMessage = _isLinuxDesktop
           ? loc.backupProgressSuccess
           : loc.backupCreatedSuccess;
-          
-      final successMessage = '$baseSuccessMessage\n\nArquivo: $fileName\nGerado em: $date às $time';
+
+      final successMessage =
+          '$baseSuccessMessage\n\nArquivo: $fileName\nGerado em: $date às $time';
 
       debugPrint('BACKUP: Compartilhamento concluído');
 
@@ -476,17 +607,15 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           _statusIsSuccess = true;
           _lastBackupFileName = fileName;
         });
-        Provider.of<RefreshProvider>(context, listen: false).refresh();
+        // Usa a referência salva previamente
+        refreshProvider.refresh();
       }
 
-      // Aguarda um tempo para garantir que todos os eventos de lifecycle foram processados
-      // antes de resetar a flag (o share sheet pode disparar múltiplos eventos resumed)
       await Future.delayed(const Duration(milliseconds: 500));
       debugPrint('BACKUP: Resetando flag após delay');
       pinProvider.isPickingExternalMedia = false;
     } catch (e) {
       debugPrint('BACKUP: Erro, resetando flag: $e');
-      // Garante reset da flag em caso de erro
       pinProvider.isPickingExternalMedia = false;
 
       if (mounted) {
@@ -502,7 +631,7 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           title: loc.backupFailedTitle,
           message: loc.backupFailedMessage,
         );
-        if (tryAgain == true) {
+        if (tryAgain == true && mounted) {
           await Future.delayed(const Duration(milliseconds: 300));
           _createAndShareBackup();
         }
@@ -510,40 +639,249 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
     }
   }
 
+  // Future<void> _restoreFromFile() async {
+  //   final loc = AppLocalizations.of(context)!;
+  //   final pinProvider = Provider.of<PinProvider>(context, listen: false);
+
+  //   bool keepTrying = true;
+
+  //   while (keepTrying) {
+  //     keepTrying = false; // Por padrão, não tenta novamente a menos que solicitado
+
+  //     // Seta flag ANTES de qualquer operação para evitar bloqueio
+  //     pinProvider.isPickingExternalMedia = true;
+  //     debugPrint('RESTORE: Flag isPickingExternalMedia = true');
+
+  //     // Limpar cache temporário do FilePicker anterior para evitar travamento ou retorno de cache
+  //     try {
+  //       await FilePicker.clearTemporaryFiles();
+  //     } catch (e) {
+  //       debugPrint('RESTORE: Erro ao limpar arquivos temporários: $e');
+  //     }
+
+  //     // Pequeno delay para garantir que diálogos anteriores fecharam completamente
+  //     await Future.delayed(const Duration(milliseconds: 300));
+
+  //     String? filePath;
+
+  //     try {
+  //       // Selecionar arquivo ZIP
+  //       final result = await FilePicker.pickFiles(
+  //         type: FileType.any,
+  //       );
+
+  //       if (result == null || result.files.single.path == null) {
+  //         // Usuário cancelou a seleção - aguarda antes de resetar
+  //         debugPrint('RESTORE: Usuário cancelou seleção, limpando cache e resetando flag');
+  //         await Future.delayed(const Duration(milliseconds: 300));
+  //         pinProvider.isPickingExternalMedia = false;
+  //         return;
+  //       }
+
+  //       filePath = result.files.single.path!;
+  //     } catch (e) {
+  //       debugPrint('RESTORE: Erro ao abrir seletor de arquivos: $e');
+  //       await Future.delayed(const Duration(milliseconds: 300));
+  //       pinProvider.isPickingExternalMedia = false;
+
+  //       if (mounted) {
+  //         final tryAgain = await _showErrorDialog(
+  //           title: loc.restoreFailedTitle,
+  //           message: loc.restoreFailedMessage,
+  //         );
+  //         if (tryAgain == true) {
+  //           keepTrying = true;
+  //           continue;
+  //         }
+  //       }
+  //       return;
+  //     }
+
+  //     final fileName = path.basename(filePath);
+
+  //     // Validação do nome do arquivo com os padrões do app
+  //     if (!_backupService.isValidBackupFileName(fileName)) {
+  //       debugPrint('RESTORE: Nome de arquivo de backup inválido: $fileName');
+  //       await Future.delayed(const Duration(milliseconds: 300));
+  //       pinProvider.isPickingExternalMedia = false;
+
+  //       if (mounted) {
+  //         final tryAgain = await _showErrorDialog(
+  //           title: loc.invalidBackupFilenameTitle,
+  //           message: loc.invalidBackupFilenameMessage(fileName),
+  //         );
+  //         if (tryAgain == true) {
+  //           keepTrying = true;
+  //           continue;
+  //         }
+  //       }
+  //       return;
+  //     }
+
+  //     if (!mounted) {
+  //       pinProvider.isPickingExternalMedia = false;
+  //       return;
+  //     }
+
+  //     // Pede confirmação antes de restaurar
+  //     final confirmed2 = await showDialog<bool>(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //         title: Text(loc.restoreConfirmTitle),
+  //         content: Text(loc.restoreConfirmContent),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () => Navigator.pop(context, false),
+  //             child: Text(loc.cancel),
+  //           ),
+  //           FilledButton(
+  //             onPressed: () => Navigator.pop(context, true),
+  //             child: Text(loc.restore),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+
+  //     if (confirmed2 != true) {
+  //       debugPrint('RESTORE: Usuário cancelou confirmação, resetando flag');
+  //       pinProvider.isPickingExternalMedia = false;
+  //       return;
+  //     }
+
+  //     setState(() {
+  //       _isLoading = true;
+  //       _statusMessage = loc.restoreStarting;
+  //       _progressValue = null;
+  //       _statusIsError = false;
+  //       _statusIsSuccess = false;
+  //     });
+
+  //     await Future.delayed(const Duration(milliseconds: 100));
+
+  //     try {
+  //       await _backupService.restoreFromZipFile(
+  //         filePath,
+  //         onProgress: (message) {
+  //           if (mounted) {
+  //             setState(() => _statusMessage = message);
+  //           }
+  //         },
+  //         onProgressValue: (value) {
+  //           if (mounted) {
+  //             setState(() => _progressValue = value);
+  //           }
+  //         },
+  //         l10n: loc,
+  //       );
+
+  //       if (!mounted) {
+  //         pinProvider.isPickingExternalMedia = false;
+  //         return;
+  //       }
+
+  //       await _backupService.saveLastBackupFileName(fileName);
+
+  //       // Notificar provider para atualizar todas as telas
+  //       Provider.of<RefreshProvider>(context, listen: false).refresh();
+
+  //       debugPrint('RESTORE: Restauração concluída, resetando flag');
+  //       // Reseta a flag após processamento completo
+  //       pinProvider.isPickingExternalMedia = false;
+
+  //       setState(() {
+  //         _isLoading = false;
+  //         _statusMessage = loc.restoreSuccess;
+  //         _progressValue = null;
+  //         _statusIsError = false;
+  //         _statusIsSuccess = true;
+  //         _lastBackupFileName = fileName;
+  //       });
+
+  //       // Mostrar diálogo de sucesso
+  //       if (!mounted) return;
+  //       showDialog(
+  //         context: context,
+  //         barrierDismissible: false,
+  //         builder: (dialogContext) => AlertDialog(
+  //           title: Text(loc.restoreSuccessTitle),
+  //           content: Text(loc.restoreSuccessContent),
+  //           actions: [
+  //             ElevatedButton(
+  //               onPressed: () async {
+  //                 final navigator = Navigator.of(context);
+  //                 Navigator.pop(dialogContext);
+  //                 // Faz logout e redireciona para o login
+  //                 final auth = Provider.of<AuthProvider>(context, listen: false);
+  //                 await auth.logout();
+  //                 navigator.pushNamedAndRemoveUntil('/login', (route) => false);
+  //               },
+  //               child: Text(loc.accessAccount),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     } catch (e) {
+  //       debugPrint('RESTORE: Erro durante a restauração: $e');
+  //       // Garantir que a flag seja resetada em caso de erro
+  //       pinProvider.isPickingExternalMedia = false;
+
+  //       if (mounted) {
+  //         setState(() {
+  //           _isLoading = false;
+  //           _statusMessage = loc.restoreFailedMessage;
+  //           _progressValue = null;
+  //           _statusIsError = true;
+  //           _statusIsSuccess = false;
+  //         });
+
+  //         final tryAgain = await _showErrorDialog(
+  //           title: loc.restoreFailedTitle,
+  //           message: loc.restoreFailedMessage,
+  //         );
+  //         if (tryAgain == true) {
+  //           keepTrying = true;
+  //           continue;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
   Future<void> _restoreFromFile() async {
     final loc = AppLocalizations.of(context)!;
     final pinProvider = Provider.of<PinProvider>(context, listen: false);
+    final refreshProvider = Provider.of<RefreshProvider>(
+      context,
+      listen: false,
+    );
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final navigator = Navigator.of(context); // Salva o navigator root no início
 
     bool keepTrying = true;
 
     while (keepTrying) {
-      keepTrying = false; // Por padrão, não tenta novamente a menos que solicitado
+      keepTrying = false;
 
-      // Seta flag ANTES de qualquer operação para evitar bloqueio
       pinProvider.isPickingExternalMedia = true;
       debugPrint('RESTORE: Flag isPickingExternalMedia = true');
 
-      // Limpar cache temporário do FilePicker anterior para evitar travamento ou retorno de cache
       try {
         await FilePicker.clearTemporaryFiles();
       } catch (e) {
         debugPrint('RESTORE: Erro ao limpar arquivos temporários: $e');
       }
 
-      // Pequeno delay para garantir que diálogos anteriores fecharam completamente
       await Future.delayed(const Duration(milliseconds: 300));
 
       String? filePath;
 
       try {
-        // Selecionar arquivo ZIP
-        final result = await FilePicker.pickFiles(
-          type: FileType.any,
-        );
+        final result = await FilePicker.pickFiles(type: FileType.any);
 
         if (result == null || result.files.single.path == null) {
-          // Usuário cancelou a seleção - aguarda antes de resetar
-          debugPrint('RESTORE: Usuário cancelou seleção, limpando cache e resetando flag');
+          debugPrint(
+            'RESTORE: Usuário cancelou seleção, limpando cache e resetando flag',
+          );
           await Future.delayed(const Duration(milliseconds: 300));
           pinProvider.isPickingExternalMedia = false;
           return;
@@ -570,7 +908,6 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
 
       final fileName = path.basename(filePath);
 
-      // Validação do nome do arquivo com os padrões do app
       if (!_backupService.isValidBackupFileName(fileName)) {
         debugPrint('RESTORE: Nome de arquivo de backup inválido: $fileName');
         await Future.delayed(const Duration(milliseconds: 300));
@@ -594,19 +931,18 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
         return;
       }
 
-      // Pede confirmação antes de restaurar
       final confirmed2 = await showDialog<bool>(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (dialogCtx) => AlertDialog(
           title: Text(loc.restoreConfirmTitle),
           content: Text(loc.restoreConfirmContent),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context, false),
+              onPressed: () => Navigator.pop(dialogCtx, false),
               child: Text(loc.cancel),
             ),
             FilledButton(
-              onPressed: () => Navigator.pop(context, true),
+              onPressed: () => Navigator.pop(dialogCtx, true),
               child: Text(loc.restore),
             ),
           ],
@@ -618,6 +954,8 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
         pinProvider.isPickingExternalMedia = false;
         return;
       }
+
+      if (!mounted) return;
 
       setState(() {
         _isLoading = true;
@@ -633,14 +971,10 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
         await _backupService.restoreFromZipFile(
           filePath,
           onProgress: (message) {
-            if (mounted) {
-              setState(() => _statusMessage = message);
-            }
+            if (mounted) setState(() => _statusMessage = message);
           },
           onProgressValue: (value) {
-            if (mounted) {
-              setState(() => _progressValue = value);
-            }
+            if (mounted) setState(() => _progressValue = value);
           },
           l10n: loc,
         );
@@ -651,12 +985,9 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
         }
 
         await _backupService.saveLastBackupFileName(fileName);
-
-        // Notificar provider para atualizar todas as telas
-        Provider.of<RefreshProvider>(context, listen: false).refresh();
+        refreshProvider.refresh();
 
         debugPrint('RESTORE: Restauração concluída, resetando flag');
-        // Reseta a flag após processamento completo
         pinProvider.isPickingExternalMedia = false;
 
         setState(() {
@@ -668,8 +999,9 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
           _lastBackupFileName = fileName;
         });
 
-        // Mostrar diálogo de sucesso
         if (!mounted) return;
+
+        // Exibe o diálogo de sucesso corrigido usando as instâncias pré-salvas
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -679,11 +1011,8 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
             actions: [
               ElevatedButton(
                 onPressed: () async {
-                  final navigator = Navigator.of(context);
                   Navigator.pop(dialogContext);
-                  // Faz logout e redireciona para o login
-                  final auth = Provider.of<AuthProvider>(context, listen: false);
-                  await auth.logout();
+                  await authProvider.logout();
                   navigator.pushNamedAndRemoveUntil('/login', (route) => false);
                 },
                 child: Text(loc.accessAccount),
@@ -693,7 +1022,6 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
         );
       } catch (e) {
         debugPrint('RESTORE: Erro durante a restauração: $e');
-        // Garantir que a flag seja resetada em caso de erro
         pinProvider.isPickingExternalMedia = false;
 
         if (mounted) {
