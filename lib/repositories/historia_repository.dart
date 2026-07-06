@@ -515,4 +515,43 @@ class HistoriaRepository {
 
     await updateHistoria(historia, updates: updateData);
   }
+
+  Future<List<Historia>> fetchRecentStoriesWithMoodEnergy({
+    required String userId,
+    int limit = 7,
+  }) async {
+    final db = await DatabaseHelper().database;
+    // Buscamos os últimos 100 registros recentes para obter dados suficientes para os 7 dias
+    final results = await db.query(
+      _table,
+      where: 'user_id = ? AND excluido IS NULL',
+      whereArgs: [userId],
+      orderBy: 'data DESC',
+      limit: 100,
+    );
+
+    final allRecent = results.map((map) => Historia.fromMap(map)).toList();
+
+    // Agrupa por dia (ano-mês-dia) para pegar apenas a história mais recente de cada dia
+    final Map<String, Historia> uniqueDays = {};
+    for (final h in allRecent) {
+      final dateKey = "${h.data.year}-${h.data.month.toString().padLeft(2, '0')}-${h.data.day.toString().padLeft(2, '0')}";
+      if (!uniqueDays.containsKey(dateKey)) {
+        uniqueDays[dateKey] = h;
+      }
+    }
+
+    // Ordena as chaves dos dias de forma decrescente para pegar os dias mais recentes
+    final sortedDays = uniqueDays.keys.toList()
+      ..sort((a, b) => b.compareTo(a));
+
+    final List<Historia> recentStories = [];
+    for (int i = 0; i < sortedDays.length && i < limit; i++) {
+      recentStories.add(uniqueDays[sortedDays[i]]!);
+    }
+
+    // Retorna na ordem cronológica (do mais antigo ao mais recente)
+    return recentStories.reversed.toList();
+  }
 }
+

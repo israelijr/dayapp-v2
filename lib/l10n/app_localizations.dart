@@ -111,6 +111,30 @@ abstract class AppLocalizations {
   /// **'DayApp'**
   String get appTitle;
 
+  /// No description provided for @moodEnergyChartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Recent Journey'**
+  String get moodEnergyChartTitle;
+
+  /// No description provided for @moodEnergyChartSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 7 days with records'**
+  String get moodEnergyChartSubtitle;
+
+  /// Tooltip showing the mood and energy summary for a day on the chart
+  ///
+  /// In en, this message translates to:
+  /// **'Day {date}: Mood {mood} / Energy {energy}'**
+  String moodEnergyChartTooltip(String date, String mood, String energy);
+
+  /// No description provided for @moodEnergyChartTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood & Energy'**
+  String get moodEnergyChartTitleLabel;
+
   /// Label for settings
   ///
   /// In en, this message translates to:

@@ -1,6 +1,24 @@
 {
   "@@locale": "en",
   "appTitle": "DayApp",
+  "moodEnergyChartTitle": "Your Recent Journey",
+  "moodEnergyChartSubtitle": "Last 7 days with records",
+  "moodEnergyChartTooltip": "Day {date}: Mood {mood} / Energy {energy}",
+  "@moodEnergyChartTooltip": {
+    "description": "Tooltip showing the mood and energy summary for a day on the chart",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "mood": {
+        "type": "String"
+      },
+      "energy": {
+        "type": "String"
+      }
+    }
+  },
+  "moodEnergyChartTitleLabel": "Mood & Energy",
   "settings": "Settings",
   "language": "Language",
   "deviceDefault": "Device default",

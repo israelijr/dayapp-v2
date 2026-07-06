@@ -32,9 +32,9 @@ void main() {
   });
 
   group('Database v2 and Pessoa CRUD Tests', () {
-    test('Database opens on version 3 and tables exist', () async {
+    test('Database opens on version 4 and tables exist', () async {
       final db = await DatabaseHelper().database;
-      expect(await db.getVersion(), 3);
+      expect(await db.getVersion(), 4);
 
       // Verify that 'pessoas' and 'historia_pessoas' tables exist
       final tables = await db.rawQuery(
@@ -147,6 +147,7 @@ void main() {
         data: DateTime.now(),
         humor: 4,
         energia: 2,
+        continua: 1,
         arquivado: '0',
         local: 'Novo Parque',
         tags: [],

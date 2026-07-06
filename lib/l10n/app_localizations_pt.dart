@@ -12,6 +12,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get appTitle => 'DayApp';
 
   @override
+  String get moodEnergyChartTitle => 'Sua Jornada Recente';
+
+  @override
+  String get moodEnergyChartSubtitle => 'Últimos 7 dias com registros';
+
+  @override
+  String moodEnergyChartTooltip(String date, String mood, String energy) {
+    return 'Dia $date: Humor $mood / Energia $energy';
+  }
+
+  @override
+  String get moodEnergyChartTitleLabel => 'Humor e Energia';
+
+  @override
   String get settings => 'Configurações';
 
   @override
@@ -3041,6 +3055,20 @@ class AppLocalizationsPt extends AppLocalizations {
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
 class AppLocalizationsPtBr extends AppLocalizationsPt {
   AppLocalizationsPtBr() : super('pt_BR');
+
+  @override
+  String get moodEnergyChartTitle => 'Sua Jornada Recente';
+
+  @override
+  String get moodEnergyChartSubtitle => 'Últimos 7 dias com registros';
+
+  @override
+  String moodEnergyChartTooltip(String date, String mood, String energy) {
+    return 'Dia $date: Humor $mood / Energia $energy';
+  }
+
+  @override
+  String get moodEnergyChartTitleLabel => 'Humor e Energia';
 
   @override
   String get aboutScreenFeatureSmartOrganizationDescription =>

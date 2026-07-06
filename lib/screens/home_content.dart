@@ -20,6 +20,7 @@ import '../services/thumbnail_service.dart';
 import '../theme/animation_durations.dart';
 import '../widgets/compact_historia_card.dart';
 import '../widgets/insight_card.dart';
+import '../widgets/mood_energy_chart_card.dart';
 import '../widgets/story_card.dart';
 import '../widgets/user_profile_avatar.dart';
 import 'create_historia_screen.dart';
@@ -638,6 +639,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
 
   @override
   Widget build(BuildContext context) {
+    final storiesProvider = context.watch<HomeStoriesProvider>();
     // Mostra loading inicial
     if (widget.isInitialLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -842,7 +844,10 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
             final userId =
                 Provider.of<AuthProvider>(context, listen: false).user?.id ??
                 '';
-            final headerCount = 1 + insights.length;
+            final recentChartStories = storiesProvider.recentChartStories;
+            final bool showChart = recentChartStories.length >= 2;
+            final int chartItemCount = showChart ? 1 : 0;
+            final headerCount = 1 + chartItemCount + insights.length;
 
             /// Constrói um InsightCard com todos os callbacks configurados.
             Widget buildInsightCard(Insight insight) {
@@ -924,8 +929,12 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                       return greetingBanner();
                     }
 
+                    if (showChart && index == 1) {
+                      return MoodEnergyChartCard(stories: recentChartStories);
+                    }
+
                     if (index < headerCount) {
-                      final insightIndex = index - 1;
+                      final insightIndex = index - 1 - chartItemCount;
                       return buildInsightCard(insights[insightIndex]);
                     }
 
@@ -942,7 +951,7 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
 
                       // Calculate remaining height to center it vertically in the remaining space
                       final double estimatedHeaderHeight =
-                          140.0 + (insights.length * 150.0);
+                          140.0 + (showChart ? 260.0 : 0.0) + (insights.length * 150.0);
                       final double remainingHeight =
                           (constraints.maxHeight - estimatedHeaderHeight - 32.0)
                               .clamp(280.0, 800.0);

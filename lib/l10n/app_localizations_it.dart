@@ -12,6 +12,20 @@ class AppLocalizationsIt extends AppLocalizations {
   String get appTitle => 'DayApp';
 
   @override
+  String get moodEnergyChartTitle => 'Il tuo Viaggio Recente';
+
+  @override
+  String get moodEnergyChartSubtitle => 'Ultimi 7 giorni con registrazioni';
+
+  @override
+  String moodEnergyChartTooltip(String date, String mood, String energy) {
+    return 'Giorno $date: Umore $mood / Energia $energy';
+  }
+
+  @override
+  String get moodEnergyChartTitleLabel => 'Umore ed Energia';
+
+  @override
   String get settings => 'Impostazioni';
 
   @override

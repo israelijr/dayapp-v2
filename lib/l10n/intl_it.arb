@@ -1,6 +1,24 @@
 {
   "@@locale": "it",
   "appTitle": "DayApp",
+  "moodEnergyChartTitle": "Il tuo Viaggio Recente",
+  "moodEnergyChartSubtitle": "Ultimi 7 giorni con registrazioni",
+  "moodEnergyChartTooltip": "Giorno {date}: Umore {mood} / Energia {energy}",
+  "@moodEnergyChartTooltip": {
+    "description": "Tooltip che mostra il riepilogo dell'umore e dell'energia di un giorno sul grafico",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "mood": {
+        "type": "String"
+      },
+      "energy": {
+        "type": "String"
+      }
+    }
+  },
+  "moodEnergyChartTitleLabel": "Umore ed Energia",
   "settings": "Impostazioni",
   "language": "Lingua",
   "deviceDefault": "Lingua del dispositivo",

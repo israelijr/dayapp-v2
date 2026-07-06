@@ -17,6 +17,7 @@ class HomeStoriesProvider with ChangeNotifier {
   bool _hasMoreData = true;
   bool _showAllStories = false;
   final List<Historia> _historias = [];
+  final List<Historia> _recentChartStories = [];
   String? _errorMessage;
 
   HomeStoriesProvider({
@@ -32,6 +33,7 @@ class HomeStoriesProvider with ChangeNotifier {
   bool get hasMoreData => _hasMoreData;
   bool get showAllStories => _showAllStories;
   List<Historia> get historias => List.unmodifiable(_historias);
+  List<Historia> get recentChartStories => List.unmodifiable(_recentChartStories);
   String? get errorMessage => _errorMessage;
 
   String get _userId => _authProvider.user?.id ?? '';
@@ -50,8 +52,18 @@ class HomeStoriesProvider with ChangeNotifier {
     try {
       if (_userId.isEmpty) {
         _hasMoreData = false;
+        _recentChartStories.clear();
         return;
       }
+
+      // Carrega as histórias para o gráfico de humor/energia
+      final chartItems = await _repository.fetchRecentStoriesWithMoodEnergy(
+        userId: _userId,
+        limit: 7,
+      );
+      _recentChartStories
+        ..clear()
+        ..addAll(chartItems);
 
       if (!_showAllStories) {
         _historias.clear();
