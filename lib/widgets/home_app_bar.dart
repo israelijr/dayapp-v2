@@ -1,6 +1,7 @@
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:dayapp/providers/chapter_filter_provider.dart';
 import 'package:dayapp/providers/home_layout_provider.dart';
+import 'package:dayapp/providers/home_stories_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       listen: false,
     );
     final filterProvider = Provider.of<ChapterFilterProvider>(context);
+    final showAllStories = context.select<HomeStoriesProvider, bool>(
+      (provider) => provider.showAllStories,
+    );
 
     return AppBar(
       automaticallyImplyLeading: true,
@@ -107,7 +111,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: IconButton(
-                      onPressed: layoutProvider.toggleCardView,
+                      onPressed: showAllStories ? layoutProvider.toggleCardView : null,
                       icon: Icon(
                         isCardView
                             ? Icons.grid_view_rounded

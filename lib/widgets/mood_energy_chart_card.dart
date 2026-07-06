@@ -313,7 +313,7 @@ class MoodEnergyChartCard extends StatelessWidget {
                       dashArray: [4, 4],
                       label: VerticalLineLabel(
                         show: true,
-                        alignment: Alignment.topRight,
+                        alignment: Alignment.topLeft,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 8,
                           fontWeight: FontWeight.bold,

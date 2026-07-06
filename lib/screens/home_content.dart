@@ -940,12 +940,17 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent> {
                       return greetingBanner();
                     }
 
-                    if (index == 1) {
-                      return const StatsChartCard();
-                    }
-
-                    if (showChart && index == 2) {
-                      return MoodEnergyChartCard(stories: recentChartStories);
+                    if (showChart) {
+                      if (index == 1) {
+                        return MoodEnergyChartCard(stories: recentChartStories);
+                      }
+                      if (index == 2) {
+                        return const StatsChartCard();
+                      }
+                    } else {
+                      if (index == 1) {
+                        return const StatsChartCard();
+                      }
                     }
 
                     if (index < headerCount) {

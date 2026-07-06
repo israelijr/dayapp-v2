@@ -326,8 +326,8 @@ class CustomColorSchemes {
         secondary: const Color(0xFFA490C2),
         onSecondary: const Color(0xFF2E2342),
 
-        tertiary: const Color(0xFF2B1E3E),
-        onTertiary: const Color(0xFFE8DEF9),
+        tertiary: const Color(0xFFF48FB1),
+        onTertiary: const Color(0xFF2B1E3E),
 
         error: const Color(0xFFFFB4AB),
         onError: const Color(0xFF690005),
