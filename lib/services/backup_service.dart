@@ -460,7 +460,7 @@ Versão: 2.0.0
       // ignore: deprecated_member_use
       await Share.shareXFiles(
         [XFile(zipPath, mimeType: 'application/zip')],
-        subject: l10n.backupShareSubject,
+        subject: path.basename(zipPath),
         text: l10n.backupShareText,
       );
 
