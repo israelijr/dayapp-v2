@@ -3138,6 +3138,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get continuityStatusClose => 'Encerrar';
+
+  @override
+  String get continuityInfoTitle => 'Histórias Vivas';
+
+  @override
+  String get continuityInfoDesc =>
+      '### Histórias Vivas: Conecte suas memórias\nNo DayApp, você pode conectar os seus registos para acompanhar o desdobramento de um evento ao longo dos dias. Ao finalizar uma nota, pode indicar se aquela situação ainda terá desdobramentos, talvez gerando um novo Capítulo.\n### Como funciona?\nSe selecionar Sim, Talvez ou Não Sei, a aplicação exibirá lembretes automáticos no ecrã inicial após alguns dias. Isso serve como um lembrete prático para atualizar o que aconteceu numa nova nota, que dará continuidade ao assunto, ou na própria história original.\n### O seu momento de reflexão:\nNo ecrã inicial, terá a oportunidade de avaliar o estado do registo:\n- Continuar a história: Escolha entre criar uma nova ou editar a história original.\n- Encerrar o ciclo: Se a situação já foi resolvida ou se não deseja mais acompanhá-la, basta mudar o estado para Não para retirá-la da fila de lembretes.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3414,4 +3421,14 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get continuaYes => 'Sim';
+
+  @override
+  String get continuityStatusClose => 'Encerrar';
+
+  @override
+  String get continuityInfoTitle => 'Histórias Vivas';
+
+  @override
+  String get continuityInfoDesc =>
+      '### Histórias Vivas: Conecte suas memórias\nNo DayApp, você pode conectar seus registros para acompanhar o desdobramento de um evento ao longo dos dias. Ao finalizar uma nota, você pode indicar se aquela situação ainda terá desdobramentos, talvez até gerando um novo Capítulo.\n### Como funciona?\nSe você selecionar Sim, Talvez ou Não Sei, o aplicativo exibirá lembretes automáticos na tela inicial após alguns dias. Isso serve como um lembrete prático para você atualizar o que aconteceu em uma nova nota, que dará continuidade ao assunto, ou na própria história original.\n### O seu momento de reflexão:\nNa tela inicial, você terá a oportunidade de avaliar o status do registro:\n- Continuar a história: Escolha entre criar uma nova ou editar a história original.\n- Encerrar o ciclo: Se a situação já foi resolvida ou se você não deseja mais acompanhá-la, basta mudar o status para Não para retirá-la da fila de lembretes.';
 }

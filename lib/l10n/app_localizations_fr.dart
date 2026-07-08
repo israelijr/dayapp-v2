@@ -3166,4 +3166,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get continuityStatusClose => 'Fermer';
+
+  @override
+  String get continuityInfoTitle => 'Histoires Vivantes';
+
+  @override
+  String get continuityInfoDesc =>
+      '### Histoires Vivantes : Connectez vos souvenirs\nDans DayApp, vous pouvez connecter vos entrées pour suivre le déroulement d\'un événement sur plusieurs jours. En terminant une note, vous pouvez indiquer si cette situation aura d\'autres développements, peut-être même en générant un nouveau Chapitre.\n### Comment ça marche ?\nSi vous sélectionnez Oui, Peut-être ou Je ne sais pas, l\'application affichera des rappels automatiques sur l\'écran d\'accueil après quelques jours. C\'est un rappel pratique pour vous aider à mettre à jour ce qui s\'est passé dans une nouvelle note — qui continue l\'histoire — ou dans l\'entrée originale.\n### Votre moment de réflexion :\nSur l\'écran d\'accueil, vous aurez l\'occasion d\'évaluer le statut de votre entrée :\n- Continuer l\'histoire : Choisissez entre en créer une nouvelle ou modifier l\'histoire originale.\n- Fermer le cycle : Si la situation a été résolue ou si vous ne souhaitez plus la suivre, changez simplement le statut à Non pour la retirer de la file de rappels.';
 }

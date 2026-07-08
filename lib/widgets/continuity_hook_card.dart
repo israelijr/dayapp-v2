@@ -5,6 +5,7 @@ import '../helpers/rich_text_helper.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../models/historia.dart';
 import '../providers/continuity_hook_provider.dart';
+import '../screens/continuity_hook_info_screen.dart';
 import '../theme/m3_expressive_theme.dart';
 
 /// Card inteligente exibido na Home para histórias em aberto.
@@ -141,8 +142,35 @@ class _ContinuityHookCardState extends State<ContinuityHookCard>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ---- Badge ----
-                    _Badge(color: borderColor, label: l10n.continuityHookBadge),
+                    // ---- Badge + Ícone de informações ----
+                    Row(
+                      children: [
+                        _Badge(
+                            color: borderColor,
+                            label: l10n.continuityHookBadge),
+                        const Spacer(),
+                        IconButton(
+                          icon: Icon(
+                            Icons.info_outline_rounded,
+                            size: 18,
+                            color: colorScheme.onSurfaceVariant
+                                .withValues(alpha: 0.7),
+                          ),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(
+                            minWidth: 32,
+                            minHeight: 32,
+                          ),
+                          tooltip: l10n.continuityInfoTitle,
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const ContinuityHookInfoScreen(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 10),
 
                     // ---- Texto do gancho ----

@@ -3116,4 +3116,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get continuityStatusClose => 'Close';
+
+  @override
+  String get continuityInfoTitle => 'Living Stories';
+
+  @override
+  String get continuityInfoDesc =>
+      '### Living Stories: Connect your memories\nIn DayApp, you can connect your entries to follow the unfolding of an event over multiple days. When finishing a note, you can indicate whether that situation will have further developments, potentially generating a new Chapter.\n### How does it work?\nIf you select Yes, Maybe, or Not Sure, the app will display automatic reminders on the home screen after a few days. This serves as a practical nudge for you to update what happened in a new note — which continues the story — or in the original entry.\n### Your moment of reflection:\nOn the home screen, you will have the opportunity to evaluate the status of your entry:\n- Continue the story: Choose between creating a new one or editing the original story.\n- Close the cycle: If the situation has been resolved or you no longer wish to track it, simply change the status to No to remove it from the reminder queue.';
 }

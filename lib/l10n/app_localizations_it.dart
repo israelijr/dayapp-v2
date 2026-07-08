@@ -3146,4 +3146,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get continuityStatusClose => 'Chiudi';
+
+  @override
+  String get continuityInfoTitle => 'Storie Vive';
+
+  @override
+  String get continuityInfoDesc =>
+      '### Storie Vive: Connetti i tuoi ricordi\nIn DayApp, puoi connettere le tue voci per seguire lo svolgersi di un evento nel corso dei giorni. Al termine di una nota, puoi indicare se quella situazione avrà ulteriori sviluppi, generando magari un nuovo Capitolo.\n### Come funziona?\nSe selezioni Sì, Forse o Non lo so, l\'app mostrerà promemoria automatici nella schermata principale dopo qualche giorno. È un promemoria pratico per aiutarti ad aggiornare cosa è successo in una nuova nota — che continua la storia — o nell\'voce originale.\n### Il tuo momento di riflessione:\nNella schermata principale, avrai l\'opportunità di valutare lo stato della tua voce:\n- Continua la storia: Scegli tra crearne una nuova o modificare la storia originale.\n- Chiudi il ciclo: Se la situazione è stata risolta o non desideri più seguirla, cambia semplicemente lo stato a No per rimuoverla dalla coda dei promemoria.';
 }
