@@ -28,7 +28,7 @@ class DatabaseHelper {
       final path = p.join(dbPath, 'dayapp.db');
       final db = await openDatabase(
         path,
-        version: 5,
+        version: 6,
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
       );
@@ -78,6 +78,7 @@ class DatabaseHelper {
           fim_historia INTEGER DEFAULT 0,
           contador_sugestoes INTEGER DEFAULT 0,
           data_ultima_sugestao TIMESTAMP,
+          sugestao_capitulo_ignorada INTEGER DEFAULT 0,
           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
           FOREIGN KEY (id_historia_origem) REFERENCES historia(id) ON DELETE SET NULL
         );
@@ -418,6 +419,15 @@ class DatabaseHelper {
         }
       }
 
+      if (oldVersion < 6) {
+        try {
+          await db.execute('ALTER TABLE historia ADD COLUMN sugestao_capitulo_ignorada INTEGER DEFAULT 0;');
+          debugPrint('DatabaseHelper: coluna sugestao_capitulo_ignorada adicionada (v6)');
+        } catch (e) {
+          debugPrint('DatabaseHelper: erro ao adicionar coluna sugestao_capitulo_ignorada (v6): $e');
+        }
+      }
+
     } catch (e) {
       rethrow;
     }
@@ -444,6 +454,7 @@ class DatabaseHelper {
         'fim_historia': 'INTEGER DEFAULT 0',
         'contador_sugestoes': 'INTEGER DEFAULT 0',
         'data_ultima_sugestao': 'TIMESTAMP',
+        'sugestao_capitulo_ignorada': 'INTEGER DEFAULT 0',
       };
 
       for (final entry in requiredColumns.entries) {

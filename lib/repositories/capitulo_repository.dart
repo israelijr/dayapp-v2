@@ -202,13 +202,15 @@ class CapituloRepository {
         h.id, h.user_id, h.assunto, h.titulo, h.data, h.tag, h.grupo,
         h.arquivado, h.excluido, h.data_exclusao, h.descricao, h.sentimento,
         h.emoticon, h.data_criacao, h.data_update, h.foto_historia,
-        h.backed_up, h.humor, h.energia,
+        h.backed_up, h.humor, h.energia, h.local, h.continua, h.id_historia_origem,
+        h.fim_historia, h.contador_sugestoes, h.data_ultima_sugestao,
+        h.sugestao_capitulo_ignorada,
         COALESCE(GROUP_CONCAT(DISTINCT LOWER(t.nome)), '') AS tag_nomes,
         COALESCE(GROUP_CONCAT(DISTINCT t.slug), '') AS tag_slugs
       FROM historia h
       LEFT JOIN historia_tags ht ON ht.historia_id = h.id
       LEFT JOIN tags t ON t.id = ht.tag_id
-      WHERE h.user_id = ? AND h.excluido IS NULL
+      WHERE h.user_id = ? AND h.excluido IS NULL AND (h.sugestao_capitulo_ignorada IS NULL OR h.sugestao_capitulo_ignorada = 0)
       GROUP BY h.id
       ORDER BY h.data DESC
       ''',
@@ -228,12 +230,23 @@ class CapituloRepository {
   Future<void> ignoreSuggestion({
     required String userId,
     required String fingerprint,
+    List<int>? entradaIds,
   }) async {
     final db = await DatabaseHelper().database;
-    await db.insert('capitulo_sugestoes_ignoradas', {
-      'user_id': userId,
-      'fingerprint': fingerprint,
-    }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    await db.transaction((txn) async {
+      await txn.insert('capitulo_sugestoes_ignoradas', {
+        'user_id': userId,
+        'fingerprint': fingerprint,
+      }, conflictAlgorithm: ConflictAlgorithm.ignore);
+
+      if (entradaIds != null && entradaIds.isNotEmpty) {
+        final placeholders = List.filled(entradaIds.length, '?').join(', ');
+        await txn.rawUpdate(
+          'UPDATE historia SET sugestao_capitulo_ignorada = 1, backed_up = 0, data_update = ? WHERE id IN ($placeholders)',
+          [DateTime.now().toIso8601String(), ...entradaIds],
+        );
+      }
+    });
   }
 
   Future<Set<String>> getIgnoredSuggestionFingerprints(String userId) async {

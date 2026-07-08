@@ -290,6 +290,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
     await _capituloRepository.ignoreSuggestion(
       userId: userId,
       fingerprint: sugestao.fingerprint,
+      entradaIds: sugestao.entradaIds,
     );
 
     if (!mounted) return;

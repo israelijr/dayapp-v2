@@ -27,6 +27,7 @@ class Historia {
   final int fimHistoria;
   final int contadorSugestoes;
   final DateTime? dataUltimaSugestao;
+  final int sugestaoCapituloIgnorada;
 
   Historia({
     required this.userId,
@@ -54,6 +55,7 @@ class Historia {
     this.fimHistoria = 0,
     this.contadorSugestoes = 0,
     this.dataUltimaSugestao,
+    this.sugestaoCapituloIgnorada = 0,
   });
 
   factory Historia.fromMap(Map<String, dynamic> map) {
@@ -99,6 +101,7 @@ class Historia {
       dataUltimaSugestao: map['data_ultima_sugestao'] != null
           ? DateTime.tryParse(map['data_ultima_sugestao'] as String)
           : null,
+      sugestaoCapituloIgnorada: map['sugestao_capitulo_ignorada'] as int? ?? 0,
     );
   }
 
@@ -129,6 +132,7 @@ class Historia {
       'fim_historia': fimHistoria,
       'contador_sugestoes': contadorSugestoes,
       'data_ultima_sugestao': dataUltimaSugestao?.toIso8601String(),
+      'sugestao_capitulo_ignorada': sugestaoCapituloIgnorada,
     };
   }
 }

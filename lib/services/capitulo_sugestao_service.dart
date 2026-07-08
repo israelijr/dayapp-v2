@@ -167,10 +167,29 @@ class CapituloSugestaoService {
 
     final adjacency = List.generate(candidatas.length, (_) => <int>{});
 
+    // 1. Conecta histórias que se complementam (relação de continuidade)
+    for (var i = 0; i < candidatas.length; i++) {
+      for (var j = i + 1; j < candidatas.length; j++) {
+        final idA = candidatas[i].id;
+        final idB = candidatas[j].id;
+        final origemA = candidatas[i].idHistoriaOrigem;
+        final origemB = candidatas[j].idHistoriaOrigem;
+
+        if ((origemB != null && origemB == idA) || (origemA != null && origemA == idB)) {
+          adjacency[i].add(j);
+          adjacency[j].add(i);
+        }
+      }
+    }
+
+    // 2. Conecta histórias por similaridade e limite temporal
     for (var i = 0; i < candidatas.length; i++) {
       for (var j = i + 1; j < candidatas.length; j++) {
         final dias = candidatas[j].data.difference(candidatas[i].data).inDays;
         if (dias > _maxDiasEntreEntradas) break;
+
+        // Se já estão conectadas por continuidade, pula a verificação de similaridade
+        if (adjacency[i].contains(j)) continue;
 
         final similaridade = _similaridadeEntre(
           featureMap[candidatas[i].id!]!,
