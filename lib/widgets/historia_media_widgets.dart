@@ -738,6 +738,19 @@ class _HistoriaThumbnailImageState extends State<HistoriaThumbnailImage> {
     _loadThumbnail();
   }
 
+  @override
+  void didUpdateWidget(covariant HistoriaThumbnailImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.identifier != widget.identifier ||
+        oldWidget.imageBytes != widget.imageBytes) {
+      setState(() {
+        _isLoading = true;
+        _thumbnailBytes = null;
+      });
+      _loadThumbnail();
+    }
+  }
+
   Future<void> _loadThumbnail() async {
     try {
       final thumbnail = await ThumbnailService().getThumbnailFromBytes(
