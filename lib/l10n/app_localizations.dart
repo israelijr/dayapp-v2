@@ -5499,31 +5499,31 @@ abstract class AppLocalizations {
   /// Hook text G-01: Post-Tension (mood ≤ 2 + energy = 3)
   ///
   /// In en, this message translates to:
-  /// **'Maybe it was tense... Looking back at what you wrote a few days ago, how do you see that situation with a calmer mind?'**
+  /// **'Looking back at what you wrote a few days ago, how do you see that situation today?'**
   String get continuityHookG01;
 
   /// Hook text G-02: Contextual closure (fallback with emotional signal for YES stories)
   ///
   /// In en, this message translates to:
-  /// **'Remember that episode you shared recently? How have things unfolded since then?'**
+  /// **'Remember the episode you reported recently? How did things unfold since then?'**
   String get continuityHookG02;
 
   /// Hook text G-03: Expression (emotional extremes + text < 15 words)
   ///
   /// In en, this message translates to:
-  /// **'You went through a very significant moment, but wrote a brief account. Would you like to put into words what was going through your mind?'**
+  /// **'You wrote a very brief entry. Would you like to try to say more about it?'**
   String get continuityHookG03;
 
   /// Hook text for MAYBE status (continua=3)
   ///
   /// In en, this message translates to:
-  /// **'Looking at it with a little more distance... do you think that situation from a few days ago is still happening?'**
+  /// **'Do you think that situation from a few days ago is still happening?'**
   String get continuityHookTalvez;
 
   /// Hook text for NOT SURE status (continua=2)
   ///
   /// In en, this message translates to:
-  /// **'Sometimes things need time to make sense. How do you see today what happened and what you wrote that day?'**
+  /// **'How do you see today what you wrote that day?'**
   String get continuityHookNaoSei;
 
   /// Primary button on the continuity card to create a follow-up story

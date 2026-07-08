@@ -3081,23 +3081,23 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get continuityHookG01 =>
-      'Forse è stato un momento di tensione... Rileggendo ciò che hai scritto qualche giorno fa, come vedi quella situazione con la mente più calma?';
+      'Rileggendo ciò che hai scritto qualche giorno fa, come vedi quella situazione oggi?';
 
   @override
   String get continuityHookG02 =>
-      'Ricordi quell\'episodio che hai condiviso di recente? Come si sono evolute le cose da allora?';
+      'Ricordi l\'episodio che hai raccontato di recente? Come si sono svolte le cose da allora?';
 
   @override
   String get continuityHookG03 =>
-      'Hai vissuto un momento molto significativo, ma hai scritto un breve racconto. Vorresti provare a mettere in parole ciò che stava passando nella tua mente?';
+      'Hai scritto un racconto molto breve. Vorresti provare a parlarne di più?';
 
   @override
   String get continuityHookTalvez =>
-      'Guardandolo con un po\' più di distanza... pensi che quella situazione di qualche giorno fa sia ancora in corso?';
+      'Pensi che quella situazione di qualche giorno fa stia ancora accadendo?';
 
   @override
   String get continuityHookNaoSei =>
-      'A volte le cose hanno bisogno di tempo per avere senso. Come vedi oggi quello che è successo e quello che hai scritto quel giorno?';
+      'Come vedi oggi quello che hai scritto quel giorno?';
 
   @override
   String get continuityHookBtnContinue => 'Continua';

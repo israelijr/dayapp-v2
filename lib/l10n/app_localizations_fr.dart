@@ -3099,23 +3099,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get continuityHookG01 =>
-      'C\'était peut-être tendu... En relisant ce que vous avez écrit il y a quelques jours, comment voyez-vous cette situation avec l\'esprit plus calme ?';
+      'En relisant ce que vous avez écrit il y a quelques jours, comment voyez-vous cette situation aujourd\'hui ?';
 
   @override
   String get continuityHookG02 =>
-      'Vous souvenez-vous de cet épisode que vous avez partagé récemment ? Comment les choses ont-elles évolué depuis ?';
+      'Vous souvenez-vous de l\'épisode que vous avez partagé récemment ? Comment les choses ont-elles évolué depuis ?';
 
   @override
   String get continuityHookG03 =>
-      'Vous avez vécu un moment très marquant, mais vous avez écrit un bref récit. Souhaitez-vous essayer de mettre en mots ce qui se passait dans votre esprit ?';
+      'Vous avez écrit un récit très bref. Souhaitez-vous essayer d\'en parler davantage ?';
 
   @override
   String get continuityHookTalvez =>
-      'En prenant un peu de recul... pensez-vous que cette situation d\'il y a quelques jours est encore en cours ?';
+      'Pensez-vous que cette situation d\'il y a quelques jours est encore en cours ?';
 
   @override
   String get continuityHookNaoSei =>
-      'Parfois, les choses ont besoin de temps pour avoir du sens. Comment voyez-vous aujourd\'hui ce qui s\'est passé et ce que vous avez écrit ce jour-là ?';
+      'Comment voyez-vous aujourd\'hui ce que vous avez écrit ce jour-là ?';
 
   @override
   String get continuityHookBtnContinue => 'Continuer';

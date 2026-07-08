@@ -2927,23 +2927,23 @@
   "@continuityHookBadge": {
     "description": "Chip de identificação exibido no topo do card de continuidade"
   },
-  "continuityHookG01": "Talvez tenha sido tenso... Olhando para o que escreveu há alguns dias, como você enxerga essa situação com a mente mais calma?",
+  "continuityHookG01": "Olhando para o que escreveu há alguns dias, como você enxerga essa situação hoje?",
   "@continuityHookG01": {
     "description": "Texto do gancho G-01: Pós-Tensão (humor ≤ 2 + energia = 3)"
   },
-  "continuityHookG02": "Lembra daquele episódio que você relatou recentemente? Como as coisas se desdobraram de lá para cá?",
+  "continuityHookG02": "Lembra o episódio que você relatou recentemente? Como as coisas se desdobraram de lá para cá?",
   "@continuityHookG02": {
     "description": "Texto do gancho G-02: Fechamento contextual (fallback com sinal emocional para histórias SIM)"
   },
-  "continuityHookG03": "Você viveu um momento muito marcante, mas escreveu um relato breve. Quer tentar colocar em palavras o que estava se passando na sua mente?",
+  "continuityHookG03": "Você escreveu um relato muito breve. Quer tentar falar mais do assunto?",
   "@continuityHookG03": {
     "description": "Texto do gancho G-03: Expressão (extremos da matriz + texto < 15 palavras)"
   },
-  "continuityHookTalvez": "Olhando com um pouco mais de distância... você acha que aquela situação de alguns dias atrás ainda está acontecendo?",
+  "continuityHookTalvez": "Você acha que aquela situação de alguns dias atrás ainda está acontecendo?",
   "@continuityHookTalvez": {
     "description": "Texto do gancho para status TALVEZ (continua=3)"
   },
-  "continuityHookNaoSei": "Às vezes, as coisas precisam de tempo para fazer sentido. Como você enxerga hoje o que aconteceu e o que escreveu naquele dia?",
+  "continuityHookNaoSei": "Como você enxerga hoje o que escreveu naquele dia?",
   "@continuityHookNaoSei": {
     "description": "Texto do gancho para status NÃO SEI (continua=2)"
   },

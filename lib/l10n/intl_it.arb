@@ -2277,23 +2277,23 @@
   "@continuityHookBadge": {
     "description": "Chip di identificazione mostrato in cima alla scheda di continuità"
   },
-  "continuityHookG01": "Forse è stato un momento di tensione... Rileggendo ciò che hai scritto qualche giorno fa, come vedi quella situazione con la mente più calma?",
+  "continuityHookG01": "Rileggendo ciò che hai scritto qualche giorno fa, come vedi quella situazione oggi?",
   "@continuityHookG01": {
     "description": "Testo del gancio G-01: Post-Tensione (umore ≤ 2 + energia = 3)"
   },
-  "continuityHookG02": "Ricordi quell'episodio che hai condiviso di recente? Come si sono evolute le cose da allora?",
+  "continuityHookG02": "Ricordi l'episodio che hai raccontato di recente? Come si sono svolte le cose da allora?",
   "@continuityHookG02": {
     "description": "Testo del gancio G-02: Chiusura contestuale (messaggio di riserva con segnale emotivo per le storie SÌ)"
   },
-  "continuityHookG03": "Hai vissuto un momento molto significativo, ma hai scritto un breve racconto. Vorresti provare a mettere in parole ciò che stava passando nella tua mente?",
+  "continuityHookG03": "Hai scritto un racconto molto breve. Vorresti provare a parlarne di più?",
   "@continuityHookG03": {
     "description": "Testo del gancio G-03: Espressione (estremi emotivi + testo < 15 parole)"
   },
-  "continuityHookTalvez": "Guardandolo con un po' più di distanza... pensi che quella situazione di qualche giorno fa sia ancora in corso?",
+  "continuityHookTalvez": "Pensi che quella situazione di qualche giorno fa stia ancora accadendo?",
   "@continuityHookTalvez": {
     "description": "Testo del gancio per lo stato FORSE (continua=3)"
   },
-  "continuityHookNaoSei": "A volte le cose hanno bisogno di tempo per avere senso. Come vedi oggi quello che è successo e quello che hai scritto quel giorno?",
+  "continuityHookNaoSei": "Come vedi oggi quello che hai scritto quel giorno?",
   "@continuityHookNaoSei": {
     "description": "Testo del gancio per lo stato NON SO (continua=2)"
   },

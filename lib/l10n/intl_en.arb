@@ -2997,23 +2997,23 @@
   "@continuityHookBadge": {
     "description": "Chip shown at the top of the continuity hook card"
   },
-  "continuityHookG01": "Maybe it was tense... Looking back at what you wrote a few days ago, how do you see that situation with a calmer mind?",
+  "continuityHookG01": "Looking back at what you wrote a few days ago, how do you see that situation today?",
   "@continuityHookG01": {
     "description": "Hook text G-01: Post-Tension (mood ≤ 2 + energy = 3)"
   },
-  "continuityHookG02": "Remember that episode you shared recently? How have things unfolded since then?",
+  "continuityHookG02": "Remember the episode you reported recently? How did things unfold since then?",
   "@continuityHookG02": {
     "description": "Hook text G-02: Contextual closure (fallback with emotional signal for YES stories)"
   },
-  "continuityHookG03": "You went through a very significant moment, but wrote a brief account. Would you like to put into words what was going through your mind?",
+  "continuityHookG03": "You wrote a very brief entry. Would you like to try to say more about it?",
   "@continuityHookG03": {
     "description": "Hook text G-03: Expression (emotional extremes + text < 15 words)"
   },
-  "continuityHookTalvez": "Looking at it with a little more distance... do you think that situation from a few days ago is still happening?",
+  "continuityHookTalvez": "Do you think that situation from a few days ago is still happening?",
   "@continuityHookTalvez": {
     "description": "Hook text for MAYBE status (continua=3)"
   },
-  "continuityHookNaoSei": "Sometimes things need time to make sense. How do you see today what happened and what you wrote that day?",
+  "continuityHookNaoSei": "How do you see today what you wrote that day?",
   "@continuityHookNaoSei": {
     "description": "Hook text for NOT SURE status (continua=2)"
   },

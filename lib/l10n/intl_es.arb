@@ -2664,23 +2664,23 @@
   "@continuityHookBadge": {
     "description": "Chip de identificación en la parte superior de la tarjeta de continuidad"
   },
-  "continuityHookG01": "Quizás fue tenso... Mirando lo que escribiste hace unos días, ¿cómo ves esa situación con la mente más tranquila?",
+  "continuityHookG01": "Mirando lo que escribiste hace unos días, ¿cómo ves esa situación hoy?",
   "@continuityHookG01": {
     "description": "Texto del gancho G-01: Post-Tensión (humor ≤ 2 + energía = 3)"
   },
-  "continuityHookG02": "¿Recuerdas ese episodio que mencionaste recientemente? ¿Cómo han evolucionado las cosas desde entonces?",
+  "continuityHookG02": "¿Recuerdas el episodio que relataste recientemente? ¿Cómo se desarrollaron las cosas desde entonces?",
   "@continuityHookG02": {
     "description": "Texto del gancho G-02: Cierre contextual (alternativa con señal emocional para historias SÍ)"
   },
-  "continuityHookG03": "Viviste un momento muy significativo, pero escribiste un relato breve. ¿Te gustaría intentar expresar con palabras lo que pasaba por tu mente?",
+  "continuityHookG03": "Escribiste un relato muy breve. ¿Quieres intentar hablar más del asunto?",
   "@continuityHookG03": {
     "description": "Texto del gancho G-03: Expresión (extremos emocionales + texto < 15 palabras)"
   },
-  "continuityHookTalvez": "Mirándolo con un poco más de distancia... ¿crees que esa situación de hace unos días todavía está ocurriendo?",
+  "continuityHookTalvez": "¿Crees que aquella situación de hace unos días todavía está ocurriendo?",
   "@continuityHookTalvez": {
     "description": "Texto del gancho para estado QUIZÁS (continua=3)"
   },
-  "continuityHookNaoSei": "A veces las cosas necesitan tiempo para tener sentido. ¿Cómo ves hoy lo que pasó y lo que escribiste ese día?",
+  "continuityHookNaoSei": "¿Cómo ves hoy lo que escribiste aquel día?",
   "@continuityHookNaoSei": {
     "description": "Texto del gancho para estado NO SÉ (continua=2)"
   },
