@@ -104,7 +104,7 @@ class HistoriaRepository {
   }
 
   /// Encerra o ciclo de continuidade de uma história:
-  /// seta continua=1 (Não) e fim_historia=1.
+  /// seta continua=1 (Não), fim_historia=1, data_ultima_sugestao=data atual e contador_sugestoes=3.
   /// Equivale à lógica das triggers SQL — implementado em Dart.
   Future<void> closeContinuityHook(int historiaId) async {
     final db = await DatabaseHelper().database;
@@ -113,6 +113,8 @@ class HistoriaRepository {
       {
         'continua': 1,
         'fim_historia': 1,
+        'data_ultima_sugestao': DateTime.now().toIso8601String(),
+        'contador_sugestoes': 3,
         'data_update': DateTime.now().toIso8601String(),
       },
       where: 'id = ?',

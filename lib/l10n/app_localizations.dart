@@ -5619,8 +5619,20 @@ abstract class AppLocalizations {
   /// Full text for the Continuity Hook info screen
   ///
   /// In en, this message translates to:
-  /// **'### Living Stories: Connect your memories\nIn DayApp, you can connect your entries to follow the unfolding of an event over multiple days. When finishing a note, you can indicate whether that situation will have further developments, potentially generating a new Chapter.\n### How does it work?\nWhen saving a new story, we will ask if you want to continue this story later. If you select Yes, Maybe, or Not Sure, the app will display automatic reminders on the home screen after a few days. This serves as a practical nudge for you to update what happened in a new note — which continues the story — or in the original entry.\n### Your moment of reflection:\nOn the home screen, you will have the opportunity to evaluate the status of your entry:\n- Continue the story: Choose between creating a new one or editing the original story.\n- Close the cycle: If the situation has been resolved or you no longer wish to track it, simply change the status to No to remove it from the reminder queue.'**
+  /// **'### Living Stories: Connect your memories\nIn DayApp, you can connect your entries to follow the unfolding of an event over multiple days. When finishing a note, you can indicate whether that situation will have further developments, potentially generating a new Chapter.\n### How does it work?\\nWhen saving a new story, we will ask if you want to continue this story later. If you select Yes, Maybe, or Not Sure, the app will display automatic reminders on the home screen after a few days. This serves as a practical nudge for you to update what happened in a new note — which continues the story — or in the original entry.\n### Your moment of reflection:\nOn the home screen, you will have the opportunity to evaluate the status of your entry:\n- Continue the story: Choose between creating a new one or editing the original story.\n- Close the cycle: If the situation has been resolved or you no longer wish to track it, simply change the status to No to remove it from the reminder queue.'**
   String get continuityInfoDesc;
+
+  /// Option to create a new story connected to the current one
+  ///
+  /// In en, this message translates to:
+  /// **'New story'**
+  String get continuityHookOptionNewStory;
+
+  /// Option to edit the current story itself
+  ///
+  /// In en, this message translates to:
+  /// **'Same story'**
+  String get continuityHookOptionSameStory;
 }
 
 class _AppLocalizationsDelegate

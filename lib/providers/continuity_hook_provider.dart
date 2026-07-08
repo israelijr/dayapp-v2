@@ -28,6 +28,7 @@ class ContinuityHookProvider extends ChangeNotifier {
   Historia? _hookStory;
   GanchoType? _ganchoType;
   bool _isExpanded = false;
+  bool _isContinueExpanded = false;
   bool _isLoading = false;
   bool _debugAccelerate = false;
 
@@ -38,6 +39,7 @@ class ContinuityHookProvider extends ChangeNotifier {
   Historia? get hookStory => _hookStory;
   GanchoType? get ganchoType => _ganchoType;
   bool get isExpanded => _isExpanded;
+  bool get isContinueExpanded => _isContinueExpanded;
   bool get isLoading => _isLoading;
   bool get debugAccelerate => _debugAccelerate;
 
@@ -62,6 +64,7 @@ class ContinuityHookProvider extends ChangeNotifier {
       _hookStory = story;
       _ganchoType = story != null ? _selectGanchoType(story) : null;
       _isExpanded = false;
+      _isContinueExpanded = false;
     } catch (e) {
       debugPrint('ContinuityHookProvider.loadHook: erro ao buscar gancho: $e');
       _hookStory = null;
@@ -90,6 +93,7 @@ class ContinuityHookProvider extends ChangeNotifier {
     _hookStory = null;
     _ganchoType = null;
     _isExpanded = false;
+    _isContinueExpanded = false;
     notifyListeners();
   }
 
@@ -103,6 +107,7 @@ class ContinuityHookProvider extends ChangeNotifier {
     _hookStory = null;
     _ganchoType = null;
     _isExpanded = false;
+    _isContinueExpanded = false;
     notifyListeners();
 
     Navigator.pushNamed(
@@ -128,12 +133,30 @@ class ContinuityHookProvider extends ChangeNotifier {
     _hookStory = null;
     _ganchoType = null;
     _isExpanded = false;
+    _isContinueExpanded = false;
     notifyListeners();
   }
 
   /// Alterna entre Fase 1 (gancho) e Fase 2 (opções de status).
   void toggleExpanded() {
     _isExpanded = !_isExpanded;
+    _isContinueExpanded = false;
+    notifyListeners();
+  }
+
+  /// Alterna entre Fase 1 (gancho) e Fase 3 (opções de continuação).
+  void toggleContinueExpanded() {
+    _isContinueExpanded = !_isContinueExpanded;
+    _isExpanded = false;
+    notifyListeners();
+  }
+
+  /// Limpa os estados do card (usado ao abrir a edição da história ativa).
+  void clearCard() {
+    _hookStory = null;
+    _ganchoType = null;
+    _isExpanded = false;
+    _isContinueExpanded = false;
     notifyListeners();
   }
 

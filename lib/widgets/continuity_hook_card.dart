@@ -6,6 +6,7 @@ import '../l10n/generated/app_localizations.dart';
 import '../models/historia.dart';
 import '../providers/continuity_hook_provider.dart';
 import '../screens/continuity_hook_info_screen.dart';
+import '../screens/edit_historia_screen.dart';
 import '../theme/m3_expressive_theme.dart';
 
 /// Card inteligente exibido na Home para histórias em aberto.
@@ -211,11 +212,15 @@ class _ContinuityHookCardState extends State<ContinuityHookCard>
                     const SizedBox(height: 12),
 
                     // ---- Fase 1: botões principais ----
-                    if (!provider.isExpanded) _Phase1Buttons(story: story),
+                    if (!provider.isExpanded && !provider.isContinueExpanded) _Phase1Buttons(story: story),
 
                     // ---- Fase 2: seletor de status (expandido) ----
                     if (provider.isExpanded)
                       _Phase2Options(continua: story.continua),
+
+                    // ---- Fase 3: opções de continuação (expandido) ----
+                    if (provider.isContinueExpanded)
+                      _Phase3ContinueOptions(story: story),
                   ],
                 ),
               ),
@@ -276,7 +281,7 @@ class _Phase1Buttons extends StatelessWidget {
       children: [
         Expanded(
           child: FilledButton.icon(
-            onPressed: () => provider.continueStory(context, '/create-historia'),
+            onPressed: () => provider.toggleContinueExpanded(),
             icon: const Icon(Icons.edit_note, size: 18),
             label: Text(l10n.continuityHookBtnContinue),
             style: FilledButton.styleFrom(
@@ -424,6 +429,71 @@ class _StatusChip extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Fase 3 — Opções de continuação (Nova / Mesma história)
+// -----------------------------------------------------------------------------
+
+class _Phase3ContinueOptions extends StatelessWidget {
+  final Historia story;
+
+  const _Phase3ContinueOptions({required this.story});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final provider = context.read<ContinuityHookProvider>();
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Botão de fechar a fase 3
+        Align(
+          alignment: Alignment.centerRight,
+          child: IconButton(
+            icon: const Icon(Icons.expand_less),
+            onPressed: () =>
+                context.read<ContinuityHookProvider>().toggleContinueExpanded(),
+            tooltip: 'Fechar opções',
+          ),
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _StatusChip(
+              label: l10n.continuityHookOptionNewStory,
+              emoji: '📝',
+              value: 1,
+              color: colorScheme.primary,
+              isSelected: false,
+              onTap: () {
+                provider.continueStory(context, '/create_historia');
+              },
+            ),
+            _StatusChip(
+              label: l10n.continuityHookOptionSameStory,
+              emoji: '✏️',
+              value: 2,
+              color: Colors.orange.shade600,
+              isSelected: false,
+              onTap: () {
+                provider.clearCard();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => EditHistoriaScreen(historia: story),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
