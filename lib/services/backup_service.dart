@@ -188,6 +188,21 @@ class BackupService {
                 .toList()
           : <File>[];
 
+      // Coletar fotos de perfil (diretório separado do photos)
+      final profileImagesDir = Directory(
+        path.join(appDocDir.path, 'profile_images'),
+      );
+      final profileImageFiles = (await profileImagesDir.exists())
+          ? profileImagesDir
+                .listSync()
+                .whereType<File>()
+                .where(
+                  (file) =>
+                      file.path.endsWith('.jpg') || file.path.endsWith('.png'),
+                )
+                .toList()
+          : <File>[];
+
       // 3. Marcar histórias como já salvas em backup
       try {
         await HistoriaRepository().markAllStoriesBackedUp();
@@ -207,6 +222,7 @@ Data: ${DateTime.now().toIso8601String()}
 Banco de dados: ${dbSnapshot.dbFile.lengthSync()} bytes
 Vídeos: ${videoFiles.length} arquivo(s)
 Fotos: ${photoFiles.length} arquivo(s)
+Fotos de perfil: ${profileImageFiles.length} arquivo(s)
 Áudios: ${audioFiles.length} arquivo(s)
 Versão: 2.0.0
 ''';
@@ -222,6 +238,7 @@ Versão: 2.0.0
         ...videoFiles,
         ...photoFiles,
         ...chapterPhotoFiles,
+        ...profileImageFiles,
         ...audioFiles,
         metadataFile,
       ];
@@ -273,6 +290,13 @@ Versão: 2.0.0
         addEntry(
           f.path,
           'chapter_photos/${path.basename(f.path)}',
+          sizes[sizeIdx++],
+        );
+      }
+      for (final f in profileImageFiles) {
+        addEntry(
+          f.path,
+          'profile_images/${path.basename(f.path)}',
           sizes[sizeIdx++],
         );
       }
@@ -619,6 +643,18 @@ Versão: 2.0.0
               .toList()) ??
           <File>[];
 
+      final profileImagesRestoreDir = findDirectory(
+        extractDir,
+        'profile_images',
+      );
+      final restoredProfileImages =
+          (profileImagesRestoreDir
+              ?.listSync()
+              .whereType<File>()
+              .where((f) => f.path.endsWith('.jpg') || f.path.endsWith('.png'))
+              .toList()) ??
+          <File>[];
+
       final dbPath = await getDatabasesPath();
       final currentDb = File(path.join(dbPath, 'dayapp.db'));
 
@@ -648,6 +684,9 @@ Versão: 2.0.0
       final restoredChapterPhotosBytes = await calculateFilesTotalBytes(
         restoredChapterPhotos,
       );
+      final restoredProfileImagesBytes = await calculateFilesTotalBytes(
+        restoredProfileImages,
+      );
 
       final restoreCopyWorkBytes =
           currentDbBytes +
@@ -657,7 +696,8 @@ Versão: 2.0.0
           restoredVideosBytes +
           restoredPhotosBytes +
           restoredAudiosBytes +
-          restoredChapterPhotosBytes;
+          restoredChapterPhotosBytes +
+          restoredProfileImagesBytes;
       final totalWorkBytes = extractTotalBytes + restoreCopyWorkBytes;
       var completedWorkBytes = extractTotalBytes;
 
@@ -851,6 +891,41 @@ Versão: 2.0.0
         }
       }
 
+      // 5.5. Restaurar fotos de perfil
+      if (profileImagesRestoreDir != null &&
+          await profileImagesRestoreDir.exists()) {
+        final appDocDir = await getApplicationDocumentsDirectory();
+        final profileImagesDestDir = Directory(
+          path.join(appDocDir.path, 'profile_images'),
+        );
+
+        // Limpar fotos de perfil atuais
+        if (await profileImagesDestDir.exists()) {
+          final currentProfileImages = profileImagesDestDir.listSync();
+          for (final file in currentProfileImages) {
+            if (file is File) {
+              await file.delete();
+            }
+          }
+        } else {
+          await profileImagesDestDir.create(recursive: true);
+        }
+
+        for (final profileImageFile in restoredProfileImages) {
+          final fileName = path.basename(profileImageFile.path);
+          final destFile = File(path.join(profileImagesDestDir.path, fileName));
+          await profileImageFile.copy(destFile.path);
+
+          if (await profileImageFile.exists()) {
+            completedWorkBytes += await profileImageFile.length();
+            reportOverallProgress(
+              completedWorkBytes: completedWorkBytes,
+              totalWorkBytes: totalWorkBytes,
+            );
+          }
+        }
+      }
+
       // 6. Restaurar áudios
       onProgress?.call(l10n.restoreProgressRestoringAudios);
 
@@ -901,6 +976,7 @@ Versão: 2.0.0
           final audiosBase = path.join(appDocDir.path, 'audios');
           final videosBase = path.join(appDocDir.path, 'videos');
           final chapterPhotosBase = path.join(appDocDir.path, 'chapter_photos');
+          final profileImagesBase = path.join(appDocDir.path, 'profile_images');
 
           // Reescreve foto_path em historia_fotos
           final fotos = await patchDb.query(
@@ -988,6 +1064,31 @@ Versão: 2.0.0
                 where: 'id = ?',
                 whereArgs: [row['id']],
               );
+            }
+          }
+
+          // Reescreve foto_perfil em users
+          final users = await patchDb.query(
+            'users',
+            columns: ['id', 'foto_perfil'],
+            where: 'foto_perfil IS NOT NULL',
+          );
+          for (final row in users) {
+            final oldPath = row['foto_perfil'] as String?;
+            if (oldPath == null || oldPath.isEmpty) continue;
+            if (!oldPath.startsWith('http') && !oldPath.startsWith('assets')) {
+              final newPath = path.join(
+                profileImagesBase,
+                path.basename(oldPath),
+              );
+              if (oldPath != newPath) {
+                await patchDb.update(
+                  'users',
+                  {'foto_perfil': newPath},
+                  where: 'id = ?',
+                  whereArgs: [row['id']],
+                );
+              }
             }
           }
         } finally {

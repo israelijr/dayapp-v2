@@ -22,6 +22,10 @@ class _StatsChartCardState extends State<StatsChartCard> {
     final theme = Theme.of(context);
     final loc = AppLocalizations.of(context)!;
 
+    if (stats.totalStories < 7) {
+      return const SizedBox.shrink();
+    }
+
     if (stats.isLoading) {
       return Container(
         margin: const EdgeInsets.only(bottom: 16),
