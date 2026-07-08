@@ -298,7 +298,7 @@ void main() {
     expect(
       p.basename(backupPath),
       matches(
-        RegExp(r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_DayApp_bkp\.zip$'),
+        RegExp(r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_bkp\.dayapp$'),
       ),
     );
 
@@ -352,6 +352,15 @@ void main() {
     expect(service.isValidBackupFileName('dayapp_backup_123456.zip'), isTrue);
     expect(service.isValidBackupFileName('dayapp_250704_123.zip'), isTrue);
     expect(service.isValidBackupFileName('dayapp_04jul_123.zip'), isTrue);
+    expect(service.isValidBackupFileName('Backup DayApp'), isTrue);
+    expect(service.isValidBackupFileName('Backup DayApp.zip'), isTrue);
+    expect(service.isValidBackupFileName('Backup_DayApp'), isTrue);
+    expect(service.isValidBackupFileName('DayApp Backup'), isTrue);
+    expect(service.isValidBackupFileName('DayApp_bkp'), isTrue);
+    expect(service.isValidBackupFileName('2026-07-04_22-35-18_bkp.dayapp'), isTrue);
+    expect(service.isValidBackupFileName('meubackup.dayapp'), isTrue);
+    expect(service.isValidBackupFileName('DayApp'), isFalse);
+    expect(service.isValidBackupFileName('Backup.zip'), isFalse);
     expect(service.isValidBackupFileName('invalid.zip'), isFalse);
   });
 

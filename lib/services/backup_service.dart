@@ -314,7 +314,7 @@ Versão: 2.0.0
       onProgress?.call(l10n.backupProgressCompressing);
       final now = DateTime.now();
       final backupStamp = _formatBackupTimestamp(now);
-      final zipPath = path.join(tempDir.path, '${backupStamp}_DayApp_bkp.zip');
+      final zipPath = path.join(tempDir.path, '${backupStamp}_bkp.dayapp');
 
       final receivePort = ReceivePort();
       final isolate = await Isolate.spawn(backupZipIsolateEntrypoint, {
@@ -1130,14 +1130,27 @@ Versão: 2.0.0
   }
 
   /// Valida se o nome do arquivo de backup (com ou sem extensão)
-  /// corresponde a um dos padrões adotados pelo app.
+  /// corresponde a um dos padrões adotados pelo app ou se contém o nome do app e backup.
   bool isValidBackupFileName(String fileName) {
-    // Garante que o arquivo termina com .zip
-    if (!fileName.toLowerCase().endsWith('.zip')) {
+    final lowerName = fileName.toLowerCase();
+    // 1. Aceita explicitamente formatos amigáveis/comuns ou arquivos com a extensão própria do app (.dayapp)
+    if (lowerName.endsWith('.dayapp') ||
+        (lowerName.contains('dayapp') &&
+            (lowerName.contains('backup') || lowerName.contains('bkp')))) {
+      return true;
+    }
+
+    // 2. Se não casar com os termos acima, mas terminar com .zip ou .dayapp, removemos a extensão para verificar
+    // os padrões de nomes gerados automaticamente (legados e novos)
+    String baseName = fileName;
+    if (lowerName.endsWith('.zip')) {
+      baseName = fileName.substring(0, fileName.length - 4);
+    } else if (lowerName.endsWith('.dayapp')) {
+      baseName = fileName.substring(0, fileName.length - 7);
+    } else {
+      // Se não tem extensão reconhecida e não casou com a regra genérica, falha
       return false;
     }
-    // Remove a extensão .zip (4 caracteres do final)
-    final baseName = fileName.substring(0, fileName.length - 4);
 
     final regExpCompat1 = RegExp(r'^dayapp_backup_\d+$');
     final regExpCompat2 = RegExp(r'^dayapp_\d{6}_\d+$');
@@ -1148,12 +1161,16 @@ Versão: 2.0.0
     final regExpNewFormat2 = RegExp(
       r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_DayApp_bkp$',
     );
+    final regExpNewFormat3 = RegExp(
+      r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_bkp$',
+    );
 
     return regExpCompat1.hasMatch(baseName) ||
         regExpCompat2.hasMatch(baseName) ||
         regExpNew.hasMatch(baseName) ||
         regExpNewFormat.hasMatch(baseName) ||
-        regExpNewFormat2.hasMatch(baseName);
+        regExpNewFormat2.hasMatch(baseName) ||
+        regExpNewFormat3.hasMatch(baseName);
   }
 
   String _formatBackupTimestamp(DateTime dateTime) {
