@@ -361,9 +361,13 @@ class _HookEngineDebugSection extends StatelessWidget {
                   value: hookProvider.debugAccelerate,
                   activeThumbColor: Colors.teal,
                   activeTrackColor: Colors.teal.shade200,
-                  onChanged: (value) => context
-                      .read<ContinuityHookProvider>()
-                      .setDebugAccelerate(value),
+                  onChanged: (value) {
+                    final provider = context.read<ContinuityHookProvider>();
+                    provider.setDebugAccelerate(value);
+                    if (userId.isNotEmpty) {
+                      provider.loadHook(userId, isPremium: isPremium);
+                    }
+                  },
                 ),
 
                 const SizedBox(height: 8),

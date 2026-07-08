@@ -60,9 +60,18 @@ class HistoriaRepository {
         ? '' // ignora janela de tempo no modo debug
         : '''
       AND (
-        (continua = 4 AND (data_ultima_sugestao IS NULL OR datetime(data_ultima_sugestao) <= datetime('now', '-2 days'))) OR
-        (continua = 3 AND (data_ultima_sugestao IS NULL OR datetime(data_ultima_sugestao) <= datetime('now', '-3 days'))) OR
-        (continua = 2 AND (data_ultima_sugestao IS NULL OR datetime(data_ultima_sugestao) <= datetime('now', '-4 days')))
+        (continua = 4 AND (
+          (data_ultima_sugestao IS NULL AND datetime(COALESCE(data_criacao, data)) <= datetime('now', '-2 days')) OR
+          (data_ultima_sugestao IS NOT NULL AND datetime(data_ultima_sugestao) <= datetime('now', '-2 days'))
+        )) OR
+        (continua = 3 AND (
+          (data_ultima_sugestao IS NULL AND datetime(COALESCE(data_criacao, data)) <= datetime('now', '-3 days')) OR
+          (data_ultima_sugestao IS NOT NULL AND datetime(data_ultima_sugestao) <= datetime('now', '-3 days'))
+        )) OR
+        (continua = 2 AND (
+          (data_ultima_sugestao IS NULL AND datetime(COALESCE(data_criacao, data)) <= datetime('now', '-4 days')) OR
+          (data_ultima_sugestao IS NOT NULL AND datetime(data_ultima_sugestao) <= datetime('now', '-4 days'))
+        ))
       )''';
 
     final results = await db.rawQuery('''
