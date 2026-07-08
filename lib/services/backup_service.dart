@@ -459,7 +459,7 @@ Versão: 2.0.0
       // Compartilhar arquivo
       // ignore: deprecated_member_use
       await Share.shareXFiles(
-        [XFile(zipPath)],
+        [XFile(zipPath, mimeType: 'application/zip')],
         subject: l10n.backupShareSubject,
         text: l10n.backupShareText,
       );
@@ -1156,13 +1156,13 @@ Versão: 2.0.0
     final regExpCompat2 = RegExp(r'^dayapp_\d{6}_\d+$');
     final regExpNew = RegExp(r'^dayapp_\d{2}[a-zA-Z]{3}_\d+$');
     final regExpNewFormat = RegExp(
-      r'^dayapp_backup_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}$',
+      r'^dayapp_backup_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}(?:-\d+)?$',
     );
     final regExpNewFormat2 = RegExp(
-      r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_DayApp_bkp$',
+      r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}(?:-\d+)?_DayApp_bkp$',
     );
     final regExpNewFormat3 = RegExp(
-      r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_bkp$',
+      r'^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}(?:-\d+)?_bkp$',
     );
 
     return regExpCompat1.hasMatch(baseName) ||
@@ -1180,7 +1180,8 @@ Versão: 2.0.0
     final hour = dateTime.hour.toString().padLeft(2, '0');
     final minute = dateTime.minute.toString().padLeft(2, '0');
     final second = dateTime.second.toString().padLeft(2, '0');
-    return '$year-$month-${day}_$hour-$minute-$second';
+    final micro = dateTime.microsecond.toString().padLeft(6, '0');
+    return '$year-$month-${day}_$hour-$minute-$second-$micro';
   }
 
   Future<void> saveLastBackupFileName(String fileName) async {
