@@ -9,6 +9,7 @@ class InsightPreferencesService {
   static const String _devDismissedPrefix = 'insight_dev_dismissed_';
   static const String _cacheKey = 'insight_cache';
   static const String _cacheTimestampKey = 'insight_cache_timestamp';
+  static const String _cycleStartPrefix = 'insight_cycle_start_';
   static const Duration _cacheDuration = Duration(hours: 24);
 
   String _shownKey(String userId, InsightType type) =>
@@ -19,6 +20,8 @@ class InsightPreferencesService {
 
   String _devDismissedKey(String userId, InsightType type) =>
       '$_devDismissedPrefix${userId}_${type.value}';
+
+  String _cycleStartKey(String userId) => '$_cycleStartPrefix$userId';
 
   Future<int?> loadShownTimestamp(String userId, InsightType type) async {
     final prefs = await SharedPreferences.getInstance();
@@ -110,5 +113,20 @@ class InsightPreferencesService {
       _timestampKeyFor(userId),
       DateTime.now().millisecondsSinceEpoch,
     );
+  }
+
+  Future<int?> loadCycleStart(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_cycleStartKey(userId));
+  }
+
+  Future<void> saveCycleStart(String userId, int timestamp) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_cycleStartKey(userId), timestamp);
+  }
+
+  Future<void> removeCycleStart(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_cycleStartKey(userId));
   }
 }

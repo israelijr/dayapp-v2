@@ -180,9 +180,12 @@ class InsightProvider with ChangeNotifier {
       return visible;
     }
 
-    // Produção: ciclo de vida completo (expiração + cooldown)
+    // Produção: ciclo de vida completo (cooldown de 7 dias e distribuição em lotes de 2 insights a cada 3 dias)
     final now = DateTime.now();
     final visible = <Insight>[];
+
+    // 1. Filtrar os insights elegíveis (os que não estão em cooldown e não são o gráfico de humor)
+    final List<Insight> elegiveis = [];
 
     for (final insight in allInsights) {
       if (insight.type == InsightType.energyChart) {
@@ -196,51 +199,96 @@ class InsightProvider with ChangeNotifier {
       );
 
       if (dismissedMs != null) {
-        // Insight foi dispensado (manualmente ou auto-expirado)
         final dismissed = DateTime.fromMillisecondsSinceEpoch(dismissedMs);
         if (now.difference(dismissed) >= _cooldownDuration) {
-          // Cooldown encerrou: limpa e reapresenta
+          // Cooldown acabou: limpa o status de dispensado para torná-lo elegível novamente
           await _preferencesService.removeDismissed(userId, insight.type);
-          await _preferencesService.saveShownTimestamp(
-            userId,
-            insight.type,
-            now.millisecondsSinceEpoch,
-          );
-          visible.add(insight);
-          _saveToHistory(userId, insight);
+          elegiveis.add(insight);
         }
-        // Else: ainda em cooldown → não exibe
       } else {
-        // Nunca foi dispensado
-        final shownMs = await _preferencesService.loadShownTimestamp(
-          userId,
-          insight.type,
-        );
-        if (shownMs == null) {
-          // Primeira exibição: registra timestamp
-          await _preferencesService.saveShownTimestamp(
+        elegiveis.add(insight);
+      }
+    }
+
+    // Se não houver outros insights elegíveis, retorna apenas os já adicionados (como o energyChart)
+    if (elegiveis.isEmpty) {
+      await _preferencesService.removeCycleStart(userId);
+      return visible;
+    }
+
+    // 2. Gerenciar o início do ciclo
+    int? cycleStartMs = await _preferencesService.loadCycleStart(userId);
+    if (cycleStartMs == null) {
+      cycleStartMs = now.millisecondsSinceEpoch;
+      await _preferencesService.saveCycleStart(userId, cycleStartMs);
+    }
+
+    var cycleStart = DateTime.fromMillisecondsSinceEpoch(cycleStartMs);
+    var difference = now.difference(cycleStart);
+    var horasDecorridas = difference.inHours;
+
+    var loteAtual = horasDecorridas ~/ 72;
+    var horasNoLote = horasDecorridas % 72;
+    var estaNaJanelaDeExibicao = horasNoLote < 24;
+
+    final totalLotes = (elegiveis.length / 2).ceil();
+
+    // Se o lote atual passou de todos os lotes possíveis, reinicia o ciclo
+    if (loteAtual >= totalLotes) {
+      cycleStartMs = now.millisecondsSinceEpoch;
+      await _preferencesService.saveCycleStart(userId, cycleStartMs);
+      cycleStart = now;
+      horasDecorridas = 0;
+      loteAtual = 0;
+      horasNoLote = 0;
+      estaNaJanelaDeExibicao = true;
+    }
+
+    // 3. Processar cada insight elegível conforme o lote
+    for (int i = 0; i < elegiveis.length; i++) {
+      final insight = elegiveis[i];
+      final loteDoInsight = i ~/ 2;
+
+      if (loteDoInsight == loteAtual) {
+        if (estaNaJanelaDeExibicao) {
+          // Lote atual e ativo: exibe o insight
+          final shownMs = await _preferencesService.loadShownTimestamp(
             userId,
             insight.type,
-            now.millisecondsSinceEpoch,
           );
-          visible.add(insight);
-          _saveToHistory(userId, insight);
-        } else {
-          final shownAt = DateTime.fromMillisecondsSinceEpoch(shownMs);
-          if (now.difference(shownAt) < _visibilityDuration) {
-            // Ainda dentro do período de visibilidade
-            visible.add(insight);
-          } else {
-            // Auto-expirou: marca como dispensado para iniciar o cooldown
-            await _preferencesService.saveDismissedTimestamp(
+          if (shownMs == null) {
+            final loteStart = cycleStart.add(Duration(hours: 72 * loteAtual));
+            await _preferencesService.saveShownTimestamp(
               userId,
               insight.type,
-              shownAt.add(_visibilityDuration).millisecondsSinceEpoch,
+              loteStart.millisecondsSinceEpoch,
             );
-            await _preferencesService.removeShown(userId, insight.type);
-            // Não adiciona à lista visível
+            _saveToHistory(userId, insight);
           }
+          visible.add(insight);
+        } else {
+          // Lote atual, mas fora da janela de 24h: expira o insight automaticamente e inicia cooldown
+          final loteStart = cycleStart.add(Duration(hours: 72 * loteAtual));
+          final expiraEm = loteStart.add(const Duration(days: 1));
+          await _preferencesService.saveDismissedTimestamp(
+            userId,
+            insight.type,
+            expiraEm.millisecondsSinceEpoch,
+          );
+          await _preferencesService.removeShown(userId, insight.type);
         }
+      } else if (loteDoInsight < loteAtual) {
+        // Lote passado que já expirou por completo: garante que entrem em cooldown
+        final loteStart = cycleStart.add(Duration(hours: 72 * loteDoInsight));
+        final expiraEm = loteStart.add(const Duration(days: 1));
+        await _preferencesService.saveDismissedTimestamp(
+          userId,
+          insight.type,
+          expiraEm.millisecondsSinceEpoch,
+        );
+        await _preferencesService.removeShown(userId, insight.type);
+      } else {
+        // Lote futuro: permanece na fila silenciosamente
       }
     }
 
