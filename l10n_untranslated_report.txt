@@ -999,6 +999,26 @@
     "homeGreetingPhraseNoName",
     "homeGreetingSubtitle",
     "startNewStoryPlaceholder",
-    "viewAllStoriesLabel"
+    "viewAllStoriesLabel",
+    "continuityHookBadge",
+    "continuityHookG01",
+    "continuityHookG02",
+    "continuityHookG03",
+    "continuityHookTalvez",
+    "continuityHookNaoSei",
+    "continuityHookBtnContinue",
+    "continuityHookBtnOptions",
+    "continuityHookFreeLimitTitle",
+    "continuityHookFreeLimitBody",
+    "continuityHookDebugSectionTitle",
+    "continuityHookDebugAcceleratorLabel",
+    "continuityHookDebugAcceleratorSubtitle",
+    "continuityHookDebugResetCounters",
+    "continuityHookDebugForceReload",
+    "continuityHookFeatureLabel",
+    "continuityHookGenericSim",
+    "continuityHookGenericTalvez",
+    "continuityHookGenericNaoSei",
+    "continuityStatusClose"
   ]
 }

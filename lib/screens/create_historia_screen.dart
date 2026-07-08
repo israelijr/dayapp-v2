@@ -19,6 +19,7 @@ import '../theme/m3_expressive_theme.dart';
 import '../widgets/audio_recorder_widget.dart';
 import '../widgets/compact_audio_icon.dart';
 import '../widgets/compact_video_icon.dart';
+import '../widgets/continua_selection_modal.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/emoji_selection_modal.dart';
 import '../widgets/entry_toolbar.dart';
@@ -31,7 +32,6 @@ import '../widgets/mood_energy_selectors.dart';
 import '../widgets/pessoas_input_widget.dart';
 import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
-import '../widgets/continua_selection_modal.dart';
 
 // Note: This file implements one UI feature requested by the team:
 // 1) Animação de expansão do editor de descrição bottom-to-top ao abrir a tela de edição (_expandDescriptionEditor).
@@ -135,6 +135,11 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
   bool _lastFormValid = false;
   bool _lastHasUnsavedChanges = false;
 
+  /// ID da história pai (passado pelo Motor de Ganchos ao clicar em "Continuar").
+  /// Quando não nulo, esta história é uma continuação e o campo
+  /// id_historia_origem será salvo silenciosamente.
+  int? _idHistoriaOrigem;
+
   // Estado do indicador de sync de backup incremental
   bool _isSyncing = false;
   bool _syncDone = false;
@@ -156,6 +161,13 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
     titleController.addListener(_checkForChanges);
     richTextController.addListener(_checkForChanges);
     localController.addListener(_checkForChanges);
+    // Extrai idHistoriaOrigem dos argumentos de rota (passado pelo ContinuityHookProvider)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is Map<String, dynamic> && args.containsKey('idHistoriaOrigem')) {
+        _idHistoriaOrigem = args['idHistoriaOrigem'] as int?;
+      }
+    });
   }
 
   void _checkForChanges() {
@@ -366,17 +378,17 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
 
     final continuaValue = continuaRes ?? 1;
 
+    // Verifica se o widget ainda está montado após o await do modal
+    if (!mounted) return null;
+
     setState(() {
       _isLoading = true;
     });
 
     try {
+      // Captura as dependências de contexto ANTES dos próximos awaits
       final auth = Provider.of<AuthProvider>(context, listen: false);
-      // Capture these before any async gaps to avoid using BuildContext after awaits
-      final refreshProvider = Provider.of<RefreshProvider>(
-        context,
-        listen: false,
-      );
+      final refreshProvider = Provider.of<RefreshProvider>(context, listen: false);
       final navigator = Navigator.of(context);
 
       // Converte o conteúdo do Rich Text para JSON
@@ -397,6 +409,8 @@ class _CreateHistoriaScreenState extends State<CreateHistoriaScreen> {
         humor: _selectedMood,
         energia: _selectedEnergy,
         continua: continuaValue,
+        // Se vier do Motor de Ganchos, vincula silenciosamente à história pai
+        idHistoriaOrigem: _idHistoriaOrigem,
         tags: _selectedTags,
         pessoas: _selectedPessoas,
         local: localController.text.trim().isEmpty

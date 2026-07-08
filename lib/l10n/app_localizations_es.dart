@@ -3081,4 +3081,74 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get continuaYes => 'Sí';
+
+  @override
+  String get continuityHookBadge => '📖 Historia abierta';
+
+  @override
+  String get continuityHookG01 =>
+      'Quizás fue tenso... Mirando lo que escribiste hace unos días, ¿cómo ves esa situación con la mente más tranquila?';
+
+  @override
+  String get continuityHookG02 =>
+      '¿Recuerdas ese episodio que mencionaste recientemente? ¿Cómo han evolucionado las cosas desde entonces?';
+
+  @override
+  String get continuityHookG03 =>
+      'Viviste un momento muy significativo, pero escribiste un relato breve. ¿Te gustaría intentar expresar con palabras lo que pasaba por tu mente?';
+
+  @override
+  String get continuityHookTalvez =>
+      'Mirándolo con un poco más de distancia... ¿crees que esa situación de hace unos días todavía está ocurriendo?';
+
+  @override
+  String get continuityHookNaoSei =>
+      'A veces las cosas necesitan tiempo para tener sentido. ¿Cómo ves hoy lo que pasó y lo que escribiste ese día?';
+
+  @override
+  String get continuityHookBtnContinue => 'Continuar';
+
+  @override
+  String get continuityHookBtnOptions => 'Opciones';
+
+  @override
+  String get continuityHookFreeLimitTitle => 'Función exclusiva';
+
+  @override
+  String get continuityHookFreeLimitBody =>
+      'Ya has utilizado tus 3 historias gratuitas con seguimiento de continuidad. Actualiza a Premium y escribe narrativas sin límite.';
+
+  @override
+  String get continuityHookDebugSectionTitle => 'Motor de Ganchos (Debug)';
+
+  @override
+  String get continuityHookDebugAcceleratorLabel => 'Acelerador de Reloj';
+
+  @override
+  String get continuityHookDebugAcceleratorSubtitle =>
+      'Ignora las ventanas de tiempo de 2/3/4 días';
+
+  @override
+  String get continuityHookDebugResetCounters => 'Reiniciar Contador Free';
+
+  @override
+  String get continuityHookDebugForceReload => 'Forzar Recarga de Tarjeta';
+
+  @override
+  String get continuityHookFeatureLabel =>
+      'Continuidad de Historias (≤3 Free · Ilimitado Premium)';
+
+  @override
+  String get continuityHookGenericSim => 'Es hora de continuar esta historia';
+
+  @override
+  String get continuityHookGenericTalvez =>
+      'Quizás quieras continuar esta historia';
+
+  @override
+  String get continuityHookGenericNaoSei =>
+      '¿Has decidido si quieres continuar esta historia?';
+
+  @override
+  String get continuityStatusClose => 'Cerrar';
 }

@@ -19,6 +19,7 @@ import 'db/database_helper.dart';
 import 'models/historia.dart';
 import 'providers/auth_provider.dart';
 import 'providers/chapter_filter_provider.dart';
+import 'providers/continuity_hook_provider.dart';
 import 'providers/home_layout_provider.dart';
 import 'providers/home_stories_provider.dart';
 import 'providers/insight_provider.dart';
@@ -28,11 +29,11 @@ import 'providers/pin_provider.dart';
 import 'providers/premium_provider.dart';
 import 'providers/refresh_provider.dart';
 import 'providers/scroll_position_provider.dart';
-import 'providers/theme_provider.dart';
 import 'providers/stats_provider.dart';
-import 'repositories/historia_repository.dart';
+import 'providers/theme_provider.dart';
 import 'repositories/capitulo_repository.dart';
 import 'repositories/group_repository.dart';
+import 'repositories/historia_repository.dart';
 import 'screens/about_screen.dart';
 import 'screens/backup_manager_screen.dart';
 import 'screens/calendar_view_screen.dart';
@@ -581,6 +582,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // Provider para manter posição do scroll em listas
         ChangeNotifierProvider(create: (_) => ScrollPositionProvider()),
         ChangeNotifierProvider(create: (_) => ChapterFilterProvider()),
+        // Provider para o Motor de Ganchos de Continuidade
+        ChangeNotifierProvider(create: (_) => ContinuityHookProvider()),
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (context, themeProvider, localeProvider, child) {

@@ -12,14 +12,17 @@ import '../db/historia_foto_helper.dart';
 import '../models/historia.dart';
 import '../models/insight.dart';
 import '../providers/auth_provider.dart';
+import '../providers/continuity_hook_provider.dart';
 import '../providers/home_stories_provider.dart';
 import '../providers/insight_provider.dart';
+import '../providers/premium_provider.dart';
 import '../providers/refresh_provider.dart';
 import '../providers/scroll_position_provider.dart';
 import '../providers/stats_provider.dart';
 import '../services/thumbnail_service.dart';
 import '../theme/animation_durations.dart';
 import '../widgets/compact_historia_card.dart';
+import '../widgets/continuity_hook_card.dart';
 import '../widgets/insight_card.dart';
 import '../widgets/mood_energy_chart_card.dart';
 import '../widgets/stats_chart_card.dart';
@@ -611,6 +614,13 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent>
             context,
             listen: false,
           ).loadStats();
+          // Carrega o card de continuidade após os insights
+          final isPremium =
+              Provider.of<PremiumProvider>(context, listen: false).isPremium;
+          Provider.of<ContinuityHookProvider>(
+            context,
+            listen: false,
+          ).loadHook(userId, isPremium: isPremium);
         }
         // Restaura posição do scroll após dados serem carregados
         if (!mounted) return;
@@ -961,6 +971,15 @@ class _PaginatedHomeContentState extends State<_PaginatedHomeContent>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Card de continuidade: aparece entre a saudacão e os insights
+                  Consumer<ContinuityHookProvider>(
+                    builder: (context, hookProvider, _) {
+                      if (hookProvider.hookStory == null) {
+                        return const SizedBox.shrink();
+                      }
+                      return const ContinuityHookCard();
+                    },
+                  ),
                   if (showChart) MoodEnergyChartCard(stories: recentChartStories),
                   const StatsChartCard(),
                   ...insights.map(buildInsightCard),

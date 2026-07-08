@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/generated/app_localizations.dart';
+import '../providers/auth_provider.dart';
+import '../providers/continuity_hook_provider.dart';
 import '../providers/premium_provider.dart';
 import '../theme/m3_expressive_theme.dart';
 
@@ -175,6 +177,11 @@ class PremiumDebugScreen extends StatelessWidget {
                 enabled: premium.canView7DayMoodInsight,
                 plan: l10n.premiumPlan,
               ),
+              _FeatureRow(
+                label: l10n.continuityHookFeatureLabel,
+                enabled: premium.isPremium,
+                plan: l10n.premiumPlan,
+              ),
               // Adicione novas features aqui conforme forem sendo criadas.
               // Exemplo futuro:
               // _FeatureRow(
@@ -182,6 +189,12 @@ class PremiumDebugScreen extends StatelessWidget {
               //   enabled: premium.canUseCloudSync,
               //   plan: l10n.premiumPlan,
               // ),
+
+              const SizedBox(height: 24),
+              // ------------------------------------------------------------------
+              // Seção de debug do Motor de Ganchos de Continuidade
+              // ------------------------------------------------------------------
+              const _HookEngineDebugSection(),
             ],
           );
         },
@@ -280,6 +293,128 @@ class _FeatureRow extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Seção de debug do Motor de Ganchos de Continuidade
+// -----------------------------------------------------------------------------
+
+class _HookEngineDebugSection extends StatelessWidget {
+  const _HookEngineDebugSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Consumer<ContinuityHookProvider>(
+      builder: (context, hookProvider, _) {
+        final userId =
+            Provider.of<AuthProvider>(context, listen: false).user?.id ?? '';
+        final isPremium =
+            Provider.of<PremiumProvider>(context, listen: false).isPremium;
+
+        return Card(
+          color: Colors.teal.shade50,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Título da seção
+                Row(
+                  children: [
+                    const Icon(Icons.timer, color: Colors.teal),
+                    const SizedBox(width: 8),
+                    Text(
+                      l10n.continuityHookDebugSectionTitle,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal.shade800,
+                          ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 12),
+
+                // Toggle: Acelerador de relógio
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    l10n.continuityHookDebugAcceleratorLabel,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.labelColor(context),
+                    ),
+                  ),
+                  subtitle: Text(
+                    l10n.continuityHookDebugAcceleratorSubtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  value: hookProvider.debugAccelerate,
+                  activeThumbColor: Colors.teal,
+                  activeTrackColor: Colors.teal.shade200,
+                  onChanged: (value) => context
+                      .read<ContinuityHookProvider>()
+                      .setDebugAccelerate(value),
+                ),
+
+                const SizedBox(height: 8),
+
+                // Botão: Resetar contador Free
+                OutlinedButton.icon(
+                  onPressed: userId.isEmpty
+                      ? null
+                      : () async {
+                          await context
+                              .read<ContinuityHookProvider>()
+                              .debugResetCounters(userId);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Contador Free resetado ✔'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.teal.shade700,
+                    side: BorderSide(color: Colors.teal.shade300),
+                    minimumSize: const Size(double.infinity, 44),
+                  ),
+                  icon: const Icon(Icons.restart_alt, size: 18),
+                  label: Text(l10n.continuityHookDebugResetCounters),
+                ),
+
+                const SizedBox(height: 8),
+
+                // Botão: Forçar reload do card
+                FilledButton.icon(
+                  onPressed: userId.isEmpty
+                      ? null
+                      : () => context
+                          .read<ContinuityHookProvider>()
+                          .loadHook(userId, isPremium: isPremium),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.teal.shade600,
+                    minimumSize: const Size(double.infinity, 44),
+                  ),
+                  icon: const Icon(Icons.refresh, size: 18),
+                  label: Text(l10n.continuityHookDebugForceReload),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

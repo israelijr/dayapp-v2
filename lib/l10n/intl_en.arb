@@ -2992,5 +2992,85 @@
   "continuaYes": "Yes",
   "@continuaYes": {
     "type": "text"
+  },
+  "continuityHookBadge": "📖 Open story",
+  "@continuityHookBadge": {
+    "description": "Chip shown at the top of the continuity hook card"
+  },
+  "continuityHookG01": "Maybe it was tense... Looking back at what you wrote a few days ago, how do you see that situation with a calmer mind?",
+  "@continuityHookG01": {
+    "description": "Hook text G-01: Post-Tension (mood ≤ 2 + energy = 3)"
+  },
+  "continuityHookG02": "Remember that episode you shared recently? How have things unfolded since then?",
+  "@continuityHookG02": {
+    "description": "Hook text G-02: Contextual closure (fallback with emotional signal for YES stories)"
+  },
+  "continuityHookG03": "You went through a very significant moment, but wrote a brief account. Would you like to put into words what was going through your mind?",
+  "@continuityHookG03": {
+    "description": "Hook text G-03: Expression (emotional extremes + text < 15 words)"
+  },
+  "continuityHookTalvez": "Looking at it with a little more distance... do you think that situation from a few days ago is still happening?",
+  "@continuityHookTalvez": {
+    "description": "Hook text for MAYBE status (continua=3)"
+  },
+  "continuityHookNaoSei": "Sometimes things need time to make sense. How do you see today what happened and what you wrote that day?",
+  "@continuityHookNaoSei": {
+    "description": "Hook text for NOT SURE status (continua=2)"
+  },
+  "continuityHookBtnContinue": "Continue",
+  "@continuityHookBtnContinue": {
+    "description": "Primary button on the continuity card to create a follow-up story"
+  },
+  "continuityHookBtnOptions": "Options",
+  "@continuityHookBtnOptions": {
+    "description": "Secondary button to expand the status options on the continuity card"
+  },
+  "continuityHookFreeLimitTitle": "Exclusive feature",
+  "@continuityHookFreeLimitTitle": {
+    "description": "Title of the Free limit reached notice"
+  },
+  "continuityHookFreeLimitBody": "You have already used your 3 free stories with continuity tracking. Upgrade to Premium and write unlimited narratives.",
+  "@continuityHookFreeLimitBody": {
+    "description": "Body of the Free limit notice for the continuity feature"
+  },
+  "continuityHookDebugSectionTitle": "Hook Engine (Debug)",
+  "@continuityHookDebugSectionTitle": {
+    "description": "Title of the debug section for the hook engine in PremiumDebugScreen"
+  },
+  "continuityHookDebugAcceleratorLabel": "Clock Accelerator",
+  "@continuityHookDebugAcceleratorLabel": {
+    "description": "Label for the clock accelerator toggle in debug"
+  },
+  "continuityHookDebugAcceleratorSubtitle": "Ignores the 2/3/4-day time windows",
+  "@continuityHookDebugAcceleratorSubtitle": {
+    "description": "Subtitle for the clock accelerator toggle"
+  },
+  "continuityHookDebugResetCounters": "Reset Free Stories Counter",
+  "@continuityHookDebugResetCounters": {
+    "description": "Button to reset the Free lifetime counter in debug"
+  },
+  "continuityHookDebugForceReload": "Force Reload Card",
+  "@continuityHookDebugForceReload": {
+    "description": "Button to force a reload of the continuity card in debug"
+  },
+  "continuityHookFeatureLabel": "Story Continuity (≤3 Free · Unlimited Premium)",
+  "@continuityHookFeatureLabel": {
+    "description": "Feature label for story continuity in the PremiumDebugScreen feature list"
+  },
+  "continuityHookGenericSim": "Time to continue this story",
+  "@continuityHookGenericSim": {
+    "description": "Generic message for YES stories with no emotional signal (mood=3, energy=2)"
+  },
+  "continuityHookGenericTalvez": "Maybe you'd like to continue this story",
+  "@continuityHookGenericTalvez": {
+    "description": "Generic message for MAYBE stories with no emotional signal"
+  },
+  "continuityHookGenericNaoSei": "Have you decided whether you want to continue this story?",
+  "@continuityHookGenericNaoSei": {
+    "description": "Generic message for NOT SURE stories with no emotional signal"
+  },
+  "continuityStatusClose": "Close",
+  "@continuityStatusClose": {
+    "description": "Button to close the continuity cycle in Phase 2 of the card"
   }
 }

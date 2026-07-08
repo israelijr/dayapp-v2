@@ -2272,5 +2272,85 @@
   "continuaYes": "Sì",
   "@continuaYes": {
     "type": "text"
+  },
+  "continuityHookBadge": "📖 Storia aperta",
+  "@continuityHookBadge": {
+    "description": "Chip di identificazione mostrato in cima alla scheda di continuità"
+  },
+  "continuityHookG01": "Forse è stato un momento di tensione... Rileggendo ciò che hai scritto qualche giorno fa, come vedi quella situazione con la mente più calma?",
+  "@continuityHookG01": {
+    "description": "Testo del gancio G-01: Post-Tensione (umore ≤ 2 + energia = 3)"
+  },
+  "continuityHookG02": "Ricordi quell'episodio che hai condiviso di recente? Come si sono evolute le cose da allora?",
+  "@continuityHookG02": {
+    "description": "Testo del gancio G-02: Chiusura contestuale (messaggio di riserva con segnale emotivo per le storie SÌ)"
+  },
+  "continuityHookG03": "Hai vissuto un momento molto significativo, ma hai scritto un breve racconto. Vorresti provare a mettere in parole ciò che stava passando nella tua mente?",
+  "@continuityHookG03": {
+    "description": "Testo del gancio G-03: Espressione (estremi emotivi + testo < 15 parole)"
+  },
+  "continuityHookTalvez": "Guardandolo con un po' più di distanza... pensi che quella situazione di qualche giorno fa sia ancora in corso?",
+  "@continuityHookTalvez": {
+    "description": "Testo del gancio per lo stato FORSE (continua=3)"
+  },
+  "continuityHookNaoSei": "A volte le cose hanno bisogno di tempo per avere senso. Come vedi oggi quello che è successo e quello che hai scritto quel giorno?",
+  "@continuityHookNaoSei": {
+    "description": "Testo del gancio per lo stato NON SO (continua=2)"
+  },
+  "continuityHookBtnContinue": "Continua",
+  "@continuityHookBtnContinue": {
+    "description": "Pulsante principale della scheda di continuità per creare una storia di seguito"
+  },
+  "continuityHookBtnOptions": "Opzioni",
+  "@continuityHookBtnOptions": {
+    "description": "Pulsante secondario per espandere le opzioni di stato sulla scheda"
+  },
+  "continuityHookFreeLimitTitle": "Funzionalità esclusiva",
+  "@continuityHookFreeLimitTitle": {
+    "description": "Titolo dell'avviso di limite Free raggiunto"
+  },
+  "continuityHookFreeLimitBody": "Hai già utilizzato le tue 3 storie gratuite con il monitoraggio della continuità. Passa a Premium e scrivi narrazioni senza limiti.",
+  "@continuityHookFreeLimitBody": {
+    "description": "Corpo dell'avviso di limite Free per la funzionalità di continuità"
+  },
+  "continuityHookDebugSectionTitle": "Motore dei Ganci (Debug)",
+  "@continuityHookDebugSectionTitle": {
+    "description": "Titolo della sezione debug del motore in PremiumDebugScreen"
+  },
+  "continuityHookDebugAcceleratorLabel": "Acceleratore dell'Orologio",
+  "@continuityHookDebugAcceleratorLabel": {
+    "description": "Etichetta del toggle dell'acceleratore dell'orologio in debug"
+  },
+  "continuityHookDebugAcceleratorSubtitle": "Ignora le finestre temporali di 2/3/4 giorni",
+  "@continuityHookDebugAcceleratorSubtitle": {
+    "description": "Sottotitolo del toggle dell'acceleratore dell'orologio"
+  },
+  "continuityHookDebugResetCounters": "Reimposta Contatore Free",
+  "@continuityHookDebugResetCounters": {
+    "description": "Pulsante per azzerare il contatore vitalizio Free in debug"
+  },
+  "continuityHookDebugForceReload": "Forza Ricaricamento Scheda",
+  "@continuityHookDebugForceReload": {
+    "description": "Pulsante per forzare il ricaricamento della scheda di continuità in debug"
+  },
+  "continuityHookFeatureLabel": "Continuità delle Storie (≤3 Free · Illimitato Premium)",
+  "@continuityHookFeatureLabel": {
+    "description": "Etichetta della funzionalità nella lista di PremiumDebugScreen"
+  },
+  "continuityHookGenericSim": "È ora di continuare questa storia",
+  "@continuityHookGenericSim": {
+    "description": "Messaggio generico per le storie SÌ senza segnale emotivo (umore=3, energia=2)"
+  },
+  "continuityHookGenericTalvez": "Forse vorresti continuare questa storia",
+  "@continuityHookGenericTalvez": {
+    "description": "Messaggio generico per le storie FORSE senza segnale emotivo"
+  },
+  "continuityHookGenericNaoSei": "Hai deciso se vuoi continuare questa storia?",
+  "@continuityHookGenericNaoSei": {
+    "description": "Messaggio generico per le storie NON SO senza segnale emotivo"
+  },
+  "continuityStatusClose": "Chiudi",
+  "@continuityStatusClose": {
+    "description": "Pulsante per chiudere il ciclo di continuità nella Fase 2 della scheda"
   }
 }

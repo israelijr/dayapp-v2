@@ -22,6 +22,11 @@ class Historia {
   final int energia;
   final String? local;
   final int continua;
+  // Campos do Motor de Ganchos de Continuidade (v5)
+  final int? idHistoriaOrigem;
+  final int fimHistoria;
+  final int contadorSugestoes;
+  final DateTime? dataUltimaSugestao;
 
   Historia({
     required this.userId,
@@ -45,6 +50,10 @@ class Historia {
     this.energia = 2,
     this.local,
     this.continua = 1,
+    this.idHistoriaOrigem,
+    this.fimHistoria = 0,
+    this.contadorSugestoes = 0,
+    this.dataUltimaSugestao,
   });
 
   factory Historia.fromMap(Map<String, dynamic> map) {
@@ -83,6 +92,13 @@ class Historia {
       // Compatibilidade: campo local pode ser nulo se não existir no banco
       local: map.containsKey('local') ? map['local'] as String? : null,
       continua: map['continua'] as int? ?? 1,
+      // Retrocompatibilidade: campos ausentes em bancos antigos usam padrão 0/null
+      idHistoriaOrigem: map['id_historia_origem'] as int?,
+      fimHistoria: map['fim_historia'] as int? ?? 0,
+      contadorSugestoes: map['contador_sugestoes'] as int? ?? 0,
+      dataUltimaSugestao: map['data_ultima_sugestao'] != null
+          ? DateTime.tryParse(map['data_ultima_sugestao'] as String)
+          : null,
     );
   }
 
@@ -109,6 +125,10 @@ class Historia {
       'energia': energia,
       'local': local,
       'continua': continua,
+      'id_historia_origem': idHistoriaOrigem,
+      'fim_historia': fimHistoria,
+      'contador_sugestoes': contadorSugestoes,
+      'data_ultima_sugestao': dataUltimaSugestao?.toIso8601String(),
     };
   }
 }

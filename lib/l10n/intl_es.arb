@@ -2659,5 +2659,85 @@
   "continuaYes": "Sí",
   "@continuaYes": {
     "type": "text"
+  },
+  "continuityHookBadge": "📖 Historia abierta",
+  "@continuityHookBadge": {
+    "description": "Chip de identificación en la parte superior de la tarjeta de continuidad"
+  },
+  "continuityHookG01": "Quizás fue tenso... Mirando lo que escribiste hace unos días, ¿cómo ves esa situación con la mente más tranquila?",
+  "@continuityHookG01": {
+    "description": "Texto del gancho G-01: Post-Tensión (humor ≤ 2 + energía = 3)"
+  },
+  "continuityHookG02": "¿Recuerdas ese episodio que mencionaste recientemente? ¿Cómo han evolucionado las cosas desde entonces?",
+  "@continuityHookG02": {
+    "description": "Texto del gancho G-02: Cierre contextual (alternativa con señal emocional para historias SÍ)"
+  },
+  "continuityHookG03": "Viviste un momento muy significativo, pero escribiste un relato breve. ¿Te gustaría intentar expresar con palabras lo que pasaba por tu mente?",
+  "@continuityHookG03": {
+    "description": "Texto del gancho G-03: Expresión (extremos emocionales + texto < 15 palabras)"
+  },
+  "continuityHookTalvez": "Mirándolo con un poco más de distancia... ¿crees que esa situación de hace unos días todavía está ocurriendo?",
+  "@continuityHookTalvez": {
+    "description": "Texto del gancho para estado QUIZÁS (continua=3)"
+  },
+  "continuityHookNaoSei": "A veces las cosas necesitan tiempo para tener sentido. ¿Cómo ves hoy lo que pasó y lo que escribiste ese día?",
+  "@continuityHookNaoSei": {
+    "description": "Texto del gancho para estado NO SÉ (continua=2)"
+  },
+  "continuityHookBtnContinue": "Continuar",
+  "@continuityHookBtnContinue": {
+    "description": "Botón principal de la tarjeta de continuidad para crear una historia de seguimiento"
+  },
+  "continuityHookBtnOptions": "Opciones",
+  "@continuityHookBtnOptions": {
+    "description": "Botón secundario para expandir las opciones de estado en la tarjeta"
+  },
+  "continuityHookFreeLimitTitle": "Función exclusiva",
+  "@continuityHookFreeLimitTitle": {
+    "description": "Título del aviso de límite Free alcanzado"
+  },
+  "continuityHookFreeLimitBody": "Ya has utilizado tus 3 historias gratuitas con seguimiento de continuidad. Actualiza a Premium y escribe narrativas sin límite.",
+  "@continuityHookFreeLimitBody": {
+    "description": "Cuerpo del aviso de límite Free para la función de continuidad"
+  },
+  "continuityHookDebugSectionTitle": "Motor de Ganchos (Debug)",
+  "@continuityHookDebugSectionTitle": {
+    "description": "Título de la sección de debug del motor en PremiumDebugScreen"
+  },
+  "continuityHookDebugAcceleratorLabel": "Acelerador de Reloj",
+  "@continuityHookDebugAcceleratorLabel": {
+    "description": "Etiqueta del interruptor del acelerador de reloj en debug"
+  },
+  "continuityHookDebugAcceleratorSubtitle": "Ignora las ventanas de tiempo de 2/3/4 días",
+  "@continuityHookDebugAcceleratorSubtitle": {
+    "description": "Subtítulo del interruptor del acelerador de reloj"
+  },
+  "continuityHookDebugResetCounters": "Reiniciar Contador Free",
+  "@continuityHookDebugResetCounters": {
+    "description": "Botón para reiniciar el contador vitalicio Free en debug"
+  },
+  "continuityHookDebugForceReload": "Forzar Recarga de Tarjeta",
+  "@continuityHookDebugForceReload": {
+    "description": "Botón para forzar la recarga de la tarjeta de continuidad en debug"
+  },
+  "continuityHookFeatureLabel": "Continuidad de Historias (≤3 Free · Ilimitado Premium)",
+  "@continuityHookFeatureLabel": {
+    "description": "Etiqueta de la función de continuidad en la lista de PremiumDebugScreen"
+  },
+  "continuityHookGenericSim": "Es hora de continuar esta historia",
+  "@continuityHookGenericSim": {
+    "description": "Mensaje genérico para historias SÍ sin señal emocional (humor=3, energía=2)"
+  },
+  "continuityHookGenericTalvez": "Quizás quieras continuar esta historia",
+  "@continuityHookGenericTalvez": {
+    "description": "Mensaje genérico para historias QUIZÁS sin señal emocional"
+  },
+  "continuityHookGenericNaoSei": "¿Has decidido si quieres continuar esta historia?",
+  "@continuityHookGenericNaoSei": {
+    "description": "Mensaje genérico para historias NO SÉ sin señal emocional"
+  },
+  "continuityStatusClose": "Cerrar",
+  "@continuityStatusClose": {
+    "description": "Botón para cerrar el ciclo de continuidad en la Fase 2 de la tarjeta"
   }
 }

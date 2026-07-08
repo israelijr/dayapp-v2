@@ -24,6 +24,133 @@ class HistoriaRepository {
     return (result.first['cnt'] ?? 0) as int;
   }
 
+  // ---------------------------------------------------------------------------
+  // Motor de Ganchos de Continuidade
+  // ---------------------------------------------------------------------------
+
+  /// Conta quantas histórias únicas já foram exibidas pelo motor ao longo de
+  /// toda a vida do app (contador vitalício para controle Free).
+  Future<int> countLifetimeTrackedStories(String userId) async {
+    final db = await DatabaseHelper().database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS cnt FROM $_table WHERE user_id = ? AND contador_sugestoes > 0',
+      [userId],
+    );
+    return (result.first['cnt'] ?? 0) as int;
+  }
+
+  /// Busca a história mais relevante para exibir o card de continuidade.
+  ///
+  /// [isPremium]: se false, verifica o limite vitalício de 3 histórias Free.
+  /// [debugAccelerate]: se true, ignora as janelas de tempo (para testes).
+  Future<Historia?> fetchContinuityHook(
+    String userId, {
+    required bool isPremium,
+    bool debugAccelerate = false,
+  }) async {
+    // Controle Free: no máximo 3 histórias tratadas ao longo da vida do app
+    if (!isPremium) {
+      final tracked = await countLifetimeTrackedStories(userId);
+      if (tracked >= 3) return null;
+    }
+
+    final db = await DatabaseHelper().database;
+
+    final dateFilter = debugAccelerate
+        ? '' // ignora janela de tempo no modo debug
+        : '''
+      AND (
+        (continua = 4 AND (data_ultima_sugestao IS NULL OR datetime(data_ultima_sugestao) <= datetime('now', '-2 days'))) OR
+        (continua = 3 AND (data_ultima_sugestao IS NULL OR datetime(data_ultima_sugestao) <= datetime('now', '-3 days'))) OR
+        (continua = 2 AND (data_ultima_sugestao IS NULL OR datetime(data_ultima_sugestao) <= datetime('now', '-4 days')))
+      )''';
+
+    final results = await db.rawQuery('''
+      SELECT *,
+          CASE
+              WHEN continua = 4 THEN 3
+              WHEN continua = 3 THEN 2
+              WHEN continua = 2 THEN 1
+          END AS peso_prioridade
+      FROM $_table
+      WHERE user_id = ?
+        AND fim_historia = 0
+        AND continua IN (2, 3, 4)
+        AND contador_sugestoes < 3
+        AND (arquivado IS NULL OR arquivado != 'sim')
+        AND (excluido IS NULL OR excluido != 'sim')
+        $dateFilter
+      ORDER BY peso_prioridade DESC, data DESC
+      LIMIT 1
+    ''', [userId]);
+
+    if (results.isEmpty) return null;
+    return Historia.fromMap(results.first);
+  }
+
+  /// Incrementa o contador de exibições e atualiza data_ultima_sugestao.
+  /// Deve ser chamado imediatamente após exibir o card ao usuário.
+  Future<void> markHookDisplayed(int historiaId) async {
+    final db = await DatabaseHelper().database;
+    await db.rawUpdate(
+      '''
+      UPDATE $_table
+      SET contador_sugestoes = contador_sugestoes + 1,
+          data_ultima_sugestao = datetime('now')
+      WHERE id = ?
+      ''',
+      [historiaId],
+    );
+  }
+
+  /// Encerra o ciclo de continuidade de uma história:
+  /// seta continua=1 (Não) e fim_historia=1.
+  /// Equivale à lógica das triggers SQL — implementado em Dart.
+  Future<void> closeContinuityHook(int historiaId) async {
+    final db = await DatabaseHelper().database;
+    await db.update(
+      _table,
+      {
+        'continua': 1,
+        'fim_historia': 1,
+        'data_update': DateTime.now().toIso8601String(),
+      },
+      where: 'id = ?',
+      whereArgs: [historiaId],
+    );
+  }
+
+  /// Atualiza apenas o status de continuidade de uma história.
+  /// Se continua=1 (Não), fecha o ciclo automaticamente (lógica da Trigger 2).
+  Future<void> updateContinuaStatus(int historiaId, int continua) async {
+    final db = await DatabaseHelper().database;
+    final data = <String, dynamic>{
+      'continua': continua,
+      'data_update': DateTime.now().toIso8601String(),
+    };
+    if (continua == 1) {
+      // Encerra o ciclo (equivale à Trigger 2, implementado em Dart)
+      data['fim_historia'] = 1;
+    }
+    await db.update(
+      _table,
+      data,
+      where: 'id = ?',
+      whereArgs: [historiaId],
+    );
+  }
+
+  /// Reseta o contador de sugestões de todas as histórias do usuário (debug only).
+  Future<void> debugResetHookCounters(String userId) async {
+    final db = await DatabaseHelper().database;
+    await db.update(
+      _table,
+      {'contador_sugestoes': 0, 'data_ultima_sugestao': null},
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+  }
+
   Future<List<Historia>> fetchUserStoriesPaginated({
     required String userId,
     required bool showAllStories,
@@ -325,6 +452,12 @@ class HistoriaRepository {
       whereArgs: [historia.id],
     );
 
+    // Lógica da Trigger 2 em Dart: se o usuário definiu continua=1 (Não),
+    // encerra o ciclo de continuidade automaticamente.
+    if (continua == 1) {
+      await updateContinuaStatus(historia.id!, 1);
+    }
+
     if (tags != null) {
       await TagHelper().setTagsForHistoria(historia.id!, tags, db);
     }
@@ -372,6 +505,7 @@ class HistoriaRepository {
     required int humor,
     required int energia,
     int continua = 1,
+    int? idHistoriaOrigem,
     String? descricao,
     String? emoticon,
     String? grupo,
@@ -401,7 +535,14 @@ class HistoriaRepository {
       'local': local,
       'continua': continua,
       'backed_up': 0,
+      'id_historia_origem': idHistoriaOrigem,
     });
+
+    // Lógica da Trigger 1 em Dart: se esta história referencia uma pai,
+    // encerra a história pai automaticamente.
+    if (idHistoriaOrigem != null) {
+      await closeContinuityHook(idHistoriaOrigem);
+    }
 
     if (tags != null && tags.isNotEmpty) {
       await TagHelper().setTagsForHistoria(historiaId, tags, db);

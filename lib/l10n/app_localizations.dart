@@ -5489,6 +5489,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yes'**
   String get continuaYes;
+
+  /// Chip shown at the top of the continuity hook card
+  ///
+  /// In en, this message translates to:
+  /// **'📖 Open story'**
+  String get continuityHookBadge;
+
+  /// Hook text G-01: Post-Tension (mood ≤ 2 + energy = 3)
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe it was tense... Looking back at what you wrote a few days ago, how do you see that situation with a calmer mind?'**
+  String get continuityHookG01;
+
+  /// Hook text G-02: Contextual closure (fallback with emotional signal for YES stories)
+  ///
+  /// In en, this message translates to:
+  /// **'Remember that episode you shared recently? How have things unfolded since then?'**
+  String get continuityHookG02;
+
+  /// Hook text G-03: Expression (emotional extremes + text < 15 words)
+  ///
+  /// In en, this message translates to:
+  /// **'You went through a very significant moment, but wrote a brief account. Would you like to put into words what was going through your mind?'**
+  String get continuityHookG03;
+
+  /// Hook text for MAYBE status (continua=3)
+  ///
+  /// In en, this message translates to:
+  /// **'Looking at it with a little more distance... do you think that situation from a few days ago is still happening?'**
+  String get continuityHookTalvez;
+
+  /// Hook text for NOT SURE status (continua=2)
+  ///
+  /// In en, this message translates to:
+  /// **'Sometimes things need time to make sense. How do you see today what happened and what you wrote that day?'**
+  String get continuityHookNaoSei;
+
+  /// Primary button on the continuity card to create a follow-up story
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continuityHookBtnContinue;
+
+  /// Secondary button to expand the status options on the continuity card
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get continuityHookBtnOptions;
+
+  /// Title of the Free limit reached notice
+  ///
+  /// In en, this message translates to:
+  /// **'Exclusive feature'**
+  String get continuityHookFreeLimitTitle;
+
+  /// Body of the Free limit notice for the continuity feature
+  ///
+  /// In en, this message translates to:
+  /// **'You have already used your 3 free stories with continuity tracking. Upgrade to Premium and write unlimited narratives.'**
+  String get continuityHookFreeLimitBody;
+
+  /// Title of the debug section for the hook engine in PremiumDebugScreen
+  ///
+  /// In en, this message translates to:
+  /// **'Hook Engine (Debug)'**
+  String get continuityHookDebugSectionTitle;
+
+  /// Label for the clock accelerator toggle in debug
+  ///
+  /// In en, this message translates to:
+  /// **'Clock Accelerator'**
+  String get continuityHookDebugAcceleratorLabel;
+
+  /// Subtitle for the clock accelerator toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Ignores the 2/3/4-day time windows'**
+  String get continuityHookDebugAcceleratorSubtitle;
+
+  /// Button to reset the Free lifetime counter in debug
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Free Stories Counter'**
+  String get continuityHookDebugResetCounters;
+
+  /// Button to force a reload of the continuity card in debug
+  ///
+  /// In en, this message translates to:
+  /// **'Force Reload Card'**
+  String get continuityHookDebugForceReload;
+
+  /// Feature label for story continuity in the PremiumDebugScreen feature list
+  ///
+  /// In en, this message translates to:
+  /// **'Story Continuity (≤3 Free · Unlimited Premium)'**
+  String get continuityHookFeatureLabel;
+
+  /// Generic message for YES stories with no emotional signal (mood=3, energy=2)
+  ///
+  /// In en, this message translates to:
+  /// **'Time to continue this story'**
+  String get continuityHookGenericSim;
+
+  /// Generic message for MAYBE stories with no emotional signal
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe you\'d like to continue this story'**
+  String get continuityHookGenericTalvez;
+
+  /// Generic message for NOT SURE stories with no emotional signal
+  ///
+  /// In en, this message translates to:
+  /// **'Have you decided whether you want to continue this story?'**
+  String get continuityHookGenericNaoSei;
+
+  /// Button to close the continuity cycle in Phase 2 of the card
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get continuityStatusClose;
 }
 
 class _AppLocalizationsDelegate

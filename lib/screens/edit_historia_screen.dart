@@ -24,6 +24,7 @@ import '../services/emoji_service.dart';
 import '../widgets/audio_recorder_widget.dart';
 import '../widgets/compact_audio_icon.dart';
 import '../widgets/compact_video_icon.dart';
+import '../widgets/continua_selection_modal.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/emoji_selection_modal.dart';
 import '../widgets/entry_toolbar.dart';
@@ -36,7 +37,6 @@ import '../widgets/mood_energy_selectors.dart';
 import '../widgets/pessoas_input_widget.dart';
 import '../widgets/tag_input_widget.dart';
 import '../widgets/video_recorder_widget.dart';
-import '../widgets/continua_selection_modal.dart';
 
 class SentenceCapitalizationTextInputFormatter extends TextInputFormatter {
   @override

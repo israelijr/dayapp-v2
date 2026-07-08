@@ -2272,5 +2272,85 @@
   "continuaYes": "Oui",
   "@continuaYes": {
     "type": "text"
+  },
+  "continuityHookBadge": "📖 Histoire en cours",
+  "@continuityHookBadge": {
+    "description": "Puce d'identification affichée en haut de la carte de continuité"
+  },
+  "continuityHookG01": "C'était peut-être tendu... En relisant ce que vous avez écrit il y a quelques jours, comment voyez-vous cette situation avec l'esprit plus calme ?",
+  "@continuityHookG01": {
+    "description": "Texte du crochet G-01 : Post-Tension (humeur ≤ 2 + énergie = 3)"
+  },
+  "continuityHookG02": "Vous souvenez-vous de cet épisode que vous avez partagé récemment ? Comment les choses ont-elles évolué depuis ?",
+  "@continuityHookG02": {
+    "description": "Texte du crochet G-02 : Clôture contextuelle (message de repli avec signal émotionnel pour les histoires OUI)"
+  },
+  "continuityHookG03": "Vous avez vécu un moment très marquant, mais vous avez écrit un bref récit. Souhaitez-vous essayer de mettre en mots ce qui se passait dans votre esprit ?",
+  "@continuityHookG03": {
+    "description": "Texte du crochet G-03 : Expression (extrêmes émotionnels + texte < 15 mots)"
+  },
+  "continuityHookTalvez": "En prenant un peu de recul... pensez-vous que cette situation d'il y a quelques jours est encore en cours ?",
+  "@continuityHookTalvez": {
+    "description": "Texte du crochet pour le statut PEUT-ÊTRE (continua=3)"
+  },
+  "continuityHookNaoSei": "Parfois, les choses ont besoin de temps pour avoir du sens. Comment voyez-vous aujourd'hui ce qui s'est passé et ce que vous avez écrit ce jour-là ?",
+  "@continuityHookNaoSei": {
+    "description": "Texte du crochet pour le statut JE NE SAIS PAS (continua=2)"
+  },
+  "continuityHookBtnContinue": "Continuer",
+  "@continuityHookBtnContinue": {
+    "description": "Bouton principal de la carte de continuité pour créer une histoire de suite"
+  },
+  "continuityHookBtnOptions": "Options",
+  "@continuityHookBtnOptions": {
+    "description": "Bouton secondaire pour développer les options de statut sur la carte"
+  },
+  "continuityHookFreeLimitTitle": "Fonctionnalité exclusive",
+  "@continuityHookFreeLimitTitle": {
+    "description": "Titre de l'avis de limite Free atteinte"
+  },
+  "continuityHookFreeLimitBody": "Vous avez déjà utilisé vos 3 histoires gratuites avec suivi de continuité. Passez à Premium et écrivez des récits sans limite.",
+  "@continuityHookFreeLimitBody": {
+    "description": "Corps de l'avis de limite Free pour la fonctionnalité de continuité"
+  },
+  "continuityHookDebugSectionTitle": "Moteur de Crochets (Debug)",
+  "@continuityHookDebugSectionTitle": {
+    "description": "Titre de la section debug du moteur dans PremiumDebugScreen"
+  },
+  "continuityHookDebugAcceleratorLabel": "Accélérateur d'Horloge",
+  "@continuityHookDebugAcceleratorLabel": {
+    "description": "Libellé du bouton bascule de l'accélérateur d'horloge en debug"
+  },
+  "continuityHookDebugAcceleratorSubtitle": "Ignore les fenêtres de temps de 2/3/4 jours",
+  "@continuityHookDebugAcceleratorSubtitle": {
+    "description": "Sous-titre du bouton bascule de l'accélérateur d'horloge"
+  },
+  "continuityHookDebugResetCounters": "Réinitialiser le compteur Free",
+  "@continuityHookDebugResetCounters": {
+    "description": "Bouton pour réinitialiser le compteur vitalice Free en debug"
+  },
+  "continuityHookDebugForceReload": "Forcer le rechargement de la carte",
+  "@continuityHookDebugForceReload": {
+    "description": "Bouton pour forcer le rechargement de la carte de continuité en debug"
+  },
+  "continuityHookFeatureLabel": "Continuité des Histoires (≤3 Free · Illimité Premium)",
+  "@continuityHookFeatureLabel": {
+    "description": "Libellé de la fonctionnalité dans la liste de PremiumDebugScreen"
+  },
+  "continuityHookGenericSim": "Il est temps de continuer cette histoire",
+  "@continuityHookGenericSim": {
+    "description": "Message générique pour les histoires OUI sans signal émotionnel (humeur=3, énergie=2)"
+  },
+  "continuityHookGenericTalvez": "Peut-être souhaitez-vous continuer cette histoire",
+  "@continuityHookGenericTalvez": {
+    "description": "Message générique pour les histoires PEUT-ÊTRE sans signal émotionnel"
+  },
+  "continuityHookGenericNaoSei": "Avez-vous décidé si vous souhaitez continuer cette histoire ?",
+  "@continuityHookGenericNaoSei": {
+    "description": "Message générique pour les histoires JE NE SAIS PAS sans signal émotionnel"
+  },
+  "continuityStatusClose": "Fermer",
+  "@continuityStatusClose": {
+    "description": "Bouton pour fermer le cycle de continuité dans la Phase 2 de la carte"
   }
 }

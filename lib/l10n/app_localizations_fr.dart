@@ -3093,4 +3093,77 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get continuaYes => 'Oui';
+
+  @override
+  String get continuityHookBadge => '📖 Histoire en cours';
+
+  @override
+  String get continuityHookG01 =>
+      'C\'était peut-être tendu... En relisant ce que vous avez écrit il y a quelques jours, comment voyez-vous cette situation avec l\'esprit plus calme ?';
+
+  @override
+  String get continuityHookG02 =>
+      'Vous souvenez-vous de cet épisode que vous avez partagé récemment ? Comment les choses ont-elles évolué depuis ?';
+
+  @override
+  String get continuityHookG03 =>
+      'Vous avez vécu un moment très marquant, mais vous avez écrit un bref récit. Souhaitez-vous essayer de mettre en mots ce qui se passait dans votre esprit ?';
+
+  @override
+  String get continuityHookTalvez =>
+      'En prenant un peu de recul... pensez-vous que cette situation d\'il y a quelques jours est encore en cours ?';
+
+  @override
+  String get continuityHookNaoSei =>
+      'Parfois, les choses ont besoin de temps pour avoir du sens. Comment voyez-vous aujourd\'hui ce qui s\'est passé et ce que vous avez écrit ce jour-là ?';
+
+  @override
+  String get continuityHookBtnContinue => 'Continuer';
+
+  @override
+  String get continuityHookBtnOptions => 'Options';
+
+  @override
+  String get continuityHookFreeLimitTitle => 'Fonctionnalité exclusive';
+
+  @override
+  String get continuityHookFreeLimitBody =>
+      'Vous avez déjà utilisé vos 3 histoires gratuites avec suivi de continuité. Passez à Premium et écrivez des récits sans limite.';
+
+  @override
+  String get continuityHookDebugSectionTitle => 'Moteur de Crochets (Debug)';
+
+  @override
+  String get continuityHookDebugAcceleratorLabel => 'Accélérateur d\'Horloge';
+
+  @override
+  String get continuityHookDebugAcceleratorSubtitle =>
+      'Ignore les fenêtres de temps de 2/3/4 jours';
+
+  @override
+  String get continuityHookDebugResetCounters =>
+      'Réinitialiser le compteur Free';
+
+  @override
+  String get continuityHookDebugForceReload =>
+      'Forcer le rechargement de la carte';
+
+  @override
+  String get continuityHookFeatureLabel =>
+      'Continuité des Histoires (≤3 Free · Illimité Premium)';
+
+  @override
+  String get continuityHookGenericSim =>
+      'Il est temps de continuer cette histoire';
+
+  @override
+  String get continuityHookGenericTalvez =>
+      'Peut-être souhaitez-vous continuer cette histoire';
+
+  @override
+  String get continuityHookGenericNaoSei =>
+      'Avez-vous décidé si vous souhaitez continuer cette histoire ?';
+
+  @override
+  String get continuityStatusClose => 'Fermer';
 }

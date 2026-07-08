@@ -28,7 +28,7 @@ class DatabaseHelper {
       final path = p.join(dbPath, 'dayapp.db');
       final db = await openDatabase(
         path,
-        version: 4,
+        version: 5,
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
       );
@@ -74,7 +74,12 @@ class DatabaseHelper {
           energia INTEGER DEFAULT 2,
           local TEXT,
           continua INTEGER DEFAULT 1,
-          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+          id_historia_origem INTEGER,
+          fim_historia INTEGER DEFAULT 0,
+          contador_sugestoes INTEGER DEFAULT 0,
+          data_ultima_sugestao TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+          FOREIGN KEY (id_historia_origem) REFERENCES historia(id) ON DELETE SET NULL
         );
       ''');
       await db.execute('''
@@ -132,6 +137,9 @@ class DatabaseHelper {
       await db.execute('CREATE INDEX idx_historia_data ON historia(data);');
       await db.execute('CREATE INDEX idx_historia_tag ON historia(tag);');
       await db.execute('CREATE INDEX idx_users_email ON users(email);');
+      await db.execute(
+        'CREATE INDEX IF NOT EXISTS idx_historia_fluxo_ganchos ON historia (user_id, fim_historia, continua, contador_sugestoes, data_ultima_sugestao, excluido, arquivado);',
+      );
 
       // Tabela de tags (v15)
       await db.execute('''
@@ -374,6 +382,42 @@ class DatabaseHelper {
           debugPrint('DatabaseHelper: erro ao adicionar coluna continua (v4): $e');
         }
       }
+
+      if (oldVersion < 5) {
+        // Campos do Motor de Ganchos de Continuidade (v5)
+        final newCols = {
+          'id_historia_origem': 'INTEGER',
+          'fim_historia': 'INTEGER DEFAULT 0',
+          'contador_sugestoes': 'INTEGER DEFAULT 0',
+          'data_ultima_sugestao': 'TIMESTAMP',
+        };
+        for (final entry in newCols.entries) {
+          try {
+            await db.execute('ALTER TABLE historia ADD COLUMN ${entry.key} ${entry.value};');
+          } catch (e) {
+            debugPrint('DatabaseHelper: erro ao adicionar coluna ${entry.key} (v5): $e');
+          }
+        }
+        try {
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_historia_fluxo_ganchos ON historia (user_id, fim_historia, continua, contador_sugestoes, data_ultima_sugestao, excluido, arquivado);',
+          );
+        } catch (e) {
+          debugPrint('DatabaseHelper: erro ao criar idx_historia_fluxo_ganchos (v5): $e');
+        }
+        // Migração de dados de consistência:
+        // Histórias legadas com continua=1 (Não, no mapeamento atual do app)
+        // devem ter fim_historia=1 para consistência com a nova lógica.
+        // Nota: 'excluido' e 'arquivado' usam o valor 'sim' (lowercase) neste app.
+        try {
+          await db.execute(
+            "UPDATE historia SET fim_historia = 1 WHERE continua = 1 AND (excluido IS NULL OR excluido != 'sim');",
+          );
+        } catch (e) {
+          debugPrint('DatabaseHelper: erro na migração de dados fim_historia (v5): $e');
+        }
+      }
+
     } catch (e) {
       rethrow;
     }
@@ -395,6 +439,11 @@ class DatabaseHelper {
         'excluido': 'TEXT',
         'data_exclusao': 'TIMESTAMP',
         'continua': 'INTEGER DEFAULT 1',
+        // Campos do Motor de Ganchos de Continuidade (v5)
+        'id_historia_origem': 'INTEGER',
+        'fim_historia': 'INTEGER DEFAULT 0',
+        'contador_sugestoes': 'INTEGER DEFAULT 0',
+        'data_ultima_sugestao': 'TIMESTAMP',
       };
 
       for (final entry in requiredColumns.entries) {
