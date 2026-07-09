@@ -414,7 +414,7 @@
   "backupInfoDetails": "La copia de seguridad completa incluye:\n• Base de datos (historias, textos, fotos, audios)\n• Archivos de vídeo\n\nSe creará un archivo ZIP y puedes guardarlo donde quieras:\n• OneDrive\n• Google Drive\n• Correo electrónico\n• Cualquier otra ubicación",
   "backupComplete": "Copia de seguridad completa",
   "backupZipSubtitle": "Archivo ZIP con todos tus datos",
-  "backupZipExplanation": "Genera un archivo ZIP que puede guardar en su dispositivo, OneDrive, Google Drive, correo electrónico o cualquier otra ubicación en la nube, excepto aplicaciones de mensajería.",
+  "backupZipExplanation": "Genera un archivo que puede guardar en su dispositivo, OneDrive, Google Drive, correo electrónico o cualquier otra ubicación en la nube.",
   "backupLinuxExplanation": "Elige una carpeta y el ZIP de copia de seguridad se guardará directamente en ella.",
   "@backupLinuxExplanation": {
     "description": "Explicación mostrada en la tarjeta de copia de seguridad al ejecutar en Linux desktop"

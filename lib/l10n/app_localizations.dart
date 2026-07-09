@@ -1866,7 +1866,7 @@ abstract class AppLocalizations {
   /// No description provided for @backupZipExplanation.
   ///
   /// In en, this message translates to:
-  /// **'Generates a ZIP file that you can save to your device, OneDrive, Google Drive, email, or any other cloud location, except messaging apps.'**
+  /// **'Generates a file that you can save to your device, OneDrive, Google Drive, email, or any other cloud location.'**
   String get backupZipExplanation;
 
   /// Explanation shown on the backup card when running on Linux desktop

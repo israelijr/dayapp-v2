@@ -953,7 +953,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get backupZipExplanation =>
-      'Gera um arquivo ZIP que você pode salvar no seu dispositivo, OneDrive, Google Drive, email ou qualquer outro local na nuvem, exceto apps de mensagens.';
+      'Gera um arquivo que você pode salvar no seu dispositivo, OneDrive, Google Drive, e-mail ou qualquer outro local na nuvem.';
 
   @override
   String get backupLinuxExplanation =>
@@ -3205,7 +3205,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get backupZipExplanation =>
-      'Gera um arquivo ZIP que você pode salvar no seu dispositivo, OneDrive, Google Drive, email ou qualquer outro local na nuvem, exceto apps de mensagens.';
+      'Gera um arquivo que você pode salvar no seu dispositivo, OneDrive, Google Drive, e-mail ou qualquer outro local na nuvem.';
 
   @override
   String get backupLinuxExplanation =>

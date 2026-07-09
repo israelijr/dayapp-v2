@@ -511,7 +511,7 @@
   "backupInfoDetails": "La sauvegarde complète comprend :\n• Base de données (histoires, textes, photos, audios)\n• Fichiers vidéo\n\nUn fichier ZIP sera créé et vous pourrez le sauvegarder où vous voulez :\n• OneDrive\n• Google Drive\n• E-mail\n• Tout autre emplacement",
   "backupComplete": "Sauvegarde complète",
   "backupZipSubtitle": "Fichier ZIP avec toutes vos données",
-  "backupZipExplanation": "Génère un fichier ZIP que vous pouvez enregistrer sur votre appareil, OneDrive, Google Drive, votre courrier électronique ou tout autre emplacement cloud, à l'exception des applications de messagerie.",
+  "backupZipExplanation": "Génère un fichier que vous pouvez enregistrer sur votre appareil, OneDrive, Google Drive, votre courrier électronique ou tout autre emplacement cloud.",
   "backupLinuxExplanation": "Choisissez un dossier et le ZIP de sauvegarde y sera enregistré directement.",
   "@backupLinuxExplanation": {
     "description": "Explication affichée sur la carte de sauvegarde sous Linux desktop"

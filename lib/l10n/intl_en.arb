@@ -515,7 +515,7 @@
   "backupInfoDetails": "The complete backup includes:\n• Database (stories, texts, photos, audios)\n• Video files\n\nA ZIP file will be created and you can save it wherever you want:\n• OneDrive\n• Google Drive\n• Email\n• Any other location",
   "backupComplete": "Complete Backup",
   "backupZipSubtitle": "ZIP file with all your data",
-  "backupZipExplanation": "Generates a ZIP file that you can save to your device, OneDrive, Google Drive, email, or any other cloud location, except messaging apps.",
+  "backupZipExplanation": "Generates a file that you can save to your device, OneDrive, Google Drive, email, or any other cloud location.",
   "backupLinuxExplanation": "Choose a folder and the backup ZIP will be saved directly to it.",
   "@backupLinuxExplanation": {
     "description": "Explanation shown on the backup card when running on Linux desktop"
