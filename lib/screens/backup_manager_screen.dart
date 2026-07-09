@@ -321,56 +321,58 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
                       child: Center(
                         child: Card(
                           margin: const EdgeInsets.all(32),
-                          child: Padding(
-                            padding: const EdgeInsets.all(32),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(
-                                  width: 60,
-                                  height: 60,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 5,
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.all(32),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(
+                                    width: 60,
+                                    height: 60,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 5,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 24),
-                                Text(
-                                  _statusMessage.isEmpty
-                                      ? loc.processing
-                                      : _statusMessage,
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                SizedBox(
-                                  width: 200,
-                                  child: LinearProgressIndicator(
-                                    value: _progressValue,
-                                  ),
-                                ),
-                                if (_progressValue != null) ...[
-                                  const SizedBox(height: 8),
+                                  const SizedBox(height: 24),
                                   Text(
-                                    '${(_progressValue! * 100).toStringAsFixed(0)}%',
+                                    _statusMessage.isEmpty
+                                        ? loc.processing
+                                        : _statusMessage,
+                                    textAlign: TextAlign.center,
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 12,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  SizedBox(
+                                    width: 200,
+                                    child: LinearProgressIndicator(
+                                      value: _progressValue,
+                                    ),
+                                  ),
+                                  if (_progressValue != null) ...[
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '${(_progressValue! * 100).toStringAsFixed(0)}%',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    loc.pleaseWait,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 13,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                     ),
                                   ),
                                 ],
-                                const SizedBox(height: 12),
-                                Text(
-                                  loc.pleaseWait,
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),

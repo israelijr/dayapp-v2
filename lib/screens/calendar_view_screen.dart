@@ -326,6 +326,62 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
     );
   }
 
+  Widget _buildTableCalendar(AppLocalizations l10n, CalendarStoriesProvider provider) {
+    return TableCalendar<Historia>(
+      firstDay: DateTime.utc(2000, 1, 1),
+      lastDay: DateTime.utc(2100, 12, 31),
+      focusedDay: provider.focusedDay,
+      calendarFormat: _calendarFormat,
+      selectedDayPredicate: (day) =>
+          isSameDay(provider.selectedDay, day),
+      eventLoader: provider.getHistoriasForDay,
+      locale: Localizations.localeOf(context).toString(),
+      startingDayOfWeek: StartingDayOfWeek.sunday,
+      availableCalendarFormats: {
+        CalendarFormat.month: l10n.calendarFormatMonth,
+        CalendarFormat.twoWeeks: l10n.calendarFormatTwoWeeks,
+        CalendarFormat.week: l10n.calendarFormatWeek,
+      },
+      calendarStyle: CalendarStyle(
+        outsideDaysVisible: false,
+        todayDecoration: BoxDecoration(
+          color: AppColors.purple700.withValues(alpha: 0.5),
+          shape: BoxShape.circle,
+        ),
+        selectedDecoration: BoxDecoration(
+          color: AppColors.purple700,
+          shape: BoxShape.circle,
+        ),
+        markerDecoration: BoxDecoration(
+          color: AppColors.purple300,
+          shape: BoxShape.circle,
+        ),
+        markersMaxCount: 3,
+      ),
+      headerStyle: const HeaderStyle(
+        formatButtonVisible: true,
+        titleCentered: true,
+        formatButtonShowsNext: false,
+      ),
+      onDaySelected: (selectedDay, focusedDay) {
+        if (!isSameDay(provider.selectedDay, selectedDay)) {
+          provider.setSelectedDay(selectedDay);
+        }
+        provider.setFocusedDay(focusedDay);
+      },
+      onFormatChanged: (format) {
+        if (_calendarFormat != format) {
+          setState(() {
+            _calendarFormat = format;
+          });
+        }
+      },
+      onPageChanged: (focusedDay) {
+        provider.setFocusedDay(focusedDay);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -341,103 +397,119 @@ class _CalendarViewContentState extends State<_CalendarViewContent> {
       ),
       body: provider.isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Card(
-                  margin: const EdgeInsets.all(8),
-                  elevation: 2,
-                  child: TableCalendar<Historia>(
-                    firstDay: DateTime.utc(2000, 1, 1),
-                    lastDay: DateTime.utc(2100, 12, 31),
-                    focusedDay: provider.focusedDay,
-                    calendarFormat: _calendarFormat,
-                    selectedDayPredicate: (day) =>
-                        isSameDay(provider.selectedDay, day),
-                    eventLoader: provider.getHistoriasForDay,
-                    locale: Localizations.localeOf(context).toString(),
-                    startingDayOfWeek: StartingDayOfWeek.sunday,
-                    availableCalendarFormats: {
-                      CalendarFormat.month: l10n.calendarFormatMonth,
-                      CalendarFormat.twoWeeks: l10n.calendarFormatTwoWeeks,
-                      CalendarFormat.week: l10n.calendarFormatWeek,
-                    },
-                    calendarStyle: CalendarStyle(
-                      outsideDaysVisible: false,
-                      todayDecoration: BoxDecoration(
-                        color: AppColors.purple700.withValues(alpha: 0.5),
-                        shape: BoxShape.circle,
+          : LayoutBuilder(
+              builder: (context, constraints) {
+                // Se a altura for pequena (ex: paisagem ou com teclado aberto),
+                // usamos uma visualização rolável (CustomScrollView) para evitar overflow.
+                final isCompactHeight = constraints.maxHeight < 580;
+
+                if (isCompactHeight) {
+                  return CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Card(
+                          margin: const EdgeInsets.all(8),
+                          elevation: 2,
+                          child: _buildTableCalendar(l10n, provider),
+                        ),
                       ),
-                      selectedDecoration: BoxDecoration(
-                        color: AppColors.purple700,
-                        shape: BoxShape.circle,
+                      const SliverToBoxAdapter(
+                        child: Divider(height: 1),
                       ),
-                      markerDecoration: BoxDecoration(
-                        color: AppColors.purple300,
-                        shape: BoxShape.circle,
-                      ),
-                      markersMaxCount: 3,
-                    ),
-                    headerStyle: const HeaderStyle(
-                      formatButtonVisible: true,
-                      titleCentered: true,
-                      formatButtonShowsNext: false,
-                    ),
-                    onDaySelected: (selectedDay, focusedDay) {
-                      if (!isSameDay(provider.selectedDay, selectedDay)) {
-                        provider.setSelectedDay(selectedDay);
-                      }
-                      provider.setFocusedDay(focusedDay);
-                    },
-                    onFormatChanged: (format) {
-                      if (_calendarFormat != format) {
-                        setState(() {
-                          _calendarFormat = format;
-                        });
-                      }
-                    },
-                    onPageChanged: (focusedDay) {
-                      provider.setFocusedDay(focusedDay);
-                    },
-                  ),
-                ),
-                const Divider(height: 1),
-                Expanded(
-                  child: provider.selectedDayHistorias.isEmpty
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.event_busy,
-                                size: 64,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                l10n.noRecordsThisDay,
-                                style: TextStyle(
-                                  fontSize: 16,
+                      if (provider.selectedDayHistorias.isEmpty)
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 32.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.event_busy,
+                                  size: 64,
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurfaceVariant,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 16),
+                                Text(
+                                  l10n.noRecordsThisDay,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         )
-                      : ListView.builder(
+                      else
+                        SliverPadding(
                           padding: const EdgeInsets.all(8),
-                          itemCount: provider.selectedDayHistorias.length,
-                          itemBuilder: (context, index) {
-                            final historia =
-                                provider.selectedDayHistorias[index];
-                            return _buildHistoriaCard(historia);
-                          },
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                final historia =
+                                    provider.selectedDayHistorias[index];
+                                return _buildHistoriaCard(historia);
+                              },
+                              childCount: provider.selectedDayHistorias.length,
+                            ),
+                          ),
                         ),
-                ),
-              ],
+                    ],
+                  );
+                }
+
+                // Layout padrão para telas com altura suficiente
+                return Column(
+                  children: [
+                    Card(
+                      margin: const EdgeInsets.all(8),
+                      elevation: 2,
+                      child: _buildTableCalendar(l10n, provider),
+                    ),
+                    const Divider(height: 1),
+                    Expanded(
+                      child: provider.selectedDayHistorias.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.event_busy,
+                                    size: 64,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    l10n.noRecordsThisDay,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.all(8),
+                              itemCount: provider.selectedDayHistorias.length,
+                              itemBuilder: (context, index) {
+                                final historia =
+                                    provider.selectedDayHistorias[index];
+                                return _buildHistoriaCard(historia);
+                              },
+                            ),
+                    ),
+                  ],
+                );
+              },
             ),
     );
   }
