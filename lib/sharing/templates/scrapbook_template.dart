@@ -61,7 +61,12 @@ class ScrapbookTemplate extends StatelessWidget {
       );
     }
 
-    Widget buildTextContent() {
+    Widget buildTextContent({
+      required double titleFs,
+      required double bodyFs,
+      required double captionFs,
+      required double brandFs,
+    }) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -69,38 +74,47 @@ class ScrapbookTemplate extends StatelessWidget {
           Text(
             story.title,
             softWrap: true,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 32,
+              fontSize: titleFs,
               color: colorScheme.onSurface,
               height: 1.04,
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: titleFs * 0.4),
           Text(
             normalizedDescription(story.description),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 15,
-              height: 1.65,
+              fontSize: bodyFs,
+              height: 1.5,
               color: colorScheme.onSurface.withValues(alpha: 0.84),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: bodyFs * 1.5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                moodLabel(context, story.mood),
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 12,
-                  color: colorScheme.onSurface.withValues(alpha: 0.72),
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  moodLabel(context, story.mood),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: captionFs,
+                    color: colorScheme.onSurface.withValues(alpha: 0.72),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
+              const SizedBox(width: 8),
               Text(
                 dateLabel,
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 12,
+                  fontSize: captionFs,
                   color: colorScheme.onSurface.withValues(alpha: 0.72),
                   fontWeight: FontWeight.w600,
                 ),
@@ -108,25 +122,25 @@ class ScrapbookTemplate extends StatelessWidget {
             ],
           ),
           if (metadataLine.isNotEmpty) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: captionFs * 0.6),
             Text(
               metadataLine,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 12,
+                fontSize: captionFs,
                 color: colorScheme.onSurface.withValues(alpha: 0.72),
                 fontWeight: FontWeight.w600,
               ),
             ),
           ],
-          const SizedBox(height: 12),
+          SizedBox(height: brandFs),
           Align(
             alignment: Alignment.centerRight,
             child: Text(
               'DayApp',
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 11,
+                fontSize: brandFs,
                 fontWeight: FontWeight.w600,
                 color: colorScheme.onSurface.withValues(alpha: 0.64),
               ),
@@ -142,7 +156,7 @@ class ScrapbookTemplate extends StatelessWidget {
             ? constraints.maxWidth
             : MediaQuery.of(context).size.width;
         final photoAreaWidth = availableWidth - 36;
-        final photoAreaHeight = photoAreaWidth * 0.6;
+        final photoAreaHeight = photoAreaWidth * 0.55;
         final mainWidth = photoAreaWidth * 0.45;
         final mainHeight = photoAreaHeight * 0.75;
         final sideWidth = mainWidth * 0.65;
@@ -161,6 +175,16 @@ class ScrapbookTemplate extends StatelessWidget {
         final cardWidth = constraints.maxWidth.isFinite
             ? constraints.maxWidth * 0.85
             : 300.0;
+
+        final topPadding = availableWidth * 0.22;
+        final bottomPadding = availableWidth * 0.08;
+        final cardPadding = availableWidth * 0.06;
+        final gapHeight = availableWidth * 0.07;
+
+        final titleFontSize = availableWidth * 0.08;
+        final bodyFontSize = availableWidth * 0.038;
+        final captionFontSize = availableWidth * 0.031;
+        final brandFontSize = availableWidth * 0.028;
 
         return IntrinsicHeight(
           child: Stack(
@@ -195,7 +219,7 @@ class ScrapbookTemplate extends StatelessWidget {
               ),
               // Conteúdo que cresce
               Padding(
-                padding: const EdgeInsets.fromLTRB(18, 100, 18, 40),
+                padding: EdgeInsets.fromLTRB(18, topPadding, 18, bottomPadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -256,7 +280,7 @@ class ScrapbookTemplate extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    SizedBox(height: gapHeight),
                     // Card de Texto que cresce
                     ClipRRect(
                       borderRadius: BorderRadius.circular(38),
@@ -292,8 +316,13 @@ class ScrapbookTemplate extends StatelessWidget {
                             ],
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(26),
-                            child: buildTextContent(),
+                            padding: EdgeInsets.all(cardPadding),
+                            child: buildTextContent(
+                              titleFs: titleFontSize,
+                              bodyFs: bodyFontSize,
+                              captionFs: captionFontSize,
+                              brandFs: brandFontSize,
+                            ),
                           ),
                         ),
                       ),
