@@ -439,16 +439,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (_pausedTime == null) return;
 
     debugPrint(
-      'LOCK: _checkBackgroundLock chamado, isPickingExternalMedia=${widget.pinProvider.isPickingExternalMedia}',
+      'LOCK: _checkBackgroundLock chamado, isPickingExternalMedia=${widget.pinProvider.isPickingExternalMedia}, isAttachingMedia=${widget.pinProvider.isAttachingMedia}',
     );
-
-    // Verifica novamente as flags antes de bloquear
-    // (pode ter mudado durante a execução assíncrona)
-    if (widget.pinProvider.isPickingExternalMedia) {
-      debugPrint('LOCK: Ignorando bloqueio - isPickingExternalMedia=true');
-      _pausedTime = null;
-      return;
-    }
 
     if (widget.pinProvider.isAuthenticatingWithBiometrics) {
       debugPrint(
@@ -470,21 +462,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       return;
     }
 
-    final backgroundTimeout = Duration(seconds: backgroundTimeoutSeconds);
-
-    // Verifica novamente após o await (pode ter mudado)
-    if (widget.pinProvider.isPickingExternalMedia) {
+    var backgroundTimeout = Duration(seconds: backgroundTimeoutSeconds);
+    
+    // Adiciona tolerância de 30 segundos se estiver selecionando mídia externa ou anexando mídia
+    final isAttaching = widget.pinProvider.isPickingExternalMedia || widget.pinProvider.isAttachingMedia;
+    if (isAttaching) {
+      backgroundTimeout += const Duration(seconds: 30);
       debugPrint(
-        'LOCK: Ignorando bloqueio após await - isPickingExternalMedia=true',
+        'LOCK: Adicionando tolerância de 30 segundos. Timeout total: ${backgroundTimeout.inSeconds}s',
       );
-      _pausedTime = null;
-      return;
     }
 
     // Bloqueia se o tempo de pausa excedeu o configurado
     if (pauseDuration > backgroundTimeout) {
-      debugPrint('LOCK: Chamando requireAuthentication');
-      widget.pinProvider.requireAuthentication();
+      debugPrint('LOCK: Chamando requireAuthentication(force: true)');
+      widget.pinProvider.requireAuthentication(force: true);
     }
 
     _pausedTime = null;
@@ -495,7 +487,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
 
     debugPrint(
-      'LIFECYCLE: $state, isPickingExternalMedia=${widget.pinProvider.isPickingExternalMedia}',
+      'LIFECYCLE: $state, isPickingExternalMedia=${widget.pinProvider.isPickingExternalMedia}, isAttachingMedia=${widget.pinProvider.isAttachingMedia}',
     );
 
     switch (state) {
@@ -521,13 +513,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 'LIFECYCLE: Ignorando - isAuthenticatingWithBiometrics=true',
               );
               widget.pinProvider.isAuthenticatingWithBiometrics = false;
-              _pausedTime = null;
-              return;
-            }
-
-            // Se estiver selecionando mídia externa (galeria, câmera, file picker, backup, etc.), não bloqueia
-            if (widget.pinProvider.isPickingExternalMedia) {
-              debugPrint('LIFECYCLE: Ignorando - isPickingExternalMedia=true');
               _pausedTime = null;
               return;
             }

@@ -117,7 +117,7 @@
   "@passwordChangedSuccess": {
     "description": "Mensagem de sucesso após alterar senha"
   },
-  "newPasswordMinLength": "A nova senha deve ter pelo menos 6 caracteres.",
+  "newPasswordMinLength": "A nova senha deve ter pelo menos 8 caracteres.",
   "@newPasswordMinLength": {
     "description": "Erro de validação quando a nova senha é curta demais (mín. 6)"
   },

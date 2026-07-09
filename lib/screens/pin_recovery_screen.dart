@@ -45,6 +45,9 @@ class _PinRecoveryScreenState extends State<PinRecoveryScreen> {
   /// 0 = informar e-mail, 1 = digitar código, 2 = novo PIN
   int currentStep = 0;
 
+  bool _obscureNewPin = true;
+  bool _obscureConfirmPin = true;
+
   @override
   void initState() {
     super.initState();
@@ -671,15 +674,37 @@ class _PinRecoveryScreenState extends State<PinRecoveryScreen> {
           label: AppLocalizations.of(context)!.newPinLabel,
           controller: newPinController,
           keyboardType: TextInputType.number,
-          obscureText: false,
+          obscureText: _obscureNewPin,
           maxLength: 8,
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscureNewPin ? Icons.visibility_off : Icons.visibility,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscureNewPin = !_obscureNewPin;
+              });
+            },
+          ),
         ),
         CustomTextField(
           label: AppLocalizations.of(context)!.confirmPin,
           controller: confirmPinController,
           keyboardType: TextInputType.number,
-          obscureText: false,
+          obscureText: _obscureConfirmPin,
           maxLength: 8,
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscureConfirmPin ? Icons.visibility_off : Icons.visibility,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscureConfirmPin = !_obscureConfirmPin;
+              });
+            },
+          ),
         ),
         const SizedBox(height: 8),
         Text(

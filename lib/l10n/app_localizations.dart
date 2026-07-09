@@ -1098,7 +1098,7 @@ abstract class AppLocalizations {
   /// Message for passwordMinLength
   ///
   /// In en, this message translates to:
-  /// **'Password must be at least 6 characters.'**
+  /// **'Password must be at least 8 characters.'**
   String get passwordMinLength;
 
   /// Label for unlock
@@ -4869,7 +4869,7 @@ abstract class AppLocalizations {
   /// Validation error when new password is too short (min 6 chars)
   ///
   /// In en, this message translates to:
-  /// **'New password must be at least 6 characters.'**
+  /// **'New password must be at least 8 characters.'**
   String get newPasswordMinLength;
 
   /// Error shown when one or more required fields are empty
@@ -4935,7 +4935,7 @@ abstract class AppLocalizations {
   /// Validation error when password is too short
   ///
   /// In en, this message translates to:
-  /// **'Password must be at least 6 characters.'**
+  /// **'Password must be at least 8 characters.'**
   String get backupPasswordTooShort;
 
   /// Validation error when password field is empty
@@ -5025,7 +5025,7 @@ abstract class AppLocalizations {
   /// No description provided for @newPasswordMinLengthLabel.
   ///
   /// In en, this message translates to:
-  /// **'New password (minimum 6 characters)'**
+  /// **'New password (minimum 8 characters)'**
   String get newPasswordMinLengthLabel;
 
   /// No description provided for @confirmNewPasswordLabel.

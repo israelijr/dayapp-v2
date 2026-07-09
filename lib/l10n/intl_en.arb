@@ -276,7 +276,7 @@
   "passwordsDoNotMatch": "Passwords do not match.",
   "resendCodeSuccess": "New code sent! Check your inbox.",
   "resendCodeError": "Error resending code. Try again.",
-  "passwordMinLength": "Password must be at least 6 characters.",
+  "passwordMinLength": "Password must be at least 8 characters.",
   "unlock": "Unlock",
   "fullName": "Full name",
   "birthDate": "Birth date",
@@ -2622,7 +2622,7 @@
   "@emailChangedSuccess": {
     "description": "Success message after email change"
   },
-  "newPasswordMinLength": "New password must be at least 6 characters.",
+  "newPasswordMinLength": "New password must be at least 8 characters.",
   "@newPasswordMinLength": {
     "description": "Validation error when new password is too short (min 6 chars)"
   },
@@ -2666,7 +2666,7 @@
   "@backupPasswordMismatch": {
     "description": "Validation error when passwords do not match"
   },
-  "backupPasswordTooShort": "Password must be at least 6 characters.",
+  "backupPasswordTooShort": "Password must be at least 8 characters.",
   "@backupPasswordTooShort": {
     "description": "Validation error when password is too short"
   },
@@ -2722,7 +2722,7 @@
   "backToStart": "Back to start",
   "codeLabel": "Code",
   "informRegisteredEmail": "Enter your registered email",
-  "newPasswordMinLengthLabel": "New password (minimum 6 characters)",
+  "newPasswordMinLengthLabel": "New password (minimum 8 characters)",
   "confirmNewPasswordLabel": "Confirm new password",
   "informYourEmailTitle": "Enter your email",
   "enterCodeTitle": "Enter code",

@@ -266,7 +266,7 @@
   "passwordsDoNotMatch": "Las contraseñas no coinciden.",
   "resendCodeSuccess": "¡Nuevo código enviado! Verifique su bandeja de entrada.",
   "resendCodeError": "Error al reenviar código. Intente nuevamente.",
-  "passwordMinLength": "La contraseña debe tener al menos 6 caracteres.",
+  "passwordMinLength": "La contraseña debe tener al menos 8 caracteres.",
   "sendCode": "Enviar código",
   "unlock": "Desbloquear",
   "fullName": "Nombre completo",
@@ -2325,7 +2325,7 @@
   "@emailChangedSuccess": {
     "description": "Mensaje de éxito tras cambiar el correo"
   },
-  "newPasswordMinLength": "La nueva contraseña debe tener al menos 6 caracteres.",
+  "newPasswordMinLength": "La nueva contraseña debe tener al menos 8 caracteres.",
   "@newPasswordMinLength": {
     "description": "Error de validación cuando la nueva contraseña es muy corta (mín. 6)"
   },
@@ -2369,7 +2369,7 @@
   "@backupPasswordMismatch": {
     "description": "Error de validación cuando las contraseñas no coinciden"
   },
-  "backupPasswordTooShort": "La contraseña debe tener al menos 6 caracteres.",
+  "backupPasswordTooShort": "La contraseña debe tener al menos 8 caracteres.",
   "@backupPasswordTooShort": {
     "description": "Error de validación cuando la contraseña es demasiado corta"
   },
@@ -2477,7 +2477,7 @@
   "backToStart": "Volver al inicio",
   "codeLabel": "Código",
   "informRegisteredEmail": "Ingrese su correo electrónico registrado",
-  "newPasswordMinLengthLabel": "Nueva contraseña (mínimo 6 caracteres)",
+  "newPasswordMinLengthLabel": "Nueva contraseña (mínimo 8 caracteres)",
   "confirmNewPasswordLabel": "Confirmar nueva contraseña",
   "informYourEmailTitle": "Ingrese su correo electrónico",
   "enterCodeTitle": "Ingrese el código",

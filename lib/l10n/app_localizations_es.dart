@@ -554,7 +554,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get passwordMinLength =>
-      'La contraseña debe tener al menos 6 caracteres.';
+      'La contraseña debe tener al menos 8 caracteres.';
 
   @override
   String get unlock => 'Desbloquear';
@@ -2724,7 +2724,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get newPasswordMinLength =>
-      'La nueva contraseña debe tener al menos 6 caracteres.';
+      'La nueva contraseña debe tener al menos 8 caracteres.';
 
   @override
   String get fillAllFields => 'Por favor, rellene todos los campos.';
@@ -2763,7 +2763,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backupPasswordTooShort =>
-      'La contraseña debe tener al menos 6 caracteres.';
+      'La contraseña debe tener al menos 8 caracteres.';
 
   @override
   String get backupPasswordEmpty => 'Por favor, ingresa una contraseña.';
@@ -2817,7 +2817,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get newPasswordMinLengthLabel =>
-      'Nueva contraseña (mínimo 6 caracteres)';
+      'Nueva contraseña (mínimo 8 caracteres)';
 
   @override
   String get confirmNewPasswordLabel => 'Confirmar nueva contraseña';

@@ -39,6 +39,22 @@ class VideoRecorderWidget extends StatefulWidget {
 class _VideoRecorderWidgetState extends State<VideoRecorderWidget> {
   final ImagePicker _picker = ImagePicker();
   bool _isLoading = false;
+  late PinProvider _pinProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _pinProvider = Provider.of<PinProvider>(context, listen: false);
+    _pinProvider.isAttachingMedia = true;
+    debugPrint('VIDEO: isAttachingMedia definido como true');
+  }
+
+  @override
+  void dispose() {
+    _pinProvider.isAttachingMedia = false;
+    debugPrint('VIDEO: isAttachingMedia definido como false');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

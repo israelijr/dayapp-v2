@@ -548,7 +548,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resendCodeError => 'Error resending code. Try again.';
 
   @override
-  String get passwordMinLength => 'Password must be at least 6 characters.';
+  String get passwordMinLength => 'Password must be at least 8 characters.';
 
   @override
   String get unlock => 'Unlock';
@@ -2696,7 +2696,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get newPasswordMinLength =>
-      'New password must be at least 6 characters.';
+      'New password must be at least 8 characters.';
 
   @override
   String get fillAllFields => 'Please fill in all fields.';
@@ -2735,7 +2735,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backupPasswordTooShort =>
-      'Password must be at least 6 characters.';
+      'Password must be at least 8 characters.';
 
   @override
   String get backupPasswordEmpty => 'Please enter a password.';
@@ -2785,7 +2785,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get informRegisteredEmail => 'Enter your registered email';
 
   @override
-  String get newPasswordMinLengthLabel => 'New password (minimum 6 characters)';
+  String get newPasswordMinLengthLabel => 'New password (minimum 8 characters)';
 
   @override
   String get confirmNewPasswordLabel => 'Confirm new password';

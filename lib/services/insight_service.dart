@@ -1,4 +1,5 @@
 import '../db/database_helper.dart';
+import '../helpers/rich_text_helper.dart';
 import '../models/insight.dart';
 import '../services/insight_preferences_service.dart';
 
@@ -588,7 +589,8 @@ class InsightService {
 
     final wordsList = rows.map((r) {
       final text = r['descricao'] as String? ?? '';
-      return text.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
+      final plainText = RichTextHelper.jsonToPlainText(text);
+      return plainText.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
     }).toList();
 
     // 1. Verifica se escreveu uma história longa nos últimos 3 dias (ex: > 150 palavras)

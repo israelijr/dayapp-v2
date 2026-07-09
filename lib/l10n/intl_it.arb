@@ -276,7 +276,7 @@
   "passwordsDoNotMatch": "Le password non corrispondono.",
   "resendCodeSuccess": "Nuovo codice inviato! Controlla la tua casella.",
   "resendCodeError": "Errore durante il reinvio del codice. Riprova.",
-  "passwordMinLength": "La password deve essere di almeno 6 caratteri.",
+  "passwordMinLength": "La password deve essere di almeno 8 caratteri.",
   "unlock": "Sblocca",
   "fullName": "Nome completo",
   "birthDate": "Data di nascita",
@@ -1990,7 +1990,7 @@
   "@emailChangedSuccess": {
     "description": "Messaggio di successo dopo il cambio e-mail"
   },
-  "newPasswordMinLength": "La nuova password deve essere di almeno 6 caratteri.",
+  "newPasswordMinLength": "La nuova password deve essere di almeno 8 caratteri.",
   "@newPasswordMinLength": {
     "description": "Errore di validazione quando la nuova password è troppo corta (min 6 caratteri)"
   },
@@ -2034,7 +2034,7 @@
   "@backupPasswordMismatch": {
     "description": "Errore di validazione quando le password non corrispondono"
   },
-  "backupPasswordTooShort": "La password deve essere di almeno 6 caratteri.",
+  "backupPasswordTooShort": "La password deve essere di almeno 8 caratteri.",
   "@backupPasswordTooShort": {
     "description": "Errore di validazione quando la password è troppo corta"
   },
@@ -2090,7 +2090,7 @@
   "backToStart": "Torna all'inizio",
   "codeLabel": "Codice",
   "informRegisteredEmail": "Inserisci la tua email registrata",
-  "newPasswordMinLengthLabel": "Nuova password (minimo 6 caratteri)",
+  "newPasswordMinLengthLabel": "Nuova password (minimo 8 caratteri)",
   "confirmNewPasswordLabel": "Conferma la nuova password",
   "informYourEmailTitle": "Inserisci la tua email",
   "enterCodeTitle": "Inserisci il codice",

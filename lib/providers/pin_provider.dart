@@ -61,6 +61,17 @@ class PinProvider extends ChangeNotifier {
   /// Quando o app vai para background para abrir a galeria/câmera, não deve bloquear
   bool isPickingExternalMedia = false;
 
+  /// Flag para indicar que o usuário está no fluxo de anexar mídia (imagem, áudio, vídeo)
+  /// Ativa uma tolerância de 30 segundos no bloqueio em segundo plano.
+  bool _isAttachingMedia = false;
+
+  bool get isAttachingMedia => _isAttachingMedia;
+
+  set isAttachingMedia(bool value) {
+    _isAttachingMedia = value;
+    notifyListeners();
+  }
+
   // Setters públicos para controle direto (usado por biometria)
   set isAuthenticated(bool value) {
     _isAuthenticated = value;
@@ -154,17 +165,27 @@ class PinProvider extends ChangeNotifier {
   }
 
   /// Força a exibição da tela de bloqueio (quando o app volta do background)
-  void requireAuthentication() {
-    // Não bloqueia se está selecionando mídia externa (galeria, câmera, file picker)
-    if (isPickingExternalMedia) {
-      debugPrint(
-        'PinProvider.requireAuthentication: Ignorado - isPickingExternalMedia=true',
-      );
-      return;
+  void requireAuthentication({bool force = false}) {
+    if (!force) {
+      // Não bloqueia se está selecionando mídia externa (galeria, câmera, file picker)
+      if (isPickingExternalMedia) {
+        debugPrint(
+          'PinProvider.requireAuthentication: Ignorado - isPickingExternalMedia=true',
+        );
+        return;
+      }
+
+      // Não bloqueia se está anexando mídia (imagem, áudio, vídeo)
+      if (isAttachingMedia) {
+        debugPrint(
+          'PinProvider.requireAuthentication: Ignorado - isAttachingMedia=true',
+        );
+        return;
+      }
     }
 
     // Não bloqueia se está autenticando com biometria
-    if (isAuthenticatingWithBiometrics) {
+    if (isAuthenticatingWithBiometrics && !force) {
       debugPrint(
         'PinProvider.requireAuthentication: Ignorado - isAuthenticatingWithBiometrics=true',
       );

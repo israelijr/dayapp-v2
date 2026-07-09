@@ -46,10 +46,21 @@ class _AudioRecorderWidgetState extends State<AudioRecorderWidget> {
   int _recordDuration = 0;
   String? _recordingPath;
   bool _isLoading = false;
+  late PinProvider _pinProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _pinProvider = Provider.of<PinProvider>(context, listen: false);
+    _pinProvider.isAttachingMedia = true;
+    debugPrint('AUDIO: isAttachingMedia definido como true');
+  }
 
   @override
   void dispose() {
     _recorder.dispose();
+    _pinProvider.isAttachingMedia = false;
+    debugPrint('AUDIO: isAttachingMedia definido como false');
     super.dispose();
   }
 

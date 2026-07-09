@@ -552,7 +552,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get resendCodeError => 'Erro ao reenviar código. Tente novamente.';
 
   @override
-  String get passwordMinLength => 'A senha deve ter pelo menos 6 caracteres.';
+  String get passwordMinLength => 'A senha deve ter pelo menos 8 caracteres.';
 
   @override
   String get unlock => 'Desbloquear';
@@ -2711,7 +2711,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get newPasswordMinLength =>
-      'A nova palavra-passe deve ter pelo menos 6 caracteres.';
+      'A nova palavra-passe deve ter pelo menos 8 caracteres.';
 
   @override
   String get fillAllFields => 'Por favor, preencha todos os campos.';
@@ -2750,7 +2750,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get backupPasswordTooShort =>
-      'A senha deve ter pelo menos 6 caracteres.';
+      'A senha deve ter pelo menos 8 caracteres.';
 
   @override
   String get backupPasswordEmpty => 'Por favor, insira uma senha.';
@@ -2802,7 +2802,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get informRegisteredEmail => 'Informe seu e-mail cadastrado';
 
   @override
-  String get newPasswordMinLengthLabel => 'Nova senha (mínimo 6 caracteres)';
+  String get newPasswordMinLengthLabel => 'Nova senha (mínimo 8 caracteres)';
 
   @override
   String get confirmNewPasswordLabel => 'Confirmar nova senha';
@@ -3328,7 +3328,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get newPasswordMinLength =>
-      'A nova senha deve ter pelo menos 6 caracteres.';
+      'A nova senha deve ter pelo menos 8 caracteres.';
 
   @override
   String get backupInfoDialogContent =>

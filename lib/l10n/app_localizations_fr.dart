@@ -556,7 +556,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get passwordMinLength =>
-      'Le mot de passe doit comporter au moins 6 caractères.';
+      'Le mot de passe doit comporter au moins 8 caractères.';
 
   @override
   String get unlock => 'Déverrouiller';
@@ -2735,7 +2735,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get newPasswordMinLength =>
-      'Le nouveau mot de passe doit comporter au moins 6 caractères.';
+      'Le nouveau mot de passe doit comporter au moins 8 caractères.';
 
   @override
   String get fillAllFields => 'Veuillez remplir tous les champs.';
@@ -2774,7 +2774,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get backupPasswordTooShort =>
-      'Le mot de passe doit comporter au moins 6 caractères.';
+      'Le mot de passe doit comporter au moins 8 caractères.';
 
   @override
   String get backupPasswordEmpty => 'Veuillez entrer un mot de passe.';
@@ -2828,7 +2828,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get newPasswordMinLengthLabel =>
-      'Nouveau mot de passe (minimum 6 caractères)';
+      'Nouveau mot de passe (minimum 8 caractères)';
 
   @override
   String get confirmNewPasswordLabel => 'Confirmer le nouveau mot de passe';

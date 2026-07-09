@@ -276,7 +276,7 @@
   "passwordsDoNotMatch": "Les mots de passe ne correspondent pas.",
   "resendCodeSuccess": "Nouveau code envoyé ! Vérifiez votre boîte de réception.",
   "resendCodeError": "Erreur lors du renvoi du code. Réessayez.",
-  "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères.",
+  "passwordMinLength": "Le mot de passe doit comporter au moins 8 caractères.",
   "unlock": "Déverrouiller",
   "fullName": "Nom complet",
   "birthDate": "Date de naissance",
@@ -1990,7 +1990,7 @@
   "@emailChangedSuccess": {
     "description": "Message de succès après le changement d'e-mail"
   },
-  "newPasswordMinLength": "Le nouveau mot de passe doit comporter au moins 6 caractères.",
+  "newPasswordMinLength": "Le nouveau mot de passe doit comporter au moins 8 caractères.",
   "@newPasswordMinLength": {
     "description": "Erreur de validation quand le nouveau mot de passe est trop court (min 6 caractères)"
   },
@@ -2034,7 +2034,7 @@
   "@backupPasswordMismatch": {
     "description": "Erreur de validation quand les mots de passe ne correspondent pas"
   },
-  "backupPasswordTooShort": "Le mot de passe doit comporter au moins 6 caractères.",
+  "backupPasswordTooShort": "Le mot de passe doit comporter au moins 8 caractères.",
   "@backupPasswordTooShort": {
     "description": "Erreur de validation quand le mot de passe est trop court"
   },
@@ -2090,7 +2090,7 @@
   "backToStart": "Retour au début",
   "codeLabel": "Code",
   "informRegisteredEmail": "Entrez votre e-mail enregistré",
-  "newPasswordMinLengthLabel": "Nouveau mot de passe (minimum 6 caractères)",
+  "newPasswordMinLengthLabel": "Nouveau mot de passe (minimum 8 caractères)",
   "confirmNewPasswordLabel": "Confirmer le nouveau mot de passe",
   "informYourEmailTitle": "Entrez votre e-mail",
   "enterCodeTitle": "Entrez le code",
