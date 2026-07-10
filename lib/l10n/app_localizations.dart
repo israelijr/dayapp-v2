@@ -5651,6 +5651,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Same story'**
   String get continuityHookOptionSameStory;
+
+  /// Greeting shown on the user's birthday
+  ///
+  /// In en, this message translates to:
+  /// **'Happy birthday, {name}! We are happy to be here with you today.'**
+  String birthdayMessageToday(String name);
+
+  /// Greeting shown after the user's birthday has passed
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! We saw that your birthday was on {date}. We are happy to accompany your journey.'**
+  String birthdayMessagePassed(String date);
 }
 
 class _AppLocalizationsDelegate

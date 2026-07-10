@@ -3170,4 +3170,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get continuityHookOptionSameStory => 'Stessa storia';
+
+  @override
+  String birthdayMessageToday(String name) {
+    return 'Buon compleanno, $name! Siamo felici di essere qui con te in questo giorno.';
+  }
+
+  @override
+  String birthdayMessagePassed(String date) {
+    return 'Auguri! Abbiamo visto che il tuo compleanno era il $date. Siamo felici di accompagnare il tuo cammino.';
+  }
 }

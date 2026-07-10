@@ -49,6 +49,12 @@ class _StatsChartCardState extends State<StatsChartCard> {
     final totalGroups = stats.totalGroups;
     final hasData = totalStories > 0 || totalChapters > 0 || totalGroups > 0;
 
+    final isDark = theme.brightness == Brightness.dark;
+    // Cores dedicadas para gráficos de dados com alto contraste e distinção clara
+    final storiesColor = isDark ? const Color(0xFFB388FF) : const Color(0xFF673AB7);
+    final chaptersColor = isDark ? const Color(0xFFFFB74D) : const Color(0xFFF57C00);
+    final groupsColor = isDark ? const Color(0xFF4DB6AC) : const Color(0xFF00796B);
+
     List<PieChartSectionData> getSections() {
       if (!hasData) {
         return [
@@ -67,7 +73,7 @@ class _StatsChartCardState extends State<StatsChartCard> {
       if (totalStories > 0) {
         sections.add(
           PieChartSectionData(
-            color: theme.colorScheme.primary,
+            color: storiesColor,
             value: totalStories.toDouble(),
             title: '',
             radius: 16,
@@ -79,7 +85,7 @@ class _StatsChartCardState extends State<StatsChartCard> {
       if (totalChapters > 0) {
         sections.add(
           PieChartSectionData(
-            color: theme.colorScheme.secondary,
+            color: chaptersColor,
             value: totalChapters.toDouble(),
             title: '',
             radius: 16,
@@ -91,7 +97,7 @@ class _StatsChartCardState extends State<StatsChartCard> {
       if (totalGroups > 0) {
         sections.add(
           PieChartSectionData(
-            color: theme.colorScheme.tertiary,
+            color: groupsColor,
             value: totalGroups.toDouble(),
             title: '',
             radius: 16,
@@ -188,21 +194,21 @@ class _StatsChartCardState extends State<StatsChartCard> {
                     _buildStatIndicator(
                       label: loc.storiesLabel,
                       count: totalStories,
-                      color: theme.colorScheme.primary,
+                      color: storiesColor,
                       theme: theme,
                     ),
                     const SizedBox(height: 10),
                     _buildStatIndicator(
                       label: loc.chaptersLabel,
                       count: totalChapters,
-                      color: theme.colorScheme.secondary,
+                      color: chaptersColor,
                       theme: theme,
                     ),
                     const SizedBox(height: 10),
                     _buildStatIndicator(
                       label: loc.groupsLabel,
                       count: totalGroups,
-                      color: theme.colorScheme.tertiary,
+                      color: groupsColor,
                       theme: theme,
                     ),
                   ],

@@ -3108,5 +3108,23 @@
   "continuityHookOptionSameStory": "Same story",
   "@continuityHookOptionSameStory": {
     "description": "Option to edit the current story itself"
+  },
+  "birthdayMessageToday": "Happy birthday, {name}! We are happy to be here with you today.",
+  "@birthdayMessageToday": {
+    "description": "Greeting shown on the user's birthday",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "birthdayMessagePassed": "Congratulations! We saw that your birthday was on {date}. We are happy to accompany your journey.",
+  "@birthdayMessagePassed": {
+    "description": "Greeting shown after the user's birthday has passed",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
   }
 }

@@ -9,7 +9,10 @@ import 'package:dayapp/widgets/home_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/auth_provider.dart';
+import '../providers/birthday_provider.dart';
 import '../providers/refresh_provider.dart';
+import '../widgets/birthday_dialog.dart';
 import 'chapters_screen.dart';
 import 'create_group_screen.dart';
 
@@ -31,6 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // apenas uma vez por inicialização do app.
   static bool _backupSuggestionShown = false;
 
+  BirthdayProvider? _birthdayProvider;
+  bool _isBirthdayDialogOpen = false;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +48,95 @@ class _HomeScreenState extends State<HomeScreen> {
         _backupSuggestionShown = true;
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    
+    // Remove listener anterior se existir
+    if (_birthdayProvider != null) {
+      _birthdayProvider!.removeListener(_onBirthdayProviderChanged);
+    }
+    
+    _birthdayProvider = Provider.of<BirthdayProvider>(context);
+    _birthdayProvider!.addListener(_onBirthdayProviderChanged);
+
+    // Se já terminou a checagem e deve mostrar agora, dispara o diálogo após o frame
+    if (_birthdayProvider!.shouldShow) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _birthdayProvider != null && _birthdayProvider!.shouldShow) {
+          _showBirthdayDialog();
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_birthdayProvider != null) {
+      _birthdayProvider!.removeListener(_onBirthdayProviderChanged);
+    }
+    super.dispose();
+  }
+
+  void _onBirthdayProviderChanged() {
+    if (_birthdayProvider != null && _birthdayProvider!.shouldShow && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _birthdayProvider != null && _birthdayProvider!.shouldShow) {
+          _showBirthdayDialog();
+        }
+      });
+    }
+  }
+
+  Future<void> _showBirthdayDialog() async {
+    if (_isBirthdayDialogOpen) return;
+    _isBirthdayDialogOpen = true;
+
+    final provider = _birthdayProvider!;
+    final status = provider.status;
+    final user = context.read<AuthProvider>().user;
+    if (user == null) {
+      _isBirthdayDialogOpen = false;
+      return;
+    }
+
+    // Primeiro marca localmente como mostrado para evitar múltiplos disparos e concorrência
+    await provider.markAsShown();
+    if (!mounted) {
+      _isBirthdayDialogOpen = false;
+      return;
+    }
+
+    // Exibe o diálogo com animação de abertura premium
+    await showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: 'BirthdayDialog',
+      transitionDuration: const Duration(milliseconds: 600),
+      pageBuilder: (dialogContext, animation, secondaryAnimation) {
+        return BirthdayDialog(
+          status: status,
+          userName: user.nome,
+          birthDate: user.dtNascimento!,
+        );
+      },
+      transitionBuilder: (dialogContext, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: ScaleTransition(
+            scale: CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutBack,
+            ),
+            child: child,
+          ),
+        );
+      },
+    );
+
+    _isBirthdayDialogOpen = false;
   }
 
   void _handleCollectionsTabChanged(int index) {

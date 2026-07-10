@@ -3162,6 +3162,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get continuityHookOptionSameStory => 'Mesma história';
+
+  @override
+  String birthdayMessageToday(String name) {
+    return 'Parabéns $name. Ficamos felizes por estar aqui com você nesse dia.';
+  }
+
+  @override
+  String birthdayMessagePassed(String date) {
+    return 'Parabéns! Vimos que foi seu aniversário dia $date. Ficamos felizes por acompanhar sua jornada.';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3468,4 +3478,14 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get continuityHookOptionSameStory => 'Mesma história';
+
+  @override
+  String birthdayMessageToday(String name) {
+    return 'Parabéns $name. Ficamos felizes por estar aqui com você nesse dia.';
+  }
+
+  @override
+  String birthdayMessagePassed(String date) {
+    return 'Parabéns! Vimos que foi seu aniversário dia $date. Ficamos felizes por acompanhar sua jornada.';
+  }
 }

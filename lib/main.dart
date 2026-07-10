@@ -18,6 +18,7 @@ import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'db/database_helper.dart';
 import 'models/historia.dart';
 import 'providers/auth_provider.dart';
+import 'providers/birthday_provider.dart';
 import 'providers/chapter_filter_provider.dart';
 import 'providers/continuity_hook_provider.dart';
 import 'providers/home_layout_provider.dart';
@@ -550,6 +551,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: widget.authProvider),
+        ChangeNotifierProxyProvider<AuthProvider, BirthdayProvider>(
+          create: (context) => BirthdayProvider(
+            authProvider: context.read<AuthProvider>(),
+          ),
+          update: (context, authProvider, previous) {
+            if (previous == null ||
+                previous.userId != authProvider.user?.id ||
+                previous.birthDate != authProvider.user?.dtNascimento) {
+              return BirthdayProvider(authProvider: authProvider);
+            }
+            return previous;
+          },
+        ),
         ChangeNotifierProvider.value(value: widget.themeProvider),
         ChangeNotifierProvider.value(value: widget.refreshProvider),
         ChangeNotifierProvider.value(value: widget.localeProvider),
