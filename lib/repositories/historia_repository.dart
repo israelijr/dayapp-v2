@@ -467,6 +467,19 @@ class HistoriaRepository {
     // encerra o ciclo de continuidade automaticamente.
     if (continua == 1) {
       await updateContinuaStatus(historia.id!, 1);
+    } else {
+      // Se a história continua (Sim, Talvez, Não sei), reabre o ciclo de continuidade
+      // limpando a flag de fim da história e reiniciando os contadores de sugestão.
+      await db.update(
+        _table,
+        {
+          'fim_historia': 0,
+          'contador_sugestoes': 0,
+          'data_ultima_sugestao': null,
+        },
+        where: 'id = ?',
+        whereArgs: [historia.id],
+      );
     }
 
     if (tags != null) {
