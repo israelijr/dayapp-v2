@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../db/database_helper.dart';
 import '../providers/auth_provider.dart';
 import '../theme/m3_expressive_theme.dart';
 import '../widgets/custom_text_field.dart';
@@ -54,6 +53,12 @@ class _CreateAccountComplementScreenState
   String? profileImagePath;
   String? errorMessage;
   bool loading = false;
+
+  @override
+  void dispose() {
+    birthDateController.dispose();
+    super.dispose();
+  }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -130,16 +135,16 @@ class _CreateAccountComplementScreenState
       return;
     }
     try {
-      final db = await DatabaseHelper().database;
-      await db.update(
-        'users',
-        {
-          'dt_nascimento': birthDate?.toIso8601String(),
-          'foto_perfil': profileImagePath,
-        },
-        where: 'id = ?',
-        whereArgs: [auth.user!.id],
+      final success = await auth.updateUser(
+        nome: auth.user!.nome,
+        email: auth.user!.email,
+        dtNascimento: birthDate,
+        fotoPerfil: profileImagePath,
       );
+
+      if (!success) {
+        throw Exception('Falha ao salvar dados complementares do perfil');
+      }
 
       if (!mounted) return;
       // Navega para uma nova instância da tela de login, removendo toda a

@@ -733,5 +733,22 @@ class HistoriaRepository {
     );
     return (result.first['cnt'] ?? 0) as int;
   }
+
+  Future<Historia?> getHistoriaById(int id) async {
+    final db = await DatabaseHelper().database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      _table,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return Historia.fromMap(maps.first);
+    }
+    return null;
+  }
+
+  Future<List<FotoComBytes>> getFotosComBytesByHistoria(int historiaId) async {
+    return HistoriaFotoHelper().getFotosComBytesByHistoria(historiaId);
+  }
 }
 

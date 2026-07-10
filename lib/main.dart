@@ -69,6 +69,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
 
+  // Captura erros do framework Flutter (UI)
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    debugPrint('FLUTTER GLOBAL ERROR: ${details.exceptionAsString()}');
+    debugPrint('STACK TRACE: ${details.stack}');
+  };
+
+  // Captura erros assíncronos fora do framework Flutter
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    debugPrint('PLATFORM GLOBAL ERROR: $error');
+    debugPrint('STACK TRACE: $stack');
+    return true; // Indica que o erro foi tratado
+  };
+
   // Inicializa a factory do banco de dados conforme a plataforma
   if (kIsWeb) {
     // Web usa IndexedDB via sqflite_common_ffi_web

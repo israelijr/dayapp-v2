@@ -140,7 +140,7 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
                             padding: const EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: 
+                              children: [
                                 Text(
                                   '📦 ${loc.backupComplete}',
                                   style: GoogleFonts.plusJakartaSans(

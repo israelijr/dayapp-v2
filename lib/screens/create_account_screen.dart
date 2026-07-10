@@ -26,6 +26,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   String? errorMessage;
   bool loading = false;
 
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   Future<void> _register(BuildContext context) async {
     setState(() {
       loading = true;

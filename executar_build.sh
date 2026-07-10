@@ -9,7 +9,8 @@ rm -rf android/.gradle
 rm -rf build
 rm -rf .dart_tool
 flutter pub get
-flutter build appbundle --release
+#flutter build appbundle --release
+flutter build appbundle --release --obfuscate --split-debug-info=./symbols
 
 # Mantém o terminal aberto para você ver o resultado ou possíveis erros
 echo ""

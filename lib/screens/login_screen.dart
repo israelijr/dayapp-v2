@@ -35,6 +35,13 @@ class _LoginScreenState extends State<LoginScreen> {
     _checkBiometric();
   }
 
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   Future<void> _checkBiometric() async {
     final available = await _biometricService.isBiometricAvailable();
     final enabled = await _biometricService.isBiometricEnabled();

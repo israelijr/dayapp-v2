@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../../db/database_helper.dart';
-import '../../db/historia_foto_helper.dart';
+import '../../repositories/historia_repository.dart';
 import '../../services/thumbnail_service.dart';
 import '../story_card.dart';
 
@@ -27,11 +26,12 @@ class ReaderBlockRenderer extends StatelessWidget {
       Future<void> openPreview() async {
         final storyId = titleBlock.storyId;
         if (storyId == null) return;
-        final historia = await DatabaseHelper().getHistoria(storyId);
+        final repo = HistoriaRepository();
+        final historia = await repo.getHistoriaById(storyId);
         if (historia == null) return;
 
         try {
-          final fotos = await HistoriaFotoHelper().getFotosComBytesByHistoria(
+          final fotos = await repo.getFotosComBytesByHistoria(
             historia.id ?? 0,
           );
           if (fotos.isNotEmpty) {
