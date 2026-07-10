@@ -18,6 +18,8 @@ class GroupSelectionScreen extends StatefulWidget {
 }
 
 class _GroupSelectionScreenState extends State<GroupSelectionScreen> {
+  static const int _maxGroupNameLength = 15;
+
   final TextEditingController _newGroupController = TextEditingController();
   String? _selectedEmoticon;
   String? _selectedEmojiTranslation;
@@ -38,6 +40,13 @@ class _GroupSelectionScreenState extends State<GroupSelectionScreen> {
     if (newGroupName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context)!.enterGroupName)),
+      );
+      return;
+    }
+
+    if (newGroupName.length > _maxGroupNameLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.groupNameTooLong)),
       );
       return;
     }
@@ -181,6 +190,8 @@ class _GroupSelectionScreenState extends State<GroupSelectionScreen> {
                         child: CustomTextField(
                           controller: _newGroupController,
                           label: AppLocalizations.of(context)!.groupNameLabel,
+                          maxLength: _maxGroupNameLength,
+                          helperText: AppLocalizations.of(context)!.groupNameMaxLengthHint,
                           textCapitalization: TextCapitalization.sentences,
                         ),
                       ),
