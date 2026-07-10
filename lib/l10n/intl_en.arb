@@ -514,14 +514,13 @@
   "backupInfoTitle": "About Backup",
   "backupInfoDetails": "The complete backup includes:\n• Database (stories, texts, photos, audios)\n• Video files\n\nA ZIP file will be created and you can save it wherever you want:\n• OneDrive\n• Google Drive\n• Email\n• Any other location",
   "backupComplete": "Complete Backup",
-  "backupZipSubtitle": "ZIP file with all your data",
   "backupZipExplanation": "Generates a file that you can save to your device, OneDrive, Google Drive, email, or any other cloud location.",
   "backupLinuxExplanation": "Choose a folder and the backup ZIP will be saved directly to it.",
   "@backupLinuxExplanation": {
     "description": "Explanation shown on the backup card when running on Linux desktop"
   },
   "restoreSectionTitle": "Restore Backup",
-  "restoreSectionDescription": "Select a backup file (ZIP) previously created to restore all your data.",
+  "restoreSectionDescription": "Select a backup file previously created to restore all your data.",
   "lastBackupLabel": "Last backup: {fileName}",
   "@lastBackupLabel": {
     "description": "Label showing the filename of the last backup",
@@ -845,7 +844,7 @@
   "notificationScheduleModeInexact": "Inexact (Play-compliant)",
   "automaticBackup": "Automatic Backup",
   "manageCompleteBackup": "Manage full backup",
-  "backupWithVideosZip": "Backup with videos in ZIP file",
+  "backupWithVideosZip": "",
   "backupOnLogoutDescription": "Backup will be created when you log out",
   "automaticBackupInfo": "When you log out, a backup will be created and you can choose where to save it (local folder, Google Drive, etc).",
   "automaticBackupInfoLocal": "On logout, a backup is automatically saved locally on your device. You can later export it to cloud storage if needed.",

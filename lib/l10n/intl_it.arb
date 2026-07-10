@@ -510,14 +510,13 @@
   "backupInfoTitle": "Informazioni sul backup",
   "backupInfoDetails": "Il backup completo include:\n• Database (storie, testi, foto, audio)\n• File video\n\nViene creato un file ZIP che puoi salvare dove vuoi:\n• OneDrive\n• Google Drive\n• E-mail\n• Qualsiasi altra posizione",
   "backupComplete": "Backup completo",
-  "backupZipSubtitle": "File ZIP con tutti i tuoi dati",
   "backupZipExplanation": "Genera un file che puoi salvare sul tuo dispositivo, OneDrive, Google Drive, posta elettronica o qualsiasi altra posizione cloud.",
   "backupLinuxExplanation": "Scegli una cartella e il backup ZIP verrà salvato direttamente al suo interno.",
   "@backupLinuxExplanation": {
     "description": "Spiegazione mostrata nella scheda di backup su Linux desktop"
   },
   "restoreSectionTitle": "Ripristina backup",
-  "restoreSectionDescription": "Seleziona un file di backup (ZIP) precedentemente creato per ripristinare tutti i tuoi dati.",
+  "restoreSectionDescription": "Seleziona un file di backup precedentemente creato per ripristinare tutti i tuoi dati.",
   "lastBackupLabel": "Ultimo backup: {fileName}",
   "@lastBackupLabel": {
     "description": "Etichetta che mostra il nome dell'ultimo file di backup",
@@ -774,7 +773,7 @@
   "notificationScheduleModeInexact": "Non esatta (compatibile con Play)",
   "automaticBackup": "Backup automatico",
   "manageCompleteBackup": "Gestisci backup completo",
-  "backupWithVideosZip": "Backup con video in file ZIP",
+  "backupWithVideosZip": "",
   "backupOnLogoutDescription": "Il backup verrà creato al logout",
   "automaticBackupInfo": "Al logout, verrà creato un backup e puoi scegliere dove salvarlo (cartella locale, Google Drive, ecc.).",
   "automaticBackupInfoLocal": "Al logout, un backup viene automaticamente salvato localmente sul tuo dispositivo. Puoi esportarlo su cloud storage in seguito se necessario.",

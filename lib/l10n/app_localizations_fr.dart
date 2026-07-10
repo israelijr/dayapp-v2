@@ -961,9 +961,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get backupComplete => 'Sauvegarde complète';
 
   @override
-  String get backupZipSubtitle => 'Fichier ZIP avec toutes vos données';
-
-  @override
   String get backupZipExplanation =>
       'Génère un fichier que vous pouvez enregistrer sur votre appareil, OneDrive, Google Drive, votre courrier électronique ou tout autre emplacement cloud.';
 
@@ -976,7 +973,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get restoreSectionDescription =>
-      'Sélectionnez un fichier de sauvegarde (ZIP) précédemment créé pour restaurer toutes vos données.';
+      'Sélectionnez un fichier de sauvegarde précédemment créé pour restaurer toutes vos données.';
 
   @override
   String lastBackupLabel(String fileName) {
@@ -1576,7 +1573,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get manageCompleteBackup => 'Gérer la sauvegarde complète';
 
   @override
-  String get backupWithVideosZip => 'Sauvegarde avec vidéos en fichier ZIP';
+  String get backupWithVideosZip => '';
 
   @override
   String get backupOnLogoutDescription =>

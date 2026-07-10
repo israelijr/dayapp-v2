@@ -456,7 +456,6 @@
     "backupInfoTitle",
     "backupInfoDetails",
     "backupComplete",
-    "backupZipSubtitle",
     "restoreSectionTitle",
     "restoreSectionDescription",
     "backupShareSubject",

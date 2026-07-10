@@ -1857,12 +1857,6 @@ abstract class AppLocalizations {
   /// **'Complete Backup'**
   String get backupComplete;
 
-  /// No description provided for @backupZipSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'ZIP file with all your data'**
-  String get backupZipSubtitle;
-
   /// No description provided for @backupZipExplanation.
   ///
   /// In en, this message translates to:
@@ -1884,7 +1878,7 @@ abstract class AppLocalizations {
   /// No description provided for @restoreSectionDescription.
   ///
   /// In en, this message translates to:
-  /// **'Select a backup file (ZIP) previously created to restore all your data.'**
+  /// **'Select a backup file previously created to restore all your data.'**
   String get restoreSectionDescription;
 
   /// Label showing the filename of the last backup
@@ -2874,7 +2868,7 @@ abstract class AppLocalizations {
   /// No description provided for @backupWithVideosZip.
   ///
   /// In en, this message translates to:
-  /// **'Backup with videos in ZIP file'**
+  /// **''**
   String get backupWithVideosZip;
 
   /// No description provided for @backupOnLogoutDescription.

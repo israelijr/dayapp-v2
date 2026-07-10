@@ -141,7 +141,7 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
+                                /* Row(
                                   children: [
                                     Icon(
                                       Icons.folder_zip,
@@ -163,21 +163,12 @@ class _BackupManagerScreenState extends State<BackupManagerScreen> {
                                               ),
                                             ),
                                           ),
-                                          Text(
-                                            loc.backupZipSubtitle,
-                                            style: GoogleFonts.plusJakartaSans(
-                                              fontSize: 13,
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.onSurfaceVariant,
-                                            ),
-                                          ),
                                         ],
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 16), */
                                 Text(
                                   '📦 ${loc.backupComplete}',
                                   style: GoogleFonts.plusJakartaSans(

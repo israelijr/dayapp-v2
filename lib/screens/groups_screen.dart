@@ -625,63 +625,72 @@ class _GroupsScreenState extends State<GroupsScreen>
                                         ),
                                       ],
                                     )
-                                  : GridView.builder(
-                                      padding: const EdgeInsets.all(16),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            crossAxisSpacing: 16,
-                                            mainAxisSpacing: 16,
-                                            childAspectRatio: 0.85,
+                                  : CustomScrollView(
+                                      slivers: [
+                                        if (_sugestoes.isNotEmpty)
+                                          SliverToBoxAdapter(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                top: 16,
+                                                left: 16,
+                                                right: 16,
+                                              ),
+                                              child: _buildSuggestionBanner(
+                                                context,
+                                              ),
+                                            ),
                                           ),
-                                      itemCount:
-                                          displayChapters.length +
-                                          (_sugestoes.isNotEmpty ? 1 : 0),
-                                      itemBuilder: (context, index) {
-                                        if (_sugestoes.isNotEmpty &&
-                                            index == 0) {
-                                          return _buildSuggestionBanner(
-                                            context,
-                                          );
-                                        }
-                                        final chapterIndex =
-                                            _sugestoes.isNotEmpty
-                                            ? index - 1
-                                            : index;
+                                        SliverPadding(
+                                          padding: EdgeInsets.only(
+                                            left: 16,
+                                            right: 16,
+                                            bottom: 16,
+                                            top: _sugestoes.isNotEmpty ? 0 : 16,
+                                          ),
+                                          sliver: SliverGrid(
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              crossAxisSpacing: 16,
+                                              mainAxisSpacing: 16,
+                                              childAspectRatio: 0.85,
+                                            ),
+                                            delegate:
+                                                SliverChildBuilderDelegate(
+                                              (context, index) {
+                                                final resumo =
+                                                    displayChapters[index];
+                                                final List<String> capas = [
+                                                  'assets/image/capa1.jpg',
+                                                  'assets/image/capa2.jpeg',
+                                                  'assets/image/capa3.jpeg',
+                                                  'assets/image/capa4.jpeg',
+                                                  'assets/image/capa5.jpg',
+                                                ];
+                                                final randomIdx =
+                                                    (resumo.capitulo.id ??
+                                                            resumo
+                                                                .capitulo
+                                                                .titulo
+                                                                .hashCode)
+                                                        .abs() %
+                                                    capas.length;
 
-                                        if (chapterIndex >=
-                                            displayChapters.length) {
-                                          return const SizedBox.shrink();
-                                        }
-
-                                        final resumo =
-                                            displayChapters[chapterIndex];
-                                        final List<String> capas = [
-                                          'assets/image/capa1.jpg',
-                                          'assets/image/capa2.jpeg',
-                                          'assets/image/capa3.jpeg',
-                                          'assets/image/capa4.jpeg',
-                                          'assets/image/capa5.jpg',
-                                        ];
-                                        final randomIdx =
-                                            (resumo.capitulo.id ??
-                                                    resumo
-                                                        .capitulo
-                                                        .titulo
-                                                        .hashCode)
-                                                .abs() %
-                                            capas.length;
-
-                                        return ChapterBookWidget(
-                                          titulo: resumo.capitulo.titulo,
-                                          dataUpdate:
-                                              resumo.capitulo.dataUpdate ??
-                                              resumo.capitulo.dataInicio,
-                                          fotoPath: resumo.capitulo.fotoPath,
-                                          coverAsset: capas[randomIdx],
-                                          onTap: () => _openChapter(resumo),
-                                        );
-                                      },
+                                                return ChapterBookWidget(
+                                                  titulo: resumo.capitulo.titulo,
+                                                  dataUpdate:
+                                                      resumo.capitulo.dataUpdate ??
+                                                      resumo.capitulo.dataInicio,
+                                                  fotoPath: resumo.capitulo.fotoPath,
+                                                  coverAsset: capas[randomIdx],
+                                                  onTap: () => _openChapter(resumo),
+                                                );
+                                              },
+                                              childCount: displayChapters.length,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     );
                             },
                           ),

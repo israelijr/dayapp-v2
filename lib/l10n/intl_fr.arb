@@ -510,14 +510,13 @@
   "backupInfoTitle": "À propos de la sauvegarde",
   "backupInfoDetails": "La sauvegarde complète comprend :\n• Base de données (histoires, textes, photos, audios)\n• Fichiers vidéo\n\nUn fichier ZIP sera créé et vous pourrez le sauvegarder où vous voulez :\n• OneDrive\n• Google Drive\n• E-mail\n• Tout autre emplacement",
   "backupComplete": "Sauvegarde complète",
-  "backupZipSubtitle": "Fichier ZIP avec toutes vos données",
   "backupZipExplanation": "Génère un fichier que vous pouvez enregistrer sur votre appareil, OneDrive, Google Drive, votre courrier électronique ou tout autre emplacement cloud.",
   "backupLinuxExplanation": "Choisissez un dossier et le ZIP de sauvegarde y sera enregistré directement.",
   "@backupLinuxExplanation": {
     "description": "Explication affichée sur la carte de sauvegarde sous Linux desktop"
   },
   "restoreSectionTitle": "Restaurer la sauvegarde",
-  "restoreSectionDescription": "Sélectionnez un fichier de sauvegarde (ZIP) précédemment créé pour restaurer toutes vos données.",
+  "restoreSectionDescription": "Sélectionnez un fichier de sauvegarde précédemment créé pour restaurer toutes vos données.",
   "lastBackupLabel": "Dernière sauvegarde : {fileName}",
   "@lastBackupLabel": {
     "description": "Étiquette affichant le nom du dernier fichier de sauvegarde",
@@ -774,7 +773,7 @@
   "notificationScheduleModeInexact": "Inexact (compatible Play)",
   "automaticBackup": "Sauvegarde automatique",
   "manageCompleteBackup": "Gérer la sauvegarde complète",
-  "backupWithVideosZip": "Sauvegarde avec vidéos en fichier ZIP",
+  "backupWithVideosZip": "",
   "backupOnLogoutDescription": "La sauvegarde sera créée lors de la déconnexion",
   "automaticBackupInfo": "Lors de la déconnexion, une sauvegarde sera créée et vous pouvez choisir où l'enregistrer (dossier local, Google Drive, etc.).",
   "automaticBackupInfoLocal": "Lors de la déconnexion, une sauvegarde est automatiquement enregistrée localement sur votre appareil. Vous pouvez ensuite l'exporter vers un stockage cloud si nécessaire.",

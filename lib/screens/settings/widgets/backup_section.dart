@@ -16,7 +16,9 @@ class BackupSection extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.folder_zip),
           title: Text(loc.manageCompleteBackup),
-          subtitle: Text(loc.backupWithVideosZip),
+          subtitle: loc.backupWithVideosZip.isEmpty
+              ? null
+              : Text(loc.backupWithVideosZip),
           trailing: const Icon(Icons.arrow_forward_ios),
           onTap: () => Navigator.pushNamed(context, '/backup-manager'),
         ),
