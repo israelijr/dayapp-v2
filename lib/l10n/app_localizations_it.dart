@@ -2524,6 +2524,20 @@ class AppLocalizationsIt extends AppLocalizations {
   String get chapterSortStories => 'Più storie';
 
   @override
+  String get chaptersMenuSorting => 'Ordinamento';
+
+  @override
+  String get chaptersMenuSortDate => 'Data (Aggiornata)';
+
+  @override
+  String get chaptersMenuVisualization => 'Visualizzazione';
+
+  @override
+  String chaptersMenuViewLimit(int count) {
+    return 'Vedi $count';
+  }
+
+  @override
   String chapterEntriesAndMood(int count, String mood) {
     return '$count storie - umore med. $mood';
   }

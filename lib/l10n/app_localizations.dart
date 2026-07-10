@@ -4524,6 +4524,30 @@ abstract class AppLocalizations {
   /// **'Most stories'**
   String get chapterSortStories;
 
+  /// Header for sorting options in the chapters menu
+  ///
+  /// In en, this message translates to:
+  /// **'Sorting'**
+  String get chaptersMenuSorting;
+
+  /// Option to sort chapters by update date
+  ///
+  /// In en, this message translates to:
+  /// **'Date (Updated)'**
+  String get chaptersMenuSortDate;
+
+  /// Header for view limit options in the chapters menu
+  ///
+  /// In en, this message translates to:
+  /// **'Visualization'**
+  String get chaptersMenuVisualization;
+
+  /// Label to show a limited number of chapters
+  ///
+  /// In en, this message translates to:
+  /// **'Show {count}'**
+  String chaptersMenuViewLimit(int count);
+
   /// Short chapter list subtitle
   ///
   /// In en, this message translates to:

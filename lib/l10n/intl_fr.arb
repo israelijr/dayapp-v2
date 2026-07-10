@@ -1747,6 +1747,27 @@
   "@chapterSortStories": {
     "description": "Option pour trier les chapitres par nombre d'histoires"
   },
+  "chaptersMenuSorting": "Tri",
+  "@chaptersMenuSorting": {
+    "description": "Header for sorting options in the chapters menu"
+  },
+  "chaptersMenuSortDate": "Date (Mise à jour)",
+  "@chaptersMenuSortDate": {
+    "description": "Option to sort chapters by update date"
+  },
+  "chaptersMenuVisualization": "Visualisation",
+  "@chaptersMenuVisualization": {
+    "description": "Header for view limit options in the chapters menu"
+  },
+  "chaptersMenuViewLimit": "Voir {count}",
+  "@chaptersMenuViewLimit": {
+    "description": "Label to show a limited number of chapters",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "chapterEntriesAndMood": "{count} histoires - humeur moy. {mood}",
   "@chapterEntriesAndMood": {
     "description": "Sous-titre court de la liste des chapitres",

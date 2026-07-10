@@ -201,29 +201,29 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 enabled: false,
                 child: Text(
-                  'Ordenação',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  l10n.chaptersMenuSorting,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
               CheckedPopupMenuItem(
                 value: 'sort_date',
                 checked: filterProvider.sortOrder == 'date',
-                child: const Text('Data (Update)'),
+                child: Text(l10n.chaptersMenuSortDate),
               ),
               CheckedPopupMenuItem(
                 value: 'sort_title',
                 checked: filterProvider.sortOrder == 'title',
-                child: const Text('Título'),
+                child: Text(l10n.chapterSortTitle),
               ),
               const PopupMenuDivider(),
-              const PopupMenuItem(
+              PopupMenuItem(
                 enabled: false,
                 child: Text(
-                  'Visualização',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  l10n.chaptersMenuVisualization,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
               CheckedPopupMenuItem(
@@ -234,17 +234,17 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               CheckedPopupMenuItem(
                 value: 'limit_10',
                 checked: filterProvider.itemLimit == 10,
-                child: const Text('Ver 10'),
+                child: Text(l10n.chaptersMenuViewLimit(10)),
               ),
               CheckedPopupMenuItem(
                 value: 'limit_20',
                 checked: filterProvider.itemLimit == 20,
-                child: const Text('Ver 20'),
+                child: Text(l10n.chaptersMenuViewLimit(20)),
               ),
               CheckedPopupMenuItem(
                 value: 'limit_50',
                 checked: filterProvider.itemLimit == 50,
-                child: const Text('Ver 50'),
+                child: Text(l10n.chaptersMenuViewLimit(50)),
               ),
             ],
           ),

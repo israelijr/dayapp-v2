@@ -1745,7 +1745,28 @@
   },
   "chapterSortStories": "Più storie",
   "@chapterSortStories": {
-    "description": "Opzione per ordinare i capitoli per numero di storie"
+    "description": "Option pour trier les chapitres par nombre d'histoires"
+  },
+  "chaptersMenuSorting": "Ordinamento",
+  "@chaptersMenuSorting": {
+    "description": "Header for sorting options in the chapters menu"
+  },
+  "chaptersMenuSortDate": "Data (Aggiornata)",
+  "@chaptersMenuSortDate": {
+    "description": "Option to sort chapters by update date"
+  },
+  "chaptersMenuVisualization": "Visualizzazione",
+  "@chaptersMenuVisualization": {
+    "description": "Header for view limit options in the chapters menu"
+  },
+  "chaptersMenuViewLimit": "Vedi {count}",
+  "@chaptersMenuViewLimit": {
+    "description": "Label to show a limited number of chapters",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "chapterEntriesAndMood": "{count} storie - umore med. {mood}",
   "@chapterEntriesAndMood": {

@@ -2516,6 +2516,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get chapterSortStories => 'Mais histórias';
 
   @override
+  String get chaptersMenuSorting => 'Ordenação';
+
+  @override
+  String get chaptersMenuSortDate => 'Data (Atualização)';
+
+  @override
+  String get chaptersMenuVisualization => 'Visualização';
+
+  @override
+  String chaptersMenuViewLimit(int count) {
+    return 'Ver $count';
+  }
+
+  @override
   String chapterEntriesAndMood(int count, String mood) {
     return '$count histórias - humor médio $mood';
   }
@@ -3306,6 +3320,20 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get themePremiumRequired =>
       'Temas personalizados são um recurso Premium.';
+
+  @override
+  String get chaptersMenuSorting => 'Ordenação';
+
+  @override
+  String get chaptersMenuSortDate => 'Data (Atualização)';
+
+  @override
+  String get chaptersMenuVisualization => 'Visualização';
+
+  @override
+  String chaptersMenuViewLimit(int count) {
+    return 'Ver $count';
+  }
 
   @override
   String get exportPdfPremiumRequired =>

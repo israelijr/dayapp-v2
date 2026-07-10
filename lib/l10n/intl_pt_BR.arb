@@ -287,5 +287,26 @@
   "continuityHookOptionSameStory": "Mesma história",
   "@continuityHookOptionSameStory": {
     "description": "Opção para editar a própria história atual"
+  },
+  "chaptersMenuSorting": "Ordenação",
+  "@chaptersMenuSorting": {
+    "description": "Header for sorting options in the chapters menu"
+  },
+  "chaptersMenuSortDate": "Data (Atualização)",
+  "@chaptersMenuSortDate": {
+    "description": "Option to sort chapters by update date"
+  },
+  "chaptersMenuVisualization": "Visualização",
+  "@chaptersMenuVisualization": {
+    "description": "Header for view limit options in the chapters menu"
+  },
+  "chaptersMenuViewLimit": "Ver {count}",
+  "@chaptersMenuViewLimit": {
+    "description": "Label to show a limited number of chapters",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

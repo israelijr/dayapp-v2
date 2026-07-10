@@ -2082,6 +2082,27 @@
   "@chapterSortStories": {
     "description": "Opción para ordenar capítulos por cantidad de historias"
   },
+  "chaptersMenuSorting": "Ordenación",
+  "@chaptersMenuSorting": {
+    "description": "Header for sorting options in the chapters menu"
+  },
+  "chaptersMenuSortDate": "Fecha (Actualizada)",
+  "@chaptersMenuSortDate": {
+    "description": "Option to sort chapters by update date"
+  },
+  "chaptersMenuVisualization": "Visualización",
+  "@chaptersMenuVisualization": {
+    "description": "Header for view limit options in the chapters menu"
+  },
+  "chaptersMenuViewLimit": "Ver {count}",
+  "@chaptersMenuViewLimit": {
+    "description": "Label to show a limited number of chapters",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "chapterEntriesAndMood": "{count} historias - ánimo promedio {mood}",
   "@chapterEntriesAndMood": {
     "description": "Subtítulo corto de la lista de capítulos",
