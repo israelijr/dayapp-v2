@@ -650,6 +650,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                       width: double.infinity,
                       height: 160,
                       fit: BoxFit.cover,
+                      cacheHeight: 480,
                       errorBuilder: (context, error, stackTrace) => Container(
                         width: double.infinity,
                         height: 160,
@@ -1344,6 +1345,8 @@ class _CreateCapituloPageState extends State<_CreateCapituloPage> {
                                   width: 100,
                                   height: 100,
                                   fit: BoxFit.cover,
+                                  cacheWidth: 300,
+                                  cacheHeight: 300,
                                 ),
                               ),
                               Positioned(
@@ -1844,6 +1847,8 @@ class _EditCapituloPageState extends State<_EditCapituloPage> {
                                   width: 100,
                                   height: 100,
                                   fit: BoxFit.cover,
+                                  cacheWidth: 300,
+                                  cacheHeight: 300,
                                 ),
                               ),
                               Positioned(
@@ -2559,6 +2564,7 @@ class _ChapterDetailsScreenState extends State<_ChapterDetailsScreen> {
                               width: double.infinity,
                               height: 200,
                               fit: BoxFit.cover,
+                              cacheHeight: 600,
                               errorBuilder: (context, error, stackTrace) =>
                                   Container(
                                     width: double.infinity,

@@ -186,6 +186,8 @@ class ChapterBookWidget extends StatelessWidget {
                             child: Image.file(
                               File(fotoPath!),
                               fit: BoxFit.cover,
+                              cacheWidth: 180,
+                              cacheHeight: 180,
                             ),
                           ),
                         ),

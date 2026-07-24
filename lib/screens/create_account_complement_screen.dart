@@ -63,7 +63,12 @@ class _CreateAccountComplementScreenState
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     try {
-      final picked = await picker.pickImage(source: ImageSource.gallery);
+      final picked = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
       if (picked != null) {
         if (!mounted) return;
         setState(() {
@@ -212,7 +217,11 @@ class _CreateAccountComplementScreenState
                           ? (kIsWeb
                                 ? NetworkImage(profileImagePath!)
                                       as ImageProvider
-                                : FileImage(File(profileImagePath!))
+                                : ResizeImage(
+                                      FileImage(File(profileImagePath!)),
+                                      width: 300,
+                                      height: 300,
+                                    )
                                       as ImageProvider)
                           : null,
                       child: profileImagePath == null

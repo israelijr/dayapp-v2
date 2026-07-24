@@ -27,9 +27,9 @@ class ImagePickerWidget extends StatefulWidget {
     this.onImagePicked,
     this.onMultipleImagesPicked,
     super.key,
-    this.maxWidth,
-    this.maxHeight,
-    this.imageQuality,
+    this.maxWidth = 1920,
+    this.maxHeight = 1920,
+    this.imageQuality = 85,
     this.allowMultiple = true,
   }) : assert(
          onImagePicked != null || onMultipleImagesPicked != null,

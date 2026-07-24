@@ -33,6 +33,8 @@ class ProfileAvatarPicker extends StatelessWidget {
                   : Image.file(
                       File(localImagePath!),
                       fit: BoxFit.cover,
+                      cacheWidth: 360,
+                      cacheHeight: 360,
                       errorBuilder: (context, error, stackTrace) =>
                           _buildPlaceholder(colorScheme),
                     ),

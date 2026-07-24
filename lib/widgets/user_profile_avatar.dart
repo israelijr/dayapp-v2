@@ -50,9 +50,12 @@ class UserProfileAvatar extends StatelessWidget {
       );
     }
 
+    final cacheDim = (radius * 4).toInt();
     return Image.file(
       File(fotoPerfil!),
       fit: BoxFit.cover,
+      cacheWidth: cacheDim > 0 ? cacheDim : 200,
+      cacheHeight: cacheDim > 0 ? cacheDim : 200,
       errorBuilder: (_, _, _) {
         return const Image(image: placeholder, fit: BoxFit.cover);
       },
