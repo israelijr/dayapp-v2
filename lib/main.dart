@@ -6,6 +6,7 @@ import 'package:dayapp/helpers/route_transition_helper.dart';
 import 'package:dayapp/l10n/generated/app_localizations.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -68,6 +69,10 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Habilita o modo edge-to-edge no Flutter para compatibilidade com Android 15+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
   GoogleFonts.config.allowRuntimeFetching = false;
 
   // Captura erros do framework Flutter (UI)

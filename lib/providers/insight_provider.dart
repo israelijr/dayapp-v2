@@ -46,9 +46,6 @@ class InsightProvider with ChangeNotifier {
   /// Filtro de tier ativo (apenas relevante em devMode).
   InsightTierFilter _tierFilter = InsightTierFilter.all;
 
-  /// Duração que um insight permanece visível antes de desaparecer automaticamente.
-  static const Duration _visibilityDuration = Duration(days: 1);
-
   /// Período de cooldown após dispensa para o insight reaparecer.
   static const Duration _cooldownDuration = Duration(days: 7);
 
@@ -224,7 +221,7 @@ class InsightProvider with ChangeNotifier {
     }
 
     var cycleStart = DateTime.fromMillisecondsSinceEpoch(cycleStartMs);
-    var difference = now.difference(cycleStart);
+    final difference = now.difference(cycleStart);
     var horasDecorridas = difference.inHours;
 
     var loteAtual = horasDecorridas ~/ 72;
