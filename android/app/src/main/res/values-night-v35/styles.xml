@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tema aplicado à Window do Android enquanto o processo é iniciado
+         (Modo escuro + Android 15 / API 35+).
+         Usa AppCompat sem definir cores de barra de sistema para compatibilidade
+         com o edge-to-edge obrigatório do Android 15. -->
+    <style name="LaunchTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+        <!-- Não bloqueia o edge-to-edge forçado pelo Android 15 -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">false</item>
+    </style>
+
+    <!-- Tema aplicado à Window assim que o processo Flutter é iniciado
+         (Modo escuro + Android 15 / API 35+) -->
+    <style name="NormalTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">?android:colorBackground</item>
+        <!-- Não bloqueia o edge-to-edge forçado pelo Android 15 -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">false</item>
+    </style>
+</resources>
