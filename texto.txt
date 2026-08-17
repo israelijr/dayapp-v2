@@ -1,0 +1,15 @@
+Melhore o desempenho do app com redução de resolução de bitmap
+Seu app está usando BitmapFactory sem redução de resolução nos seguintes locais:
+
+i0.i.b
+Tipo de problema: falta o parâmetro BitmapFactory.Options
+p7.g.c
+Tipo de problema: falta o parâmetro BitmapFactory.Options
+Carregar bitmaps em resolução total pode levar a um uso excessivo de memória, principalmente se a resolução da imagem aumentar em atualizações futuras.
+
+Considere usar uma biblioteca de carregamento de imagens para lidar automaticamente com o gerenciamento de memória e a redução de resolução. Se você precisar de BitmapFactory diretamente, use BitmapFactory.Options.inSampleSize para reduzir a resolução da imagem para o tamanho de exibição necessário.
+
+Qualidade técnica
+Nome da versão: 44 (1.0.37)
+Isso foi útil?
+https://developer.android.com/develop/ui/compose/graphics/images/optimization?hl=pt-br
