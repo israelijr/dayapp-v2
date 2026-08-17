@@ -13,3 +13,41 @@ Qualidade técnica
 Nome da versão: 44 (1.0.37)
 Isso foi útil?
 https://developer.android.com/develop/ui/compose/graphics/images/optimization?hl=pt-br
+
+=========================================================================
+AVALIAÇÃO (17/08/2026)
+=========================================================================
+
+O aviso é do Google Play Console sobre o app DayApp v1.0.37+44. Como o app
+é Flutter, nenhum código Dart usa BitmapFactory. As classes ofuscadas
+(i0.i.b e p7.g.c, geradas pelo R8 pois isMinifyEnabled = true) pertencem a
+código nativo de plugins. Fontes encontradas nas versões resolvidas:
+
+1) file_picker 11.0.2
+   Arquivo: android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FileUtils.kt:464
+   Chamada: BitmapFactory.decodeStream(imageStream) sem Options, em compressImage().
+   Observação: o app não passa compressionQuality no pickFiles, então este
+   caminho provavelmente não é acionado em runtime.
+
+2) quill_native_bridge_android 0.0.1+2 (transitivo do flutter_quill 11.5.0)
+   Arquivo: android/src/main/kotlin/dev/flutterquill/quill_native_bridge/util/ImageDecoderCompat.kt:31,54,61
+   Chamadas: BitmapFactory.decodeByteArray/decodeStream sem Options (fallback
+   para Android API < 28 ao colar/abrir imagens no editor).
+
+Plugins que já usam Options corretamente: image_picker e flutter_image_compress.
+
+DECISÃO
+=========================================================================
+
+Adotada a opção "Apenas documentar decisão" — nenhuma alteração de código
+será feita agora. Plano de correção registrado para ação futura:
+
+- file_picker: a partir da 12.0.0-beta.8 (PR #2083), compressImage decodifica
+  com inSampleSize. Migrar para 12.0.0 quando houver janela de release
+  (exige ajustes: pickFile(), allowMultiple padrão true, withData deprecado).
+- quill_native_bridge_android: não há correção upstream (0.0.2 só atualiza
+  Kotlin/SDK). Alternativas: dependency_overrides apontando para fork
+  patcheado com BitmapFactory.Options + inSampleSize, ou justificar a
+  exclusão do aviso (fallback só roda em Android API < 28).
+- O código Dart do app não precisa de mudanças; o uso de
+  flutter_image_compress para reduzir imagens já está correto.
